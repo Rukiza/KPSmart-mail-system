@@ -1,8 +1,8 @@
 package kps.ui;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -26,11 +26,12 @@ public class LogonBox extends JFrame{
 		JButton loginButton = new JButton("Login");
 		JButton cancelButton = new JButton("Cancel");
 
-		passwordField.setMinimumSize(passwordField.getPreferredSize());
 		passwordField.setEchoChar('~');
 
 		JPanel unPanel = new JPanel();
+		unPanel.setLayout(new BoxLayout(unPanel, BoxLayout.LINE_AXIS));
 		JPanel pwPanel = new JPanel();
+		pwPanel.setLayout(new BoxLayout(pwPanel, BoxLayout.LINE_AXIS));
 		JPanel buttonPanel = new JPanel();
 
 		unPanel.add(usernameLabel);
@@ -52,12 +53,14 @@ public class LogonBox extends JFrame{
 						new String(passwordField.getPassword()));
 			}
 		});
-
 		cancelButton.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				listener.onReceivedCancel();
 			}
 		});
+		// close window when any of the buttons are pressed
+		loginButton.addActionListener(new CloseWindowListener());
+		loginButton.addActionListener(new CloseWindowListener());
 
 		// display the box
 		setVisible(true);
@@ -73,4 +76,14 @@ public class LogonBox extends JFrame{
 			}
 		}, "Will", "pw");
 	}
+	
+	private class CloseWindowListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e){
+			LogonBox.this.dispatchEvent(
+					new WindowEvent(LogonBox.this, WindowEvent.WINDOW_CLOSING)
+					);
+		}
+	}
+	
 }
