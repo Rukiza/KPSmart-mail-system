@@ -78,4 +78,12 @@ public class KPSmartSystem {
 	public void resetEventLogLocation(){
 		iterationLocation = 0;
 	}
+
+	/**
+	 * Check if the event log is empty
+	 * @return - true if its empty
+	 */
+	public boolean eventLogIsEmpty(){
+		return eventLog.isEmpty();
+	}
 }
