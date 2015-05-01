@@ -1,6 +1,6 @@
 package kps;
 
-import java.util.List;
+import java.util.*;
 
 import kps.data.CustomerRoute;
 import kps.data.RouteGraph;
@@ -14,6 +14,7 @@ public class KPSmartSystem {
 	private double totalRevenue;
 	private double totalExpenditure;
 	private List<BusinessEvent> eventLog;
+	private int iterationLocation;
 	private KPSParser parser;
 	private List<CustomerRoute> customerRoutes;
 	private RouteGraph routeGraph;
@@ -28,9 +29,8 @@ public class KPSmartSystem {
 	 * Adds a business event to the eventLog list in order.
 	 * Ordering is based on date.
 	 */
-	public boolean addBusinessEvent(BusinessEvent event){
+	public void addBusinessEvent(BusinessEvent event){
 		eventLog.add(findPosition(event), event);
-		return true;
 	}
 
 	private int findPosition(BusinessEvent event){
@@ -44,5 +44,38 @@ public class KPSmartSystem {
 			}
 		}
 		return eventLog.size();
+	}
+
+	/**
+	 * Used to get the next event in the list.
+	 * Loops aroundto the start of the list when reaches the end.
+	 *
+	 * @return - Business event
+	 */
+	public BusinessEvent getNextEvent(){
+		if (iterationLocation >= eventLog.size()){
+			iterationLocation = 0;
+		}
+		return eventLog.get(iterationLocation++);
+	}
+
+	/**
+	 * Used to get the previous event in the list.
+	 * Loops around to the end of the list when it reaches the start..
+	 *
+	 * @return - Business event
+	 */
+	public BusinessEvent getPrevEvent(){
+		if (iterationLocation < 0){
+			iterationLocation = eventLog.size() -1;
+		}
+		return eventLog.get(iterationLocation--);
+	}
+
+	/**
+	 * Resets the eventLog iteration.
+	 */
+	public void resetEventLogLocation(){
+		iterationLocation = 0;
 	}
 }
