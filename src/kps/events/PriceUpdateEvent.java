@@ -2,15 +2,15 @@ package kps.events;
 
 import kps.data.wrappers.BasicRoute;
 import kps.data.wrappers.DeliveryPrice;
-import kps.enums.TransportType;
+import kps.enums.Priority;
 
 public class PriceUpdateEvent extends BusinessEvent{
 
 	// fields
 	private DeliveryPrice deliveryPrice;
-	private TransportType priority;
+	private Priority priority;
 
-	public PriceUpdateEvent(long timeLogged, BasicRoute route, DeliveryPrice deliveryPrice, TransportType priority){
+	public PriceUpdateEvent(long timeLogged, BasicRoute route, DeliveryPrice deliveryPrice, Priority priority){
 		super(timeLogged, route);
 		this.deliveryPrice = deliveryPrice;
 		this.priority = priority;
@@ -41,7 +41,7 @@ public class PriceUpdateEvent extends BusinessEvent{
 	 *
 	 * @return priority
 	 */
-	public TransportType getPriority(){
+	public Priority getPriority(){
 		return priority;
 	}
 

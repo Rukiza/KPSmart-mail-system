@@ -9,9 +9,9 @@ public class RouteGraphTests {
 	
 	public RouteGraph createSimpleGraph(){
 		RouteGraph g = new RouteGraph();
-		g.addRoute(new Route("Taupo","Hamilton", 5d, TransportType.Land));
-		g.addRoute(new Route("Hamilton","Auckland", 5d, TransportType.Land));
-		g.addRoute(new Route("Auckland","Northland", 5d, TransportType.Land));
+		g.addRoute(new Route("Taupo","Hamilton", 5d, TransportType.LAND));
+		g.addRoute(new Route("Hamilton","Auckland", 5d, TransportType.LAND));
+		g.addRoute(new Route("Auckland","Northland", 5d, TransportType.LAND));
 		return g;
 	}
 	
@@ -31,7 +31,7 @@ public class RouteGraphTests {
 	
 	@Test public void nodeAddRouteTest(){
 		Node node1 = new Node("Taupo");
-		Route route1 = new Route("Taupo","Hamilton",5d,TransportType.Land);
+		Route route1 = new Route("Taupo","Hamilton",5d,TransportType.LAND);
 		
 		assertTrue(node1.addEdge(route1));
 		assertTrue(node1.edgesOut.size() == 1);

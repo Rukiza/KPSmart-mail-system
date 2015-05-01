@@ -2,7 +2,7 @@ package kps.events;
 
 import kps.data.wrappers.BasicRoute;
 import kps.enums.Day;
-import kps.enums.TransportType;
+import kps.enums.Priority;
 
 public class MailDeliveryEvent extends BusinessEvent {
 
@@ -10,9 +10,9 @@ public class MailDeliveryEvent extends BusinessEvent {
 	private Day day;
 	private int weight; // weight is measured in grams
 	private int volume; // volume is measured in cubic centimeters
-	private TransportType priority;
+	private Priority priority;
 
-	public MailDeliveryEvent(long timeLogged, BasicRoute route, Day day, int weight, int volume, TransportType priority){
+	public MailDeliveryEvent(long timeLogged, BasicRoute route, Day day, int weight, int volume, Priority priority){
 		super(timeLogged, route);
 		this.day = day;
 		this.weight = weight;
@@ -54,7 +54,7 @@ public class MailDeliveryEvent extends BusinessEvent {
 	 *
 	 * @return priority
 	 */
-	public TransportType getPriority(){
+	public Priority getPriority(){
 		return priority;
 	}
 
