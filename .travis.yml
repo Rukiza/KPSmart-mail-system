@@ -1,0 +1,6 @@
+language: java
+
+install: ant compile jar run
+
+jdk:
+  - oraclejdk8
