@@ -41,7 +41,7 @@
         </java>
     </target>
 
-    <target name="junit" depends="jar">
+    <!-- <target name="junit" depends="jar">
         <junit printsummary="yes">
             <classpath>
                 <path refid="classpath"/>
@@ -52,6 +52,6 @@
                 <fileset dir="${src.dir}" includes="*Test.java"/>
             </batchtest>
         </junit>
-    </target>
+    </target> -->
 
 </project>
