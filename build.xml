@@ -31,13 +31,14 @@
     </target>
 
     <path id="application" location="${jar.dir}/${ant.project.name}.jar"/>
-    
+
     <target name="run">
         <java fork="true" classname="${main-class}">
             <classpath>
                 <path refid="classpath"/>
                 <path location="${jar.dir}/${ant.project.name}.jar"/>
             </classpath>
+        </java>
     </target>
 
     <target name="junit" depends="jar">
@@ -52,4 +53,5 @@
             </batchtest>
         </junit>
     </target>
+
 </project>
