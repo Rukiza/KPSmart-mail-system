@@ -41,7 +41,7 @@
         </java>
     </target>
 
-    <!-- <target name="junit" depends="jar">
+    <target name="test" depends="jar">
         <junit printsummary="yes">
             <classpath>
                 <path refid="classpath"/>
@@ -49,9 +49,9 @@
             </classpath>
             
             <batchtest fork="yes">
-                <fileset dir="${src.dir}" includes="*Test.java"/>
+                <fileset dir="${src.dir}" includes="*Tests.java"/>
             </batchtest>
         </junit>
-    </target> -->
+    </target>
 
 </project>
