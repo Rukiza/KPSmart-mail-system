@@ -10,6 +10,7 @@
     
     <path id="classpath">
         <fileset dir="${lib.dir}" includes="**/*.jar"/>
+        <fileset dir="${classes.dir}" includes="**/*.class">
     </path>
 
     <target name="clean">
