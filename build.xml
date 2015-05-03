@@ -54,7 +54,7 @@
 </path>
 
     <target name="test" depends="jar, test.compile">
-        <junit printsummary="yes" haltonfailure="yes">
+        <junit printsummary="yes" haltonfailure="yes" showoutput="true">
             <classpath refid="junit.class.path"/>
             
             <batchtest fork="yes">
