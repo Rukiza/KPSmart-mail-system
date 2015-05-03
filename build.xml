@@ -56,10 +56,7 @@
 
     <target name="test" depends="jar, test.compile">
         <junit printsummary="yes" haltonfailure="yes">
-            <classpath>
-                <path refid="classpath"/>
-                <path refid="application"/>
-            </classpath>
+            <classpath refid="junit.class.path"/>
             
             <batchtest fork="yes">
                 <fileset dir="${src.dir}" includes="*/*Test*.java"/>
