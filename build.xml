@@ -39,7 +39,7 @@
 
     <path id="application" location="${jar.dir}/${ant.project.name}.jar"/>
 
-    <target name="test">
+    <target name="test" depends="compile">
         <junit printsummary="on" haltonfailure="yes">
             <classpath>
                 <path refid="classpath.test" />
