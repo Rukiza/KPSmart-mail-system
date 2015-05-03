@@ -58,10 +58,10 @@
             <classpath refid="junit.class.path"/>
             
             <batchtest fork="yes">
-                <fileset dir="${src.dir}" includes="*/*Test*.java"/>
-                <echo message="Tests Done" />
+                <fileset dir="${src.dir}" includes="**/*Test*.java"/>
             </batchtest>
         </junit>
+        <echo message="Tests Done" />
     </target>
 
 </project>
