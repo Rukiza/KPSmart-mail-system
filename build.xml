@@ -32,16 +32,20 @@
 
     <path id="application" location="${jar.dir}/${ant.project.name}.jar"/>
 
-    <target name="run">
-        <java fork="true" classname="${main-class}">
+    <target name="test">
+        <junit printsummary="on" haltonfailure="yes">
             <classpath>
-                <path refid="classpath"/>
-                <path location="${jar.dir}/${ant.project.name}.jar"/>
+                <path refid="classpath.test" />
+                <pathelement location="${test.build.dir}"/>
             </classpath>
-        </java>
+            <formatter type="brief" usefile="false" />
+            <batchtest>
+                <fileset dir="${src.dir}" includes="**/*Test*.java" />
+            </batchtest>
+        </junit>
     </target>
 
-    <target name="test" depends="jar">
+    <!-- <target name="test" depends="jar">
         <junit printsummary="yes">
             <classpath>
                 <path refid="classpath"/>
@@ -53,5 +57,5 @@
             </batchtest>
         </junit>
     </target>
-
+ -->
 </project>
