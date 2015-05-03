@@ -1,4 +1,4 @@
-<project name="Main" basedir="." default="main">
+<project name="KPSmart-mail-system" basedir="." default="main">
     <property name="src.dir"     value="src"/>
 
     <property name="build.dir"   value="build"/>
