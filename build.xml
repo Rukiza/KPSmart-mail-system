@@ -8,13 +8,6 @@
     <property name="main-class"  value="kps.Main"/>
     <property name="lib.dir"     value="lib"/>
     
-    <path id="classpath.test">
-        <pathelement location="lib/junit*.jar" />
-        <pathelement location="lib/*hamcrest-*.jar" />
-        <pathelement location="${build.dir}"/>
-        <path refid="classpath" />
-    </path>
-    
     <path id="classpath">
         <fileset dir="${lib.dir}" includes="**/*.jar"/>
     </path>
@@ -44,6 +37,7 @@
             <classpath>
                 <path refid="classpath" />
                 <pathelement location="${build.dir}/classes"/>
+                <path refid="application"/>
             </classpath>
             <formatter type="brief" usefile="false" />
             <batchtest>
