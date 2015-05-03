@@ -42,8 +42,8 @@
     <target name="test" depends="compile">
         <junit printsummary="on" haltonfailure="yes">
             <classpath>
-                <path refid="classpath.test" />
-                <pathelement location="${build.dir}"/>
+                <path refid="classpath" />
+                <pathelement location="${build.dir}/classes"/>
             </classpath>
             <formatter type="brief" usefile="false" />
             <batchtest>
