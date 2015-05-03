@@ -1,6 +1,6 @@
 language: java
 
-install: ant compile jar
+ant compile jar test
 
 jdk:
   - oraclejdk8
