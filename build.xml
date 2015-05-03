@@ -36,7 +36,6 @@
         <junit printsummary="on" haltonfailure="yes">
             <classpath>
                 <path refid="classpath" />
-                <pathelement location="${build.dir}/classes"/>
                 <path refid="application"/>
             </classpath>
             <formatter type="brief" usefile="false" />
