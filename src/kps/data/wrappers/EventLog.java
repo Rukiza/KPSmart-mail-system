@@ -1,12 +1,20 @@
 package kps.data.wrappers;
 
-import java.util.List;
+import java.util.*;
 
 import kps.events.BusinessEvent;
 
 public class EventLog {
 	private List<BusinessEvent> eventLog;
 	private int iterationLocation;
+	
+	public EventLog(){
+		eventLog = new ArrayList<BusinessEvent>();
+	}
+	
+	public EventLog(List<BusinessEvent> eventLog){
+		this.eventLog = eventLog;
+	}
 	
 	/**
 	 * Adds a business event to the eventLog list in order.
