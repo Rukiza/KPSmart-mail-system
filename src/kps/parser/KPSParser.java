@@ -70,17 +70,18 @@ public class KPSParser {
 		// scan all of the file into a string
 		String data = "";
 		while(scan.hasNext()){
-			data += scan.next();
+			data += scan.next()+" ";
 		}
 		// ensure that there are gaps after > and before <
-		data.replaceAll(">", "> ");
-		data.replaceAll("<", " <");
+		data = data.replaceAll(">", "> ");
+		data = data.replaceAll("<", " <");
 		
 		// scan string containing data
 		scan.close();
 		scan = new Scanner(data);
 		
-		gobble(scan, "<"+FILE_TAG+" "+SCHEMA+">");
+		gobble(scan, "<"+FILE_TAG);
+		gobble(scan, SCHEMA+">");
 		// parse data from string
 		while(scan.hasNext()){
 			BusinessEvent event = null;

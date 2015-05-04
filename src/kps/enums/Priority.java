@@ -1,7 +1,7 @@
 package kps.enums;
 
 public enum Priority {
-	DOMESTIC_AIR, DOMESTIC_LAND, DOMESTIC_SEA, INTERNATIONAL_AIR, INTERNATIONAL_SEA;
+	DOMESTIC_AIR, DOMESTIC_LAND, DOMESTIC_SEA, DOMESTIC_STANDARD, INTERNATIONAL_AIR, INTERNATIONAL_SEA, INTERNATIONAL_STANDARD;
 
 	/**
 	 * Converts the specified string into the corresponding
@@ -21,10 +21,14 @@ public enum Priority {
 			return DOMESTIC_LAND;
 		case "Domestic Sea":
 			return DOMESTIC_SEA;
+		case "Domestic Standard":
+			return DOMESTIC_STANDARD;
 		case "International Air":
 			return INTERNATIONAL_AIR;
 		case "International Sea":
 			return INTERNATIONAL_SEA;
+		case "International Standard":
+			return INTERNATIONAL_STANDARD;
 		default:
 			throw new IllegalArgumentException(priority+" is an invalid priority value.");
 		}
@@ -47,10 +51,14 @@ public enum Priority {
 			return "Domestic Land";
 		case DOMESTIC_SEA:
 			return "Domestic Sea";
+		case DOMESTIC_STANDARD:
+			return "Domestic Standard";
 		case INTERNATIONAL_AIR:
 			return "International Air";
 		case INTERNATIONAL_SEA:
 			return "International Sea";
+		case INTERNATIONAL_STANDARD:
+			return "International Standard";
 		default:
 			// will not reach this stage as a priority can only be one of the above cases
 			return null;
