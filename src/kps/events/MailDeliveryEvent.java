@@ -62,14 +62,61 @@ public class MailDeliveryEvent extends BusinessEvent {
 	 * Returns an XML representation of this event.
 	 */
 	public String toXML(){
-		String xml = "<mail>\n";
-		xml += "\t<day>" + day + "</day>\n";
-		xml += "\t<to>" + super.getOrigin() + "</to>\n";
-		xml += "\t<from>" + super.getDestination() + "</from>\n";
-		xml += "\t<weight>" + weight + "</weight>\n";
-		xml += "\t<volume>" + volume + "</volume>\n";
-		xml += "\t<priority>" + priority + "</priority>\n";
-		xml += "</mail>";
-		return xml;
+		return "";
+	}
+	
+	/**
+	 * Compares this MailDeliveryEvent to the specified object. Only
+	 * returns true if the object shares the same field values as this event.
+	 * Will not return true if the object is null or not of the same type.
+	 */
+	public boolean equals(Object o){
+		// return true if o is the same object
+		if(o == this){
+			return true;
+		}
+		// return false if o is null
+		if(o == null){
+			return false;
+		}
+		// check if o is of the same type
+		if(o instanceof MailDeliveryEvent){
+			// compare field values. return false as soon as one is incorrect
+			MailDeliveryEvent obj = (MailDeliveryEvent)o;
+			// time
+			if(obj.getTimeLogged() != getTimeLogged()){
+				return false;
+			}
+			// origin
+			if(!obj.getOrigin().equals(getOrigin())){
+				return false;
+			}
+			// destination
+			if(!obj.getDestination().equals(getDestination())){
+				return false;
+			}
+			// day
+			if(obj.getDay() != day){
+				return false;
+			}
+			// weight
+			if(obj.getWeight() != weight){
+				return false;
+			}
+			// volume
+			if(obj.getVolume() != volume){
+				return false;
+			}
+			// priority
+			if(obj.getPriority() != priority){
+				return false;
+			}
+		}
+		else{
+			// object not of the same type, return false
+			return false;
+		}
+		// otherwise o is identical to this object
+		return true;
 	}
 }

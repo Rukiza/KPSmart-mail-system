@@ -21,6 +21,7 @@ public class KPSParser {
 	public static final String PRICE_UPDATE_TAG = "price";
 	public static final String TRANSPORT_COST_UPDATE_TAG = "cost";
 	public static final String TRANSPORT_DISCONTINUED_TAG = "discontinue";
+	public static final String TIME_TAG = "time";
 	public static final String ORIGIN_TAG = "from";
 	public static final String DESTINATION_TAG = "to";
 	public static final String COMPANY_TAG = "company";
@@ -51,7 +52,7 @@ public class KPSParser {
 	public static MailDeliveryEvent parseMailDeliveryEvent(Scanner scan) throws ParserException{
 		// parse data from the file
 		gobble(scan, "<"+MAIL_DELIVERY_TAG+">");
-		// add something for parsing time
+		long time = parseLong(scan, TIME_TAG);
 		Day day = Day.convertStringToDay(parseString(scan, DAY_TAG));
 		BasicRoute route = parseBasicRoute(scan);
 		int weight = parseInt(scan, WEIGHT_TAG);
@@ -60,7 +61,7 @@ public class KPSParser {
 		gobble(scan, "</"+MAIL_DELIVERY_TAG+">");
 		
 		// data has been successfully retrieved
-		return new MailDeliveryEvent(0, route, day, weight, volume, priority);
+		return new MailDeliveryEvent(time, route, day, weight, volume, priority);
 	}
 	
 	/**
@@ -78,14 +79,14 @@ public class KPSParser {
 	public static PriceUpdateEvent parsePriceUpdateEvent(Scanner scan) throws ParserException{
 		// parse data from the file
 		gobble(scan, "<"+PRICE_UPDATE_TAG+">");
-		// add something for parsing time
+		long time = parseLong(scan, TIME_TAG);
 		BasicRoute route = parseBasicRoute(scan);
 		Priority priority = Priority.convertStringToPriority(parseString(scan, PRIORITY_TAG));
 		DeliveryPrice price = parseDeliveryPrice(scan);
 		gobble(scan, "</"+PRICE_UPDATE_TAG+">");
 		
 		// data has been successfully retrieved
-		return new PriceUpdateEvent(0, route, price, priority);
+		return new PriceUpdateEvent(time, route, price, priority);
 	}
 	
 	/**
@@ -103,7 +104,7 @@ public class KPSParser {
 	public static TransportCostUpdateEvent parseTransportCostUpdateEvent(Scanner scan) throws ParserException{
 		// parse data from the file
 		gobble(scan, "<"+TRANSPORT_COST_UPDATE_TAG+">");
-		// add something for parsing time
+		long time = parseLong(scan, TIME_TAG);
 		String company = parseString(scan, COMPANY_TAG);
 		BasicRoute route = parseBasicRoute(scan);
 		TransportType type = TransportType.convertStringToTransportType(parseString(scan, TRANSPORT_TYPE_TAG));
@@ -117,7 +118,7 @@ public class KPSParser {
 		
 		// data has been successfully retrieved
 		MailTransport transport = new MailTransport(duration, frequency, day);
-		return new TransportCostUpdateEvent(0, route, company, type, price, maxWeight, maxVolume, transport);
+		return new TransportCostUpdateEvent(time, route, company, type, price, maxWeight, maxVolume, transport);
 	}
 	
 	/**
@@ -135,14 +136,14 @@ public class KPSParser {
 	public static TransportDiscontinuedEvent parseTransportDiscontinuedEvent(Scanner scan) throws ParserException{
 		// parse data from file
 		gobble(scan, "<"+TRANSPORT_DISCONTINUED_TAG+">");
-		// add something for parsing time
+		long time = parseLong(scan, TIME_TAG);
 		String company = parseString(scan, COMPANY_TAG);
 		BasicRoute route = parseBasicRoute(scan);
 		TransportType type = TransportType.convertStringToTransportType(parseString(scan, TRANSPORT_TYPE_TAG));
 		gobble(scan, "</"+TRANSPORT_DISCONTINUED_TAG+">");
 		
 		// data has been successfully retrieved
-		return new TransportDiscontinuedEvent(0, route, company, type);
+		return new TransportDiscontinuedEvent(time, route, company, type);
 	}
 	
 	/**
@@ -263,6 +264,33 @@ public class KPSParser {
 		try{
 			data = Double.parseDouble(next);
 		}catch(NumberFormatException e){throw new ParserException("ParserException: Expecting a double, recieved "+next);} 
+		gobble(scan, "</"+tag+">");
+		return data;
+	}
+	
+	/**
+	 * Parses a long value from the scanner using the specified
+	 * XML tags.
+	 *
+	 * @param scan
+	 * 		-- scanner containing xml data
+	 * @param tag
+	 * 		-- the current tag expected to be parsed
+
+	 * @return the long value contained between the xml tags
+	 *
+	 * @throws ParserException
+	 * 		-- thrown if tags are incorrect or line does not match
+	 * 		up with the xml format or a long cannot be parsed
+	 */
+	public static long parseLong(Scanner scan, String tag) throws ParserException{
+		gobble(scan, "<"+tag+">");
+		long data = 0;
+		String next = scan.next();
+		// try catch statement to catch trying to parse incorrect type
+		try{
+			data = Long.parseLong(next);
+		}catch(NumberFormatException e){throw new ParserException("ParserException: Expecting an integer, received "+next);} 
 		gobble(scan, "</"+tag+">");
 		return data;
 	}

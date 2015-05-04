@@ -22,7 +22,7 @@ public class EventLog {
 		}
 
 		for (int i = 0; i < eventLog.size(); i++){
-			if (event.timeLogged() > eventLog.get(i).timeLogged()){
+			if (event.getTimeLogged() > eventLog.get(i).getTimeLogged()){
 				return i;
 			}
 		}

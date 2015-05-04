@@ -15,16 +15,17 @@ public abstract class BusinessEvent {
 
 	/**
 	 * Returns the time at which this event was logged.
-	 * @return
+	 * 
+	 * @return time event was logged (as a long)
 	 */
-	public long timeLogged(){
+	public long getTimeLogged(){
 		return timeLogged;
 	}
 
 	/**
 	 * Returns the origin associated with this event.
 	 *
-	 * @return
+	 * @return the origin
 	 */
 	public String getOrigin(){
 		return route.getOrigin();
@@ -33,7 +34,7 @@ public abstract class BusinessEvent {
 	/**
 	 * Returns the destination associated with this event.
 	 *
-	 * @return
+	 * @return the destination
 	 */
 	public String getDestination(){
 		return route.getDestination();

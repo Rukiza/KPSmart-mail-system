@@ -17,8 +17,14 @@ public class TransportCostUpdateEvent extends BusinessEvent{
 	private MailTransport mailTransport;
 
 	public TransportCostUpdateEvent(long timeLogged, BasicRoute route, String transportFirm,
-			TransportType transportType, DeliveryPrice deliveryPrice, int maxWeight, int maxVolume){
+			TransportType transportType, DeliveryPrice deliveryPrice, int maxWeight, int maxVolume, MailTransport mailTransport){
 		super(timeLogged, route);
+		this.transportFirm = transportFirm;
+		this.transportType = transportType;
+		this.deliveryPrice = deliveryPrice;
+		this.maxWeight = maxWeight;
+		this.maxVolume = maxVolume;
+		this.mailTransport = mailTransport;
 	}
 
 	/**
@@ -118,5 +124,80 @@ public class TransportCostUpdateEvent extends BusinessEvent{
 	 */
 	public String toXML(){
 		return "";
+	}
+	
+	/**
+	 * Compares this TransportCostUpdateEvent to the specified object. Only
+	 * returns true if the object shares the same field values as this event.
+	 * Will not return true if the object is null or not of the same type.
+	 */
+	public boolean equals(Object o){
+		// return true if o is the same object
+		if(o == this){
+			return true;
+		}
+		// return false if o is null
+		if(o == null){
+			return false;
+		}
+		// check if o is of the same type
+		if(o instanceof TransportCostUpdateEvent){
+			// compare field values. return false as soon as one is incorrect
+			TransportCostUpdateEvent obj = (TransportCostUpdateEvent)o;
+			// time
+			if(obj.getTimeLogged() != getTimeLogged()){
+				return false;
+			}
+			// origin
+			if(!obj.getOrigin().equals(getOrigin())){
+				return false;
+			}
+			// destination
+			if(!obj.getDestination().equals(getDestination())){
+				return false;
+			}
+			// company
+			if(!obj.getTransportFirm().equals(transportFirm)){
+				return false;
+			}
+			// type
+			if(obj.getTransportType() != transportType){
+				return false;
+			}
+			// weight cost
+			if(obj.getGramPrice() != getGramPrice()){
+				return false;
+			}
+			// volume cost
+			if(obj.getVolumePrice() != getVolumePrice()){
+				return false;
+			}
+			// max weight
+			if(obj.getMaxWeight() != maxWeight){
+				return false;
+			}
+			// max volume
+			if(obj.getMaxVolume() != maxVolume){
+				return false;
+			}
+			// duration
+			if(obj.getTripDuration() != getTripDuration()){
+				return false;
+			}
+			// frequency
+			if(obj.getDepartureFrequency() != getDepartureFrequency()){
+				return false;
+			}
+			// day
+			if(obj.getDayDelivered() != getDayDelivered()){
+				return false;
+			}
+		}
+		else{
+			// object not of the same type, return false
+			return false;
+		}
+		// otherwise o is identical to this object
+		return true;
 	}
 }
