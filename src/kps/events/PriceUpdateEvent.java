@@ -51,4 +51,55 @@ public class PriceUpdateEvent extends BusinessEvent{
 	public String toXML(){
 		return "";
 	}
+	
+	/**
+	 * Compares this PriceUpdateEvent to the specified object. Only
+	 * returns true if the object shares the same field values as this event.
+	 * Will not return true if the object is null or not of the same type.
+	 */
+	public boolean equals(Object o){
+		// return true if o is the same object
+		if(o == this){
+			return true;
+		}
+		// return false if o is null
+		if(o == null){
+			return false;
+		}
+		// check if o is of the same type
+		if(o instanceof PriceUpdateEvent){
+			// compare field values. return false as soon as one is incorrect
+			PriceUpdateEvent obj = (PriceUpdateEvent)o;
+			// time
+			if(obj.getTimeLogged() != getTimeLogged()){
+				return false;
+			}
+			// origin
+			if(!obj.getOrigin().equals(getOrigin())){
+				return false;
+			}
+			// destination
+			if(!obj.getDestination().equals(getDestination())){
+				return false;
+			}
+			// gram price
+			if(obj.getGramPrice() != getGramPrice()){
+				return false;
+			}
+			// volume price
+			if(obj.getVolumePrice() != getVolumePrice()){
+				return false;
+			}
+			// priority
+			if(obj.getPriority() != priority){
+				return false;
+			}
+		}
+		else{
+			// object not of the same type, return false
+			return false;
+		}
+		// otherwise o is identical to this object
+		return true;
+	}
 }
