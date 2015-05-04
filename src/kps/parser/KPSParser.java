@@ -1,5 +1,9 @@
 package kps.parser;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -9,6 +13,7 @@ import kps.data.wrappers.MailTransport;
 import kps.enums.Day;
 import kps.enums.Priority;
 import kps.enums.TransportType;
+import kps.events.BusinessEvent;
 import kps.events.MailDeliveryEvent;
 import kps.events.PriceUpdateEvent;
 import kps.events.TransportCostUpdateEvent;
@@ -17,6 +22,8 @@ import kps.events.TransportDiscontinuedEvent;
 public class KPSParser {
 	
 	// fields
+	public static final String FILE_TAG = "simulation";
+	public static final String SCHEMA = "xsi:noNamespaceSchemaLocation=\"postal.xsd\"";
 	public static final String MAIL_DELIVERY_TAG = "mail";
 	public static final String PRICE_UPDATE_TAG = "price";
 	public static final String TRANSPORT_COST_UPDATE_TAG = "cost";
@@ -36,6 +43,87 @@ public class KPSParser {
 	public static final String DAY_TAG = "day";
 	public static final String DURATION_TAG = "duration";
 	public static final String FREQUENCY_TAG = "frequency";
+		
+	
+	/**
+	 * Parses the file specified by the file name and returns the business
+	 * events that are contained within it.
+	 * 
+	 * @param filename
+	 * 		-- the name of the file containing business event data
+	 * 
+	 * @return a list of business events
+	 * 
+	 * @throws ParserException
+	 * 		-- thrown if the file cannot be opened, an incorrect tag is
+	 * 		found or if a null value is attempted to be added to the event log.
+	 */
+	public static List<BusinessEvent> parseFile(String filename) throws ParserException{
+		List<BusinessEvent> eventLog = new ArrayList<BusinessEvent>();
+		
+		// load file into scanner
+		Scanner scan = null;
+		try{
+			scan = new Scanner(new File(filename));
+		}catch(IOException e){throw new ParserException("ParseFile: Cannot load file "+filename);}
+		
+		// scan all of the file into a string
+		String data = "";
+		while(scan.hasNext()){
+			data += scan.next();
+		}
+		// ensure that there are gaps after > and before <
+		data.replaceAll(">", "> ");
+		data.replaceAll("<", " <");
+		
+		// scan string containing data
+		scan.close();
+		scan = new Scanner(data);
+		
+		gobble(scan, "<"+FILE_TAG+" "+SCHEMA+">");
+		// parse data from string
+		while(scan.hasNext()){
+			BusinessEvent event = null;
+			// check if mail delivery event is next
+			if(scan.hasNext("<"+MAIL_DELIVERY_TAG+">")){
+				event = parseMailDeliveryEvent(scan);
+			}
+			// check if price update event is next
+			else if(scan.hasNext("<"+PRICE_UPDATE_TAG+">")){
+				event = parsePriceUpdateEvent(scan);
+			}
+			// check if transport cost update event is next
+			else if(scan.hasNext("<"+TRANSPORT_COST_UPDATE_TAG+">")){
+				event = parseTransportCostUpdateEvent(scan);
+			}
+			// check if transport discontinued event is next
+			else if(scan.hasNext("<"+TRANSPORT_DISCONTINUED_TAG+">")){
+				event = parseTransportDiscontinuedEvent(scan);
+			}
+			// check if the end of the file has been reached
+			else if(scan.hasNext("</"+FILE_TAG+">")){
+				scan.next();
+				break;
+			}
+			// otherwise an incorrect tag has been found
+			else{
+				scan.close();
+				throw new ParserException("ParseFile: Incorrect tag found: "+scan.next());
+			}
+			
+			// check that event is not null before adding to event log
+			if(event != null){
+				eventLog.add(event);
+			}
+			else{
+				scan.close();
+				throw new ParserException("ParseFile: Event should not be null after parsing.");
+			}
+		}
+		// file parsing successful
+		scan.close();
+		return eventLog;
+	}
 		
 	/**
 	 * Parses a Mail Delivery Event from the scanner.
