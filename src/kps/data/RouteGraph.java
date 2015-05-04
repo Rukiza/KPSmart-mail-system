@@ -4,24 +4,30 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+/**
+ * @author Nicky van Hulst 300294657
+ * */
+public class RouteGraph implements Iterable<Node> {
 
-public class RouteGraph {
-
-	// fields
 	//private Route root; // root node for the route graph (not sure how you want to implement this.
 	private List<Route> criticalRoutes;
 	private Map<Route, Integer> averageDeliveryTimes;
 	
-	//
+	//the root node TODO change if we have disconnected graph
 	Node root;
 	
-	Set<Node> nodes; 
-
+	private List<Node> nodes; 
+	
+	/**
+	 * Constructor for RouteGraph
+	 * */
 	public RouteGraph(){
-		nodes = new HashSet<Node>();
+		nodes = new ArrayList<Node>();
+		criticalRoutes = new ArrayList<Route>();
 	}
 	
 	
@@ -40,8 +46,7 @@ public class RouteGraph {
      * */
     public void addRoute(Route route) {
     	boolean routeAdded = false;
-    	Node dest;
-    	
+    	Node dest = null;
     	
     	for(Node n : nodes){
     		if(n.getName().equals(route.getSrc())){
@@ -66,13 +71,35 @@ public class RouteGraph {
     	
     	//no graph exists create new node set route source as the root name
     	if(root == null){
-    		root = new Node(route.getSrc());
+    		
     		dest = new Node(route.getDest());
+    		root = new Node(route.getSrc());//new Node(route.getSrc());
     		dest.addEdge(route);
+    		root.addEdge(route);
     		nodes.add(dest);//the route was added
     		nodes.add(root);
     	}
     	
+    }
+    
+    /**
+     * Removes route from graph 
+     * 
+     * @param route to be removed
+     * */
+    public boolean removeRoute(Route route){
+    	if(criticalRoutes.contains(route))return false;//cannot remove a critical route
+    	boolean toReturn = false;
+    	
+    	for(int i = 0; i < nodes.size(); i++){
+    		if(nodes.get(i).getNeighbours().contains(route)){
+    			
+    			nodes.get(i).removeRoute(route);
+    			if(nodes.get(i).getNeighbours().size() == 0)nodes.remove(i);//remove the node as it no longer has any routes
+    			toReturn = true;
+    		}
+    	}
+    	return toReturn;
     }
     
     class SearchNode{
@@ -95,17 +122,17 @@ public class RouteGraph {
     	}
     }
     
-    List<SearchNode> visited = new ArrayList<SearchNode>();
-    List<SearchNode> allnodes = new ArrayList<SearchNode>();
+    List<SearchNode> visited;
+    List<SearchNode> allnodes;
     
     public void setUpDFS(){
+    	allnodes =  new ArrayList<SearchNode>();//resets searchNode list
+    	visited = new ArrayList<SearchNode>();//reset visited list
+    	
     	for(Node n : nodes){
     		allnodes.add(new SearchNode(n));
     	}
-
-
-    	DFS(this,allnodes.get(0));
-    	System.out.println("Visited " + visited.size() );
+    	if(!nodes.isEmpty())DFS(this,allnodes.get(0));
     }
     
     public void DFS(RouteGraph g, SearchNode n){
@@ -116,13 +143,50 @@ public class RouteGraph {
     	for(Route r : n.getNode().getNeighbours()){
     		for(SearchNode an : allnodes){
     			if((an.getNode().getName().equals(r.getDest()) || an.getNode().getName().equals(r.getSrc()))  && an.visited == false){//does visit them all but might want to remove it so its only the destination node
-    				System.out.println("Name :"+an.getNode().getName());
     				DFS(g,an);
     			}
     		}
     	}
     }
     
+    public boolean isCriticalRoute(Route route){
+    	System.out.println("Starting Critical Route");
+    	
+    	setUpDFS();
+    	
+    	int origSise = visited.size();
+    	
+    	System.out.println("Orig Size :" + origSise);
+    	this.removeRoute(route);
+    	
+    	setUpDFS();
+    	
+    	int finalSize = visited.size();
+    	this.addRoute(route);
+    	System.out.println("Final Size : " + finalSize);
+    	if(finalSize < origSise )return true;
+    	
+    	return false;
+    }
+    
+   
+    
     public int getSize(){return nodes.size();}
+
+
+	@Override
+	public Iterator<Node> iterator() {
+		return nodes.iterator();
+	}
+	
+	public List<Node> getNodes(){return this.nodes;}
+	
+	public Node getNode(String name){
+		for(int i =0; i < nodes.size(); i++){
+			if(nodes.get(i).getName().equals(name))return nodes.get(i);
+		}
+		return null;
+	}
+	public Node getRoot(){return this.root;}
 
 }

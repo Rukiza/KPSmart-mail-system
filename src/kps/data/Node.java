@@ -2,8 +2,14 @@ package kps.data;
 
 import java.util.HashSet;
 import java.util.Set;
-
-public class Node {
+/**
+ * @author Nicky van Hulst 300294657
+ * */
+public class Node  implements Comparable<Node>{
+	
+	private Node prev;
+	private double minCost = Double.POSITIVE_INFINITY;
+	
 	
 	//name of the node
 	String name;
@@ -25,19 +31,22 @@ public class Node {
 		if(!(route.getSrc().equals(name) || route.getDest().equals(name)))return false;
 		
 		if(route.getDest().equals(name))edgesIn.add(route);
-		else{edgesOut.add(route);}
+		else if(route.getSrc().equals(name)){edgesOut.add(route);}
 		return true;
 	}
 	
 	
-	public boolean removeEdge(Route route){
+	public boolean removeRoute(Route route){
+		System.out.println("Removing in route");
 		if(edgesOut.contains(route)){
 			edgesOut.remove(route);
+			System.out.println("Removing from :" + name);
 			return true;
 		}
 		
 		if(edgesIn.contains(route)){
 			edgesIn.remove(route);
+			System.out.println("Removing from :" + name);
 			return true;
 		}
 		return false;
@@ -51,8 +60,55 @@ public class Node {
 		neighbours.addAll(edgesOut);
 		
 		return neighbours;
-	}  
+	}
 	
+	public Set<Route> getRouteOut(){
+		return edgesOut;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Node other = (Node) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
+
+	public Set<Route> getRouteIn(){
+		return edgesIn;
+	}
+	
+	public void resetSearch(){
+		this.minCost = Double.POSITIVE_INFINITY;
+		this.prev = null;
+	}
+	
+	@Override
+	public String toString(){return this.name;}
 	public String getName(){return this.name;}
+	public Node getPrev(){return this.prev;}
+	public void setPrev(Node n){this.prev = n;}
+	public double getMindCost(){return this.minCost;}
+	public void setMindCost(double minCost){this.minCost = minCost;}
+
+	@Override
+	public int compareTo(Node o) {return Double.compare(minCost, o.getMindCost());}
 
 }
