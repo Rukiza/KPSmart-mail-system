@@ -289,7 +289,7 @@ public class KPSParser {
 		String next = scan.next();
 		// try catch statement to catch trying to parse incorrect type
 		try{
-			data = Integer.parseInt(next);
+			data = Long.parseLong(next);
 		}catch(NumberFormatException e){throw new ParserException("ParserException: Expecting an integer, received "+next);} 
 		gobble(scan, "</"+tag+">");
 		return data;
