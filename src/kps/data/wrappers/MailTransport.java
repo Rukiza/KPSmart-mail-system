@@ -62,4 +62,28 @@ public class MailTransport {
 	public Day getDayDelivered(){
 		return dayDelivered;
 	}
+	
+	public boolean equals(Object o){
+		if(o == this){
+			return true;
+		}
+		if(o == null){
+			return false;
+		}
+		if(o instanceof MailTransport){
+			if(((MailTransport)o).getTripDuration() != tripDuration){
+				return false;
+			}
+			if(((MailTransport)o).getDepartureFrequency() != departureFrequency){
+				return false;
+			}
+			if(((MailTransport)o).getDayDelivered() != dayDelivered){
+				return false;
+			}
+		}
+		else{
+			return false;
+		}
+		return true;
+	}
 }

@@ -58,4 +58,25 @@ public class DeliveryPrice {
 		this.gramPrice = gramPrice;
 		this.volumePrice = volumePrice;
 	}
+	
+	public boolean equals(Object o){
+		if(o == this){
+			return true;
+		}
+		if(o == null){
+			return false;
+		}
+		if(o instanceof DeliveryPrice){
+			if(((DeliveryPrice)o).getGramPrice() != gramPrice){
+				return false;
+			}
+			if(((DeliveryPrice)o).getVolumePrice() != volumePrice){
+				return false;
+			}
+		}
+		else{
+			return false;
+		}
+		return true;
+	}
 }

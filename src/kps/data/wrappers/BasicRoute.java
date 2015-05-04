@@ -46,4 +46,24 @@ public class BasicRoute {
 	public String getDestination(){
 		return destination;
 	}
+	
+	public boolean equals(Object o){
+		if(o == null){
+			return false;
+		}
+		if(this == o){
+			return true;
+		}
+		if(o instanceof BasicRoute){
+			if(!((BasicRoute)o).getDestination().equals(destination)){
+				return false;
+			}
+			if(!((BasicRoute)o).getOrigin().equals(origin)){
+				return false;
+			}
+			return true;
+		}
+
+		return false;
+	}
 }
