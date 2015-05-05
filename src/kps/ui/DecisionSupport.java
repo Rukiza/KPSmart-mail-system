@@ -1,17 +1,25 @@
 package kps.ui;
 
 import java.awt.Color;
+<<<<<<< HEAD
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+=======
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+>>>>>>> 49e805365930d905a81a5ba7934e0a31755cabb6
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.List;
+=======
+>>>>>>> 49e805365930d905a81a5ba7934e0a31755cabb6
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -22,7 +30,6 @@ import kps.data.wrappers.EventLog;
 import kps.events.BusinessEvent;
 
 /**
- *
  * @author Shane Brewer
  *
  */
@@ -127,7 +134,7 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 		public String name;
 		public Color draw = new Color(255,0,0);
 		public Color fill = new Color(0,255,0);
-
+		
 		public Button(String name, int x, int y, int width, int height){
 			super(x,y, width, height);
 			this.name = name;
@@ -172,5 +179,4 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 		frame.setVisible(true);
 	}
 }
-
 
