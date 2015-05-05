@@ -10,7 +10,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +18,11 @@ import javax.swing.JPanel;
 
 import com.sun.corba.se.impl.oa.poa.ActiveObjectMap.Key;
 
+import kps.Main;
 import kps.data.wrappers.EventLog;
 import kps.events.BusinessEvent;
+import kps.parser.KPSParser;
+import kps.parser.ParserException;
 
 /**
  * @author Shane Brewer
@@ -31,6 +33,8 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 	private EventLog data;
 	private BusinessEvent event;
 	private List<Button> buttons;
+	private Color textColor = new Color (0, 0, 0);
+	private Color backgroundColor = new Color (255,255,255);
 
 	/**
 	 * @param data - The Event log of the program.
@@ -40,10 +44,10 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 		if (!this.data.isEmpty()){
 			event = this.data.getCurrentEvent();
 		}
-		setPreferredSize(new Dimension(700,500));
-		setSize(700, 500);
+		setPreferredSize(new Dimension(650,450));
+		setSize(650, 450);
 		buttonSetup();
-
+		addMouseListener(this);
 	}
 
 	@Override
@@ -51,6 +55,8 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 		if(buttons == null)return;
 		Graphics2D g2 = (Graphics2D)g;
 
+		g.setColor(backgroundColor );
+		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
 		for (Button button: buttons){
 			g.setColor(button.fill);
@@ -58,11 +64,23 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 			g.setColor(button.draw);
 			g2.draw(button);
 		}
+
+		if (event == null && !data.isEmpty()){
+			System.out.println("Only here once");
+			event = data.getCurrentEvent();
+		}
+
+		if (event != null){
+			g.setColor(textColor);
+			g.drawString(event.getOrigin(), 100, 100);
+			g.drawString(event.getDestination(), 100, 200);
+		}
 	};
 
 	@Override
 	public void repaint(){
 		Graphics g = this.getGraphics();
+
 		paint(g);
 	}
 
@@ -73,12 +91,10 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 			for (Button button: buttons){
 				if (button.isAtPoint(e.getPoint()) &&
 						button.name.equals("Right")){
-					System.out.println("Click Right");
 					event = data.getNextEvent();
 				}
 				else if (button.isAtPoint(e.getPoint()) &&
 						button.name.equals("Left")){
-					System.out.println("Click Left");
 					event = data.getPrevEvent();
 				}
 			}
@@ -89,17 +105,14 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		System.out.println(e.getID());
-		System.out.println(KeyEvent.KEY_PRESSED);
 		if (e.getID() == KeyEvent.KEY_PRESSED &&
 				!data.isEmpty()){
 			if (e.getKeyCode() == KeyEvent.VK_RIGHT){
-				System.out.println("Right");
 				event = data.getNextEvent();
 			}
 			else if (e.getKeyCode() == KeyEvent.VK_LEFT){
-				System.out.println("Left");
 				event = data.getPrevEvent();
+
 			}
 			repaint();
 		}
@@ -110,13 +123,13 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 	 */
 	private void buttonSetup(){
 		buttons = new ArrayList<Button>();
-		int width = 50;
-		int height = 20;
+		int width = 100;
+		int height = 60;
 		int base = 20;
 		int y = this.getHeight() - base - height;
 		int x = this.getWidth() - base;
-		buttons.add(new Button("Up", x - width, y, width, height));
-		buttons.add(new Button("Down", x - width*2-base, y, width, height));
+		buttons.add(new Button("Right", x - width, y, width, height));
+		buttons.add(new Button("Left", x - width*2-base, y, width, height));
 	}
 
 	/**
@@ -132,10 +145,6 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 		public Button(String name, int x, int y, int width, int height){
 			super(x,y, width, height);
 			this.name = name;
-			this.x = x;
-			this.y = y;
-			this.width = width;
-			this.height = height;
 		}
 
 		public boolean isAtPoint(Point point){
@@ -166,8 +175,13 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 	public static void main(String[] arg){
 		JFrame frame = new JFrame();
 		frame.setSize(700, 500);
-		DecisionSupport support = new DecisionSupport(new EventLog());
-		frame.addMouseListener(support);
+		DecisionSupport support = null;
+		try {
+			support = new DecisionSupport(new EventLog(KPSParser.parseFile(Main.filename)));
+		} catch (ParserException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		frame.addKeyListener(support);
 		frame.add(support);
 		frame.setVisible(true);
