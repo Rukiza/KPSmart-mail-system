@@ -3,6 +3,7 @@ package kps.data.wrappers;
 import java.util.*;
 
 import kps.events.BusinessEvent;
+import kps.parser.KPSParser;
 
 public class EventLog {
 	private List<BusinessEvent> eventLog;
@@ -87,5 +88,19 @@ public class EventLog {
 	 */
 	public boolean isEmpty(){
 		return eventLog.isEmpty();
+	}
+
+	/**
+	 * Converts the event log into XML data.
+	 *
+	 * @return string of xml data
+	 */
+	public String toXML(){
+		String xml = "<"+KPSParser.FILE_TAG+" "+KPSParser.SCHEMA+">\n";
+		for(BusinessEvent event : eventLog){
+			xml += event.toXML();
+		}
+		xml += "</"+KPSParser.FILE_TAG+">";
+		return xml;
 	}
 }
