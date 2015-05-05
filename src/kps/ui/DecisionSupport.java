@@ -21,6 +21,10 @@ import javax.swing.JPanel;
 import kps.Main;
 import kps.data.wrappers.EventLog;
 import kps.events.BusinessEvent;
+import kps.events.MailDeliveryEvent;
+import kps.events.PriceUpdateEvent;
+import kps.events.TransportCostUpdateEvent;
+import kps.events.TransportDiscontinuedEvent;
 import kps.parser.KPSParser;
 import kps.parser.ParserException;
 
@@ -75,9 +79,11 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 			g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 30));
 			g.drawString("Type of Event: "+event.getType(), 100, 80);
 			g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 24));
-			g.drawString("Origin: "+event.getOrigin(), 100, 135);
-			g.drawString("Destination: "+event.getDestination(), 100, 165);
-			g.drawString("Time Stamp: "+new Date(event.getTimeLogged()).toString(), 100, 220);
+			g.drawString("Origin: "+event.getOrigin(), 100, 120);
+			g.drawString("Destination: "+event.getDestination(), 100, 150);
+			g.drawString("Time Stamp: "+new Date(event.getTimeLogged()).toString(), 100, 350);
+			g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 16));
+			paintEventByType(g2);
 		}
 	};
 
@@ -123,6 +129,34 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 	}
 
 	//=======================HELPER METHODS==============================//
+	public void paintEventByType(Graphics g){
+		if (event instanceof MailDeliveryEvent){
+			MailDeliveryEvent tempEvent = (MailDeliveryEvent) event;
+			g.drawString("Volume: "+tempEvent.getVolume(), 100, 175);
+			g.drawString("Weight: "+ tempEvent.getWeight(), 100, 195);
+		}
+		if (event instanceof PriceUpdateEvent){
+			PriceUpdateEvent tempEvent = (PriceUpdateEvent) event;
+			g.drawString("Price Per Gram: "+tempEvent.getGramPrice(), 100, 175);
+			g.drawString("Price Per Volume: "+ tempEvent.getVolumePrice(), 100, 195);
+		}
+		if (event instanceof TransportCostUpdateEvent){
+			TransportCostUpdateEvent tempEvent = (TransportCostUpdateEvent) event;
+			g.drawString("Volume Price: "+tempEvent.getGramPrice(), 100, 175);
+			g.drawString("Weight Price: "+ tempEvent.getVolumePrice(), 100, 195);
+			g.drawString("Maximum Weight: "+tempEvent.getMaxWeight(), 100, 215);
+			g.drawString("Maximum Volume: "+ tempEvent.getMaxVolume(), 100, 235);
+			g.drawString("Transport Duration: "+ tempEvent.getTripDuration(), 100, 255);
+			g.drawString("Transport Firm: "+ tempEvent.getTransportFirm(), 100, 275);
+			g.drawString("Transport Type: "+ tempEvent.getTransportType(), 100, 295);
+			g.drawString("Departure Frequency: "+ tempEvent.getDepartureFrequency(), 100, 315);
+		}
+		if (event instanceof TransportDiscontinuedEvent){
+			TransportDiscontinuedEvent tempEvent = (TransportDiscontinuedEvent) event;
+			g.drawString("Transport Firm: "+tempEvent.getTransportFirm(), 100, 175);
+			g.drawString("Transport Type: "+ tempEvent.getTransportType(), 100, 195);
+		}
+	}
 	//=====================HELPER METHODS END============================//
 
 	/**
