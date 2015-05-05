@@ -12,12 +12,12 @@ import org.junit.Test;
 /**
  * Tests to ensure that the parseDouble method in KPSParser is
  * working correctly.
- * 
+ *
  * @author David
  *
  */
 public class ParseDoubleTests {
-	
+
 	/**
 	 * Test that a double can be parsed successfully.
 	 */
@@ -276,38 +276,10 @@ public class ParseDoubleTests {
 	}
 
 	/**
-	 * Test that error is thrown for trying to parse a value outside the
-	 * range of a double.
-	 */
-	@Test public void testIncorrectDoubleParse_10(){
-		double expected = 1.9446744e+19;
-		String line = "<tag> "+expected+" </tag>";
-		Scanner scan = new Scanner(line);
-		try{
-			KPSParser.parseDouble(scan, "tag");
-		}catch(ParserException e){return;}
-		fail("Tags to parse: "+line+"\nException should have been thrown.");
-	}
-
-	/**
-	 * Test that error is thrown for trying to parse a value outside the
-	 * range of a double.
-	 */
-	@Test public void testIncorrectDoubleParse_11(){
-		double expected = -1.9446744e+19;
-		String line = "<tag> "+expected+" </tag>";
-		Scanner scan = new Scanner(line);
-		try{
-			KPSParser.parseDouble(scan, "tag");
-		}catch(ParserException e){return;}
-		fail("Tags to parse: "+line+"\nException should have been thrown.");
-	}
-
-	/**
 	 * Test that error is thrown for trying to parse something that is not
 	 * a double.
 	 */
-	@Test public void testIncorrectDoubleParse_12(){
+	@Test public void testIncorrectDoubleParse_10(){
 		String line = "<tag> one </tag>";
 		Scanner scan = new Scanner(line);
 		try{
@@ -320,7 +292,7 @@ public class ParseDoubleTests {
 	 * Test that error is thrown for trying to parse something that is not
 	 * a double.
 	 */
-	@Test public void testIncorrectDoubleParse_13(){
+	@Test public void testIncorrectDoubleParse_11(){
 		String line = "<tag> double </tag>";
 		Scanner scan = new Scanner(line);
 		try{
@@ -332,7 +304,7 @@ public class ParseDoubleTests {
 	/**
 	 * Helper method which checks whether the expected result matches
 	 * the received result.
-	 * 
+	 *
 	 * @param expected
 	 * 		-- expected result
 	 * @param received
