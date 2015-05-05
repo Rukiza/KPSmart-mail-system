@@ -7,15 +7,15 @@ import kps.events.BusinessEvent;
 public class EventLog {
 	private List<BusinessEvent> eventLog;
 	private int iterationLocation;
-	
+
 	public EventLog(){
 		eventLog = new ArrayList<BusinessEvent>();
 	}
-	
+
 	public EventLog(List<BusinessEvent> eventLog){
 		this.eventLog = eventLog;
 	}
-	
+
 	/**
 	 * Adds a business event to the eventLog list in order.
 	 * Ordering is based on date.
@@ -44,8 +44,9 @@ public class EventLog {
 	 * @return - Business event
 	 */
 	public BusinessEvent getNextEvent(){
-		if (iterationLocation >= eventLog.size()){
+		if (iterationLocation + 1 >= eventLog.size()){
 			iterationLocation = 0;
+			return eventLog.get(iterationLocation);
 		}
 		return eventLog.get(++iterationLocation);
 	}
@@ -57,15 +58,16 @@ public class EventLog {
 	 * @return - Business event
 	 */
 	public BusinessEvent getPrevEvent(){
-		if (iterationLocation < 0){
+		if (iterationLocation - 1 < 0){
 			iterationLocation = eventLog.size() -1;
+			return eventLog.get(iterationLocation);
 		}
 		return eventLog.get(--iterationLocation);
 	}
-	
+
 	/**
 	 * Gets the current business event.
-	 * 
+	 *
 	 * @return - Current Business event.
 	 */
 	public BusinessEvent getCurrentEvent(){
@@ -83,7 +85,7 @@ public class EventLog {
 	 * Check if the event log is empty
 	 * @return - true if its empty
 	 */
-	public boolean eventLogIsEmpty(){
+	public boolean isEmpty(){
 		return eventLog.isEmpty();
 	}
 }
