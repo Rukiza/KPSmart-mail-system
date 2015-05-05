@@ -3,6 +3,7 @@ package kps.events;
 import kps.data.wrappers.BasicRoute;
 import kps.enums.Day;
 import kps.enums.Priority;
+import kps.parser.KPSParser;
 
 public class MailDeliveryEvent extends BusinessEvent {
 
@@ -62,7 +63,16 @@ public class MailDeliveryEvent extends BusinessEvent {
 	 * Returns an XML representation of this event.
 	 */
 	public String toXML(){
-		return "";
+		String xml = "<"+KPSParser.MAIL_DELIVERY_TAG+">";
+		xml += "<"+KPSParser.TIME_TAG+">"+getTimeLogged()+"</"+KPSParser.TIME_TAG+">";
+		xml += "<"+KPSParser.DAY_TAG+">"+Day.convertDayToString(day)+"</"+KPSParser.DAY_TAG+">";
+		xml += "<"+KPSParser.DESTINATION_TAG+">"+getDestination()+"</"+KPSParser.DESTINATION_TAG+">";
+		xml += "<"+KPSParser.ORIGIN_TAG+">"+getOrigin()+"</"+KPSParser.ORIGIN_TAG+">";
+		xml += "<"+KPSParser.WEIGHT_TAG+">"+weight+"</"+KPSParser.WEIGHT_TAG+">";
+		xml += "<"+KPSParser.VOLUME_TAG+">"+volume+"</"+KPSParser.VOLUME_TAG+">";
+		xml += "<"+KPSParser.PRIORITY_TAG+">"+Priority.convertPriorityToString(priority)+"</"+KPSParser.PRIORITY_TAG+">";
+		xml += "</"+KPSParser.MAIL_DELIVERY_TAG+">";
+		return xml;
 	}
 
 	/**
@@ -122,6 +132,6 @@ public class MailDeliveryEvent extends BusinessEvent {
 
 	@Override
 	public String getType() {
-		return "Mail Delivey Event";
+		return "Mail Delivery Event";
 	}
 }

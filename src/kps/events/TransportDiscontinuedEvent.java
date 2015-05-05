@@ -2,6 +2,7 @@ package kps.events;
 
 import kps.data.wrappers.BasicRoute;
 import kps.enums.TransportType;
+import kps.parser.KPSParser;
 
 public class TransportDiscontinuedEvent extends BusinessEvent{
 
@@ -39,7 +40,14 @@ public class TransportDiscontinuedEvent extends BusinessEvent{
 	 * Returns an XML representation of this event.
 	 */
 	public String toXML(){
-		return "";
+		String xml = "<"+KPSParser.TRANSPORT_DISCONTINUED_TAG+">";
+		xml += "<"+KPSParser.TIME_TAG+">"+getTimeLogged()+"</"+KPSParser.TIME_TAG+">";
+		xml += "<"+KPSParser.COMPANY_TAG+">"+transportFirm+"</"+KPSParser.COMPANY_TAG+">";
+		xml += "<"+KPSParser.DESTINATION_TAG+">"+getDestination()+"</"+KPSParser.DESTINATION_TAG+">";
+		xml += "<"+KPSParser.ORIGIN_TAG+">"+getOrigin()+"</"+KPSParser.ORIGIN_TAG+">";
+		xml += "<"+KPSParser.TRANSPORT_TYPE_TAG+">"+TransportType.convertTransportTypeToString(transportType)+"</"+KPSParser.TRANSPORT_TYPE_TAG+">";
+		xml += "</"+KPSParser.TRANSPORT_DISCONTINUED_TAG+">";
+		return xml;
 	}
 
 	/**

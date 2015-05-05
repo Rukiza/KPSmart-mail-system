@@ -5,6 +5,7 @@ import kps.data.wrappers.DeliveryPrice;
 import kps.data.wrappers.MailTransport;
 import kps.enums.Day;
 import kps.enums.TransportType;
+import kps.parser.KPSParser;
 
 public class TransportCostUpdateEvent extends BusinessEvent{
 
@@ -123,7 +124,20 @@ public class TransportCostUpdateEvent extends BusinessEvent{
 	 * Returns an XML representation of this event.
 	 */
 	public String toXML(){
-		return "";
+		String xml = "<"+KPSParser.TRANSPORT_COST_UPDATE_TAG+">";
+		xml += "<"+KPSParser.TIME_TAG+">"+getTimeLogged()+"</"+KPSParser.TIME_TAG+">";
+		xml += "<"+KPSParser.COMPANY_TAG+">"+transportFirm+"</"+KPSParser.COMPANY_TAG+">";
+		xml += "<"+KPSParser.DESTINATION_TAG+">"+getDestination()+"</"+KPSParser.DESTINATION_TAG+">";
+		xml += "<"+KPSParser.ORIGIN_TAG+">"+getOrigin()+"</"+KPSParser.ORIGIN_TAG+">";
+		xml += "<"+KPSParser.WEIGHT_COST_TAG+">"+getGramPrice()+"</"+KPSParser.WEIGHT_COST_TAG+">";
+		xml += "<"+KPSParser.VOLUME_COST_TAG+">"+getVolumePrice()+"</"+KPSParser.VOLUME_COST_TAG+">";
+		xml += "<"+KPSParser.MAX_WEIGHT_TAG+">"+maxWeight+"</"+KPSParser.MAX_WEIGHT_TAG+">";
+		xml += "<"+KPSParser.MAX_VOLUME_TAG+">"+maxVolume+"</"+KPSParser.MAX_VOLUME_TAG+">";
+		xml += "<"+KPSParser.DURATION_TAG+">"+getTripDuration()+"</"+KPSParser.DURATION_TAG+">";
+		xml += "<"+KPSParser.FREQUENCY_TAG+">"+getDepartureFrequency()+"</"+KPSParser.FREQUENCY_TAG+">";
+		xml += "<"+KPSParser.DAY_TAG+">"+Day.convertDayToString(getDayDelivered())+"</"+KPSParser.DAY_TAG+">";
+		xml += "</"+KPSParser.TRANSPORT_COST_UPDATE_TAG+">";
+		return xml;
 	}
 
 	/**
