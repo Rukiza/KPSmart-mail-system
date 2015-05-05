@@ -15,7 +15,7 @@ public abstract class BusinessEvent {
 
 	/**
 	 * Returns the time at which this event was logged.
-	 * 
+	 *
 	 * @return time event was logged (as a long)
 	 */
 	public long getTimeLogged(){
@@ -46,4 +46,11 @@ public abstract class BusinessEvent {
 	 * @return an XML representation of this event
 	 */
 	public abstract String toXML();
+
+	/**
+	 * Returns the type of event it is.
+	 *
+	 * @return - type of event in string form.
+	 */
+	public abstract String getType();
 }

@@ -125,7 +125,7 @@ public class TransportCostUpdateEvent extends BusinessEvent{
 	public String toXML(){
 		return "";
 	}
-	
+
 	/**
 	 * Compares this TransportCostUpdateEvent to the specified object. Only
 	 * returns true if the object shares the same field values as this event.
@@ -199,5 +199,10 @@ public class TransportCostUpdateEvent extends BusinessEvent{
 		}
 		// otherwise o is identical to this object
 		return true;
+	}
+
+	@Override
+	public String getType() {
+		return "Transport Cost Update";
 	}
 }

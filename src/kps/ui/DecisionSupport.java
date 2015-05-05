@@ -11,6 +11,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -72,8 +73,10 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 
 		if (event != null){
 			g.setColor(textColor);
+			g.drawString(event.getType(), 100, 80);
 			g.drawString(event.getOrigin(), 100, 100);
-			g.drawString(event.getDestination(), 100, 200);
+			g.drawString(event.getDestination(), 100, 120);
+			g.drawString(new Date(event.getTimeLogged()).toString(), 100, 160);
 		}
 	};
 
@@ -117,6 +120,9 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 			repaint();
 		}
 	}
+
+	//=======================HELPER METHODS==============================//
+	//=====================HELPER METHODS END============================//
 
 	/**
 	 * Sets up buttons on panel
