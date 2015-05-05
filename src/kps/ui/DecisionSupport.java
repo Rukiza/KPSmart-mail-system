@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,6 @@ import kps.data.wrappers.EventLog;
 import kps.events.BusinessEvent;
 
 /**
- *
  * @author Shane Brewer
  *
  */
@@ -84,6 +84,7 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 			}
 			repaint();
 		}
+
 	}
 
 	@Override
