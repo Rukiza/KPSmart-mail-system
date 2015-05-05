@@ -2,6 +2,7 @@ package kps.ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -16,8 +17,6 @@ import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
-import com.sun.corba.se.impl.oa.poa.ActiveObjectMap.Key;
 
 import kps.Main;
 import kps.data.wrappers.EventLog;
@@ -73,10 +72,12 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 
 		if (event != null){
 			g.setColor(textColor);
-			g.drawString(event.getType(), 100, 80);
-			g.drawString(event.getOrigin(), 100, 100);
-			g.drawString(event.getDestination(), 100, 120);
-			g.drawString(new Date(event.getTimeLogged()).toString(), 100, 160);
+			g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 30));
+			g.drawString("Type of Event: "+event.getType(), 100, 80);
+			g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 24));
+			g.drawString("Origin: "+event.getOrigin(), 100, 135);
+			g.drawString("Destination: "+event.getDestination(), 100, 165);
+			g.drawString("Time Stamp: "+new Date(event.getTimeLogged()).toString(), 100, 220);
 		}
 	};
 
