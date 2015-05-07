@@ -88,4 +88,15 @@ public class EventLog {
 	public boolean isEmpty(){
 		return eventLog.isEmpty();
 	}
+
+	/**
+	 * @return - Size of the event log
+	 */
+	public int getSize(){
+		return eventLog.size();
+	}
+
+	public int getPosition(){
+		return iterationLocation;
+	}
 }
