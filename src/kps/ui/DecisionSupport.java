@@ -1,5 +1,6 @@
 package kps.ui;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -14,6 +15,8 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javafx.scene.layout.Border;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -48,15 +51,17 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 		if (!this.data.isEmpty()){
 			event = this.data.getCurrentEvent();
 		}
-		setPreferredSize(new Dimension(650,450));
-		setSize(650, 450);
-		buttonSetup();
 		addMouseListener(this);
+	}
+
+	public void setup(){
+		this.validate();
+		buttonSetup();
 	}
 
 	@Override
 	public void paint(Graphics g) {
-		if(buttons == null)return;
+		if(buttons == null || buttons.isEmpty())return;
 		Graphics2D g2 = (Graphics2D)g;
 
 		g.setColor(backgroundColor );
@@ -85,12 +90,12 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 			g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 16));
 			paintEventByType(g2);
 		}
+		paintProgressBar(g2);
 	};
 
 	@Override
 	public void repaint(){
 		Graphics g = this.getGraphics();
-
 		paint(g);
 	}
 
@@ -129,7 +134,7 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 	}
 
 	//=======================HELPER METHODS==============================//
-	public void paintEventByType(Graphics g){
+	private void paintEventByType(Graphics g){
 		if (event instanceof MailDeliveryEvent){
 			MailDeliveryEvent tempEvent = (MailDeliveryEvent) event;
 			g.drawString("Volume: "+tempEvent.getVolume(), 100, 175);
@@ -156,6 +161,11 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 			g.drawString("Transport Firm: "+tempEvent.getTransportFirm(), 100, 175);
 			g.drawString("Transport Type: "+ tempEvent.getTransportType(), 100, 195);
 		}
+	}
+
+	private void paintProgressBar(Graphics g){
+		g.drawRect((int)(this.getWidth()*0.10), (int)(this.getHeight()*0.90), (int)(getWidth()*0.8), 20);
+		g.fillRect((int)(this.getWidth()*0.10), (int)(this.getHeight()*0.90), (int)((int)(getWidth()*0.8)*(data.getPosition()/(data.getSize()-1.0))), 20);
 	}
 	//=====================HELPER METHODS END============================//
 
@@ -215,7 +225,7 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 
 	public static void main(String[] arg){
 		JFrame frame = new JFrame();
-		frame.setSize(700, 500);
+		frame.setSize(1200, 900);
 		DecisionSupport support = null;
 		try {
 			support = new DecisionSupport(new EventLog(KPSParser.parseFile(Main.filename)));
@@ -224,8 +234,10 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 			e.printStackTrace();
 		}
 		frame.addKeyListener(support);
-		frame.add(support);
+		frame.add(support, BorderLayout.CENTER);
 		frame.setVisible(true);
+		support.setup();
+
 	}
 }
 

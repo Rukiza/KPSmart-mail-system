@@ -91,6 +91,17 @@ public class EventLog {
 	}
 
 	/**
+	 * @return - Size of the event log
+	 */
+	public int getSize(){
+		return eventLog.size();
+	}
+
+	public int getPosition(){
+		return iterationLocation;
+	}
+
+	/**
 	 * Converts the event log into XML data.
 	 *
 	 * @return string of xml data
