@@ -10,7 +10,7 @@ import kps.parser.ParserException;
 public class Main {
 
 	public static final String XML_FILE_PATH = "src"+File.separatorChar+"kps"+File.separatorChar+"xml"+File.separatorChar;
-	public static final String filename = XML_FILE_PATH + "kps2.xml";
+	public static final String filename = XML_FILE_PATH + "kps_data.xml";
 
 	public static void main(String[] args){
 		try{

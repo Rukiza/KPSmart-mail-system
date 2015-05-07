@@ -1,24 +1,23 @@
 package kps.data;
 
+import sun.rmi.transport.Transport;
 import kps.enums.TransportType;
+import kps.events.TransportCostUpdateEvent;
 
 /**
  * @author Nicky van Hulst 300294657
  * */
 public class Route {
-	private String src;
-	private String dest;
 	private double cost;
 	private TransportType type;
-	
-	public Route(String src, String dest, Double cost, TransportType type){
-		this.cost = cost;
-		this.src = src;
-		this.dest = dest;
-		this.type = type;
+	private TransportCostUpdateEvent transport;
+
+	//public Route(String src, String dest, Double cost, TransportType type,TransportCostUpdateEvent trans ){
+	public Route(TransportCostUpdateEvent trans){
+		this.transport = trans;
 	}
-	
-	
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -26,8 +25,6 @@ public class Route {
 		long temp;
 		temp = Double.doubleToLongBits(cost);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + ((dest == null) ? 0 : dest.hashCode());
-		result = prime * result + ((src == null) ? 0 : src.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
@@ -45,26 +42,33 @@ public class Route {
 		if (Double.doubleToLongBits(cost) != Double
 				.doubleToLongBits(other.cost))
 			return false;
-		if (dest == null) {
-			if (other.dest != null)
+		if ( transport.getDestination() == null) {
+			if (other.getDest()!= null)
 				return false;
-		} else if (!dest.equals(other.dest))
+		} else if (! transport.getDestination().equals(other.getCost()))
 			return false;
-		if (src == null) {
-			if (other.src != null)
+		if (transport.getOrigin() == null) {
+			if (other.getDest()!= null)
 				return false;
-		} else if (!src.equals(other.src))
+		} else if (!transport.getOrigin().equals(other.getSrc()))
 			return false;
-		if (type != other.type)
+		if (transport.getTransportType() != other.transport.getTransportType())
 			return false;
 		return true;
 	}
-	
-	@Override
-	public String toString(){return "Name :" + src + " Dest :" + dest + " Cost :"+cost;}
 
-	public String getSrc(){return this.src;}
-	public String getDest(){return this.dest;}
-	public TransportType getType(){return type;}
-	public double getCost(){return cost;}
+	@Override
+	public String toString(){return "src :" + transport.getOrigin() + " Dest :" + transport.getDestination() + " Cost :"+cost;}
+
+	public String getSrc(){return transport.getOrigin();}
+	public String getDest(){return transport.getDestination();}
+	public TransportType getType(){return transport.getTransportType();}
+	public double getCost(){return cost;}//TODO change to getCost(double volume, double weight)
+
+	public double calculateCost(double volume, double weight){
+		if(volume > transport.getMaxVolume())return -1;
+		if(weight > transport.getMaxWeight())return -1;
+
+		return (volume * transport.getVolumePrice()) + (weight * transport.getGramPrice());
+	}
 }

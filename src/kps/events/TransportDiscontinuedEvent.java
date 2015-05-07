@@ -40,13 +40,13 @@ public class TransportDiscontinuedEvent extends BusinessEvent{
 	 * Returns an XML representation of this event.
 	 */
 	public String toXML(){
-		String xml = "<"+KPSParser.TRANSPORT_DISCONTINUED_TAG+">";
-		xml += "<"+KPSParser.TIME_TAG+">"+getTimeLogged()+"</"+KPSParser.TIME_TAG+">";
-		xml += "<"+KPSParser.COMPANY_TAG+">"+transportFirm+"</"+KPSParser.COMPANY_TAG+">";
-		xml += "<"+KPSParser.DESTINATION_TAG+">"+getDestination()+"</"+KPSParser.DESTINATION_TAG+">";
-		xml += "<"+KPSParser.ORIGIN_TAG+">"+getOrigin()+"</"+KPSParser.ORIGIN_TAG+">";
-		xml += "<"+KPSParser.TRANSPORT_TYPE_TAG+">"+TransportType.convertTransportTypeToString(transportType)+"</"+KPSParser.TRANSPORT_TYPE_TAG+">";
-		xml += "</"+KPSParser.TRANSPORT_DISCONTINUED_TAG+">";
+		String xml = "\t<"+KPSParser.TRANSPORT_DISCONTINUED_TAG+">\n";
+		xml += "\t\t<"+KPSParser.TIME_TAG+">"+getTimeLogged()+"</"+KPSParser.TIME_TAG+">\n";
+		xml += "\t\t<"+KPSParser.COMPANY_TAG+">"+transportFirm+"</"+KPSParser.COMPANY_TAG+">\n";
+		xml += "\t\t<"+KPSParser.DESTINATION_TAG+">"+getDestination()+"</"+KPSParser.DESTINATION_TAG+">\n";
+		xml += "\t\t<"+KPSParser.ORIGIN_TAG+">"+getOrigin()+"</"+KPSParser.ORIGIN_TAG+">\n";
+		xml += "\t\t<"+KPSParser.TRANSPORT_TYPE_TAG+">"+TransportType.convertTransportTypeToString(transportType)+"</"+KPSParser.TRANSPORT_TYPE_TAG+">\n";
+		xml += "\t</"+KPSParser.TRANSPORT_DISCONTINUED_TAG+">\n";
 		return xml;
 	}
 

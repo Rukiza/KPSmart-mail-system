@@ -28,25 +28,33 @@ public class Node  implements Comparable<Node>{
 	 * Adds an edge to the Node
 	 * */
 	public boolean addEdge(Route route){
-		if(!(route.getSrc().equals(name) || route.getDest().equals(name)))return false;
+				if(!(route.getSrc().equals(name) || route.getDest().equals(name))){
+			return false;
+		}
 		
-		if(route.getDest().equals(name))edgesIn.add(route);
-		else if(route.getSrc().equals(name)){edgesOut.add(route);}
+		if(route.getDest().equals(name)){
+			edgesIn.add(route);
+		}
+		
+		else if(route.getSrc().equals(name)){
+						edgesOut.add(route);
+			}
 		return true;
+	}
+	
+	public void updateRoute(){
+		
 	}
 	
 	
 	public boolean removeRoute(Route route){
-		System.out.println("Removing in route");
 		if(edgesOut.contains(route)){
 			edgesOut.remove(route);
-			System.out.println("Removing from :" + name);
 			return true;
 		}
 		
 		if(edgesIn.contains(route)){
 			edgesIn.remove(route);
-			System.out.println("Removing from :" + name);
 			return true;
 		}
 		return false;
@@ -54,7 +62,6 @@ public class Node  implements Comparable<Node>{
 	
 	
 	public Set<Route> getNeighbours(){
-		
 		Set<Route> neighbours = new HashSet<Route>();
 		neighbours.addAll(edgesIn);
 		neighbours.addAll(edgesOut);
@@ -105,10 +112,20 @@ public class Node  implements Comparable<Node>{
 	public String getName(){return this.name;}
 	public Node getPrev(){return this.prev;}
 	public void setPrev(Node n){this.prev = n;}
-	public double getMindCost(){return this.minCost;}
-	public void setMindCost(double minCost){this.minCost = minCost;}
+	public double getMinCost(){return this.minCost;}
+	public void setMinCost(double minCost){this.minCost = minCost;}
+	
+	public void printRoutes(){
+		System.out.println("Node " +this.name + " In size " + edgesIn.size() + " Out Size " + edgesOut.size()  );
+		for(Route r : edgesIn){
+			System.out.println(r);
+		}
+		for(Route r : edgesOut){
+			System.out.println(r);
+		}
+	}
 
 	@Override
-	public int compareTo(Node o) {return Double.compare(minCost, o.getMindCost());}
+	public int compareTo(Node o) {return Double.compare(minCost, o.getMinCost());}
 
 }

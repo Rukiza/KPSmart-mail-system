@@ -51,14 +51,14 @@ public class PriceUpdateEvent extends BusinessEvent{
 	 * Returns an XML representation of this event.
 	 */
 	public String toXML(){
-		String xml = "<"+KPSParser.PRICE_UPDATE_TAG+">";
-		xml += "<"+KPSParser.TIME_TAG+">"+getTimeLogged()+"</"+KPSParser.TIME_TAG+">";
-		xml += "<"+KPSParser.DESTINATION_TAG+">"+getDestination()+"</"+KPSParser.DESTINATION_TAG+">";
-		xml += "<"+KPSParser.ORIGIN_TAG+">"+getOrigin()+"</"+KPSParser.ORIGIN_TAG+">";
-		xml += "<"+KPSParser.PRIORITY_TAG+">"+Priority.convertPriorityToString(priority)+"</"+KPSParser.PRIORITY_TAG+">";
-		xml += "<"+KPSParser.WEIGHT_COST_TAG+">"+getGramPrice()+"</"+KPSParser.WEIGHT_COST_TAG+">";
-		xml += "<"+KPSParser.VOLUME_COST_TAG+">"+getVolumePrice()+"</"+KPSParser.VOLUME_COST_TAG+">";
-		xml += "</"+KPSParser.PRICE_UPDATE_TAG+">";
+		String xml = "\t<"+KPSParser.PRICE_UPDATE_TAG+">\n";
+		xml += "\t\t<"+KPSParser.TIME_TAG+">"+getTimeLogged()+"</"+KPSParser.TIME_TAG+">\n";
+		xml += "\t\t<"+KPSParser.DESTINATION_TAG+">"+getDestination()+"</"+KPSParser.DESTINATION_TAG+">\n";
+		xml += "\t\t<"+KPSParser.ORIGIN_TAG+">"+getOrigin()+"</"+KPSParser.ORIGIN_TAG+">\n";
+		xml += "\t\t<"+KPSParser.PRIORITY_TAG+">"+Priority.convertPriorityToString(priority)+"</"+KPSParser.PRIORITY_TAG+">\n";
+		xml += "\t\t<"+KPSParser.WEIGHT_COST_TAG+">"+getGramPrice()+"</"+KPSParser.WEIGHT_COST_TAG+">\n";
+		xml += "\t\t<"+KPSParser.VOLUME_COST_TAG+">"+getVolumePrice()+"</"+KPSParser.VOLUME_COST_TAG+">\n";
+		xml += "\t\t</"+KPSParser.PRICE_UPDATE_TAG+">\n";
 		return xml;
 	}
 
