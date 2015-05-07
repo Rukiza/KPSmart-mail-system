@@ -42,6 +42,12 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 	private List<Button> buttons;
 	private Color textColor = new Color (0, 0, 0);
 	private Color backgroundColor = new Color (255,255,255);
+	private int progressBarY;
+	private Color progressForground = new Color(185, 142, 0);
+	private Color progressBackground = new Color(255, 205, 0);
+	private Color progressDraw = new Color(255,196,0);
+
+
 
 	/**
 	 * @param data - The Event log of the program.
@@ -91,6 +97,7 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 			paintEventByType(g2);
 		}
 		paintProgressBar(g2);
+		buttonSetup();
 	};
 
 	@Override
@@ -164,8 +171,13 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 	}
 
 	private void paintProgressBar(Graphics g){
-		g.drawRect((int)(this.getWidth()*0.10), (int)(this.getHeight()*0.90), (int)(getWidth()*0.8), 20);
-		g.fillRect((int)(this.getWidth()*0.10), (int)(this.getHeight()*0.90), (int)((int)(getWidth()*0.8)*(data.getPosition()/(data.getSize()-1.0))), 20);
+		int progressBarX = (int)(this.getWidth()*0.10);
+		progressBarY = (int)(this.getHeight()*0.90);
+		int progressBarWidth = (int)(getWidth()*0.8);
+		int progressBarHeight = 20;
+		int progress = (int)(progressBarWidth * (data.getPosition()/(data.getSize()-1.0)));
+		g.drawRect(progressBarX, progressBarY, progressBarWidth, progressBarHeight);
+		g.fillRect(progressBarX, progressBarY, progress, progressBarHeight);
 	}
 	//=====================HELPER METHODS END============================//
 
@@ -177,10 +189,10 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 		int width = 100;
 		int height = 60;
 		int base = 20;
-		int y = this.getHeight() - base - height;
-		int x = this.getWidth() - base;
-		buttons.add(new Button("Right", x - width, y, width, height));
-		buttons.add(new Button("Left", x - width*2-base, y, width, height));
+		int y = this.progressBarY - base - height;
+		int x = this.getWidth()/2;
+		buttons.add(new Button("Right", x - width/2 - base/2, y, width, height));
+		buttons.add(new Button("Left", x + width/2  +base/2, y, width, height));
 	}
 
 	/**
@@ -190,8 +202,8 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 	 */
 	private class Button extends Rectangle{
 		public String name;
-		public Color draw = new Color(255,0,0);
-		public Color fill = new Color(0,255,0);
+		public Color draw = new Color(255,196,0);
+		public Color fill = new Color(255,215,51);
 
 		public Button(String name, int x, int y, int width, int height){
 			super(x,y, width, height);
