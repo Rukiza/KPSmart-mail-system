@@ -129,6 +129,7 @@ public class TransportCostUpdateEvent extends BusinessEvent{
 		xml += "\t\t<"+KPSParser.COMPANY_TAG+">"+transportFirm+"</"+KPSParser.COMPANY_TAG+">\n";
 		xml += "\t\t<"+KPSParser.DESTINATION_TAG+">"+getDestination()+"</"+KPSParser.DESTINATION_TAG+">\n";
 		xml += "\t\t<"+KPSParser.ORIGIN_TAG+">"+getOrigin()+"</"+KPSParser.ORIGIN_TAG+">\n";
+		xml += "\t\t<"+KPSParser.TRANSPORT_TYPE_TAG+">"+TransportType.convertTransportTypeToString(transportType)+"</"+KPSParser.TRANSPORT_TYPE_TAG+">\n";
 		xml += "\t\t<"+KPSParser.WEIGHT_COST_TAG+">"+getGramPrice()+"</"+KPSParser.WEIGHT_COST_TAG+">\n";
 		xml += "\t\t<"+KPSParser.VOLUME_COST_TAG+">"+getVolumePrice()+"</"+KPSParser.VOLUME_COST_TAG+">\n";
 		xml += "\t\t<"+KPSParser.MAX_WEIGHT_TAG+">"+maxWeight+"</"+KPSParser.MAX_WEIGHT_TAG+">\n";

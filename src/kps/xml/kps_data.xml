@@ -4,6 +4,7 @@
 		<company>Air NZ</company>
 		<to>Rome</to>
 		<from>Wellington</from>
+		<type>Air</type>
 		<weightcost>6.0</weightcost>
 		<volumecost>6.0</volumecost>
 		<maxWeight>350</maxWeight>
@@ -17,6 +18,7 @@
 		<company>Kelburn Airways</company>
 		<to>Sydney</to>
 		<from>Wellington</from>
+		<type>Air</type>
 		<weightcost>2.0</weightcost>
 		<volumecost>0.0</volumecost>
 		<maxWeight>800</maxWeight>
@@ -30,6 +32,7 @@
 		<company>Qantas</company>
 		<to>Sydney</to>
 		<from>Wellington</from>
+		<type>Air</type>
 		<weightcost>2.0</weightcost>
 		<volumecost>1.0</volumecost>
 		<maxWeight>700</maxWeight>
@@ -43,6 +46,7 @@
 		<company>Kelburn Freight</company>
 		<to>Wellington</to>
 		<from>Auckland</from>
+		<type>Land</type>
 		<weightcost>0.0</weightcost>
 		<volumecost>1.0</volumecost>
 		<maxWeight>1200</maxWeight>
@@ -56,6 +60,7 @@
 		<company>Kelburn Freight</company>
 		<to>Wellington</to>
 		<from>Hamilton</from>
+		<type>Land</type>
 		<weightcost>0.0</weightcost>
 		<volumecost>1.0</volumecost>
 		<maxWeight>1100</maxWeight>
@@ -69,6 +74,7 @@
 		<company>Rodney's Longhaul</company>
 		<to>Hamilton</to>
 		<from>Auckland</from>
+		<type>Land</type>
 		<weightcost>0.0</weightcost>
 		<volumecost>1.0</volumecost>
 		<maxWeight>8000</maxWeight>
@@ -82,6 +88,7 @@
 		<company>Roman Air Freight Ltd</company>
 		<to>Rome</to>
 		<from>Sydney</from>
+		<type>Air</type>
 		<weightcost>2.0</weightcost>
 		<volumecost>3.0</volumecost>
 		<maxWeight>120</maxWeight>
@@ -95,6 +102,7 @@
 		<company>Pacifica Merchants</company>
 		<to>Suva</to>
 		<from>Sydney</from>
+		<type>Sea</type>
 		<weightcost>3.0</weightcost>
 		<volumecost>3.0</volumecost>
 		<maxWeight>100</maxWeight>
@@ -108,6 +116,7 @@
 		<company>Davy Jones Ltd</company>
 		<to>Rome</to>
 		<from>Auckland</from>
+		<type>Sea</type>
 		<weightcost>5.0</weightcost>
 		<volumecost>4.0</volumecost>
 		<maxWeight>1000</maxWeight>
@@ -212,6 +221,7 @@
 		<company>Qantas</company>
 		<to>Sydney</to>
 		<from>Wellington</from>
+		<type>Air</type>
 		<weightcost>2.0</weightcost>
 		<volumecost>1.0</volumecost>
 		<maxWeight>120</maxWeight>
