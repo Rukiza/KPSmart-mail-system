@@ -12,12 +12,9 @@ import java.util.Set;
  * @author Nicky van Hulst 300294657
  * */
 public class RouteGraph implements Iterable<Node> {
-
-	//private Route root; // root node for the route graph (not sure how you want to implement this.
+	
+	
 	private List<Route> criticalRoutes;
-
-	//the root node TODO change if we have disconnected graph
-	Node root;
 	
 	//the nodes of the graph
 	private List<Node> nodes;
@@ -35,13 +32,11 @@ public class RouteGraph implements Iterable<Node> {
 	 * Updates a route
 	 * */
     public boolean updateRoute(Route route){
+    	if(route == null)return false;
     	for(Node n : nodes){
-    		//if(n.getNeighbours().contains(route))n.updateRoute(route);
+    		if(n.getNeighbours().contains(route))n.updateRoute(route);
     	}
-    	if(route == null || !nodes.contains(route))return false;
     	return true;
-
-
     }
     
     
@@ -59,13 +54,13 @@ public class RouteGraph implements Iterable<Node> {
     	nodes.add(dest);
     }
     
-    private void createRoot(Route route){
+    private void createSrcAndDest(Route route){
     	Node dest = new Node(route.getDest());
-		root = new Node(route.getSrc());
+    	Node  src= new Node(route.getSrc());
 		dest.addEdge(route);
-		root.addEdge(route);
+		src.addEdge(route);
 		nodes.add(dest);//the route was added
-		nodes.add(root);
+		nodes.add(src);
     }
 
     /**
@@ -75,14 +70,13 @@ public class RouteGraph implements Iterable<Node> {
     	Node srcNode = null;
     	Node destNode = null;
     	
-    	
     	for(Node n : nodes){
     		if(n.getName().equals(route.getSrc()))srcNode = n;
     		if(n.getName().equals(route.getDest()))destNode = n;
     	}
     	
-    	if( root == null){
-    		createRoot(route);
+    	if( srcNode == null && destNode == null){
+    		createSrcAndDest(route);
     		return;
     	}
     	
@@ -100,9 +94,6 @@ public class RouteGraph implements Iterable<Node> {
     		createDest(route, srcNode);
     		return;
     	}
-    	//if(srcNode !=null)srcNode.addEdge(route);
-    	//if(destNode != null)destNode.addEdge(route);
-
     }
 
     /**
@@ -210,6 +201,5 @@ public class RouteGraph implements Iterable<Node> {
 		}
 		return null;
 	}
-	public Node getRoot(){return this.root;}
 
 }

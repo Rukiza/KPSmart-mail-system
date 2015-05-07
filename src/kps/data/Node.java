@@ -42,22 +42,27 @@ public class Node  implements Comparable<Node>{
 		return true;
 	}
 	
-	public void updateRoute(){
+	public void updateRoute(Route route){
+		edgesIn.remove(route);
+		edgesOut.remove(route);
 		
+		edgesIn.add(route);
+		edgesOut.add(route);
 	}
 	
-	
 	public boolean removeRoute(Route route){
+		boolean removed = false;
+		
 		if(edgesOut.contains(route)){
 			edgesOut.remove(route);
-			return true;
+			removed = true;
 		}
 		
 		if(edgesIn.contains(route)){
 			edgesIn.remove(route);
-			return true;
+			removed = true;
 		}
-		return false;
+		return removed;
 	}
 	
 	
@@ -107,14 +112,6 @@ public class Node  implements Comparable<Node>{
 		this.prev = null;
 	}
 	
-	@Override
-	public String toString(){return this.name;}
-	public String getName(){return this.name;}
-	public Node getPrev(){return this.prev;}
-	public void setPrev(Node n){this.prev = n;}
-	public double getMinCost(){return this.minCost;}
-	public void setMinCost(double minCost){this.minCost = minCost;}
-	
 	public void printRoutes(){
 		System.out.println("Node " +this.name + " In size " + edgesIn.size() + " Out Size " + edgesOut.size()  );
 		for(Route r : edgesIn){
@@ -124,6 +121,16 @@ public class Node  implements Comparable<Node>{
 			System.out.println(r);
 		}
 	}
+
+	
+	@Override
+	public String toString(){return this.name;}
+	public String getName(){return this.name;}
+	public Node getPrev(){return this.prev;}
+	public void setPrev(Node n){this.prev = n;}
+	public double getMinCost(){return this.minCost;}
+	public void setMinCost(double minCost){this.minCost = minCost;}
+	
 
 	@Override
 	public int compareTo(Node o) {return Double.compare(minCost, o.getMinCost());}
