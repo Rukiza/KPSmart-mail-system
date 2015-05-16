@@ -1,4 +1,4 @@
-package kps.ui;
+package kps.ui.panel;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -35,7 +35,7 @@ import kps.parser.ParserException;
  * @author Shane Brewer
  *
  */
-public class DecisionSupport extends JPanel implements MouseListener, KeyListener{
+public class DecisionSupportPanel extends JPanel implements MouseListener, KeyListener{
 
 	private EventLog data;
 	private BusinessEvent event;
@@ -52,7 +52,7 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 	/**
 	 * @param data - The Event log of the program.
 	 */
-	public DecisionSupport(EventLog data){
+	public DecisionSupportPanel(EventLog data){
 		this.data = data;
 		if (!this.data.isEmpty()){
 			event = this.data.getCurrentEvent();
@@ -238,9 +238,9 @@ public class DecisionSupport extends JPanel implements MouseListener, KeyListene
 	public static void main(String[] arg){
 		JFrame frame = new JFrame();
 		frame.setSize(1200, 900);
-		DecisionSupport support = null;
+		DecisionSupportPanel support = null;
 		try {
-			support = new DecisionSupport(new EventLog(KPSParser.parseFile(Main.filename)));
+			support = new DecisionSupportPanel(new EventLog(KPSParser.parseFile(Main.filename)));
 		} catch (ParserException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

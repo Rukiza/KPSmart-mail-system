@@ -1,4 +1,4 @@
-package kps.ui;
+package kps.ui.panel;
 
 import javax.swing.JPanel;
 

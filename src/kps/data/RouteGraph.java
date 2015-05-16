@@ -12,11 +12,13 @@ import java.util.Set;
  * @author Nicky van Hulst 300294657
  * */
 public class RouteGraph implements Iterable<Node> {
-	
-	
+
+
 	private List<Route> criticalRoutes;
-	
-	//the nodes of the graph
+
+	/**
+	 * the nodes of the graph
+	 */
 	private List<Node> nodes;
 
 	/**
@@ -38,22 +40,22 @@ public class RouteGraph implements Iterable<Node> {
     	}
     	return true;
     }
-    
-    
+
+
     private void createSrc(Route route, Node destNode){
     	Node src = new Node(route.getSrc());
     	src.addEdge(route);
     	destNode.addEdge(route);
     	nodes.add(src);
     }
-    
+
     private void createDest(Route route, Node srcNode){
     	Node dest = new Node(route.getDest());
     	dest.addEdge(route);
     	srcNode.addEdge(route);
     	nodes.add(dest);
     }
-    
+
     private void createSrcAndDest(Route route){
     	Node dest = new Node(route.getDest());
     	Node  src= new Node(route.getSrc());
@@ -69,23 +71,23 @@ public class RouteGraph implements Iterable<Node> {
     public void addRoute(Route route) {
     	Node srcNode = null;
     	Node destNode = null;
-    	
+
     	for(Node n : nodes){
     		if(n.getName().equals(route.getSrc()))srcNode = n;
     		if(n.getName().equals(route.getDest()))destNode = n;
     	}
-    	
+
     	if( srcNode == null && destNode == null){
     		createSrcAndDest(route);
     		return;
     	}
-    	
+
     	if(srcNode !=null && destNode !=null){
     		srcNode.addEdge(route);
     		destNode.addEdge(route);
     		return;
     	}
-    	
+
     	if(srcNode == null && destNode !=null){
     		createSrc(route, destNode);
     		return;

@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 import kps.data.wrappers.EventLog;
 import kps.parser.KPSParser;
 import kps.parser.ParserException;
-import kps.ui.DecisionSupport;
+import kps.ui.panel.DecisionSupportPanel;
 
 import org.junit.Test;
 
@@ -14,7 +14,7 @@ public class DecisonSupportTests {
 	@Test
 	public void basicTest(){
 		JFrame frame = new JFrame();
-		frame.add(new DecisionSupport(new EventLog()));
+		frame.add(new DecisionSupportPanel(new EventLog()));
 		frame.pack();
 		frame.setVisible(true);
 	}
@@ -23,7 +23,7 @@ public class DecisonSupportTests {
 	public void basicTestWithData(){
 		JFrame frame = new JFrame();
 		try {
-			frame.add(new DecisionSupport(new EventLog(KPSParser.parseFile("src/kps/xml/kps2.xml"))));
+			frame.add(new DecisionSupportPanel(new EventLog(KPSParser.parseFile("src/kps/xml/kps2.xml"))));
 			System.out.println("File loaded");
 		} catch (ParserException e) {
 			System.out.println("File Failed to load");
