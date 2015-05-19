@@ -2,8 +2,8 @@ package kps.ui.test;
 
 import org.junit.Test;
 
-import kps.ui.AuthDetailsListener;
 import kps.ui.LogonBox;
+import kps.ui.listener.AuthDetailsListener;
 
 public class LogonBoxTests {
 
@@ -13,7 +13,7 @@ public class LogonBoxTests {
 			public void onReceivedAuthDetails(String un, String pw){
 				System.out.println(un + ", " + pw);
 			}
-			public void onReceivedCancel(){
+			public void onCancel(){
 				System.out.println("Cancelled");
 			}
 		}, "Will", "pw");

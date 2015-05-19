@@ -7,9 +7,9 @@ import kps.data.wrappers.EventLog;
 import kps.events.BusinessEvent;
 import kps.parser.KPSParser;
 import kps.parser.ParserException;
-import kps.ui.AuthDetailsListener;
 import kps.ui.LogonBox;
 import kps.ui.Window;
+import kps.ui.listener.AuthDetailsListener;
 
 public class Main {
 
@@ -30,7 +30,7 @@ public class Main {
 				}
 
 				@Override
-				public void onReceivedCancel() {
+				public void onCancel() {
 					// do nothing
 				}
 
