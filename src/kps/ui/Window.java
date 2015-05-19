@@ -3,6 +3,7 @@ package kps.ui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -11,8 +12,10 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import kps.data.wrappers.EventLog;
+import kps.ui.listener.PackageFormListener;
 import kps.ui.panel.DecisionSupportPanel;
 import kps.ui.panel.MetricsPanel;
+import kps.ui.panel.PackageFormWindow;
 
 /**
  * @author hardwiwill
@@ -40,6 +43,10 @@ public class Window extends JFrame {
 		setVisible(true);
 	}
 
+	/**
+	 * make the sidebar including buttons and their listeners
+	 * @return
+	 */
 	private JPanel makeSidebar(){
 		JPanel sidebar = new JPanel();
 		sidebar.setPreferredSize(new Dimension(100, 0));
@@ -48,6 +55,21 @@ public class Window extends JFrame {
 
 		JButton addPackage = new JButton("add package");
 		sidebar.add(addPackage);
+		
+		// side bar events
+		addPackage.addActionListener((ActionEvent e) -> {
+			new PackageFormWindow(new PackageFormListener(){
+				@Override
+				public void onPackageFormSubmitted(String day, String from, double price, double volume, String priority){
+					System.out.println("Submitted package form");
+				}
+				@Override
+				public void onCancel(){
+					System.out.println("Cancelled");
+				}
+			});
+		});
+		
 		return sidebar;
 	}
 

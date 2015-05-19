@@ -20,7 +20,6 @@ public class Main {
 		try{
 			List<BusinessEvent> bizEvents = KPSParser.parseFile(filename);
 
-			// some crazy shit
 			new LogonBox(new AuthDetailsListener(){
 
 				@Override

@@ -3,7 +3,6 @@ package kps.ui.panel;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.WindowEvent;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
-import kps.ui.LogonBox;
+import kps.ui.UIUtils;
 import kps.ui.listener.PackageFormListener;
 import kps.ui.util.SpringUtilities;
 
@@ -86,12 +85,11 @@ public class PackageFormWindow extends JFrame{
 			String priority = fields.get("priority").getText();
 
 			listener.onPackageFormSubmitted(day, from, weight, volume, priority);
+			UIUtils.closeWindow(this);
 		});
 
 		cancel.addActionListener((ActionEvent e) -> {
-			PackageFormWindow.this.dispatchEvent(
-				new WindowEvent(PackageFormWindow.this, WindowEvent.WINDOW_CLOSING)
-			);
+			UIUtils.closeWindow(this);
 			listener.onCancel();
 		});
 

@@ -1,11 +1,9 @@
 package kps.ui;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -91,9 +89,7 @@ public class LogonBox extends JFrame{
 	private class LogonButtonListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e){
-			LogonBox.this.dispatchEvent(
-					new WindowEvent(LogonBox.this, WindowEvent.WINDOW_CLOSING)
-			);
+			UIUtils.closeWindow(LogonBox.this);
 		}
 	}
 
