@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -14,6 +15,7 @@ import javax.swing.JTabbedPane;
 import kps.KPSmartSystem;
 import kps.data.wrappers.EventLog;
 import kps.ui.listener.PackageFormListener;
+import kps.ui.listener.RouteFormListener;
 import kps.ui.panel.DecisionSupportPanel;
 import kps.ui.panel.MetricsPanel;
 
@@ -22,15 +24,14 @@ import kps.ui.panel.MetricsPanel;
  * Encapsulates all of the KPSmart GUI elements (aside from popup boxes)
  */
 public class Window extends JFrame {
-	
+
 	private KPSmartSystem system = new KPSmartSystem();
 
 	public Window(EventLog bizEvents){
+		super("KPSmart");
 		final Dimension WINDOW_SIZE = new Dimension(800,600);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(WINDOW_SIZE);
-		setLocationRelativeTo(null); // centers the frame
 
+		setSize(WINDOW_SIZE);
 		setLayout(new BorderLayout());
 
 		JTabbedPane tabbedPane = new JTabbedPane();
@@ -52,12 +53,12 @@ public class Window extends JFrame {
 	private JPanel makeSidebar(){
 		JPanel sidebar = new JPanel();
 		sidebar.setPreferredSize(new Dimension(100, 0));
-		sidebar.setLayout(new FlowLayout());
+		sidebar.setLayout(new FlowLayout(FlowLayout.CENTER));
 		sidebar.add(new JLabel("Sidebar"));
 
 		JButton addPackage = new JButton("add package");
 		sidebar.add(addPackage);
-		
+
 		// side bar events
 		addPackage.addActionListener((ActionEvent e) -> {
 			new PackageFormWindow(new PackageFormListener(){
@@ -71,7 +72,21 @@ public class Window extends JFrame {
 				}
 			});
 		});
-		
+
+		JButton addRoute= new JButton("Add route");
+		sidebar.add(addRoute);
+
+		// oh lordy
+		addRoute.addActionListener((ActionEvent e) -> new RouteFormWindow(new RouteFormListener(){
+			public void onRouteFormSubmitted(String company, String to, String from, String type, double weightCost, double volCost
+					, double maxWeight, double maxVol, double dur, double freq, String priority, String day){
+				System.out.println("Got form");
+			}
+			public void onCancel(){
+				System.out.println("cancelled");
+			}
+		}));
+
 		return sidebar;
 	}
 

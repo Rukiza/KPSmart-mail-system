@@ -1,6 +1,7 @@
 package kps.ui.window;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
@@ -14,21 +15,20 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
 import kps.ui.listener.PackageFormListener;
+import kps.ui.listener.RouteFormListener;
 import kps.ui.util.SpringUtilities;
 import kps.ui.util.UIUtils;
 
-public class RouteFormWindow extends JFrame{
+public class RouteFormWindow extends AbstractFormWindow{
 
-	public RouteFormWindow(PackageFormListener listener){
-
+	public RouteFormWindow(RouteFormListener listener){
 		super("enter package details");
-		setLocationRelativeTo(null); // center
-
 		setLayout(new BorderLayout());
 
 		// add fields
 		Map<String, JTextField> fields = new HashMap<>();
-		String[] names = new String[] { "day", "from", "weight", "volume", "priority" };
+		String[] names = new String[] { "company", "to", "from", "type", "weight cost", "volume cost", "max weight",
+				"max volume", "duration", "frequency", "priority", "day"};
 		int fieldCount = names.length;
 
 		JPanel fieldPanel = new JPanel();
@@ -37,6 +37,7 @@ public class RouteFormWindow extends JFrame{
 		for (String name : names){
 			JLabel l = new JLabel(name);
 			JTextField field = new JTextField();
+			field.setPreferredSize(new Dimension(150, 15));
 			l.setLabelFor(field);
 			fields.put(name, field);
 			fieldPanel.add(l);
@@ -67,21 +68,35 @@ public class RouteFormWindow extends JFrame{
 				return;
 			}
 			// assumes form has been filled
+
 			// check digit fields
-			String weightStr = fields.get("weight").getText();
-			String volStr = fields.get("volume").getText();
-			if (!isDouble(weightStr) || !isDouble(volStr)){
-				promptNumberFields();
+			String weightCostStr = fields.get("weight cost").getText();
+			String volCostStr = fields.get("volume cost").getText();
+			String maxWeightStr = fields.get("max weight").getText();
+			String maxVolStr = fields.get("max volume").getText();
+			String durStr = fields.get("duration").getText();
+			String freqStr = fields.get("frequency").getText();
+
+			if (!UIUtils.isDouble(weightCostStr, volCostStr, maxWeightStr, maxVolStr, durStr, freqStr)){
+				promptNumberFields("some fields must only have digits");
 				return;
 			}
 
-			String day = fields.get("day").getText();
+			String company = fields.get("company").getText();
+			String to = fields.get("to").getText();
 			String from = fields.get("from").getText();
-			double weight = Double.parseDouble(weightStr);
-			double volume = Double.parseDouble(volStr);
+			String type = fields.get("type").getText();
+			double weightCost = Double.parseDouble(weightCostStr);
+			double volCost = Double.parseDouble(volCostStr);
+			double maxWeight = Double.parseDouble(maxWeightStr);
+			double maxVol = Double.parseDouble(maxVolStr);
+			double dur = Double.parseDouble(durStr);
+			double freq = Double.parseDouble(freqStr);
 			String priority = fields.get("priority").getText();
+			String day = fields.get("day").getText();
 
-			listener.onPackageFormSubmitted(day, from, weight, volume, priority);
+			listener.onRouteFormSubmitted(company, to, from, type, weightCost, volCost
+						, maxWeight, maxVol, dur, freq, priority, day);
 			UIUtils.closeWindow(this);
 		});
 
@@ -94,5 +109,17 @@ public class RouteFormWindow extends JFrame{
 		pack();
 		setVisible(true);
 	}
-	
+
+	public static void main(String[] args){
+		new RouteFormWindow(new RouteFormListener(){
+			public void onRouteFormSubmitted(String company, String to, String from, String type, double weightCost, double volCost
+					, double maxWeight, double maxVol, double dur, double freq, String priority, String day){
+				System.out.println("Got form");
+			}
+			public void onCancel(){
+				System.out.println("cancelled");
+			}
+		});
+	}
+
 }

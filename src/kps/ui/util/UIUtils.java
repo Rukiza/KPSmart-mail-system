@@ -11,5 +11,16 @@ public class UIUtils {
 			new WindowEvent(frame, WindowEvent.WINDOW_CLOSING)
 		);
 	}
-	
+
+	public static boolean isDouble(String... input){
+		for(String s : input){
+			try {
+				Double.parseDouble(s);
+			} catch (NumberFormatException e){
+				return false;
+			}
+		}
+		return true;
+	}
+
 }

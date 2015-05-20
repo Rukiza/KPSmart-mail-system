@@ -20,12 +20,11 @@ import kps.ui.util.SpringUtilities;
 import kps.ui.util.UIUtils;
 
 
-public class PackageFormWindow extends JFrame{
+public class PackageFormWindow extends AbstractFormWindow{
 
 	public PackageFormWindow(PackageFormListener listener){
 
 		super("enter package details");
-		setLocationRelativeTo(null); // center
 
 		setLayout(new BorderLayout());
 
@@ -73,8 +72,8 @@ public class PackageFormWindow extends JFrame{
 			// check digit fields
 			String weightStr = fields.get("weight").getText();
 			String volStr = fields.get("volume").getText();
-			if (!isDouble(weightStr) || !isDouble(volStr)){
-				promptNumberFields();
+			if (!UIUtils.isDouble(weightStr, volStr)){
+				promptNumberFields("weight and volume should only contain digits");
 				return;
 			}
 
@@ -96,36 +95,6 @@ public class PackageFormWindow extends JFrame{
 		// open window
 		pack();
 		setVisible(true);
-	}
-
-	private void promptNumberFields() {
-		JOptionPane.showMessageDialog(this, "weight and volume should only contain digits");
-
-	}
-
-	private void completeFormPrompt() {
-		JOptionPane.showMessageDialog(this, "Please fill all fields");
-	}
-
-	/**
-	 * @param fields
-	 * @return whether the form is complete (all fields are filled)
-	 */
-	private boolean formComplete(Collection<JTextField> fields) {
-		for (JTextField f : fields){
-			if (f.getText().isEmpty())
-				return false;
-		}
-		return true;
-	}
-
-	private boolean isDouble(String input){
-		try {
-			Double.parseDouble(input);
-			return true;
-		} catch (NumberFormatException e){
-			return false;
-		}
 	}
 
 	public static void main(String args[]){
