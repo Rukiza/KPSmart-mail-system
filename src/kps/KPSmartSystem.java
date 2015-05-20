@@ -6,21 +6,14 @@ import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 import kps.data.CustomerRoute;
-import kps.data.DijkstraSearch;
-import kps.data.Node;
 import kps.data.Route;
 import kps.data.RouteGraph;
-import kps.data.wrappers.BasicRoute;
 import kps.data.wrappers.EventLog;
-import kps.data.Mail;
-import kps.enums.Day;
-import kps.enums.Priority;
 import kps.events.BusinessEvent;
 import kps.events.MailDeliveryEvent;
 import kps.events.PriceUpdateEvent;
 import kps.events.TransportCostUpdateEvent;
 import kps.events.TransportDiscontinuedEvent;
-import kps.parser.KPSParser;
 import kps.users.KPSUser;
 
 public class KPSmartSystem {
@@ -31,7 +24,7 @@ public class KPSmartSystem {
 	private EventLog eventLog;
 	private List<CustomerRoute> customerRoutes;
 	private RouteGraph routeGraph;
-	private List<KPSUser> users;
+	private Map<String,KPSUser> users;
 	private KPSUser currentUser;
 
 	private final String EVENT_LOG_FILENAME = Main.XML_FILE_PATH+"kps_data.xml";
@@ -45,7 +38,7 @@ public class KPSmartSystem {
 		eventLog = new EventLog();
 		customerRoutes = new ArrayList<CustomerRoute>();
 		routeGraph = new RouteGraph();
-		users = new ArrayList<KPSUser>();
+		users = new HashMap<String, KPSUser>();
 		currentUser = null;
 	}
 
@@ -62,9 +55,29 @@ public class KPSmartSystem {
 		eventLog = new EventLog(log);
 		customerRoutes = new ArrayList<CustomerRoute>();
 		routeGraph = new RouteGraph();
-		users = new ArrayList<KPSUser>();
+		users = new HashMap<String, KPSUser>();
 		currentUser = null;
 		processBusinessEvents(log);
+	}
+
+	/**
+	 * Returns the current total revenue for the KPSmartSystem.
+	 *
+	 * @return
+	 * 		-- total revenue
+	 */
+	public double getTotalRevenue(){
+		return totalRevenue;
+	}
+
+	/**
+	 * Returns the current total expenditure for the KPSmartSystem.
+	 *
+	 * @return
+	 * 		-- total expenditure
+	 */
+	public double getTotalExpenditure(){
+		return totalExpenditure;
 	}
 
 	/**
@@ -87,6 +100,17 @@ public class KPSmartSystem {
 		return eventLog.getSize();
 	}
 
+	/**
+	 * Returns the user name of the current user logged into
+	 * the KPSmartSystem.
+	 *
+	 * @return
+	 * 		-- current user's name
+	 */
+	public String getCurrentUser(){
+		return currentUser.getUsername();
+	}
+
 	public void addMailDeliveryEvent(){
 
 	}
@@ -101,6 +125,21 @@ public class KPSmartSystem {
 
 	public void addTransportDiscontinuedEvent(){
 
+	}
+
+	public boolean login(String username, int passwordHash){
+		if(users.containsKey(username)){
+			KPSUser user = users.get(username);
+			if(user.getPasswordHash() == passwordHash){
+				currentUser = user;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void logout(){
+		currentUser = null;
 	}
 
 	private void processBusinessEvents(List<BusinessEvent> events){
