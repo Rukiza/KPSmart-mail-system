@@ -1,4 +1,4 @@
-package kps.ui;
+package kps.ui.util;
 
 import java.awt.event.WindowEvent;
 

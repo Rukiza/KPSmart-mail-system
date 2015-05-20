@@ -7,9 +7,9 @@ import kps.data.wrappers.EventLog;
 import kps.events.BusinessEvent;
 import kps.parser.KPSParser;
 import kps.parser.ParserException;
-import kps.ui.LogonBox;
-import kps.ui.Window;
 import kps.ui.listener.AuthDetailsListener;
+import kps.ui.window.LogonBox;
+import kps.ui.window.Window;
 
 public class Main {
 

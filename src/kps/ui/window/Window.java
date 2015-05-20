@@ -1,4 +1,4 @@
-package kps.ui;
+package kps.ui.window;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -11,17 +11,19 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import kps.KPSmartSystem;
 import kps.data.wrappers.EventLog;
 import kps.ui.listener.PackageFormListener;
 import kps.ui.panel.DecisionSupportPanel;
 import kps.ui.panel.MetricsPanel;
-import kps.ui.panel.PackageFormWindow;
 
 /**
  * @author hardwiwill
  * Encapsulates all of the KPSmart GUI elements (aside from popup boxes)
  */
 public class Window extends JFrame {
+	
+	private KPSmartSystem system = new KPSmartSystem();
 
 	public Window(EventLog bizEvents){
 		final Dimension WINDOW_SIZE = new Dimension(800,600);

@@ -1,4 +1,4 @@
-package kps.ui;
+package kps.ui.window;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -15,6 +15,7 @@ import javax.swing.SpringLayout;
 
 import kps.ui.listener.AuthDetailsListener;
 import kps.ui.util.SpringUtilities;
+import kps.ui.util.UIUtils;
 
 public class LogonBox extends JFrame{
 

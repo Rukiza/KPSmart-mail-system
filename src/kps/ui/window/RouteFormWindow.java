@@ -1,28 +1,25 @@
-package kps.ui.panel;
+package kps.ui.window;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
-import kps.ui.UIUtils;
 import kps.ui.listener.PackageFormListener;
 import kps.ui.util.SpringUtilities;
+import kps.ui.util.UIUtils;
 
+public class RouteFormWindow extends JFrame{
 
-public class PackageFormWindow extends JFrame{
-
-	public PackageFormWindow(PackageFormListener listener){
+	public RouteFormWindow(PackageFormListener listener){
 
 		super("enter package details");
 		setLocationRelativeTo(null); // center
@@ -97,49 +94,5 @@ public class PackageFormWindow extends JFrame{
 		pack();
 		setVisible(true);
 	}
-
-	private void promptNumberFields() {
-		JOptionPane.showMessageDialog(this, "weight and volume should only contain digits");
-
-	}
-
-	private void completeFormPrompt() {
-		JOptionPane.showMessageDialog(this, "Please fill all fields");
-	}
-
-	/**
-	 * @param fields
-	 * @return whether the form is complete (all fields are filled)
-	 */
-	private boolean formComplete(Collection<JTextField> fields) {
-		for (JTextField f : fields){
-			if (f.getText().isEmpty())
-				return false;
-		}
-		return true;
-	}
-
-	private boolean isDouble(String input){
-		try {
-			Double.parseDouble(input);
-			return true;
-		} catch (NumberFormatException e){
-			return false;
-		}
-	}
-
-	public static void main(String args[]){
-		new PackageFormWindow(new PackageFormListener(){
-			@Override
-			public void onPackageFormSubmitted(String day, String from, double weight, double volume, String priority){
-				System.out.println("submitted: " + day + ", " + from + "... etc");
-			}
-
-			@Override
-			public void onCancel(){
-				System.out.println("Cancelled");
-			}
-		});
-	}
-
+	
 }
