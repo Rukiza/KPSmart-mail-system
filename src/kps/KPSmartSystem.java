@@ -8,6 +8,7 @@ import java.util.*;
 import kps.data.CustomerRoute;
 import kps.data.Route;
 import kps.data.RouteGraph;
+import kps.data.wrappers.BasicRoute;
 import kps.data.wrappers.EventLog;
 import kps.events.BusinessEvent;
 import kps.events.MailDeliveryEvent;
@@ -22,7 +23,7 @@ public class KPSmartSystem {
 	private double totalRevenue;
 	private double totalExpenditure;
 	private EventLog eventLog;
-	private List<CustomerRoute> customerRoutes;
+	private Map<BasicRoute, CustomerRoute> customerRoutes;
 	private RouteGraph routeGraph;
 	private Map<String,KPSUser> users;
 	private KPSUser currentUser;
@@ -36,7 +37,7 @@ public class KPSmartSystem {
 		totalRevenue = 0;
 		totalExpenditure = 0;
 		eventLog = new EventLog();
-		customerRoutes = new ArrayList<CustomerRoute>();
+		customerRoutes = new HashMap<BasicRoute, CustomerRoute>();
 		routeGraph = new RouteGraph();
 		users = new HashMap<String, KPSUser>();
 		currentUser = null;
@@ -53,7 +54,7 @@ public class KPSmartSystem {
 		totalRevenue = 0;
 		totalExpenditure = 0;
 		eventLog = new EventLog(log);
-		customerRoutes = new ArrayList<CustomerRoute>();
+		customerRoutes = new HashMap<BasicRoute, CustomerRoute>();
 		routeGraph = new RouteGraph();
 		users = new HashMap<String, KPSUser>();
 		currentUser = null;
@@ -126,7 +127,18 @@ public class KPSmartSystem {
 	public void addTransportDiscontinuedEvent(){
 
 	}
-
+	
+	/**
+	 * Attempts to log the specified user into the system. Returns
+	 * true if login is successful, otherwise returns false.
+	 * 
+	 * @param username
+	 * 		-- user to login
+	 * @param passwordHash
+	 * 		-- password of user
+	 * @return
+	 * 		-- true if login successful, otherwise false
+	 */
 	public boolean login(String username, int passwordHash){
 		if(users.containsKey(username)){
 			KPSUser user = users.get(username);
@@ -137,7 +149,10 @@ public class KPSmartSystem {
 		}
 		return false;
 	}
-
+	
+	/**
+	 * Logs the current user out of the system.
+	 */
 	public void logout(){
 		currentUser = null;
 	}

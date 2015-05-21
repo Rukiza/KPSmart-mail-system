@@ -16,7 +16,7 @@ import kps.enums.TransportType;
  * the cost of sending mail through this route based on the weight, volume
  * and priority of the mail.
  *
- * @author
+ * @author David Sheridan
  *
  */
 public class CustomerRoute {
@@ -66,14 +66,18 @@ public class CustomerRoute {
 	 * @param weight
 	 * 		-- weight of mail to be delivered (in grams)
 	 * @param volume
-	 * 		-- volume of mail to be delieverd (in cubic cenimeters)
+	 * 		-- volume of mail to be delivered (in cubic cenimeters)
 	 * @param priority
 	 * 		-- priority of the mail being delivered
 	 * @return
 	 */
 	public double calculateDeliveryPrice(int weight, int volume, TransportType priority){
-		// to be implemented.
-		return 0;
+		if(deliveryPrices.containsKey(priority)){
+			double price = deliveryPrices.get(priority).calculateDeliveryPrice(weight, volume);
+			mailDelivered.updateMailDelivered(weight, volume);
+			return price;
+		}
+		return -1;
 	}
 
 	/**
