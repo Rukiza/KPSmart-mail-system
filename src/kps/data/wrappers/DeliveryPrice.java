@@ -58,6 +58,22 @@ public class DeliveryPrice {
 		this.gramPrice = gramPrice;
 		this.volumePrice = volumePrice;
 	}
+	
+	/**
+	 * Calculate the cost of delivering a package with the specified
+	 * weight and volume. Returns the cost of sending the package in
+	 * dollars.
+	 * 
+	 * @param weight
+	 * 		-- weight of package (in grams)
+	 * @param volume
+	 * 		-- volume of package (int cubic centimeters)
+	 * @return
+	 * 		-- cost of delivering package (in dollars)
+	 */
+	public double calculateDeliveryPrice(int weight, int volume){
+		return (((double)weight * gramPrice) + ((double)volume * volumePrice)) / 100; // converts to dollars
+	}
 
 	public boolean equals(Object o){
 		if(o == this){

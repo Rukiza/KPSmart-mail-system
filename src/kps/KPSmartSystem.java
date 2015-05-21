@@ -8,7 +8,13 @@ import java.util.*;
 import kps.data.CustomerRoute;
 import kps.data.Route;
 import kps.data.RouteGraph;
+import kps.data.wrappers.BasicRoute;
+import kps.data.wrappers.DeliveryPrice;
 import kps.data.wrappers.EventLog;
+import kps.data.wrappers.MailTransport;
+import kps.enums.Day;
+import kps.enums.Priority;
+import kps.enums.TransportType;
 import kps.events.BusinessEvent;
 import kps.events.MailDeliveryEvent;
 import kps.events.PriceUpdateEvent;
@@ -22,7 +28,7 @@ public class KPSmartSystem {
 	private double totalRevenue;
 	private double totalExpenditure;
 	private EventLog eventLog;
-	private List<CustomerRoute> customerRoutes;
+	private Map<BasicRoute, CustomerRoute> customerRoutes;
 	private RouteGraph routeGraph;
 	private Map<String,KPSUser> users;
 	private KPSUser currentUser;
@@ -36,7 +42,7 @@ public class KPSmartSystem {
 		totalRevenue = 0;
 		totalExpenditure = 0;
 		eventLog = new EventLog();
-		customerRoutes = new ArrayList<CustomerRoute>();
+		customerRoutes = new HashMap<BasicRoute, CustomerRoute>();
 		routeGraph = new RouteGraph();
 		users = new HashMap<String, KPSUser>();
 		currentUser = null;
@@ -53,7 +59,7 @@ public class KPSmartSystem {
 		totalRevenue = 0;
 		totalExpenditure = 0;
 		eventLog = new EventLog(log);
-		customerRoutes = new ArrayList<CustomerRoute>();
+		customerRoutes = new HashMap<BasicRoute, CustomerRoute>();
 		routeGraph = new RouteGraph();
 		users = new HashMap<String, KPSUser>();
 		currentUser = null;
@@ -110,23 +116,141 @@ public class KPSmartSystem {
 	public String getCurrentUser(){
 		return currentUser.getUsername();
 	}
-
-	public void addMailDeliveryEvent(){
-
+	
+	/**
+	 * Adds a new MailDeliveryEvent to the KPSmartSystem based on the specified
+	 * parameters. A new MailDeliveryEvent will not be added if:
+	 * 
+	 * 	- KPS does not ship mail to the specified destination
+	 *  - There is no shipping to the specified destination with the specified priority
+	 *  - A transport link cannot be made to the destination with the specified priority
+	 *  
+	 * @param to
+	 * 		-- destination of mail
+	 * @param from
+	 * 		-- origin of mail
+	 * @param day
+	 * 		-- day mail was posted
+	 * @param weight
+	 * 		-- weight of mail (in grams)
+	 * @param volume
+	 * 		-- volume of mail (in cubic centimeters)
+	 * @param priority
+	 * 		-- priority of mail
+	 */
+	public void addMailDeliveryEvent(String to, String from, Day day, int weight, int volume, Priority priority){
+		BasicRoute route = new BasicRoute(from, to);
+		if(!customerRoutes.containsKey(route)){
+			// cannot send mail
+		}
+		double revenue = customerRoutes.get(route).calculateDeliveryPrice(weight, volume, priority);
+		if(revenue < 0){
+			// cannot send mail
+		}
+		// calculate expenditure
+		
+		long timeLogged = System.currentTimeMillis();
+		eventLog.addBusinessEvent(new MailDeliveryEvent(timeLogged, route, day, weight, volume, priority));
 	}
-
-	public void addPriceUpdateEvent(){
-
+	
+	/**
+	 * Adds a new PriceUpdateEvent to the KPSmartSystem based on the specified
+	 * parameters. If there is already a price set for sending mail from the
+	 * origin to location with the same priority, this price is updated. 
+	 * 
+	 * @param to
+	 * 		-- destination
+	 * @param from
+	 * 		-- origin
+	 * @param gramPrice
+	 * 		-- price per gram
+	 * @param volumePrice
+	 * 		-- price per cubic centimeter
+	 * @param priority
+	 * 		-- priority of mail
+	 */
+	public void addPriceUpdateEvent(String to, String from, double gramPrice, double volumePrice, Priority priority){
+		BasicRoute route = new BasicRoute(from, to);
+		if(!customerRoutes.containsKey(route)){
+			customerRoutes.put(route, new CustomerRoute(route));
+		}
+		customerRoutes.get(route).addDeliveryPrice(gramPrice, volumePrice, priority);
+		
+		long timeLogged = System.currentTimeMillis();
+		DeliveryPrice price = new DeliveryPrice(gramPrice, volumePrice);
+		eventLog.addBusinessEvent(new PriceUpdateEvent(timeLogged, route, price, priority));
 	}
-
-	public void addTransportCostUpdateEvent(){
-
+	
+	/**
+	 * Adds a new TransportCostUpdateEvent to the KPSmartSystem based on the specified
+	 * parameters. If there is currently not a route with the same origin, destination, company
+	 * and transport type a new route is created. Otherwise the existing route is updated.
+	 * 
+	 * @param to
+	 * 		-- destination
+	 * @param from
+	 * 		-- origin
+	 * @param company
+	 * 		-- transport firm
+	 * @param type
+	 * 		-- transport type
+	 * @param gramPrice
+	 * 		-- price per gram
+	 * @param volumePrice
+	 * 		-- price per cubic centimeter
+	 * @param maxWeight
+	 * 		-- max weight of mail on route
+	 * @param maxVolume
+	 * 		-- max volume of mail on route
+	 * @param duration
+	 * 		-- duration of the trip
+	 * @param frequency
+	 * 		-- frequency that transport departs
+	 * @param day
+	 * 		-- day that transport departs
+	 */
+	public void addTransportCostUpdateEvent(String to, String from, String company, TransportType type, 
+			double gramPrice, double volumePrice, int maxWeight, int maxVolume, int duration, int frequency, Day day){
+		BasicRoute route = new BasicRoute(from, to);
+		DeliveryPrice price = new DeliveryPrice(gramPrice, volumePrice);
+		MailTransport transport = new MailTransport(duration, frequency, day);
+		long timeLogged = System.currentTimeMillis();
+		TransportCostUpdateEvent event = new TransportCostUpdateEvent(timeLogged, route, company, type, price, maxWeight, maxVolume, transport);
+		eventLog.addBusinessEvent(event);
+		// add route to graph
 	}
-
-	public void addTransportDiscontinuedEvent(){
-
+	
+	/**
+	 * Adds a new TransportDiscontinuedEvent to the KPSmartSystem based on the specified
+	 * parameters. Removes the route specified by these parameters from the route graph.
+	 * 
+	 * @param to
+	 * 		-- destination
+	 * @param from
+	 * 		-- origin
+	 * @param company
+	 * 		-- transport firm
+	 * @param type
+	 * 		-- transport type
+	 */
+	public void addTransportDiscontinuedEvent(String to, String from, String company, TransportType type){
+		BasicRoute route = new BasicRoute(from, to);
+		//RouteGraph.removeRoute(route, transportFirm, transportType); TO BE IMPLEMENTED
+		long timeLogged = System.currentTimeMillis();
+		eventLog.addBusinessEvent(new TransportDiscontinuedEvent(timeLogged, route, company, type));
 	}
-
+	
+	/**
+	 * Attempts to log the specified user into the system. Returns
+	 * true if login is successful, otherwise returns false.
+	 * 
+	 * @param username
+	 * 		-- user to login
+	 * @param passwordHash
+	 * 		-- password of user
+	 * @return
+	 * 		-- true if login successful, otherwise false
+	 */
 	public boolean login(String username, int passwordHash){
 		if(users.containsKey(username)){
 			KPSUser user = users.get(username);
@@ -137,7 +261,10 @@ public class KPSmartSystem {
 		}
 		return false;
 	}
-
+	
+	/**
+	 * Logs the current user out of the system.
+	 */
 	public void logout(){
 		currentUser = null;
 	}

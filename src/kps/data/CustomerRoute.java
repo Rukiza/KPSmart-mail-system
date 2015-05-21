@@ -6,7 +6,7 @@ import java.util.Map;
 import kps.data.wrappers.BasicRoute;
 import kps.data.wrappers.DeliveryPrice;
 import kps.data.wrappers.MailDelivered;
-import kps.enums.TransportType;
+import kps.enums.Priority;
 
 /**
  * Represents a generic route for which mail will be delivered for the
@@ -16,14 +16,14 @@ import kps.enums.TransportType;
  * the cost of sending mail through this route based on the weight, volume
  * and priority of the mail.
  *
- * @author
+ * @author David Sheridan
  *
  */
 public class CustomerRoute {
 
 	// fields
 	private BasicRoute route;
-	private Map<TransportType, DeliveryPrice> deliveryPrices;
+	private Map<Priority, DeliveryPrice> deliveryPrices;
 	private MailDelivered mailDelivered;
 
 	/**
@@ -37,7 +37,7 @@ public class CustomerRoute {
 	 */
 	public CustomerRoute(BasicRoute route){
 		this.route = route;
-		deliveryPrices = new HashMap<TransportType, DeliveryPrice>();
+		deliveryPrices = new HashMap<Priority, DeliveryPrice>();
 		mailDelivered = new MailDelivered();
 	}
 
@@ -58,6 +58,15 @@ public class CustomerRoute {
 	public String getDestination(){
 		return route.getDestination();
 	}
+	
+	public void addDeliveryPrice(double gramPrice, double volumePrice, Priority priority){
+		if(deliveryPrices.containsKey(priority)){
+			deliveryPrices.get(priority).updateDeliveryPrice(gramPrice, volumePrice);
+		}
+		else{
+			deliveryPrices.put(priority, new DeliveryPrice(gramPrice, volumePrice));
+		}
+	}
 
 	/**
 	 * Calculates and returns the delivery price for mail to be delivered
@@ -66,14 +75,18 @@ public class CustomerRoute {
 	 * @param weight
 	 * 		-- weight of mail to be delivered (in grams)
 	 * @param volume
-	 * 		-- volume of mail to be delieverd (in cubic cenimeters)
+	 * 		-- volume of mail to be delivered (in cubic cenimeters)
 	 * @param priority
 	 * 		-- priority of the mail being delivered
 	 * @return
 	 */
-	public double calculateDeliveryPrice(int weight, int volume, TransportType priority){
-		// to be implemented.
-		return 0;
+	public double calculateDeliveryPrice(int weight, int volume, Priority priority){
+		if(deliveryPrices.containsKey(priority)){
+			double price = deliveryPrices.get(priority).calculateDeliveryPrice(weight, volume);
+			mailDelivered.updateMailDelivered(weight, volume);
+			return price;
+		}
+		return -1;
 	}
 
 	/**
