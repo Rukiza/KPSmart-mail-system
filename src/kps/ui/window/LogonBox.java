@@ -22,7 +22,7 @@ public class LogonBox extends JFrame{
 	public LogonBox(AuthDetailsListener listener, String defaultUN, String defaultPW){
 		super("Login");
 		setLocationRelativeTo(null); // centers the frame
-		getContentPane().setLayout(new BorderLayout());
+		setLayout(new BorderLayout());
 
 		//set up components
 		JLabel usernameLabel = new JLabel("Username:");
@@ -74,6 +74,8 @@ public class LogonBox extends JFrame{
 		// display the box
 		pack();
 		setVisible(true);
+
+		loginButton.requestFocus(); // for quick usage
 	}
 
 	public static void main(String[] args){
