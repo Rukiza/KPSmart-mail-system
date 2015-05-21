@@ -58,6 +58,15 @@ public class CustomerRoute {
 	public String getDestination(){
 		return route.getDestination();
 	}
+	
+	public void addDeliveryPrice(double gramPrice, double volumePrice, Priority priority){
+		if(deliveryPrices.containsKey(priority)){
+			deliveryPrices.get(priority).updateDeliveryPrice(gramPrice, volumePrice);
+		}
+		else{
+			deliveryPrices.put(priority, new DeliveryPrice(gramPrice, volumePrice));
+		}
+	}
 
 	/**
 	 * Calculates and returns the delivery price for mail to be delivered

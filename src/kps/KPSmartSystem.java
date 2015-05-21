@@ -9,6 +9,7 @@ import kps.data.CustomerRoute;
 import kps.data.Route;
 import kps.data.RouteGraph;
 import kps.data.wrappers.BasicRoute;
+import kps.data.wrappers.DeliveryPrice;
 import kps.data.wrappers.EventLog;
 import kps.enums.Day;
 import kps.enums.Priority;
@@ -149,9 +150,33 @@ public class KPSmartSystem {
 		long timeLogged = System.currentTimeMillis();
 		eventLog.addBusinessEvent(new MailDeliveryEvent(timeLogged, route, day, weight, volume, priority));
 	}
-
-	public void addPriceUpdateEvent(){
+	
+	/**
+	 * Adds a new PriceUpdateEvent to the KPSmartSystem based on the specified
+	 * parameters. If there is already a price set for sending mail from the
+	 * origin to location with the same priority, this price is updated. 
+	 * 
+	 * @param to
+	 * 		-- destination
+	 * @param from
+	 * 		-- origin
+	 * @param gramPrice
+	 * 		-- price per gram
+	 * @param volumePrice
+	 * 		-- price per cubic centimeter
+	 * @param priority
+	 * 		-- priority of mail
+	 */
+	public void addPriceUpdateEvent(String to, String from, double gramPrice, double volumePrice, Priority priority){
+		BasicRoute route = new BasicRoute(from, to);
+		if(!customerRoutes.containsKey(route)){
+			customerRoutes.put(route, new CustomerRoute(route));
+		}
+		customerRoutes.get(route).addDeliveryPrice(gramPrice, volumePrice, priority);
+		
 		long timeLogged = System.currentTimeMillis();
+		DeliveryPrice price = new DeliveryPrice(gramPrice, volumePrice);
+		eventLog.addBusinessEvent(new PriceUpdateEvent(timeLogged, route, price, priority));
 	}
 
 	public void addTransportCostUpdateEvent(){
