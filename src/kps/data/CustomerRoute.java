@@ -6,7 +6,7 @@ import java.util.Map;
 import kps.data.wrappers.BasicRoute;
 import kps.data.wrappers.DeliveryPrice;
 import kps.data.wrappers.MailDelivered;
-import kps.enums.TransportType;
+import kps.enums.Priority;
 
 /**
  * Represents a generic route for which mail will be delivered for the
@@ -23,7 +23,7 @@ public class CustomerRoute {
 
 	// fields
 	private BasicRoute route;
-	private Map<TransportType, DeliveryPrice> deliveryPrices;
+	private Map<Priority, DeliveryPrice> deliveryPrices;
 	private MailDelivered mailDelivered;
 
 	/**
@@ -37,7 +37,7 @@ public class CustomerRoute {
 	 */
 	public CustomerRoute(BasicRoute route){
 		this.route = route;
-		deliveryPrices = new HashMap<TransportType, DeliveryPrice>();
+		deliveryPrices = new HashMap<Priority, DeliveryPrice>();
 		mailDelivered = new MailDelivered();
 	}
 
@@ -71,7 +71,7 @@ public class CustomerRoute {
 	 * 		-- priority of the mail being delivered
 	 * @return
 	 */
-	public double calculateDeliveryPrice(int weight, int volume, TransportType priority){
+	public double calculateDeliveryPrice(int weight, int volume, Priority priority){
 		if(deliveryPrices.containsKey(priority)){
 			double price = deliveryPrices.get(priority).calculateDeliveryPrice(weight, volume);
 			mailDelivered.updateMailDelivered(weight, volume);

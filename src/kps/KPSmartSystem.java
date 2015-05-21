@@ -10,6 +10,8 @@ import kps.data.Route;
 import kps.data.RouteGraph;
 import kps.data.wrappers.BasicRoute;
 import kps.data.wrappers.EventLog;
+import kps.enums.Day;
+import kps.enums.Priority;
 import kps.events.BusinessEvent;
 import kps.events.MailDeliveryEvent;
 import kps.events.PriceUpdateEvent;
@@ -111,21 +113,53 @@ public class KPSmartSystem {
 	public String getCurrentUser(){
 		return currentUser.getUsername();
 	}
-
-	public void addMailDeliveryEvent(){
-
+	
+	/**
+	 * Adds a new MailDeliveryEvent to the KPSmartSystem based on the specified
+	 * parameters. A new MailDeliveryEvent will not be added if:
+	 * 
+	 * 	- KPS does not ship mail to the specified destination
+	 *  - There is no shipping to the specified destination with the specified priority
+	 *  - A transport link cannot be made to the destination with the specified priority
+	 *  
+	 * @param to
+	 * 		-- destination of mail
+	 * @param from
+	 * 		-- origin of mail
+	 * @param day
+	 * 		-- day mail was posted
+	 * @param weight
+	 * 		-- weight of mail (in grams)
+	 * @param volume
+	 * 		-- volume of mail (in cubic centimeters)
+	 * @param priority
+	 * 		-- priority of mail
+	 */
+	public void addMailDeliveryEvent(String to, String from, Day day, int weight, int volume, Priority priority){
+		BasicRoute route = new BasicRoute(from, to);
+		if(!customerRoutes.containsKey(route)){
+			// cannot send mail
+		}
+		double revenue = customerRoutes.get(route).calculateDeliveryPrice(weight, volume, priority);
+		if(revenue < 0){
+			// cannot send mail
+		}
+		// calculate expenditure
+		
+		long timeLogged = System.currentTimeMillis();
+		eventLog.addBusinessEvent(new MailDeliveryEvent(timeLogged, route, day, weight, volume, priority));
 	}
 
 	public void addPriceUpdateEvent(){
-
+		long timeLogged = System.currentTimeMillis();
 	}
 
 	public void addTransportCostUpdateEvent(){
-
+		long timeLogged = System.currentTimeMillis();
 	}
 
 	public void addTransportDiscontinuedEvent(){
-
+		long timeLogged = System.currentTimeMillis();
 	}
 	
 	/**
