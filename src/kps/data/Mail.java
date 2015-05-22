@@ -23,4 +23,6 @@ class Mail{
 	public String getDestination(){return route.getDestination();}
 	public int getWeight(){return weight;}
 	public int getVolume(){return volume;}
+	public Priority getPriority(){return priority;}
+	public Day getDay(){return day;}
 }

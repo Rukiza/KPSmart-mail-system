@@ -37,8 +37,9 @@ public class RouteGraph implements Iterable<Node> {
     	if(route == null)return false;
     	for(Node n : nodes){
     		if(n.getNeighbours().contains(route))n.updateRoute(route);
+    		return true;
     	}
-    	return true;
+    	return false;
     }
 
 

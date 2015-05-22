@@ -1,4 +1,4 @@
-package kps.ui.panel;
+package kps.ui.graph;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -11,6 +11,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,13 +26,8 @@ import kps.events.BusinessEvent;
 import kps.events.TransportCostUpdateEvent;
 import kps.parser.KPSParser;
 import kps.parser.ParserException;
-import kps.ui.graph.DrawNode;
-import kps.ui.graph.DrawRoute;
 
-/**
- * @author Nicky van Hulst
- * */
-public class RouteGraphPanel extends JPanel implements MouseMotionListener, MouseListener, KeyListener{
+public class GraphDrawer extends JPanel implements MouseMotionListener, MouseListener, KeyListener{
 
 
 	private Color textColor = new Color (0, 0, 0);
@@ -48,7 +44,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 	/**
 	 * @param data - The Event log of the program.
 	 */
-	public RouteGraphPanel(RouteGraph g, JFrame frame){
+	public GraphDrawer(RouteGraph g, JFrame frame){
 		this.drawNodes = new ArrayList<DrawNode>();
 		this.drawRoutes = new ArrayList<DrawRoute>();
 		this.graph = g;
@@ -88,7 +84,9 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 
 	@Override
 	public void paint(Graphics g) {
+		System.out.println("Painting");
 		if(g == null )return;
+		System.out.println(drawNodes.size());
 		Graphics2D g2 = (Graphics2D)g;
 		 g2.setRenderingHint(
 		            RenderingHints.KEY_ANTIALIASING,
@@ -102,6 +100,9 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 
 
 		for(DrawNode n : drawNodes)n.draw(g2);
+
+
+
 	};
 	
 	/**
@@ -120,6 +121,8 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 	@Override
 	public void repaint(){
 		Graphics g = this.getGraphics();
+
+
 		paint(g);
 	}
 
@@ -193,7 +196,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 
 		JFrame frame = new JFrame();
 		frame.setSize(1200, 900);
-		RouteGraphPanel support = new RouteGraphPanel(g,frame);
+		GraphDrawer support = new GraphDrawer(g,frame);
 
 		frame.addKeyListener(support);
 		frame.add(support, BorderLayout.CENTER);

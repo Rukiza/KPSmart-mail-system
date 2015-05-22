@@ -46,7 +46,7 @@ public class Window extends JFrame {
 
 		tabbedPane.addTab("Decision Support", new DecisionSupportPanel(bizEvents));
 		tabbedPane.addTab("Metrics", new MetricsPanel());
-		tabbedPane.addTab("Route Graph", new RouteGraphPanel());
+		tabbedPane.addTab("Route Graph", new RouteGraphPanel(system.getRouteGraph(),this));
 
 		JPanel sidebar = makeSidebar();
 		add(sidebar, BorderLayout.WEST);

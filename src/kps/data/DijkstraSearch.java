@@ -28,13 +28,10 @@ public class DijkstraSearch  {
 	 * @param graph to be searched
 	 * */
 	public DijkstraSearch(RouteGraph g){
-
 		this.graph = g;
 		dijkNodesList = g.getNodes();
 	}
 	private Mail mail;
-
-
 
 	/**
 	 * Return the route and cost of the cheapest path as an entry in the map
@@ -65,44 +62,8 @@ public class DijkstraSearch  {
 		return null;
 	}
 
-	@Deprecated
-	public List<Node> getPathList(CustomerRoute route){
-
-		//look for source node
-		for(int i = 0; i < dijkNodesList.size(); i++){
-			if(dijkNodesList.get(i).getName().equals(route.getOrigin()))computePaths(dijkNodesList.get(i));
-		}
-
-
-		List<Node> path = null;
-		for(int i = 0; i < dijkNodesList.size(); i++){
-			if(dijkNodesList.get(i).getName().equals(route.getDestination())){
-				path = getShortestPathTo(dijkNodesList.get(i));
-			}
-
-		}
-
-
-		return path;
-	}
-	@Deprecated
-	public double getCost(CustomerRoute route){
-		//look for source node
-		for(int i = 0; i < dijkNodesList.size(); i++){
-			if(dijkNodesList.get(i).getName().equals(route.getOrigin())){
-				computePaths(dijkNodesList.get(i));
-			}
-		}
-
-		for(int i = 0; i < dijkNodesList.size(); i++){
-			if(dijkNodesList.get(i).getName().equals(route.getDestination()))return dijkNodesList.get(i).getMinCost();
-		}
-		return -1;
-	}
-
 
 	 private  void computePaths(Node source){
-		 System.out.println("Computing Paths");
 	        source.setMinCost(0);
 
 	        PriorityQueue<Node> nodeQueue = new PriorityQueue<Node>();
@@ -117,8 +78,9 @@ public class DijkstraSearch  {
 	            	for(int i =0; i < dijkNodesList.size(); i++){
 	            		if(dijkNodesList.get(i).getName().equals(r.getDest()))d = dijkNodesList.get(i);
 	            	}
-
+	            	
 	                double cost = r.calculateCost(mail.getVolume(),mail.getWeight());
+	                
 	                System.out.println("Cost : "+ cost);
 	                double distanceThroughR = dn.getMinCost() + cost;
 			if (distanceThroughR < d.getMinCost()) {
