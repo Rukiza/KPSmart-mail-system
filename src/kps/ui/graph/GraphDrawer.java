@@ -11,7 +11,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +60,8 @@ public class GraphDrawer extends JPanel implements MouseMotionListener, MouseLis
 		}
 	}
 	
+	
+	
 	public void setUpDrawRoutes(){
 		for(DrawNode n : drawNodes ){
 			for(Route r : n.getNode().getNeighbours()){
@@ -71,7 +72,14 @@ public class GraphDrawer extends JPanel implements MouseMotionListener, MouseLis
 					if(drawNodes.get(i).getNode().getName().equals(r.getSrc()))src = drawNodes.get(i);
 					if(drawNodes.get(i).getNode().getName().equals(r.getDest()))dest = drawNodes.get(i);
 				}
-				drawRoutes.add(new DrawRoute(r,src,dest));
+				boolean added = false;
+				for(DrawRoute dr : drawRoutes){
+					 if(dr.shouldAddRoute(r)){
+						 dr.addRoute(r);
+						 added = true;
+					 }
+				}				
+				if(!added)drawRoutes.add(new DrawRoute(r,src,dest));
 			}
 
 		}
@@ -84,9 +92,7 @@ public class GraphDrawer extends JPanel implements MouseMotionListener, MouseLis
 
 	@Override
 	public void paint(Graphics g) {
-		System.out.println("Painting");
 		if(g == null )return;
-		System.out.println(drawNodes.size());
 		Graphics2D g2 = (Graphics2D)g;
 		 g2.setRenderingHint(
 		            RenderingHints.KEY_ANTIALIASING,
@@ -121,8 +127,6 @@ public class GraphDrawer extends JPanel implements MouseMotionListener, MouseLis
 	@Override
 	public void repaint(){
 		Graphics g = this.getGraphics();
-
-
 		paint(g);
 	}
 
@@ -131,7 +135,7 @@ public class GraphDrawer extends JPanel implements MouseMotionListener, MouseLis
 	}
 
 
-
+	
 	private DrawNode nodeOnPoint(Point p){
 		DrawNode n = null;
 
