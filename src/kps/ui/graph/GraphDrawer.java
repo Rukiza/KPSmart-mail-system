@@ -74,7 +74,7 @@ public class GraphDrawer extends JPanel implements MouseMotionListener, MouseLis
 				}
 				boolean added = false;
 				for(DrawRoute dr : drawRoutes){
-					 if(dr.shouldAddRoute(r)){
+					 if(dr.addRouteCheck(r)){
 						 dr.addRoute(r);
 						 added = true;
 					 }
