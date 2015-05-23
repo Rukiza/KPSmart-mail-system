@@ -52,13 +52,14 @@ public class AbstractFormWindow extends JFrame {
 	protected void makeTextField(String name, final Map<String, Object> fields, Container cont) {
 		JTextField textField = new JTextField();
 		textField.getDocument().addDocumentListener(new DocumentListener(){
-                public void changedUpdate(DocumentEvent e) {
-                        fields.put(name, textField.getText());
+                @Override
+                public void insertUpdate(DocumentEvent e) {
+					fields.put(name, textField.getText());
                 }
 				@Override
-				public void insertUpdate(DocumentEvent e) { }
-				@Override
-				public void removeUpdate(DocumentEvent e) { }
+                public void changedUpdate(DocumentEvent e) { }
+                @Override
+                public void removeUpdate(DocumentEvent e) { }
 		});
 		JLabel label = new JLabel(name);
 		label.setLabelFor(textField);

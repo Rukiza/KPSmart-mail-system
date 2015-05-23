@@ -44,6 +44,7 @@ public class KPSWindow extends JFrame {
 		setSize(WINDOW_SIZE);
 		setLocationRelativeTo(null);
 		setLayout(new BorderLayout());
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JTabbedPane tabbedPane = new JTabbedPane();
 		add(tabbedPane, BorderLayout.CENTER);
