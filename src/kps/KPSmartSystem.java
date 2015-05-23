@@ -20,6 +20,8 @@ import kps.events.MailDeliveryEvent;
 import kps.events.PriceUpdateEvent;
 import kps.events.TransportCostUpdateEvent;
 import kps.events.TransportDiscontinuedEvent;
+import kps.parser.KPSParser;
+import kps.parser.ParserException;
 import kps.users.KPSUser;
 
 public class KPSmartSystem {
@@ -43,9 +45,27 @@ public class KPSmartSystem {
 		totalExpenditure = 0;
 		eventLog = new EventLog();
 		customerRoutes = new HashMap<BasicRoute, CustomerRoute>();
-		routeGraph = new RouteGraph();
+		routeGraph = loadGraph();
 		users = new HashMap<String, KPSUser>();
 		currentUser = null;
+	}
+	
+	public RouteGraph loadGraph(){
+		List<BusinessEvent> events = new ArrayList<BusinessEvent>();
+		try {
+			events = KPSParser.parseFile(Main.XML_FILE_PATH+"graph.xml");
+		} catch (ParserException e) {
+			e.printStackTrace();
+		}
+
+		RouteGraph g = new RouteGraph();
+		
+		for(BusinessEvent e : events){
+			if(e instanceof TransportCostUpdateEvent){
+				g.addRoute(new Route((TransportCostUpdateEvent)e));
+			}
+		}
+		return g;
 	}
 
 	/**
@@ -94,6 +114,10 @@ public class KPSmartSystem {
 	 */
 	public int getRouteGraphSize(){
 		return routeGraph.getSize();
+	}
+	
+	public RouteGraph getRouteGraph(){
+		return this.routeGraph;
 	}
 
 	/**
