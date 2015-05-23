@@ -38,6 +38,7 @@ import kps.parser.ParserException;
 public class DecisionSupportPanel extends JPanel implements MouseListener, KeyListener{
 
 	private EventLog data;
+	private boolean setup;
 	private BusinessEvent event;
 	private List<Button> buttons;
 	private Color textColor = new Color (0, 0, 0);
@@ -67,10 +68,16 @@ public class DecisionSupportPanel extends JPanel implements MouseListener, KeyLi
 
 	@Override
 	public void paint(Graphics g) {
-		if(buttons == null || buttons.isEmpty()) return;
+		if(g == null){
+			return;
+		}
+		if (!setup){
+			setup();
+		}
+		if(buttons == null || buttons.isEmpty())return;
 		Graphics2D g2 = (Graphics2D)g;
 
-		g.setColor(backgroundColor );
+		g.setColor(backgroundColor);
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 
 		for (Button button: buttons){
