@@ -67,7 +67,7 @@ public class DecisionSupportPanel extends JPanel implements MouseListener, KeyLi
 
 	@Override
 	public void paint(Graphics g) {
-		if(buttons == null || buttons.isEmpty())return;
+		if(buttons == null || buttons.isEmpty()) return;
 		Graphics2D g2 = (Graphics2D)g;
 
 		g.setColor(backgroundColor );

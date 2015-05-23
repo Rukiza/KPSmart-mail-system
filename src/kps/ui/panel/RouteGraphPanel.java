@@ -42,7 +42,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 	private ArrayList<DrawRoute> drawRoutes;
 
 	private double NODE_SIZE = 80;
-	
+
 	private JFrame frame;
 
 	/**
@@ -56,6 +56,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		setUpDrawNodes();
 		setUpDrawRoutes();
 		addMouseListener(this);
+		addMouseMotionListener(this);
 		startThread();
 	}
 
@@ -64,11 +65,11 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 			drawNodes.add(new DrawNode(n,(int)(Math.random()*1200), (int)(Math.random()*900)));
 		}
 	}
-	
+
 	public void setUpDrawRoutes(){
 		for(DrawNode n : drawNodes ){
 			for(Route r : n.getNode().getNeighbours()){
-				
+
 				DrawNode src = null;
 				DrawNode dest = null;
 				for(int i = 0; i<drawNodes.size(); i++){
@@ -103,19 +104,19 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 
 		for(DrawNode n : drawNodes)n.draw(g2);
 	};
-	
+
 	/**
-	 * Simple way of drawing the routes 
+	 * Simple way of drawing the routes
 	 * */
 	public void drawRoutes(Graphics2D g){
 		for(DrawRoute r : drawRoutes){
 			r.draw(g);
-		}	
+		}
 	}
-	
 
-	
-	
+
+
+
 
 	@Override
 	public void repaint(){
@@ -151,7 +152,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 			repaint();
 		}
 	}
-	
+
 	public void mouseMoved(MouseEvent e){
 		for(DrawNode n : drawNodes){
 			if(n.containsPoint(e.getPoint())){
@@ -171,7 +172,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 				n.setX(e.getX() - n.getSize()/2);
 		}
 	}
-	
+
 	public static void main(String[] arg){
 		RouteGraph g = new RouteGraph();
 
@@ -182,8 +183,6 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		} catch (ParserException e) {
 			e.printStackTrace();
 		}
-
-
 
 		for(BusinessEvent e : events){
 			if(e instanceof TransportCostUpdateEvent){
@@ -200,11 +199,11 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		frame.setVisible(true);
 		support.setup();
 	}
-	
+
 	public void startThread(){
 		new WindowThread(40, frame).start();;
 	}
-	
+
 	public class WindowThread extends Thread {
 		private final int delay; // delay between pulses
 		private final JFrame display;
@@ -221,7 +220,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 					Thread.sleep(delay);
 					if(display != null) {
 						display.repaint();
-						
+
 					}
 				} catch(InterruptedException e) {
 					// should never happen
@@ -229,7 +228,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 			}
 		}
 	}
-	
+
 	@Override
 	public void keyPressed(KeyEvent e) {}
 	@Override

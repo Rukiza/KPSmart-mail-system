@@ -8,8 +8,8 @@ import kps.events.BusinessEvent;
 import kps.parser.KPSParser;
 import kps.parser.ParserException;
 import kps.ui.listener.AuthDetailsListener;
+import kps.ui.window.KPSWindow;
 import kps.ui.window.LogonBox;
-import kps.ui.window.Window;
 
 public class Main {
 
@@ -25,7 +25,7 @@ public class Main {
 				@Override
 				public void onReceivedAuthDetails(String un, String pw) {
 					// just assume un and pw are correct for now
-					new Window(new EventLog(bizEvents));
+					new KPSWindow(new EventLog(bizEvents));
 				}
 
 				@Override
@@ -36,6 +36,7 @@ public class Main {
 			},"monkey", "bananas");
 
 
-		}catch(ParserException e){e.printStackTrace();}
+		}catch(ParserException e){ e.printStackTrace(); }
 	}
 }
+

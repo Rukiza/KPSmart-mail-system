@@ -17,7 +17,7 @@ import kps.ui.listener.AuthDetailsListener;
 import kps.ui.util.SpringUtilities;
 import kps.ui.util.UIUtils;
 
-public class LogonBox extends JFrame{
+public class LogonBox extends JFrame {
 
 	public LogonBox(AuthDetailsListener listener, String defaultUN, String defaultPW){
 		super("Login");

@@ -1,12 +1,19 @@
 package kps.ui.window;
 
+import java.awt.Container;
+import java.awt.event.ItemEvent;
 import java.util.Collection;
+import java.util.Map;
 
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
-public class AbstractFormWindow extends JFrame{
+public class AbstractFormWindow extends JFrame {
 
 	public AbstractFormWindow(String title){
 		super(title);
@@ -17,7 +24,7 @@ public class AbstractFormWindow extends JFrame{
 	/**
 	 * prompt the user to fill number fields correctly
 	 */
-	protected void promptNumberFields(String message) {
+	protected void numberFieldsPrompt(String message) {
 		JOptionPane.showMessageDialog(this, message);
 
 	}
@@ -33,12 +40,42 @@ public class AbstractFormWindow extends JFrame{
 	 * @param fields
 	 * @return whether the form is complete (all fields are filled)
 	 */
-	protected boolean formComplete(Collection<JTextField> fields) {
-		for (JTextField f : fields){
-			if (f.getText().isEmpty())
+	protected boolean isFormComplete(Collection<Object> fields) {
+		for (Object o : fields){
+			System.out.println(o);
+			if (o == null)
 				return false;
 		}
 		return true;
+	}
+
+	protected void makeTextField(String name, final Map<String, Object> fields, Container cont) {
+		JTextField textField = new JTextField();
+		textField.getDocument().addDocumentListener(new DocumentListener(){
+                public void changedUpdate(DocumentEvent e) {
+                        fields.put(name, textField.getText());
+                }
+				@Override
+				public void insertUpdate(DocumentEvent e) { }
+				@Override
+				public void removeUpdate(DocumentEvent e) { }
+		});
+		JLabel label = new JLabel(name);
+		label.setLabelFor(textField);
+		cont.add(label);
+		cont.add(textField);
+	}
+
+	protected void makeComboBox(String name, Object[] values,
+			Map<String, Object> fields, Container cont) {
+		JComboBox<Object> combo = new JComboBox<>(values);
+		combo.addItemListener((ItemEvent e) -> {
+			fields.put(name, combo.getSelectedItem());
+		});
+		JLabel label = new JLabel(name);
+		label.setLabelFor(combo);
+		cont.add(label);
+		cont.add(combo);
 	}
 
 }
