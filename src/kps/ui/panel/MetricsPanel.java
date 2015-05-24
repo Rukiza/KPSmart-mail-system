@@ -9,11 +9,13 @@ import java.text.DecimalFormat;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 import javax.swing.border.TitledBorder;
 
+import kps.data.wrappers.Metrics;
 import kps.ui.util.SpringUtilities;
 
 public class MetricsPanel extends JPanel{
@@ -86,6 +88,30 @@ public class MetricsPanel extends JPanel{
     }
 
     public void repaint(){
+
+    }
+
+    public void update(Metrics metrics){
+    	profit.setProfitMetrics(metrics.getTotalRevenue(), metrics.getTotalExpenditure());
+    	int mailEvents = metrics.getTotalMailDeliveryEvents();
+    	int priceEvents = metrics.getTotalPriceUpdateEvents();
+    	int costEvents = metrics.getTotalTransportCostUpdateEvents();
+    	int discontinuedEvents = metrics.getTotalTransportDiscontinuedEvents();
+    	int totalEvents = metrics.getTotalBusinessEvents();
+    	events.setBusinessEventMetrics(mailEvents, priceEvents, costEvents, discontinuedEvents, totalEvents);
+    }
+
+    public static void main(String[] args){
+    	JFrame frame = new JFrame();
+    	MetricsPanel mp = new MetricsPanel();
+    	frame.add(mp);
+
+    	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	frame.pack();
+    	frame.setVisible(true);
+
+    	Metrics metrics = new Metrics();
+    	mp.update(metrics);
 
     }
 
@@ -217,12 +243,11 @@ public class MetricsPanel extends JPanel{
             }
         }
 
-        public void setBusinessEventMetrics(int mail, int price, int cost, int discontinued){
+        public void setBusinessEventMetrics(int mail, int price, int cost, int discontinued, int total){
         	this.mail.setText(Integer.toString(mail));
         	this.price.setText(Integer.toString(price));
         	this.cost.setText(Integer.toString(cost));
         	this.discontinued.setText(Integer.toString(discontinued));
-        	int total = mail + price + cost + discontinued;
         	this.total.setText(Integer.toString(total));
         }
 
