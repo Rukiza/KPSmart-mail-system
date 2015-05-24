@@ -64,4 +64,8 @@ public enum Priority {
 			return null;
 		}
 	}
+
+	public boolean isAirPriority(Priority priority){
+		return priority == INTERNATIONAL_AIR || priority == DOMESTIC_AIR;
+	}
 }
