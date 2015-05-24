@@ -235,5 +235,19 @@ public class MetricsPanel extends JPanel{
             add(originLabel);
             add(destLabel);
         }
+
+        private class TotalMailPanel extends JPanel{
+
+        	public TotalMailPanel(){
+        		super();
+        	}
+        }
+
+        private class AverageTimesPanel extends JPanel{
+
+        	public AverageTimesPanel(){
+        		super();
+        	}
+        }
     }
 }
