@@ -126,10 +126,12 @@ public class DecisionSupportPanel extends JPanel{
 		}
 		
 		public void updateDisplay(){
+			if (data.isEmpty()) return;
 			event = data.getCurrentEvent();
 			for (JTextField text : textFields){
 				text.setText(null);
 			}
+			if (event == null) return;
 			textFields.get(0).setText("Name: ");
 			textFields.get(1).setText(event.getType());
 			if (event instanceof MailDeliveryEvent){
