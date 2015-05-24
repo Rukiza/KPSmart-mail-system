@@ -3,8 +3,12 @@ package kps;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import kps.Main;
 import kps.data.CustomerRoute;
 import kps.data.Route;
 import kps.data.RouteGraph;
@@ -40,10 +44,10 @@ public class KPSmartSystem {
 	/**
 	 * Constructs an empty instance of KPSmartSystem
 	 */
-	public KPSmartSystem(){
+	public KPSmartSystem(EventLog eventLog){
 		totalRevenue = 0;
 		totalExpenditure = 0;
-		eventLog = new EventLog();
+		this.eventLog = eventLog;
 		customerRoutes = new HashMap<BasicRoute, CustomerRoute>();
 		routeGraph = loadGraph();
 		users = new HashMap<String, KPSUser>();
@@ -321,5 +325,9 @@ public class KPSmartSystem {
 			writer.close();
 		}catch(FileNotFoundException e){e.printStackTrace();}
 		catch(UnsupportedEncodingException e){e.printStackTrace();}
+	}
+
+	public EventLog getEventLog() {
+		return eventLog;
 	}
 }

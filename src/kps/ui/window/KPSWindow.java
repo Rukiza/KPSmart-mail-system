@@ -18,7 +18,6 @@ import javax.swing.SwingConstants;
 
 import kps.KPSmartSystem;
 import kps.data.Node;
-import kps.data.wrappers.EventLog;
 import kps.enums.Day;
 import kps.enums.Priority;
 import kps.enums.TransportType;
@@ -35,10 +34,12 @@ import kps.ui.util.UIUtils;
  */
 public class KPSWindow extends JFrame {
 
-	private KPSmartSystem system = new KPSmartSystem();
+	private KPSmartSystem system; 
 
-	public KPSWindow(EventLog bizEvents){
+	public KPSWindow(KPSmartSystem system){
 		super("KPSmart");
+		this.system = system;
+
 		final Dimension WINDOW_SIZE = new Dimension(800,600);
 
 		setSize(WINDOW_SIZE);
@@ -49,7 +50,7 @@ public class KPSWindow extends JFrame {
 		JTabbedPane tabbedPane = new JTabbedPane();
 		add(tabbedPane, BorderLayout.CENTER);
 
-		tabbedPane.addTab("Decision Support", new DecisionSupportPanel(bizEvents));
+		tabbedPane.addTab("Decision Support", new DecisionSupportPanel(system.getEventLog()));
 		tabbedPane.addTab("Metrics", new MetricsPanel());
 		tabbedPane.addTab("Route Graph", new RouteGraphPanel(system.getRouteGraph(),this));
 
