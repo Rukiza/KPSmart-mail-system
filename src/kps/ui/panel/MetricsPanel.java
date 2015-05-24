@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.text.DecimalFormat;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -225,28 +226,115 @@ public class MetricsPanel extends JPanel{
 
         public CustomerRoutePanel(int width, int height){
             super(width, height);
-            setLayout(new SpringLayout());
-            JLabel originLabel = new JLabel("Origin: ");
+            add(setupOptionsPanel());
+            add(new JButton("Generate Metrics"));
+            add(setupMetricsPanel());
+
+        }
+
+        public JPanel setupOptionsPanel(){
+        	JLabel originLabel = new JLabel("Origin: ");
             origin = new JComboBox<String>();
             originLabel.setLabelFor(origin);
             JLabel destLabel = new JLabel("Destination: ");
             destination = new JComboBox<String>();
             destLabel.setLabelFor(destination);
-            add(originLabel);
-            add(destLabel);
+        	JPanel options = new JPanel();
+        	options.add(originLabel);
+        	options.add(origin);
+        	options.add(destLabel);
+        	options.add(destination);
+        	return options;
+        }
+
+        public JPanel setupMetricsPanel(){
+        	TotalMailPanel mail = new TotalMailPanel((getWidth() / 2) - 11);
+        	SpringUtilities.makeCompactGrid(mail, 3, 2, 6, 6, 6, 6);
+        	mail.setBorder(new TitledBorder("Total Amounts"));
+        	AverageTimesPanel times = new AverageTimesPanel((getWidth() / 2) - 11);
+        	SpringUtilities.makeCompactGrid(times, 2, 2, 6, 6, 6, 6);
+        	times.setBorder(new TitledBorder("AverageTimes"));
+
+        	JPanel metrics = new JPanel();
+        	metrics.add(mail);
+        	metrics.add(times);
+        	return metrics;
         }
 
         private class TotalMailPanel extends JPanel{
 
-        	public TotalMailPanel(){
+			private static final long serialVersionUID = 1L;
+
+			// fields
+        	private JLabel weight;
+        	private JLabel volume;
+        	private JLabel amount;
+
+        	public TotalMailPanel(int width){
         		super();
+        		setPreferredSize(new Dimension(width, 126));
+
+        		setLayout(new SpringLayout());
+        		JLabel weightLabel = new JLabel("Weight: ");
+        		weight = new JLabel();
+        		weightLabel.setLabelFor(weight);
+        		JLabel volumeLabel = new JLabel("Volume: ");
+        		volume = new JLabel();
+        		volumeLabel.setLabelFor(volume);
+        		JLabel amountLabel = new JLabel("Amount: ");
+        		amount = new JLabel();
+        		amountLabel.setLabelFor(amount);
+        		add(weightLabel);
+        		add(weight);
+        		add(volumeLabel);
+        		add(volume);
+        		add(amountLabel);
+        		add(amount);
+        	}
+
+        	public void setWeight(int weight){
+        		this.weight.setText(weight+" g");
+        	}
+
+        	public void setVolume(int volume){
+        		this.volume.setText(volume+" cm3");
+
+        	}
+
+        	public void setAmount(int amount){
+        		this.amount.setText(""+amount);
         	}
         }
 
         private class AverageTimesPanel extends JPanel{
 
-        	public AverageTimesPanel(){
+        	// fields
+        	private JLabel airTime;
+        	private JLabel standardTime;
+
+        	public AverageTimesPanel(int width){
         		super();
+        		setPreferredSize(new Dimension(width, 126));
+
+        		setLayout(new SpringLayout());
+        		JLabel airLabel = new JLabel("Air: ");
+        		airTime = new JLabel();
+        		airLabel.setLabelFor(airTime);
+        		JLabel standardLabel = new JLabel("Std: ");
+        		standardTime = new JLabel();
+        		standardLabel.setLabelFor(standardTime);
+        		add(airLabel);
+        		add(airTime);
+        		add(standardLabel);
+        		add(standardTime);
+        	}
+
+        	public void setAirTime(double airTime){
+        		this.airTime.setText(airTime+" hours");
+        	}
+
+        	public void setStandardTime(double standardTime){
+        		this.standardTime.setText(standardTime+" hours");
         	}
         }
     }
