@@ -7,10 +7,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.text.DecimalFormat;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
@@ -34,10 +32,6 @@ public class MetricsPanel extends JPanel{
 
     public MetricsPanel(){
         super();
-
-        System.out.println(super.WIDTH);
-        System.out.println(super.HEIGHT);
-
         setPreferredSize(new Dimension(660, 520));
         // setup components
         graph = new GraphPanel(660, 290);
@@ -87,16 +81,12 @@ public class MetricsPanel extends JPanel{
         add(routes, constraints);
     }
 
-    public void repaint(){
+    public void repaintMetrics(){
 
     }
 
-    public static void main(String[] args){
-        JFrame frame = new JFrame("Test");
-        frame.add(new MetricsPanel());
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
+    public void repaint(){
+
     }
 
     private abstract class MetricComponent extends JPanel{
@@ -179,20 +169,28 @@ public class MetricsPanel extends JPanel{
 
         private static final long serialVersionUID = 1L;
 
-        private final String[] LABELS = {"Total Revenue", "Total Expenditure", "Total Profit"};
-        private double[] metrics = {1000000000, 1234565, -1657.87};
+        private final String[] TYPES = {"Total Revenue", "Total Expenditure", "Total Profit"};
+        private JLabel revenue = new JLabel();
+        private JLabel expenditure = new JLabel();
+        private JLabel profit = new JLabel();
+        private final JLabel[] LABELS = {revenue, expenditure, profit};
+        private final DecimalFormat FORMAT = new DecimalFormat("$###,###,###.##");
 
         public ProfitPanel(int width, int height){
             super(width, height);
             setLayout(new SpringLayout());
-            DecimalFormat format = new DecimalFormat("$###,###,###.##");
             for(int i = 0; i < LABELS.length; i++){
-                JLabel label = new JLabel(LABELS[i]+": ");
-                JLabel metric = new JLabel(format.format(metrics[i]));
-                label.setLabelFor(metric);
+                JLabel label = new JLabel(TYPES[i]+": ");
+                label.setLabelFor(LABELS[i]);
                 add(label);
-                add(metric);
+                add(LABELS[i]);
             }
+        }
+
+        public void setProfitMetrics(double revenue, double expenditure){
+        	this.revenue.setText(FORMAT.format(revenue));
+        	this.expenditure.setText(FORMAT.format(expenditure));
+        	this.profit.setText(FORMAT.format(revenue - expenditure));
         }
     }
 
@@ -200,19 +198,32 @@ public class MetricsPanel extends JPanel{
 
         private static final long serialVersionUID = 1L;
 
-        private final String[] LABELS = {"Mail Delivery", "Price Update", "Transport Cost Update", "Transport Discontinued", "Total"};
-        private int[] counts = {0, 0, 0, 0, 0};
+        private final String[] TYPES = {"Mail Delivery", "Price Update", "Transport Cost Update", "Transport Discontinued", "Total"};
+        private JLabel mail = new JLabel();
+        private JLabel price = new JLabel();
+        private JLabel cost = new JLabel();
+        private JLabel discontinued = new JLabel();
+        private JLabel total = new JLabel();
+        private final JLabel[] LABELS = {mail, price, cost, discontinued, total};
 
         public BusinessEventPanel(int width, int height){
             super(width, height);
             setLayout(new SpringLayout());
             for(int i = 0; i < LABELS.length; i++){
-                JLabel label = new JLabel(LABELS[i]+": ");
-                JLabel metric = new JLabel(""+counts[i]);
-                label.setLabelFor(metric);
+                JLabel label = new JLabel(TYPES[i]+": ");
+                label.setLabelFor(LABELS[i]);
                 add(label);
-                add(metric);
+                add(LABELS[i]);
             }
+        }
+
+        public void setBusinessEventMetrics(int mail, int price, int cost, int discontinued){
+        	this.mail.setText(Integer.toString(mail));
+        	this.price.setText(Integer.toString(price));
+        	this.cost.setText(Integer.toString(cost));
+        	this.discontinued.setText(Integer.toString(discontinued));
+        	int total = mail + price + cost + discontinued;
+        	this.total.setText(Integer.toString(total));
         }
 
     }
@@ -266,30 +277,24 @@ public class MetricsPanel extends JPanel{
 			private static final long serialVersionUID = 1L;
 
 			// fields
-        	private JLabel weight;
-        	private JLabel volume;
-        	private JLabel amount;
+			private final String[] TYPES = {"Weight", "Volume", "Amount"};
+        	private JLabel weight = new JLabel();
+        	private JLabel volume = new JLabel();
+        	private JLabel amount = new JLabel();
+        	private final JLabel[] LABELS = {weight, volume, amount};
+
 
         	public TotalMailPanel(int width){
         		super();
         		setPreferredSize(new Dimension(width, 126));
 
         		setLayout(new SpringLayout());
-        		JLabel weightLabel = new JLabel("Weight: ");
-        		weight = new JLabel();
-        		weightLabel.setLabelFor(weight);
-        		JLabel volumeLabel = new JLabel("Volume: ");
-        		volume = new JLabel();
-        		volumeLabel.setLabelFor(volume);
-        		JLabel amountLabel = new JLabel("Amount: ");
-        		amount = new JLabel();
-        		amountLabel.setLabelFor(amount);
-        		add(weightLabel);
-        		add(weight);
-        		add(volumeLabel);
-        		add(volume);
-        		add(amountLabel);
-        		add(amount);
+        		for(int i = 0; i < TYPES.length; i++){
+        			JLabel label = new JLabel(TYPES[i]+": ");
+        			label.setLabelFor(LABELS[i]);
+        			add(label);
+        			add(LABELS[i]);
+        		}
         	}
 
         	public void setWeight(int weight){
@@ -309,24 +314,22 @@ public class MetricsPanel extends JPanel{
         private class AverageTimesPanel extends JPanel{
 
         	// fields
-        	private JLabel airTime;
-        	private JLabel standardTime;
+        	private final String[] TYPES = {"Air", "Std"};
+        	private JLabel airTime = new JLabel();
+        	private JLabel standardTime = new JLabel();
+        	private final JLabel[] LABELS = {airTime, standardTime};
 
         	public AverageTimesPanel(int width){
         		super();
         		setPreferredSize(new Dimension(width, 126));
 
         		setLayout(new SpringLayout());
-        		JLabel airLabel = new JLabel("Air: ");
-        		airTime = new JLabel();
-        		airLabel.setLabelFor(airTime);
-        		JLabel standardLabel = new JLabel("Std: ");
-        		standardTime = new JLabel();
-        		standardLabel.setLabelFor(standardTime);
-        		add(airLabel);
-        		add(airTime);
-        		add(standardLabel);
-        		add(standardTime);
+        		for(int i = 0; i < TYPES.length; i++){
+        			JLabel label = new JLabel(TYPES[i]+": ");
+        			label.setLabelFor(LABELS[i]);
+        			add(label);
+        			add(LABELS[i]);
+        		}
         	}
 
         	public void setAirTime(double airTime){
