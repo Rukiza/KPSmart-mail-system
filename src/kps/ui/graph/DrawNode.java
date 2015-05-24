@@ -11,6 +11,7 @@ import kps.data.Node;
 public class DrawNode {
 	private Node node;
 	private boolean selected;
+	private boolean routeSelected;
 	private double size;
 
 	private double x;
@@ -43,6 +44,7 @@ public class DrawNode {
 
 		//draw inside yellow
 		g.setColor(Color.yellow);
+		if(routeSelected)g.setColor(Color.GREEN);
 		g.fillOval((int)getX()+5, (int)getY()+5, (int)getSize()-10, (int)getSize()-10);
 
 		//draw the name of the node
@@ -121,6 +123,10 @@ public class DrawNode {
 
 	public Node getNode() {
 		return node;
+	}
+	
+	public void setRouteSelected(boolean selected){
+		this.routeSelected = selected;
 	}
 
 

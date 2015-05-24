@@ -17,7 +17,11 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
 import kps.KPSmartSystem;
+import kps.data.Node;
 import kps.data.wrappers.EventLog;
+import kps.enums.Day;
+import kps.enums.Priority;
+import kps.enums.TransportType;
 import kps.ui.listener.PackageFormListener;
 import kps.ui.listener.RouteFormListener;
 import kps.ui.panel.DecisionSupportPanel;
@@ -29,17 +33,18 @@ import kps.ui.util.UIUtils;
  * @author hardwiwill
  * Encapsulates all of the KPSmart GUI elements (aside from popup boxes)
  */
-public class Window extends JFrame {
+public class KPSWindow extends JFrame {
 
 	private KPSmartSystem system = new KPSmartSystem();
 
-	public Window(EventLog bizEvents){
+	public KPSWindow(EventLog bizEvents){
 		super("KPSmart");
 		final Dimension WINDOW_SIZE = new Dimension(800,600);
 
 		setSize(WINDOW_SIZE);
 		setLocationRelativeTo(null);
 		setLayout(new BorderLayout());
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JTabbedPane tabbedPane = new JTabbedPane();
 		add(tabbedPane, BorderLayout.CENTER);
@@ -64,6 +69,7 @@ public class Window extends JFrame {
 		sidebar.setLayout(new FlowLayout(FlowLayout.CENTER));
 		sidebar.add(new JLabel("Sidebar"));
 
+		// button setup
 		ImageIcon plusIconGreen = null;
 		ImageIcon plusIconBlue = null;
 		try {
@@ -90,27 +96,26 @@ public class Window extends JFrame {
 		// side bar events
 		addPackage.addActionListener((ActionEvent e) -> {
 			new PackageFormWindow(new PackageFormListener(){
-				public void onPackageFormSubmitted(String day, String from, double price, double volume, String priority){
-					System.out.println("Submitted package form");
+				public void onPackageFormSubmitted(Day day, Node from, Node to, double price, double volume, Priority priority){
+					// package form submitted
 				}
 				public void onCancel(){
-					System.out.println("Cancelled");
+					// cancelled
 				}
-			});
+			}, system.getRouteGraph().getNodes());
 		});
 
 		// oh lordy
 		addRoute.addActionListener((ActionEvent e) -> new RouteFormWindow(new RouteFormListener(){
-			public void onRouteFormSubmitted(String company, String to, String from, String type, double weightCost, double volCost
-					, double maxWeight, double maxVol, double dur, double freq, String priority, String day){
-				System.out.println("Got form");
+			public void onRouteFormSubmitted(String company, String to, String from, TransportType type, double weightCost, double volCost
+					, double maxWeight, double maxVol, double dur, double freq, Priority priority, Day day){
+				// route form submitted
 			}
 			public void onCancel(){
-				System.out.println("cancelled");
+				// cancelled
 			}
 		}));
 
 		return sidebar;
 	}
-
 }

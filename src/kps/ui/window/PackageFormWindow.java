@@ -3,49 +3,44 @@ package kps.ui.window;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
+import kps.data.Node;
+import kps.enums.Day;
+import kps.enums.Priority;
 import kps.ui.listener.PackageFormListener;
 import kps.ui.util.SpringUtilities;
 import kps.ui.util.UIUtils;
 
+public class PackageFormWindow extends AbstractFormWindow {
 
-public class PackageFormWindow extends AbstractFormWindow{
-
-	public PackageFormWindow(PackageFormListener listener){
-
+	public PackageFormWindow(PackageFormListener listener, List<Node> locations){
 		super("enter package details");
-
 		setLayout(new BorderLayout());
 
 		// add fields
-		Map<String, JTextField> fields = new HashMap<>();
-		String[] names = new String[] { "day", "from", "weight", "volume", "priority" };
+		Map<String, Object> fields = new HashMap<>();
+		String[] names = new String[] { "day", "from", "to", "weight", "volume", "priority" };
 		int fieldCount = names.length;
 
-		JPanel fieldPanel = new JPanel();
-		fieldPanel.setLayout(new SpringLayout());
+		JPanel inputPanel = new JPanel();
+		inputPanel.setLayout(new SpringLayout());
 
-		for (String name : names){
-			JLabel l = new JLabel(name);
-			JTextField field = new JTextField();
-			l.setLabelFor(field);
-			fields.put(name, field);
-			fieldPanel.add(l);
-			fieldPanel.add(field);
-		}
+		makeComboBox("day", Day.values(), fields, inputPanel);
+		makeComboBox("from", locations.toArray(), fields, inputPanel);
+		makeComboBox("to", locations.toArray(), fields, inputPanel);
+		makeTextField("weight", fields, inputPanel);
+		makeTextField("volume", fields, inputPanel);
+		makeComboBox("priority", Priority.values(), fields, inputPanel);
 
-		SpringUtilities.makeCompactGrid(fieldPanel,
+		SpringUtilities.makeCompactGrid(inputPanel,
 				fieldCount, 2,	//rows, cols
                 6, 6,	//initX, initY
                 6, 6);	//xPad, yPad)
@@ -59,37 +54,38 @@ public class PackageFormWindow extends AbstractFormWindow{
 		buttonPanel.add(OK);
 		buttonPanel.add(cancel);
 
-		add(fieldPanel, BorderLayout.CENTER);
+		add(inputPanel, BorderLayout.CENTER);
 		add(buttonPanel, BorderLayout.SOUTH);
 
 		// event handling
 		OK.addActionListener((ActionEvent e) -> {
-			if (!formComplete(fields.values())){
+			if (!isFormComplete(fields.values())){
 				completeFormPrompt();
 				return;
 			}
 			// assumes form has been filled
 			// check digit fields
-			String weightStr = fields.get("weight").getText();
-			String volStr = fields.get("volume").getText();
+			String weightStr = (String)fields.get("weight");
+			String volStr = (String)fields.get("volume");
 			if (!UIUtils.isDouble(weightStr, volStr)){
-				promptNumberFields("weight and volume should only contain digits");
+				numberFieldsPrompt("weight and volume should only contain digits");
 				return;
 			}
 
-			String day = fields.get("day").getText();
-			String from = fields.get("from").getText();
+			Day day = (Day)fields.get("day");
+			Node from = (Node)fields.get("from");
+			Node to = (Node) fields.get("to");
 			double weight = Double.parseDouble(weightStr);
 			double volume = Double.parseDouble(volStr);
-			String priority = fields.get("priority").getText();
+			Priority priority = (Priority) fields.get("priority");
 
-			listener.onPackageFormSubmitted(day, from, weight, volume, priority);
+			listener.onPackageFormSubmitted(day, from, to, weight, volume, priority);
 			UIUtils.closeWindow(this);
 		});
 
 		cancel.addActionListener((ActionEvent e) -> {
-			UIUtils.closeWindow(this);
 			listener.onCancel();
+			UIUtils.closeWindow(PackageFormWindow.this);
 		});
 
 		// open window
@@ -100,7 +96,7 @@ public class PackageFormWindow extends AbstractFormWindow{
 	public static void main(String args[]){
 		new PackageFormWindow(new PackageFormListener(){
 			@Override
-			public void onPackageFormSubmitted(String day, String from, double weight, double volume, String priority){
+			public void onPackageFormSubmitted(Day day, Node from, Node to, double weight, double volume, Priority priority){
 				System.out.println("submitted: " + day + ", " + from + "... etc");
 			}
 
@@ -108,7 +104,7 @@ public class PackageFormWindow extends AbstractFormWindow{
 			public void onCancel(){
 				System.out.println("Cancelled");
 			}
-		});
+		}, Arrays.asList(new Node[]{null, null}));
 	}
 
 }

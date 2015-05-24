@@ -2,7 +2,6 @@ package kps.ui.util;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
@@ -10,16 +9,14 @@ import javax.swing.JFrame;
 public class UIUtils {
 
 	public static void closeWindow(JFrame frame){
-		frame.dispatchEvent(
-			new WindowEvent(frame, WindowEvent.WINDOW_CLOSING)
-		);
+		frame.dispose();
 	}
 
 	public static boolean isDouble(String... input){
 		for(String s : input){
 			try {
 				Double.parseDouble(s);
-			} catch (NumberFormatException e){
+			} catch (NumberFormatException | NullPointerException e){
 				return false;
 			}
 		}
