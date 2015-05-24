@@ -2,6 +2,7 @@ package kps.ui.panel;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -28,7 +29,13 @@ import kps.events.TransportDiscontinuedEvent;
 import kps.parser.KPSParser;
 import kps.parser.ParserException;
 
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.general.PieDataset;
+
 
 /**
  * @author Shane Brewer
@@ -37,13 +44,11 @@ import org.jfree.chart.JFreeChart;
 public class DecisionSupportPanel extends JPanel{
 
 	private EventLog data;
-	private boolean setup;
-	private BusinessEvent event;
 	private LogManager manager;
 	private GraphPanel graphPanel;
 	private DisplayPanel displayPanel;
 	private SelectPanel selectPanel;
-	private Dimension size = new Dimension(500, 500);
+	private Dimension size = new Dimension(600, 600);
 	
 
 
@@ -53,28 +58,25 @@ public class DecisionSupportPanel extends JPanel{
 	 */
 	public DecisionSupportPanel(EventLog data){
 		this.data = data;
-		if (!this.data.isEmpty()){
-			event = this.data.getCurrentEvent();
-		}
 		this.setPreferredSize(size);
 		this.setSize(size);
 		manager = new LogManager(this.data);
 		this.setLayout(new GridBagLayout());
-		graphPanel = new GraphPanel(manager);
+		graphPanel = new GraphPanel("Temp",manager);
 		displayPanel = new DisplayPanel(manager);
 		selectPanel = new SelectPanel(manager);
 		GridBagConstraints con = new GridBagConstraints();
-		con.fill = GridBagConstraints.HORIZONTAL;
+		con.fill = GridBagConstraints.NONE;
 		con.weightx = 0.5;
 		con.gridx = 0;
 		con.gridy = 0;
 		this.add(graphPanel, con);
-		con.fill = GridBagConstraints.HORIZONTAL;
+		con.fill = GridBagConstraints.NONE;
 		con.weightx = 0.5;
 		con.gridx = 1;
 		con.gridy = 0;
 		this.add(displayPanel, con);
-		con.fill = GridBagConstraints.HORIZONTAL;
+		con.fill = GridBagConstraints.NONE;
 		con.anchor = GridBagConstraints.PAGE_END;
 		con.gridx = 0;
 		con.gridy = 1;
@@ -215,17 +217,43 @@ public class DecisionSupportPanel extends JPanel{
 
 	private class GraphPanel extends JPanel{
 		private LogManager data;
-		private Dimension sizeg  = new Dimension(size.width/2, size.height/2);
-		public GraphPanel (LogManager eventLog){
+		private Dimension sizeg  = new Dimension(size.width/2, size.height - size.height/4);
+		public GraphPanel (String title, LogManager eventLog){
 			data = eventLog;
 			this.setPreferredSize(sizeg);
 			this.setSize(sizeg);
+			add(setupGraph(setupDataset()));
 		}
+		
+		private PieDataset setupDataset(){
+			DefaultPieDataset dataset = new DefaultPieDataset();
+			dataset.setValue("One", new Double(43.2));
+			return dataset;
+		}
+		
+		private JPanel setupGraph(PieDataset dataset){
+			JFreeChart chart = ChartFactory.createPieChart(
+					"Temp", 
+					dataset,
+					false,
+					true,
+					false
+					);
+			PiePlot plot = (PiePlot) chart.getPlot();
+			plot.setLabelFont(new Font("SansSerif", Font.PLAIN, 12));
+	        plot.setNoDataMessage("No data available");
+	        plot.setCircular(false);
+	        plot.setLabelGap(0.02);
+	        JPanel p = new ChartPanel(chart);
+	        p.setPreferredSize(sizeg);
+	        return p;
+		}
+		
 	}
 	
 	private class DisplayPanel extends JPanel{
 		private LogManager data;
-		private Dimension sized  = new Dimension(size.width/2, size.height/2);
+		private Dimension sized  = new Dimension(size.width/2, size.height - size.height/4);
 		private List<JTextField> textFields;
 		
 		public DisplayPanel (LogManager eventLog){
@@ -265,7 +293,7 @@ public class DecisionSupportPanel extends JPanel{
 	
 	private class SelectPanel extends JPanel{
 		private LogManager data;
-		private Dimension sizes  = new Dimension(size.width, size.height/2);
+		private Dimension sizes  = new Dimension(size.width, size.height/10);
 		
 		public SelectPanel (LogManager eventLog){
 			data = eventLog;
