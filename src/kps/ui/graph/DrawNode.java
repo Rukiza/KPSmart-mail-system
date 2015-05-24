@@ -16,7 +16,7 @@ public class DrawNode {
 
 	private double x;
 	private double y;
-	
+
 	Map<DrawNode, Integer> connections;
 
 	public DrawNode(Node n, double x, double y){
@@ -36,27 +36,27 @@ public class DrawNode {
 	 * */
 	public void draw(Graphics2D g){
 		//draw outline black
-		g.setColor(Color.black);
+		g.setColor(Color.WHITE);
 
 		//if selected draw outline red
 		if(isSelected())g.setColor(Color.RED);
 		g.fillOval((int)getX(), (int)getY(), (int)getSize(), (int)getSize());
 
 		//draw inside yellow
-		g.setColor(Color.yellow);
-		if(routeSelected)g.setColor(Color.GREEN);
-		g.fillOval((int)getX()+5, (int)getY()+5, (int)getSize()-10, (int)getSize()-10);
+		g.setColor(Color.BLUE);
+		if(routeSelected)g.setColor(Color.RED);
+		g.fillOval((int)getX()+3, (int)getY()+3, (int)getSize()-6, (int)getSize()-6);
 
 		//draw the name of the node
-		g.setColor(Color.black);
+		g.setColor(Color.WHITE);
 		g.drawString(getNode().getName(), (int)getX()+20, (int)(getY()+getSize()/2));
 	}
-	
+
 	public void addConnection(DrawNode destNode){
 		if(connections.containsKey(destNode))connections.put(destNode, connections.get(destNode)+1);
 		else connections.put(destNode, 1);
 	}
-	
+
 	@Override
 	public boolean equals(Object other){
 		if(other instanceof DrawNode){
@@ -64,7 +64,7 @@ public class DrawNode {
 			return node.getNode().equals(this.getNode());
 		}
 		return false;
-		
+
 	}
 
 
@@ -124,7 +124,7 @@ public class DrawNode {
 	public Node getNode() {
 		return node;
 	}
-	
+
 	public void setRouteSelected(boolean selected){
 		this.routeSelected = selected;
 	}

@@ -38,7 +38,6 @@ public class DijkstraSearch  {
 	}
 
 
-
 	/**
 	 * Return the route and cost of the cheapest path as an entry in the map
 	 *
