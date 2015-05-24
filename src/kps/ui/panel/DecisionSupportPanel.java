@@ -1,25 +1,22 @@
 package kps.ui.panel;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Rectangle;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javafx.scene.layout.Border;
-
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.Border;
 
 import kps.Main;
 import kps.data.wrappers.EventLog;
@@ -31,22 +28,23 @@ import kps.events.TransportDiscontinuedEvent;
 import kps.parser.KPSParser;
 import kps.parser.ParserException;
 
+import org.jfree.chart.JFreeChart;
+
 /**
  * @author Shane Brewer
  *
  */
-public class DecisionSupportPanel extends JPanel implements MouseListener, KeyListener{
+public class DecisionSupportPanel extends JPanel{
 
 	private EventLog data;
 	private boolean setup;
 	private BusinessEvent event;
-	private List<Button> buttons;
-	private Color textColor = new Color (0, 0, 0);
-	private Color backgroundColor = new Color (255,255,255);
-	private int progressBarY;
-	private Color progressForground = new Color(185, 142, 0);
-	private Color progressBackground = new Color(255, 205, 0);
-	private Color progressDraw = new Color(255,196,0);
+	private LogManager manager;
+	private GraphPanel graphPanel;
+	private DisplayPanel displayPanel;
+	private SelectPanel selectPanel;
+	private Dimension size = new Dimension(500, 500);
+	
 
 
 
@@ -58,189 +56,241 @@ public class DecisionSupportPanel extends JPanel implements MouseListener, KeyLi
 		if (!this.data.isEmpty()){
 			event = this.data.getCurrentEvent();
 		}
-		addMouseListener(this);
+		this.setPreferredSize(size);
+		this.setSize(size);
+		manager = new LogManager(this.data);
+		this.setLayout(new GridBagLayout());
+		graphPanel = new GraphPanel(manager);
+		displayPanel = new DisplayPanel(manager);
+		selectPanel = new SelectPanel(manager);
+		GridBagConstraints con = new GridBagConstraints();
+		con.fill = GridBagConstraints.HORIZONTAL;
+		con.weightx = 0.5;
+		con.gridx = 0;
+		con.gridy = 0;
+		this.add(graphPanel, con);
+		con.fill = GridBagConstraints.HORIZONTAL;
+		con.weightx = 0.5;
+		con.gridx = 1;
+		con.gridy = 0;
+		this.add(displayPanel, con);
+		con.fill = GridBagConstraints.HORIZONTAL;
+		con.anchor = GridBagConstraints.PAGE_END;
+		con.gridx = 0;
+		con.gridy = 1;
+		con.gridwidth = 2;
+		this.add(selectPanel, con);		
+		
+	}
+	
+	public KeyListener getKeyListener(){
+		return manager.getKeyListener();
 	}
 
-	public void setup(){
-		this.validate();
-		buttonSetup();
-	}
-
-	@Override
-	public void paint(Graphics g) {
-		if(g == null){
-			return;
+	private class LogManager{
+		private EventLog data;
+		private List<JTextField> textFields;
+		private BusinessEvent event;
+		
+		public LogManager(EventLog eventLog){
+			data = eventLog;
 		}
-		if (!setup){
-			setup();
+		
+		public KeyListener getKeyListener() {
+			return new KeyListener() {
+				
+				@Override
+				public void keyTyped(KeyEvent e) {}
+				
+				@Override
+				public void keyReleased(KeyEvent e) {
+					if (e.getID() == KeyEvent.VK_RIGHT){
+						event = data.getNextEvent();
+						updateDisplay();
+					}
+					if (e.getID() == KeyEvent.VK_LEFT){
+						event = data.getPrevEvent();
+						updateDisplay();
+					}
+				}
+				
+				@Override
+				public void keyPressed(KeyEvent e) {}
+			};
 		}
-		if(buttons == null || buttons.isEmpty())return;
-		Graphics2D g2 = (Graphics2D)g;
 
-		g.setColor(backgroundColor);
-		g.fillRect(0, 0, this.getWidth(), this.getHeight());
-
-		for (Button button: buttons){
-			g.setColor(button.fill);
-			g2.fill(button);
-			g.setColor(button.draw);
-			g2.draw(button);
+		public void setupEventDisplay(List<JTextField> temp){
+			textFields = temp;
 		}
-
-		if (event == null && !data.isEmpty()){
-			System.out.println("Only here once");
+		
+		public void updateDisplay(){
 			event = data.getCurrentEvent();
+			for (JTextField text : textFields){
+				text.setText(null);
+			}
+			textFields.get(0).setText("Name: ");
+			textFields.get(1).setText(event.getType());
+			if (event instanceof MailDeliveryEvent){
+				handleMailUpdate((MailDeliveryEvent) event);
+			}
+			else if (event instanceof TransportCostUpdateEvent){
+				handleCostUpdate((TransportCostUpdateEvent) event);
+			}
+			else if (event instanceof TransportDiscontinuedEvent){
+				handleDiscountinuedUpdate((TransportDiscontinuedEvent) event);
+			}
+			else if (event instanceof PriceUpdateEvent){
+				handlePriceUpdate((PriceUpdateEvent) event);
+			}
+			textFields.get(12).setText("Date: ");
+			textFields.get(13).setText(new Date(event.getTimeLogged()).toString());
 		}
 
-		if (event != null){
-			g.setColor(textColor);
-			g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 30));
-			g.drawString("Type of Event: "+event.getType(), 100, 80);
-			g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 24));
-			g.drawString("Origin: "+event.getOrigin(), 100, 120);
-			g.drawString("Destination: "+event.getDestination(), 100, 150);
-			g.drawString("Time Stamp: "+new Date(event.getTimeLogged()).toString(), 100, 350);
-			g.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 16));
-			paintEventByType(g2);
+		private void handlePriceUpdate(PriceUpdateEvent event) {
+			textFields.get(2).setText("Desitination");
+			textFields.get(3).setText(event.getDestination());
+			textFields.get(4).setText("Volume Price");
+			textFields.get(5).setText("$"+event.getVolumePrice());
+			textFields.get(6).setText("Gram Price");
+			textFields.get(7).setText("$"+event.getGramPrice());
+			textFields.get(8).setText("Priority");
+			textFields.get(9).setText(""+event.getPriority());
 		}
-		paintProgressBar(g2);
-		buttonSetup();
-	};
 
-	@Override
-	public void repaint(){
-		Graphics g = this.getGraphics();
-		paint(g);
-	}
+		private void handleDiscountinuedUpdate(TransportDiscontinuedEvent event) {
+			textFields.get(2).setText("Desitination");
+			textFields.get(3).setText(event.getDestination());
+			textFields.get(4).setText("Tansport Firm");
+			textFields.get(5).setText(event.getTransportFirm());
+			textFields.get(6).setText("Transport Type");
+			textFields.get(7).setText(""+event.getTransportType());
+			
+		}
 
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		if (e.getID() == MouseEvent.MOUSE_RELEASED &&
-				!data.isEmpty()){
-			for (Button button: buttons){
-				if (button.isAtPoint(e.getPoint()) &&
-						button.name.equals("Right")){
+		private void handleCostUpdate(TransportCostUpdateEvent event) {
+			textFields.get(2).setText("Desitination");
+			textFields.get(3).setText(event.getDestination());
+			textFields.get(4).setText("Volume Price");
+			textFields.get(5).setText("$"+event.getVolumePrice());
+			textFields.get(6).setText("Gram Price");
+			textFields.get(7).setText("$"+event.getGramPrice());
+			textFields.get(8).setText("Max Volume");
+			textFields.get(9).setText(""+event.getMaxVolume());
+			textFields.get(10).setText("Max Weight");
+			textFields.get(11).setText(""+event.getMaxWeight());
+			textFields.get(12).setText("Mail Transport");
+		}
+
+		private void handleMailUpdate(MailDeliveryEvent event) {
+			textFields.get(2).setText("Desitination");
+			textFields.get(3).setText(event.getDestination());
+			textFields.get(4).setText("Volume");
+			textFields.get(5).setText(event.getVolume()+"");
+			textFields.get(6).setText("Weight");
+			textFields.get(7).setText(event.getWeight()+"");
+			textFields.get(8).setText("Day");
+			textFields.get(9).setText(""+event.getDay());
+		}
+
+		public ActionListener getNextLisener() {
+			return new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
 					event = data.getNextEvent();
+					updateDisplay();
 				}
-				else if (button.isAtPoint(e.getPoint()) &&
-						button.name.equals("Left")){
+			};
+		}
+
+		public ActionListener getPrevLisener() {
+			return new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
 					event = data.getPrevEvent();
+					updateDisplay();
 				}
+			};
+		}
+	}
+
+	private class GraphPanel extends JPanel{
+		private LogManager data;
+		private Dimension sizeg  = new Dimension(size.width/2, size.height/2);
+		public GraphPanel (LogManager eventLog){
+			data = eventLog;
+			this.setPreferredSize(sizeg);
+			this.setSize(sizeg);
+		}
+	}
+	
+	private class DisplayPanel extends JPanel{
+		private LogManager data;
+		private Dimension sized  = new Dimension(size.width/2, size.height/2);
+		private List<JTextField> textFields;
+		
+		public DisplayPanel (LogManager eventLog){
+			data = eventLog;
+			textFields = new ArrayList<JTextField>();
+			data.setupEventDisplay(textFields);
+			this.setPreferredSize(sized);
+			this.setSize(sized);
+			textFieldSetup();
+		}
+		
+		private void textFieldSetup(){
+			this.setLayout(new GridBagLayout());
+			GridBagConstraints com = new GridBagConstraints();
+			for (int i = 0; i < 14; i++){
+				textFields.add(makeTextField(i, com));
 			}
-			repaint();
+			data.updateDisplay();
 		}
-
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if (e.getID() == KeyEvent.KEY_PRESSED &&
-				!data.isEmpty()){
-			if (e.getKeyCode() == KeyEvent.VK_RIGHT){
-				event = data.getNextEvent();
-			}
-			else if (e.getKeyCode() == KeyEvent.VK_LEFT){
-				event = data.getPrevEvent();
-
-			}
-			repaint();
-		}
-	}
-
-	//=======================HELPER METHODS==============================//
-	private void paintEventByType(Graphics g){
-		if (event instanceof MailDeliveryEvent){
-			MailDeliveryEvent tempEvent = (MailDeliveryEvent) event;
-			g.drawString("Volume: "+tempEvent.getVolume(), 100, 175);
-			g.drawString("Weight: "+ tempEvent.getWeight(), 100, 195);
-		}
-		if (event instanceof PriceUpdateEvent){
-			PriceUpdateEvent tempEvent = (PriceUpdateEvent) event;
-			g.drawString("Price Per Gram: "+tempEvent.getGramPrice(), 100, 175);
-			g.drawString("Price Per Volume: "+ tempEvent.getVolumePrice(), 100, 195);
-		}
-		if (event instanceof TransportCostUpdateEvent){
-			TransportCostUpdateEvent tempEvent = (TransportCostUpdateEvent) event;
-			g.drawString("Volume Price: "+tempEvent.getGramPrice(), 100, 175);
-			g.drawString("Weight Price: "+ tempEvent.getVolumePrice(), 100, 195);
-			g.drawString("Maximum Weight: "+tempEvent.getMaxWeight(), 100, 215);
-			g.drawString("Maximum Volume: "+ tempEvent.getMaxVolume(), 100, 235);
-			g.drawString("Transport Duration: "+ tempEvent.getTripDuration(), 100, 255);
-			g.drawString("Transport Firm: "+ tempEvent.getTransportFirm(), 100, 275);
-			g.drawString("Transport Type: "+ tempEvent.getTransportType(), 100, 295);
-			g.drawString("Departure Frequency: "+ tempEvent.getDepartureFrequency(), 100, 315);
-		}
-		if (event instanceof TransportDiscontinuedEvent){
-			TransportDiscontinuedEvent tempEvent = (TransportDiscontinuedEvent) event;
-			g.drawString("Transport Firm: "+tempEvent.getTransportFirm(), 100, 175);
-			g.drawString("Transport Type: "+ tempEvent.getTransportType(), 100, 195);
+		
+		private JTextField makeTextField(int counter, GridBagConstraints com){
+			JTextField field = new JTextField() {
+				@Override
+				public void setBorder(Border border) {}
+			};
+			field.setEditable(false);
+			com.fill = GridBagConstraints.NONE;
+			int temp = counter%2;
+			com.anchor = temp == 1 ? GridBagConstraints.NORTHEAST : GridBagConstraints.NORTHWEST;
+			com.gridx = counter%2;
+			com.gridy = counter/2;
+			this.add(field, com);
+			field.setMinimumSize(new Dimension(0, size.width/4-10));
+			return field;
 		}
 	}
-
-	private void paintProgressBar(Graphics g){
-		int progressBarX = (int)(this.getWidth()*0.10);
-		progressBarY = (int)(this.getHeight()*0.90);
-		int progressBarWidth = (int)(getWidth()*0.8);
-		int progressBarHeight = 20;
-		int progress = (int)(progressBarWidth * (data.getPosition()/(data.getSize()-1.0)));
-		g.drawRect(progressBarX, progressBarY, progressBarWidth, progressBarHeight);
-		g.fillRect(progressBarX, progressBarY, progress, progressBarHeight);
-	}
-	//=====================HELPER METHODS END============================//
-
-	/**
-	 * Sets up buttons on panel
-	 */
-	private void buttonSetup(){
-		buttons = new ArrayList<Button>();
-		int width = 100;
-		int height = 60;
-		int base = 20;
-		int y = this.progressBarY - base - height;
-		int x = this.getWidth()/2;
-		buttons.add(new Button("Right", x - width/2 - base/2, y, width, height));
-		buttons.add(new Button("Left", x + width/2  +base/2, y, width, height));
-	}
-
-	/**
-	 * Button - Used in the menu for pressing.
-	 * @author Shane Brewer
-	 *
-	 */
-	private class Button extends Rectangle{
-		public String name;
-		public Color draw = new Color(255,196,0);
-		public Color fill = new Color(255,215,51);
-
-		public Button(String name, int x, int y, int width, int height){
-			super(x,y, width, height);
-			this.name = name;
+	
+	private class SelectPanel extends JPanel{
+		private LogManager data;
+		private Dimension sizes  = new Dimension(size.width, size.height/2);
+		
+		public SelectPanel (LogManager eventLog){
+			data = eventLog;
+			this.setPreferredSize(sizes);
+			this.setSize(sizes);
+			buttonSetup();
 		}
-
-		public boolean isAtPoint(Point point){
-			if (point.x < x || point.x > x + width){
-				return false;
-			}
-			if (point.y < y || point.y > y + height){
-				return false;
-			}
-			return true;
+		
+		public void buttonSetup(){
+			this.setLayout(new GridBagLayout());
+			GridBagConstraints con = new GridBagConstraints();
+			JButton button = new JButton("Next");
+			con.fill = GridBagConstraints.HORIZONTAL;
+			con.gridx = 0;
+			con.gridy = 0;
+			button.addActionListener(data.getNextLisener());
+			this.add(button, con);
+			button = new JButton("Prev");
+			con.fill = GridBagConstraints.HORIZONTAL;
+			con.gridx = 1;
+			con.gridy = 0;
+			button.addActionListener(data.getPrevLisener());
+			this.add(button, con);
 		}
 	}
-
-	//==========================Unused Methods===========================//
-	@Override
-	public void mouseClicked(MouseEvent e) {}
-	@Override
-	public void mouseEntered(MouseEvent e) {}
-	@Override
-	public void mouseExited(MouseEvent e) {}
-	@Override
-	public void mousePressed(MouseEvent e) {}
-	@Override
-	public void keyReleased(KeyEvent e) {}
-	@Override
-	public void keyTyped(KeyEvent e) {}
 
 	public static void main(String[] arg){
 		JFrame frame = new JFrame();
@@ -252,11 +302,8 @@ public class DecisionSupportPanel extends JPanel implements MouseListener, KeyLi
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		frame.addKeyListener(support);
 		frame.add(support, BorderLayout.CENTER);
 		frame.setVisible(true);
-		support.setup();
-
 	}
 }
 
