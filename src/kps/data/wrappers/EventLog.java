@@ -114,4 +114,8 @@ public class EventLog {
 		xml += "</"+KPSParser.FILE_TAG+">";
 		return xml;
 	}
+
+	public List<BusinessEvent> getListToCurrent(){
+		return eventLog.subList(0, iterationLocation);
+	}
 }
