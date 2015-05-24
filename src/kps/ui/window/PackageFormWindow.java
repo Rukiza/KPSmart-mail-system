@@ -1,23 +1,16 @@
 package kps.ui.window;
 
 import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.SpringLayout;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import kps.data.Node;
 import kps.enums.Day;
@@ -25,9 +18,6 @@ import kps.enums.Priority;
 import kps.ui.listener.PackageFormListener;
 import kps.ui.util.SpringUtilities;
 import kps.ui.util.UIUtils;
-
-
-
 
 public class PackageFormWindow extends AbstractFormWindow {
 
@@ -84,11 +74,12 @@ public class PackageFormWindow extends AbstractFormWindow {
 
 			Day day = (Day)fields.get("day");
 			Node from = (Node)fields.get("from");
+			Node to = (Node) fields.get("to");
 			double weight = Double.parseDouble(weightStr);
 			double volume = Double.parseDouble(volStr);
 			Priority priority = (Priority) fields.get("priority");
 
-			listener.onPackageFormSubmitted(day, from, null, weight, volume, priority);
+			listener.onPackageFormSubmitted(day, from, to, weight, volume, priority);
 			UIUtils.closeWindow(this);
 		});
 

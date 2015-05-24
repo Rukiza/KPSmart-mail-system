@@ -11,6 +11,7 @@ public class DrawRoute {
 
 	private DrawNode node1;
 	private DrawNode node2;
+	private boolean routeTaken;
 
 	private ArrayList<Route> routes;
 
@@ -18,8 +19,9 @@ public class DrawRoute {
 	 * Represents a connection between nodes and holds the routes between them
 	 * */
 	public DrawRoute(Route r, DrawNode node1, DrawNode node2){
-		routes = new ArrayList<Route>();
-		routes.add(r);
+		this.routeTaken = false;
+		this.routes = new ArrayList<Route>();
+		this.routes.add(r);
 		this.node2 = node2;
 		this.node1 = node1;
 	}
@@ -39,6 +41,10 @@ public class DrawRoute {
 	}
 
 	public void draw(Graphics2D g){
+		if(routeTaken)g.setColor(Color.GREEN);
+		else g.setColor(Color.BLACK);
+		
+		
 		boolean toNode2 = false;
 		boolean toNode1 = false;
 
@@ -104,7 +110,19 @@ public class DrawRoute {
 		}
 		return connections;
 	}
-
+	
+	
+	public void setTaken(boolean taken){
+		this.routeTaken = taken;
+	}
+	
+	public String getNode1Name(){
+		return this.node1.getNode().getName();
+	}
+	
+	public String getNode2Name(){
+		return this.node2.getNode().getName();
+	}
 
 	/**
 	 * Return if a point is inside the node

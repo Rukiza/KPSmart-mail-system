@@ -42,24 +42,21 @@ public class AbstractFormWindow extends JFrame {
 	 */
 	protected boolean isFormComplete(Collection<Object> fields) {
 		for (Object o : fields){
-			System.out.println(o);
 			if (o == null)
 				return false;
 		}
 		return true;
 	}
 
-	protected void makeTextField(String name, final Map<String, Object> fields, Container cont) {
+	protected void makeTextField(String name, Map<String, Object> fields, Container cont) {
 		JTextField textField = new JTextField();
 		textField.getDocument().addDocumentListener(new DocumentListener(){
                 @Override
                 public void insertUpdate(DocumentEvent e) {
 					fields.put(name, textField.getText());
                 }
-				@Override
-                public void changedUpdate(DocumentEvent e) { }
-                @Override
-                public void removeUpdate(DocumentEvent e) { }
+				@Override public void changedUpdate(DocumentEvent e) { }
+                @Override public void removeUpdate(DocumentEvent e) { }
 		});
 		JLabel label = new JLabel(name);
 		label.setLabelFor(textField);

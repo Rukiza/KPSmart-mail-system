@@ -13,14 +13,20 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import kps.Main;
+import kps.data.DijkstraSearch;
+import kps.data.Mail;
 import kps.data.Node;
 import kps.data.Route;
 import kps.data.RouteGraph;
+import kps.data.wrappers.BasicRoute;
+import kps.enums.Day;
+import kps.enums.Priority;
 import kps.events.BusinessEvent;
 import kps.events.TransportCostUpdateEvent;
 import kps.parser.KPSParser;
@@ -35,7 +41,9 @@ public class GraphDrawer extends JPanel implements MouseMotionListener, MouseLis
 	private RouteGraph graph;
 	private ArrayList<DrawNode> drawNodes;
 	private ArrayList<DrawRoute> drawRoutes;
-
+	
+	private List<Node> nodePath;
+	
 	private double NODE_SIZE = 80;
 	
 	private JFrame frame;
@@ -44,6 +52,7 @@ public class GraphDrawer extends JPanel implements MouseMotionListener, MouseLis
 	 * @param data - The Event log of the program.
 	 */
 	public GraphDrawer(RouteGraph g, JFrame frame){
+		this.nodePath = new ArrayList<Node>();
 		this.drawNodes = new ArrayList<DrawNode>();
 		this.drawRoutes = new ArrayList<DrawRoute>();
 		this.graph = g;
@@ -89,6 +98,36 @@ public class GraphDrawer extends JPanel implements MouseMotionListener, MouseLis
 		addMouseMotionListener(this);
 		this.validate();
 	}
+	
+	public void setRoute(Mail mail){
+		DijkstraSearch dks = new DijkstraSearch(graph);
+		
+		Map<List<Node>,Double> path = dks.getShortestPath(mail);
+		
+		for(List<Node> list : path.keySet()){
+			this.nodePath = list;
+		}
+	}
+	
+	public void setRoutesTaken(){
+		for(DrawRoute r : drawRoutes)r.setTaken(false);
+		for(DrawNode n : drawNodes)n.setSelected(false);
+		
+		for(DrawNode n : drawNodes){
+			for(int i = 0; i < nodePath.size(); i++){
+				if(nodePath.get(i).getName().equals(n.getNode().getName()))n.setRouteSelected(true);
+			}
+		}
+		
+		
+		
+		for(int i = 0; i < nodePath.size() - 1; i++){
+			for(DrawRoute r : drawRoutes){
+				if(r.getNode1Name().equals(nodePath.get(i).getName()) && r.getNode2Name().equals(nodePath.get(i+1).getName())
+				|| r.getNode2Name().equals(nodePath.get(i).getName()) && r.getNode1Name().equals(nodePath.get(i+1).getName()))r.setTaken(true);
+			}
+		}
+	}
 
 	@Override
 	public void paint(Graphics g) {
@@ -104,11 +143,7 @@ public class GraphDrawer extends JPanel implements MouseMotionListener, MouseLis
 		g2.setColor(Color.BLACK);
 		drawRoutes(g2);
 
-
 		for(DrawNode n : drawNodes)n.draw(g2);
-
-
-
 	};
 	
 	/**
@@ -206,6 +241,12 @@ public class GraphDrawer extends JPanel implements MouseMotionListener, MouseLis
 		frame.add(support, BorderLayout.CENTER);
 		frame.setVisible(true);
 		support.setup();
+		
+		BasicRoute route = new BasicRoute("Wellington", "Rome");
+		Mail mail = new Mail(route, Day.FRIDAY, 100, 5, Priority.DOMESTIC_AIR);
+		
+		support.setRoute(mail);
+		support.setRoutesTaken();
 	}
 	
 	public void startThread(){
