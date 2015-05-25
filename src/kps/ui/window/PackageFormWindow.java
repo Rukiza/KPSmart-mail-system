@@ -15,7 +15,7 @@ import javax.swing.SpringLayout;
 import kps.data.Node;
 import kps.enums.Day;
 import kps.enums.Priority;
-import kps.ui.listener.PackageFormListener;
+import kps.ui.form.PackageFormListener;
 import kps.ui.util.SpringUtilities;
 import kps.ui.util.UIUtils;
 

@@ -21,8 +21,8 @@ import kps.data.Node;
 import kps.enums.Day;
 import kps.enums.Priority;
 import kps.enums.TransportType;
-import kps.ui.listener.PackageFormListener;
-import kps.ui.listener.RouteFormListener;
+import kps.ui.form.PackageFormListener;
+import kps.ui.form.RouteFormListener;
 import kps.ui.panel.DecisionSupportPanel;
 import kps.ui.panel.MetricsPanel;
 import kps.ui.panel.RouteGraphPanel;
@@ -30,11 +30,14 @@ import kps.ui.util.UIUtils;
 
 /**
  * @author hardwiwill
- * Encapsulates all of the KPSmart GUI elements (aside from popup boxes)
+ * Contains all of the KPSmart GUI elements (aside from popup boxes)
  */
 public class KPSWindow extends JFrame {
 
 	private KPSmartSystem system; 
+	private RouteGraphPanel routeGraph;
+	private MetricsPanel metrics;
+	private DecisionSupportPanel decisionSupport;
 
 	public KPSWindow(KPSmartSystem system){
 		super("KPSmart");
@@ -49,10 +52,14 @@ public class KPSWindow extends JFrame {
 
 		JTabbedPane tabbedPane = new JTabbedPane();
 		add(tabbedPane, BorderLayout.CENTER);
+		
+		decisionSupport = new DecisionSupportPanel(system.getEventLog());
+		metrics = new MetricsPanel();
+		routeGraph = new RouteGraphPanel(system.getRouteGraph(),this);
 
-		tabbedPane.addTab("Decision Support", new DecisionSupportPanel(system.getEventLog()));
-		tabbedPane.addTab("Metrics", new MetricsPanel());
-		tabbedPane.addTab("Route Graph", new RouteGraphPanel(system.getRouteGraph(),this));
+		tabbedPane.addTab("Decision Support", decisionSupport);
+		tabbedPane.addTab("Metrics", metrics);
+		tabbedPane.addTab("Route Graph", routeGraph);
 
 		JPanel sidebar = makeSidebar();
 		add(sidebar, BorderLayout.WEST);
@@ -98,7 +105,13 @@ public class KPSWindow extends JFrame {
 		addPackage.addActionListener((ActionEvent e) -> {
 			new PackageFormWindow(new PackageFormListener(){
 				public void onPackageFormSubmitted(Day day, Node from, Node to, double price, double volume, Priority priority){
-					// package form submitted
+//					if (system.getRouteGraph().isValidRoute(to, from)){
+//						routeGraph.update();
+//						system.addMailDeliveryEvent(day, from, to, price, volume, priority);
+//					}
+				}
+				public void onRouteChosen(Node to, Node from){
+//					routeGraph.setRoute(to, from);
 				}
 				public void onCancel(){
 					// cancelled

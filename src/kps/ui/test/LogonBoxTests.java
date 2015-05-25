@@ -2,7 +2,7 @@ package kps.ui.test;
 
 import org.junit.Test;
 
-import kps.ui.listener.AuthDetailsListener;
+import kps.ui.form.AuthDetailsListener;
 import kps.ui.window.LogonBox;
 
 public class LogonBoxTests {
