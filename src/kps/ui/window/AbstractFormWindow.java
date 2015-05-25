@@ -13,7 +13,7 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-public class AbstractFormWindow extends JFrame {
+public abstract class AbstractFormWindow extends JFrame {
 
 	protected Map<String, Object> fields = new HashMap<>();
 	
@@ -42,13 +42,7 @@ public class AbstractFormWindow extends JFrame {
 	 * @param fields
 	 * @return whether the form is complete (all fields are filled)
 	 */
-	protected boolean isFormComplete() {
-		for (Object o : fields.values()){
-			if (o == null)
-				return false;
-		}
-		return true;
-	}
+	protected abstract boolean isFormComplete();
 
 	protected void makeTextField(String name, Container cont) {
 		JTextField textField = new JTextField();
@@ -60,18 +54,21 @@ public class AbstractFormWindow extends JFrame {
 				@Override public void changedUpdate(DocumentEvent e) { }
                 @Override public void removeUpdate(DocumentEvent e) { }
 		});
+		// put default text in fields
+		fields.put(name, null); 
 		JLabel label = new JLabel(name);
 		label.setLabelFor(textField);
 		cont.add(label);
 		cont.add(textField);
 	}
 
-	protected void makeComboBox(String name, Object[] values,
-			Container cont) {
-		JComboBox<Object> combo = new JComboBox<>(values);
+	protected void makeComboBox(String name, Object[] items, Container cont) {
+		JComboBox<Object> combo = new JComboBox<>(items);
 		combo.addItemListener((ItemEvent e) -> {
 			fields.put(name, combo.getSelectedItem());
 		});
+		// put default item in fields
+		fields.put(name, combo.getSelectedItem());
 		JLabel label = new JLabel(name);
 		label.setLabelFor(combo);
 		cont.add(label);

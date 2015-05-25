@@ -115,7 +115,9 @@ public class KPSWindow extends JFrame {
 				@Override public void onCompletedFormUpdate(Day day, String from, String to, int weight, int volume, Priority priority){
 					DijkstraSearch search = new DijkstraSearch(system.getRouteGraph());
 					Mail mail = new Mail(new BasicRoute(from, to), day, weight, volume, priority);
+					System.out.println("checking valid route with mail object:\n" + mail);
 					if (search.isValidMailDelivery(mail)) {
+						System.out.println("updating graph from window!");
 						graphPanel.setRoute(mail);
 					}
 				}

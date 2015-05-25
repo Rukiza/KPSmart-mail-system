@@ -1,18 +1,11 @@
 package kps.ui.window;
 
 import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
 import kps.enums.Day;
@@ -29,8 +22,6 @@ public class RouteFormWindow extends AbstractFormWindow {
 		setLayout(new BorderLayout());
 
 		// add fields
-		Map<String, Object> fields = new HashMap<>();
-
 		JPanel inputPanel = new JPanel();
 		inputPanel.setLayout(new SpringLayout());
 
@@ -83,7 +74,7 @@ public class RouteFormWindow extends AbstractFormWindow {
 			String durStr = (String)fields.get("duration");
 			String freqStr = (String)fields.get("frequency");
 
-			if (!UIUtils.isDouble(weightCostStr, volCostStr, maxWeightStr, maxVolStr, durStr, freqStr)){
+			if (!UIUtils.isInteger(weightCostStr, volCostStr, maxWeightStr, maxVolStr, durStr, freqStr)){
 				numberFieldsPrompt("some fields must only have digits");
 				return;
 			}
@@ -116,6 +107,16 @@ public class RouteFormWindow extends AbstractFormWindow {
 		setVisible(true);
 	}
 
+	@Override
+	public boolean isFormComplete(){
+		for (String key : fields.keySet()) {
+			Object input = fields.get(key);
+			if (input == null)
+				return false;
+		}
+		return true; 
+	}
+	
 	public static void main(String[] args){
 		new RouteFormWindow(new RouteFormListener(){
 			@Override

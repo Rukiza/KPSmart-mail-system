@@ -25,4 +25,8 @@ public class Mail{
 	public int getVolume(){return volume;}
 	public Priority getPriority(){return priority;}
 	public Day getDay(){return day;}
+	
+	public String toString(){
+		return day.toString() + ", " + route.toString() + ", " + weight + "g, " + volume + "cm^3";  
+	}
 }

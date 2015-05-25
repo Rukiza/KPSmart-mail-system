@@ -4,19 +4,18 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import kps.data.Mail;
 import kps.data.Node;
 import kps.enums.Day;
 import kps.enums.Priority;
@@ -28,6 +27,8 @@ public class PackageFormWindow extends AbstractFormWindow {
 
 	private PackageFormListener listener;
 	
+	private String[] fieldNames = new String[] { "day", "to", "from", "weight", "volume", "priority" };
+	
 	public PackageFormWindow(PackageFormListener listener, List<Node> locations){
 		super("enter package details");
 		this.listener = listener;
@@ -37,14 +38,14 @@ public class PackageFormWindow extends AbstractFormWindow {
 		JPanel inputPanel = new JPanel();
 		inputPanel.setLayout(new SpringLayout());
 
-		makeComboBox("day", Day.values(), inputPanel);
-		makeComboBox("from", locations.toArray(), inputPanel);
-		makeComboBox("to", locations.toArray(), inputPanel);
-		makeTextField("weight", inputPanel);
-		makeTextField("volume", inputPanel);
-		makeComboBox("priority", Priority.values(), inputPanel);
+		makeComboBox(fieldNames[0], Day.values(), inputPanel);
+		makeComboBox(fieldNames[1], locations.toArray(), inputPanel);
+		makeComboBox(fieldNames[2], locations.toArray(), inputPanel);
+		makeTextField(fieldNames[3], inputPanel);
+		makeTextField(fieldNames[4], inputPanel);
+		makeComboBox(fieldNames[5], Priority.values(), inputPanel);
 
-		int fieldCount = 6;
+		int fieldCount = fieldNames.length;
 
 		SpringUtilities.makeCompactGrid(inputPanel,
 				fieldCount, 2,	//rows, cols
@@ -72,14 +73,13 @@ public class PackageFormWindow extends AbstractFormWindow {
 			// check digit fields
 			String weightStr = (String)fields.get("weight");
 			String volStr = (String)fields.get("volume");
-			if (!UIUtils.isDouble(weightStr, volStr)){
+			if (!UIUtils.isInteger(weightStr, volStr)){
 				numberFieldsPrompt("weight and volume should only contain digits");
 				return;
 			}
 
 			Day day = (Day)fields.get("day");
-			String from = (String)fields.get("from").toString();
-			System.out.println(fields.get("to"));
+			String from = (String) fields.get("from").toString();
 			String to = (String) fields.get("to").toString();
 			int weight = Integer.parseInt(weightStr);
 			int volume = Integer.parseInt(volStr);
@@ -110,32 +110,58 @@ public class PackageFormWindow extends AbstractFormWindow {
 					fields.put(name, textField.getText());
 					// listen if all fields are complete
 					if (isFormComplete()) {
-						// TODO: reuse this code:
-						
-                        // check digit fields
-                        String weightStr = (String)fields.get("weight");
-                        String volStr = (String)fields.get("volume");
-                        if (!UIUtils.isDouble(weightStr, volStr)){
-                                return;
-                        }
-
-                        Day day = (Day)fields.get("day");
-                        for (String key : fields.keySet()) {
-                        	System.out.println(key + ", " + fields.get(key));
-                        }
-
-                        String from = (String)fields.get("from").toString();
-                        String to = (String) fields.get("to").toString();
-                        int weight = Integer.parseInt(weightStr);
-                        int volume = Integer.parseInt(volStr);
-                        Priority priority = (Priority) fields.get("priority");
-
-						listener.onCompletedFormUpdate(day, from, to, weight, volume, priority);
+						fireFormUpdate();
 					}
                 }
 				@Override public void changedUpdate(DocumentEvent e) { }
-                @Override public void removeUpdate(DocumentEvent e) { }
+                @Override public void removeUpdate(DocumentEvent e) {
+                	fields.put(name, textField.getText());
+					if (isFormComplete()) {
+						fireFormUpdate();
+					}
+                }
 		});
+	}
+	
+	@Override
+	protected void makeComboBox(String name, Object[] items, Container cont){
+		super.makeComboBox(name, items, cont);
+		// get the combobox as most recently added component
+		JComboBox<Object> combobox = (JComboBox<Object>) cont.getComponent(cont.getComponentCount() - 1);
+		combobox.addItemListener((ItemEvent e) -> {
+                if (isFormComplete()) {
+                        fireFormUpdate();
+                }
+		});
+	}
+	
+	private void fireFormUpdate(){
+		// TODO: reuse this code with form submit code
+        // check digit fields
+        String weightStr = (String)fields.get("weight");
+        String volStr = (String)fields.get("volume");
+        if (!UIUtils.isInteger(weightStr, volStr)){
+                return;
+        }
+
+        Day day = (Day)fields.get("day");
+
+        String from = (String)fields.get("from").toString();
+        String to = (String) fields.get("to").toString();
+        int weight = Integer.parseInt(weightStr);
+        int volume = Integer.parseInt(volStr);
+        Priority priority = (Priority) fields.get("priority");
+
+        listener.onCompletedFormUpdate(day, from, to, weight, volume, priority);
+	}
+	
+	protected boolean isFormComplete(){
+		for (String fieldName : fieldNames){
+			if (fields.get(fieldName) == null){
+				return false; 
+			}
+		}
+		return true;
 	}
 	
 	public static void main(String args[]){
