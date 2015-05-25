@@ -49,7 +49,7 @@ public class DecisionSupportPanel extends JPanel{
 	private DisplayPanel displayPanel;
 	private SelectPanel selectPanel;
 	private Dimension size = new Dimension(600, 600);
-	
+
 
 
 
@@ -81,10 +81,10 @@ public class DecisionSupportPanel extends JPanel{
 		con.gridx = 0;
 		con.gridy = 1;
 		con.gridwidth = 2;
-		this.add(selectPanel, con);		
-		
+		this.add(selectPanel, con);
+
 	}
-	
+
 	public KeyListener getKeyListener(){
 		return manager.getKeyListener();
 	}
@@ -93,17 +93,17 @@ public class DecisionSupportPanel extends JPanel{
 		private EventLog data;
 		private List<JTextField> textFields;
 		private BusinessEvent event;
-		
+
 		public LogManager(EventLog eventLog){
 			data = eventLog;
 		}
-		
+
 		public KeyListener getKeyListener() {
 			return new KeyListener() {
-				
+
 				@Override
 				public void keyTyped(KeyEvent e) {}
-				
+
 				@Override
 				public void keyReleased(KeyEvent e) {
 					if (e.getID() == KeyEvent.VK_RIGHT){
@@ -115,7 +115,7 @@ public class DecisionSupportPanel extends JPanel{
 						updateDisplay();
 					}
 				}
-				
+
 				@Override
 				public void keyPressed(KeyEvent e) {}
 			};
@@ -124,7 +124,7 @@ public class DecisionSupportPanel extends JPanel{
 		public void setupEventDisplay(List<JTextField> temp){
 			textFields = temp;
 		}
-		
+
 		public void updateDisplay(){
 			if (data.isEmpty()) return;
 			event = data.getCurrentEvent();
@@ -168,7 +168,7 @@ public class DecisionSupportPanel extends JPanel{
 			textFields.get(5).setText(event.getTransportFirm());
 			textFields.get(6).setText("Transport Type");
 			textFields.get(7).setText(""+event.getTransportType());
-			
+
 		}
 
 		private void handleCostUpdate(TransportCostUpdateEvent event) {
@@ -219,23 +219,23 @@ public class DecisionSupportPanel extends JPanel{
 
 	private class GraphPanel extends JPanel{
 		private LogManager data;
-		private Dimension sizeg  = new Dimension(size.width/2, size.height - size.height/4);
+		private Dimension sizeg = new Dimension(size.width/2, size.height - size.height/4);
 		public GraphPanel (String title, LogManager eventLog){
 			data = eventLog;
 			this.setPreferredSize(sizeg);
 			this.setSize(sizeg);
 			add(setupGraph(setupDataset()));
 		}
-		
+
 		private PieDataset setupDataset(){
 			DefaultPieDataset dataset = new DefaultPieDataset();
 			dataset.setValue("One", new Double(43.2));
 			return dataset;
 		}
-		
+
 		private JPanel setupGraph(PieDataset dataset){
 			JFreeChart chart = ChartFactory.createPieChart(
-					"Temp", 
+					"Temp",
 					dataset,
 					false,
 					true,
@@ -250,14 +250,14 @@ public class DecisionSupportPanel extends JPanel{
 	        p.setPreferredSize(sizeg);
 	        return p;
 		}
-		
+
 	}
-	
+
 	private class DisplayPanel extends JPanel{
 		private LogManager data;
 		private Dimension sized  = new Dimension(size.width/2, size.height - size.height/4);
 		private List<JTextField> textFields;
-		
+
 		public DisplayPanel (LogManager eventLog){
 			data = eventLog;
 			textFields = new ArrayList<JTextField>();
@@ -266,7 +266,7 @@ public class DecisionSupportPanel extends JPanel{
 			this.setSize(sized);
 			textFieldSetup();
 		}
-		
+
 		private void textFieldSetup(){
 			this.setLayout(new GridBagLayout());
 			GridBagConstraints com = new GridBagConstraints();
@@ -275,7 +275,7 @@ public class DecisionSupportPanel extends JPanel{
 			}
 			data.updateDisplay();
 		}
-		
+
 		private JTextField makeTextField(int counter, GridBagConstraints com){
 			JTextField field = new JTextField() {
 				@Override
@@ -292,18 +292,18 @@ public class DecisionSupportPanel extends JPanel{
 			return field;
 		}
 	}
-	
+
 	private class SelectPanel extends JPanel{
 		private LogManager data;
 		private Dimension sizes  = new Dimension(size.width, size.height/10);
-		
+
 		public SelectPanel (LogManager eventLog){
 			data = eventLog;
 			this.setPreferredSize(sizes);
 			this.setSize(sizes);
 			buttonSetup();
 		}
-		
+
 		public void buttonSetup(){
 			this.setLayout(new GridBagLayout());
 			GridBagConstraints con = new GridBagConstraints();

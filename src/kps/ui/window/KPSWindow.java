@@ -50,8 +50,8 @@ public class KPSWindow extends JFrame {
 		JTabbedPane tabbedPane = new JTabbedPane();
 		add(tabbedPane, BorderLayout.CENTER);
 
-		tabbedPane.addTab("Decision Support", new DecisionSupportPanel(bizEvents));
 		tabbedPane.addTab("Metrics", new MetricsPanel());
+		tabbedPane.addTab("Decision Support", new DecisionSupportPanel(bizEvents));
 		tabbedPane.addTab("Route Graph", new RouteGraphPanel(system.getRouteGraph(),this));
 
 		JPanel sidebar = makeSidebar();

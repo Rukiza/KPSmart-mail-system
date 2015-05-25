@@ -27,8 +27,6 @@ public class PackageFormWindow extends AbstractFormWindow {
 
 		// add fields
 		Map<String, Object> fields = new HashMap<>();
-		String[] names = new String[] { "day", "from", "to", "weight", "volume", "priority" };
-		int fieldCount = names.length;
 
 		JPanel inputPanel = new JPanel();
 		inputPanel.setLayout(new SpringLayout());
@@ -39,6 +37,8 @@ public class PackageFormWindow extends AbstractFormWindow {
 		makeTextField("weight", fields, inputPanel);
 		makeTextField("volume", fields, inputPanel);
 		makeComboBox("priority", Priority.values(), fields, inputPanel);
+
+		int fieldCount = fields.size();
 
 		SpringUtilities.makeCompactGrid(inputPanel,
 				fieldCount, 2,	//rows, cols
@@ -74,12 +74,11 @@ public class PackageFormWindow extends AbstractFormWindow {
 
 			Day day = (Day)fields.get("day");
 			Node from = (Node)fields.get("from");
-			Node to = (Node) fields.get("to");
 			double weight = Double.parseDouble(weightStr);
 			double volume = Double.parseDouble(volStr);
 			Priority priority = (Priority) fields.get("priority");
 
-			listener.onPackageFormSubmitted(day, from, to, weight, volume, priority);
+			listener.onPackageFormSubmitted(day, from, null, weight, volume, priority);
 			UIUtils.closeWindow(this);
 		});
 
