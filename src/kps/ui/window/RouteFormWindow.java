@@ -1,24 +1,17 @@
 package kps.ui.window;
 
 import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
 import kps.enums.Day;
 import kps.enums.Priority;
 import kps.enums.TransportType;
-import kps.ui.listener.RouteFormListener;
+import kps.ui.formlistener.RouteFormListener;
 import kps.ui.util.SpringUtilities;
 import kps.ui.util.UIUtils;
 
@@ -29,26 +22,24 @@ public class RouteFormWindow extends AbstractFormWindow {
 		setLayout(new BorderLayout());
 
 		// add fields
-		Map<String, Object> fields = new HashMap<>();
-		String[] names = new String[] { "company", "to", "from", "type", "weight cost", "volume cost", "max weight",
-				"max volume", "duration", "frequency", "priority", "day"};
-		int fieldCount = names.length;
-
 		JPanel inputPanel = new JPanel();
 		inputPanel.setLayout(new SpringLayout());
 
-		makeTextField("company", fields, inputPanel);
-		makeTextField("from", fields, inputPanel);
-		makeTextField("to", fields, inputPanel);
-		makeComboBox("type", TransportType.values(), fields, inputPanel);
-		makeTextField("weight cost", fields, inputPanel);
-		makeTextField("volume cost", fields, inputPanel);
-		makeTextField("max weight", fields, inputPanel);
-		makeTextField("max volume", fields, inputPanel);
-		makeTextField("duration", fields, inputPanel);
-		makeTextField("frequency", fields, inputPanel);
-		makeComboBox("priority", Priority.values(), fields, inputPanel);
-		makeComboBox("day", Day.values(), fields, inputPanel);
+		makeTextField("company", inputPanel);
+		makeTextField("from", inputPanel);
+		makeTextField("to", inputPanel);
+		makeComboBox("type", TransportType.values(), inputPanel);
+		makeTextField("weight cost", inputPanel);
+		makeTextField("volume cost",  inputPanel);
+		makeTextField("max weight", inputPanel);
+		makeTextField("max volume", inputPanel);
+		makeTextField("duration", inputPanel);
+		makeTextField("frequency", inputPanel);
+		makeComboBox("priority", Priority.values(), inputPanel);
+		makeComboBox("day", Day.values(), inputPanel);
+
+		// TODO: make this variable dynamic
+		int fieldCount = 12; 
 
 		SpringUtilities.makeCompactGrid(inputPanel,
 				fieldCount, 2,	//rows, cols
@@ -69,7 +60,7 @@ public class RouteFormWindow extends AbstractFormWindow {
 
 		// event handling
 		OK.addActionListener((ActionEvent e) -> {
-			if (!isFormComplete(fields.values())){
+			if (!isFormComplete()){
 				completeFormPrompt();
 				return;
 			}
@@ -83,7 +74,7 @@ public class RouteFormWindow extends AbstractFormWindow {
 			String durStr = (String)fields.get("duration");
 			String freqStr = (String)fields.get("frequency");
 
-			if (!UIUtils.isDouble(weightCostStr, volCostStr, maxWeightStr, maxVolStr, durStr, freqStr)){
+			if (!UIUtils.isInteger(weightCostStr, volCostStr, maxWeightStr, maxVolStr, durStr, freqStr)){
 				numberFieldsPrompt("some fields must only have digits");
 				return;
 			}
@@ -116,6 +107,16 @@ public class RouteFormWindow extends AbstractFormWindow {
 		setVisible(true);
 	}
 
+	@Override
+	public boolean isFormComplete(){
+		for (String key : fields.keySet()) {
+			Object input = fields.get(key);
+			if (input == null)
+				return false;
+		}
+		return true; 
+	}
+	
 	public static void main(String[] args){
 		new RouteFormWindow(new RouteFormListener(){
 			@Override

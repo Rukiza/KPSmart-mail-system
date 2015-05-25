@@ -18,7 +18,7 @@ public class DijkstraSearch  {
 	private  RouteGraph graph;
 
 	//Nodes of the graph
-	static List<Node> dijkNodesList;
+	 private List<Node> dijkNodesList;
 
 	/**
 	 * Constructor for DijkstraSearch
@@ -33,9 +33,10 @@ public class DijkstraSearch  {
 	private Mail mail;
 
 
-	public boolean isValidMail(Mail mail){
+	public boolean isValidMailDelivery(Mail mail){
 		return !(getShortestPath(mail).isEmpty());
 	}
+
 
 
 

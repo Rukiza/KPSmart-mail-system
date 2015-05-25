@@ -66,4 +66,8 @@ public class BasicRoute {
 
 		return false;
 	}
+	
+	public String toString(){
+		return origin + " ---> " + destination; 
+	}
 }

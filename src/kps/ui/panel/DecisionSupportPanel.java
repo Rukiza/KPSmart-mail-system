@@ -50,6 +50,8 @@ public class DecisionSupportPanel extends JPanel {
 	private SelectPanel selectPanel;
 	private Dimension size = new Dimension(600, 600);
 
+
+
 	/**
 	 * @param data
 	 *            - The Event log of the program.
@@ -82,6 +84,7 @@ public class DecisionSupportPanel extends JPanel {
 		this.add(selectPanel, con);
 
 	}
+
 
 	public KeyListener getKeyListener() {
 		return manager.getKeyListener();
@@ -183,8 +186,7 @@ public class DecisionSupportPanel extends JPanel {
 			textFields.get(4).setText("Tansport Firm");
 			textFields.get(5).setText(event.getTransportFirm());
 			textFields.get(6).setText("Transport Type");
-			textFields.get(7).setText("" + event.getTransportType());
-
+			textFields.get(7).setText(""+event.getTransportType());
 		}
 
 		private void handleCostUpdate(TransportCostUpdateEvent event) {
@@ -233,6 +235,7 @@ public class DecisionSupportPanel extends JPanel {
 		}
 	}
 
+
 	/**
 	 * Panel for displaying of graph data.
 	 * @author brewershan
@@ -250,6 +253,7 @@ public class DecisionSupportPanel extends JPanel {
 			add(setupGraph(null));
 			this.setBorder(new TitledBorder("Graph"));
 		}
+
 
 		private JPanel setupGraph(PieDataset dataset) {
 			JFreeChart chart = ChartFactory.createPieChart("Temp", dataset,
@@ -297,6 +301,7 @@ public class DecisionSupportPanel extends JPanel {
 			manager.updateDisplay();
 		}
 
+
 		private JTextField makeTextField(int counter, GridBagConstraints com) {
 			JTextField field = new JTextField() {
 				@Override
@@ -319,6 +324,7 @@ public class DecisionSupportPanel extends JPanel {
 			return field;
 		}
 	}
+
 
 	private class SelectPanel extends JPanel {
 		private DataManager data;

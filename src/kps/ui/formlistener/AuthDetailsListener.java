@@ -1,6 +1,6 @@
-package kps.ui.listener;
+package kps.ui.formlistener;
 
-public interface AuthDetailsListener extends FormSubmitListener{
+public interface AuthDetailsListener extends FormListener{
 
 	/**
 	 * Executed when authentication details are recieved.

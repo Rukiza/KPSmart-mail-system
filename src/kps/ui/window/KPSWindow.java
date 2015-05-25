@@ -17,41 +17,54 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
 import kps.KPSmartSystem;
-import kps.data.Node;
-import kps.data.wrappers.EventLog;
+import kps.data.DijkstraSearch;
+import kps.data.Mail;
+import kps.data.wrappers.BasicRoute;
 import kps.enums.Day;
 import kps.enums.Priority;
 import kps.enums.TransportType;
-import kps.ui.listener.PackageFormListener;
-import kps.ui.listener.RouteFormListener;
+import kps.events.MailDeliveryEvent;
+import kps.ui.formlistener.PackageFormListener;
+import kps.ui.formlistener.RouteFormListener;
 import kps.ui.panel.DecisionSupportPanel;
 import kps.ui.panel.MetricsPanel;
 import kps.ui.panel.RouteGraphPanel;
 import kps.ui.util.UIUtils;
 
+
 /**
  * @author hardwiwill
- * Encapsulates all of the KPSmart GUI elements (aside from popup boxes)
+ * Contains all of the KPSmart GUI elements (aside from popup boxes)
  */
 public class KPSWindow extends JFrame {
 
-	private KPSmartSystem system = new KPSmartSystem();
+	private KPSmartSystem system;
+	
+	private MetricsPanel metricsPanel;
+	private DecisionSupportPanel dsPanel; 
+	private RouteGraphPanel graphPanel;
 
-	public KPSWindow(EventLog bizEvents){
+	public KPSWindow(KPSmartSystem system){
 		super("KPSmart");
-		final Dimension WINDOW_SIZE = new Dimension(800,600);
+		this.system = system;
+		final Dimension WINDOW_SIZE = new Dimension(1200,800);
 
 		setSize(WINDOW_SIZE);
 		setLocationRelativeTo(null);
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(false);
 
 		JTabbedPane tabbedPane = new JTabbedPane();
 		add(tabbedPane, BorderLayout.CENTER);
 
-		tabbedPane.addTab("Decision Support", new DecisionSupportPanel(bizEvents));
-		tabbedPane.addTab("Metrics", new MetricsPanel());
-		tabbedPane.addTab("Route Graph", new RouteGraphPanel(system.getRouteGraph(),this));
+		metricsPanel = new MetricsPanel();
+		dsPanel = new DecisionSupportPanel(system.getEventLog());
+		graphPanel = new RouteGraphPanel(system.getRouteGraph(), this);
+		
+		tabbedPane.addTab("Metrics", metricsPanel);
+		tabbedPane.addTab("Decision Support", dsPanel);
+		tabbedPane.addTab("Route graph", graphPanel);
 
 		JPanel sidebar = makeSidebar();
 		add(sidebar, BorderLayout.WEST);
@@ -96,8 +109,24 @@ public class KPSWindow extends JFrame {
 		// side bar events
 		addPackage.addActionListener((ActionEvent e) -> {
 			new PackageFormWindow(new PackageFormListener(){
-				public void onPackageFormSubmitted(Day day, Node from, Node to, double price, double volume, Priority priority){
-					// package form submitted
+				@Override
+				public void onPackageFormSubmitted(Day day, String from, String to, int weight, int volume, Priority priority){
+					MailDeliveryEvent event = new MailDeliveryEvent(System.currentTimeMillis(),
+							new BasicRoute(from, to), 
+							day, 
+							weight, 
+							volume, 
+							priority
+						);
+				}
+				@Override public void onCompletedFormUpdate(Day day, String from, String to, int weight, int volume, Priority priority){
+					DijkstraSearch search = new DijkstraSearch(system.getRouteGraph());
+					Mail mail = new Mail(new BasicRoute(from, to), day, weight, volume, priority);
+					System.out.println("checking valid route with mail object:\n" + mail);
+					if (search.isValidMailDelivery(mail)) {
+						System.out.println("updating graph from window!");
+						graphPanel.setRoute(mail);
+					}
 				}
 				public void onCancel(){
 					// cancelled
@@ -107,12 +136,16 @@ public class KPSWindow extends JFrame {
 
 		// oh lordy
 		addRoute.addActionListener((ActionEvent e) -> new RouteFormWindow(new RouteFormListener(){
+			@Override
 			public void onRouteFormSubmitted(String company, String to, String from, TransportType type, double weightCost, double volCost
 					, double maxWeight, double maxVol, double dur, double freq, Priority priority, Day day){
 				// route form submitted
 			}
-			public void onCancel(){
-				// cancelled
+
+			@Override
+			public void onCancel() {
+				// TODO Auto-generated method stub
+				
 			}
 		}));
 

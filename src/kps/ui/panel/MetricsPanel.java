@@ -5,7 +5,10 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -18,7 +21,7 @@ import javax.swing.border.TitledBorder;
 import kps.data.wrappers.Metrics;
 import kps.ui.util.SpringUtilities;
 
-public class MetricsPanel extends JPanel{
+public class MetricsPanel extends JPanel implements ActionListener{
 
     private static final long serialVersionUID = 1L;
 
@@ -31,6 +34,7 @@ public class MetricsPanel extends JPanel{
     private ProfitPanel profit;
     private BusinessEventPanel events;
     private CustomerRoutePanel routes;
+    private boolean initialised = false;
 
     public MetricsPanel(){
         super();
@@ -44,10 +48,11 @@ public class MetricsPanel extends JPanel{
         events = new BusinessEventPanel(260, 138);
         SpringUtilities.makeCompactGrid(events, 5, 2, 6, 6, 6, 6);
         events.setBorder(new TitledBorder("Business Events"));
-        routes = new CustomerRoutePanel(400, 230);
+        routes = new CustomerRoutePanel(400, 230, this);
         routes.setBorder(new TitledBorder("Customer Routes"));
         SpringUtilities.makeCompactGrid(events, 2, 2, 6, 6, 6, 6);
         layoutComponents();
+        initialised = true;
     }
 
     private void layoutComponents(){
@@ -83,12 +88,29 @@ public class MetricsPanel extends JPanel{
         add(routes, constraints);
     }
 
-    public void repaintMetrics(){
+    public void repaintMetrics(Metrics metrics){
+    	// update graph panel
 
+    	// update profit panel
+    	profit.setProfitMetrics(metrics.getTotalRevenue(), metrics.getTotalExpenditure());
+    	// update events panel
+    	int mail = metrics.getTotalMailDeliveryEvents();
+    	int price = metrics.getTotalPriceUpdateEvents();
+    	int cost = metrics.getTotalTransportCostUpdateEvents();
+    	int discontinued = metrics.getTotalTransportDiscontinuedEvents();
+    	int total = metrics.getTotalBusinessEvents();
+    	events.setBusinessEventMetrics(mail, price, cost, discontinued, total);
+    	// update customer route panel
+    	repaint();
     }
 
     public void repaint(){
-
+    	if(initialised){
+    		graph.repaint();
+    		profit.repaint();
+    		events.repaint();
+    		routes.repaint();
+    	}
     }
 
     public void update(Metrics metrics){
@@ -101,6 +123,19 @@ public class MetricsPanel extends JPanel{
     	events.setBusinessEventMetrics(mailEvents, priceEvents, costEvents, discontinuedEvents, totalEvents);
     }
 
+    public void actionPerformed(ActionEvent event){
+    	if(event.getSource() instanceof JButton){
+    		String button = ((JButton)event.getSource()).getText();
+    		if(button.equals("Generate Metrics")){
+    			// TEMPORARY
+    			metrics.addMailDeliveryEvent(67, 40);
+    			repaintMetrics(metrics);
+    		}
+    	}
+    }
+
+    private static Metrics metrics;
+
     public static void main(String[] args){
     	JFrame frame = new JFrame();
     	MetricsPanel mp = new MetricsPanel();
@@ -110,7 +145,7 @@ public class MetricsPanel extends JPanel{
     	frame.pack();
     	frame.setVisible(true);
 
-    	Metrics metrics = new Metrics();
+    	metrics = new Metrics();
     	mp.update(metrics);
 
     }
@@ -260,12 +295,13 @@ public class MetricsPanel extends JPanel{
         private JComboBox<String> origin;
         private JComboBox<String> destination;
 
-        public CustomerRoutePanel(int width, int height){
+        public CustomerRoutePanel(int width, int height, ActionListener listener){
             super(width, height);
             add(setupOptionsPanel());
-            add(new JButton("Generate Metrics"));
+            JButton button = new JButton("Generate Metrics");
+            button.addActionListener(listener);
+            add(button);
             add(setupMetricsPanel());
-
         }
 
         public JPanel setupOptionsPanel(){

@@ -13,7 +13,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
-import kps.ui.listener.AuthDetailsListener;
+import kps.ui.formlistener.AuthDetailsListener;
 import kps.ui.util.SpringUtilities;
 import kps.ui.util.UIUtils;
 
