@@ -12,10 +12,10 @@ public class UIUtils {
 		frame.dispose();
 	}
 
-	public static boolean isDouble(String... input){
+	public static boolean isInteger(String... input){
 		for(String s : input){
 			try {
-				Double.parseDouble(s);
+				Integer.parseInt(s);
 			} catch (NumberFormatException | NullPointerException e){
 				return false;
 			}

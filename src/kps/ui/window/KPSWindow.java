@@ -17,17 +17,20 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
 import kps.KPSmartSystem;
-import kps.data.Node;
-import kps.data.wrappers.EventLog;
+import kps.data.DijkstraSearch;
+import kps.data.Mail;
+import kps.data.wrappers.BasicRoute;
 import kps.enums.Day;
 import kps.enums.Priority;
 import kps.enums.TransportType;
-import kps.ui.form.PackageFormListener;
-import kps.ui.form.RouteFormListener;
+import kps.events.MailDeliveryEvent;
+import kps.ui.formlistener.PackageFormListener;
+import kps.ui.formlistener.RouteFormListener;
 import kps.ui.panel.DecisionSupportPanel;
 import kps.ui.panel.MetricsPanel;
 import kps.ui.panel.RouteGraphPanel;
 import kps.ui.util.UIUtils;
+
 
 /**
  * @author hardwiwill
@@ -35,32 +38,33 @@ import kps.ui.util.UIUtils;
  */
 public class KPSWindow extends JFrame {
 
-	private KPSmartSystem system; 
-	private RouteGraphPanel routeGraph;
-	private MetricsPanel metrics;
-	private DecisionSupportPanel decisionSupport;
+	private KPSmartSystem system;
+	
+	private MetricsPanel metricsPanel;
+	private DecisionSupportPanel dsPanel; 
+	private RouteGraphPanel graphPanel;
 
 	public KPSWindow(KPSmartSystem system){
 		super("KPSmart");
 		this.system = system;
-
-		final Dimension WINDOW_SIZE = new Dimension(800,600);
+		final Dimension WINDOW_SIZE = new Dimension(1200,800);
 
 		setSize(WINDOW_SIZE);
 		setLocationRelativeTo(null);
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(false);
 
 		JTabbedPane tabbedPane = new JTabbedPane();
 		add(tabbedPane, BorderLayout.CENTER);
-		
-		decisionSupport = new DecisionSupportPanel(system.getEventLog());
-		metrics = new MetricsPanel();
-		routeGraph = new RouteGraphPanel(system.getRouteGraph(),this);
 
-		tabbedPane.addTab("Metrics", metrics);
-		tabbedPane.addTab("Decision Support", decisionSupport);
-		tabbedPane.addTab("Route Graph", routeGraph);
+		metricsPanel = new MetricsPanel();
+		dsPanel = new DecisionSupportPanel(system.getEventLog());
+		graphPanel = new RouteGraphPanel(system.getRouteGraph(), this);
+		
+		tabbedPane.addTab("Metrics", metricsPanel);
+		tabbedPane.addTab("Decision Support", dsPanel);
+		tabbedPane.addTab("Route graph", graphPanel);
 
 		JPanel sidebar = makeSidebar();
 		add(sidebar, BorderLayout.WEST);
@@ -105,14 +109,24 @@ public class KPSWindow extends JFrame {
 		// side bar events
 		addPackage.addActionListener((ActionEvent e) -> {
 			new PackageFormWindow(new PackageFormListener(){
-				public void onPackageFormSubmitted(Day day, Node from, Node to, double price, double volume, Priority priority){
-//					if (system.getRouteGraph().isValidRoute(to, from)){
-//						routeGraph.update();
-//						system.addMailDeliveryEvent(day, from, to, price, volume, priority);
-//					}
+				@Override
+				public void onPackageFormSubmitted(Day day, String from, String to, int weight, int volume, Priority priority){
+					MailDeliveryEvent event = new MailDeliveryEvent(System.currentTimeMillis(),
+							new BasicRoute(from, to), 
+							day, 
+							weight, 
+							volume, 
+							priority
+						);
 				}
-				public void onRouteChosen(Node to, Node from){
-//					routeGraph.setRoute(to, from);
+				@Override public void onCompletedFormUpdate(Day day, String from, String to, int weight, int volume, Priority priority){
+					DijkstraSearch search = new DijkstraSearch(system.getRouteGraph());
+					Mail mail = new Mail(new BasicRoute(from, to), day, weight, volume, priority);
+					System.out.println("checking valid route with mail object:\n" + mail);
+					if (search.isValidMailDelivery(mail)) {
+						System.out.println("updating graph from window!");
+						graphPanel.setRoute(mail);
+					}
 				}
 				public void onCancel(){
 					// cancelled
@@ -122,12 +136,16 @@ public class KPSWindow extends JFrame {
 
 		// oh lordy
 		addRoute.addActionListener((ActionEvent e) -> new RouteFormWindow(new RouteFormListener(){
+			@Override
 			public void onRouteFormSubmitted(String company, String to, String from, TransportType type, double weightCost, double volCost
 					, double maxWeight, double maxVol, double dur, double freq, Priority priority, Day day){
 				// route form submitted
 			}
-			public void onCancel(){
-				// cancelled
+
+			@Override
+			public void onCancel() {
+				// TODO Auto-generated method stub
+				
 			}
 		}));
 

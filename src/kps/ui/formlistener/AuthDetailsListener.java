@@ -1,4 +1,4 @@
-package kps.ui.form;
+package kps.ui.formlistener;
 
 public interface AuthDetailsListener extends FormListener{
 
