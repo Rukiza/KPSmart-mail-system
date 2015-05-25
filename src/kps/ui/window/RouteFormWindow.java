@@ -30,9 +30,6 @@ public class RouteFormWindow extends AbstractFormWindow {
 
 		// add fields
 		Map<String, Object> fields = new HashMap<>();
-		String[] names = new String[] { "company", "to", "from", "type", "weight cost", "volume cost", "max weight",
-				"max volume", "duration", "frequency", "priority", "day"};
-		int fieldCount = names.length;
 
 		JPanel inputPanel = new JPanel();
 		inputPanel.setLayout(new SpringLayout());
@@ -49,6 +46,8 @@ public class RouteFormWindow extends AbstractFormWindow {
 		makeTextField("frequency", fields, inputPanel);
 		makeComboBox("priority", Priority.values(), fields, inputPanel);
 		makeComboBox("day", Day.values(), fields, inputPanel);
+
+		int fieldCount = fields.size();
 
 		SpringUtilities.makeCompactGrid(inputPanel,
 				fieldCount, 2,	//rows, cols

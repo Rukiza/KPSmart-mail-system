@@ -1,5 +1,6 @@
 package kps.data;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class RouteGraphTests {
 		}
 
 		RouteGraph g = new RouteGraph();
-		
+
 		for(BusinessEvent e : events){
 			if(e instanceof TransportCostUpdateEvent){
 				g.addRoute(new Route((TransportCostUpdateEvent)e));
@@ -45,11 +46,11 @@ public class RouteGraphTests {
 
 		assertTrue(g.getSize() == 6);
 	}
-	
+
 	@Test
 	public void testRemove(){
 		RouteGraph g = readGraphFromXML();
-		
+
 		List<Node> nodes = g.getNodes();
 		Node n = nodes.get(0);//just grab the first node in the graph
 		Route testRoute = null;
@@ -58,32 +59,32 @@ public class RouteGraphTests {
 		}
 		System.out.println(testRoute);
 		g.removeRoute(testRoute);
-		
-		//go through graph checking if the route exists 
+
+		//go through graph checking if the route exists
 		for(Node ns : g.getNodes()){
 			for(Route r : ns.getNeighbours()){
 				assertTrue(r!=testRoute);
 			}
 		}
 	}
-	
+
 	@Test
 	public void testUpdate(){
 		RouteGraph g = readGraphFromXML();
-		
-		
+
+
 		List<Node> nodes = g.getNodes();
 		Node n = nodes.get((int)(Math.random()*nodes.size()));//just grab a random node in the graph
 		Route testRoute = null;
 		for(Route r : n.getNeighbours()){
 			testRoute = r;
 		}
-		
+
 		g.removeRoute(testRoute);
-		
-		
-		
-		//go through graph checking if the route exists 
+
+
+
+		//go through graph checking if the route exists
 		for(Node ns : g.getNodes()){
 			for(Route r : ns.getNeighbours()){
 				assertTrue(r!=testRoute);
@@ -91,10 +92,10 @@ public class RouteGraphTests {
 			}
 		}
 	}
-	
 
-	
-	
+
+
+
 
 	@Test
 	public void testSimpleRoute(){
@@ -104,15 +105,15 @@ public class RouteGraphTests {
 		RouteGraph g = readGraphFromXML();
 
 		System.out.println("-------------------------------------------");
-		
+
 		for(Node n : g.getNodes())n.printRoutes();
-		
+
 		System.out.println("-------------------------------------------");
 
-		
+
 		DijkstraSearch ds = new DijkstraSearch(g);
-		
-		
+
+
 		Map<List<Node>,Double> shortestPath = ds.getShortestPath(mail);
 
 		//Expected shortest path
@@ -129,7 +130,7 @@ public class RouteGraphTests {
 		}
 
 	}
-	
+
 	@Test
 	public void testInvalidRoute(){
 		BasicRoute route = new BasicRoute("Rome", "Suva");
@@ -137,7 +138,7 @@ public class RouteGraphTests {
 
 		RouteGraph g = readGraphFromXML();
 		DijkstraSearch ds = new DijkstraSearch(g);
-		
+
 		Map<List<Node>,Double> shortestPath = ds.getShortestPath(mail);
 
 		//Expected shortest path
@@ -153,5 +154,43 @@ public class RouteGraphTests {
 			//Expected shortest path cost
 			assertTrue(shortestPath.get(list).doubleValue() == Double.POSITIVE_INFINITY);//TODO check
 		}
+	}
+
+	@Test
+	public void testIsValid(){
+		RouteGraph g = readGraphFromXML();
+
+		BasicRoute route = new BasicRoute("Wellington", "Suva");
+		BasicRoute route1 = new BasicRoute("Wellington", "Sydney");
+		BasicRoute route2 = new BasicRoute("Sydney", "Suva");
+		BasicRoute route3 = new BasicRoute("Auckland", "Wellington");
+
+				BasicRoute route4 = new BasicRoute("Wellington", "Auckland");
+		BasicRoute route5 = new BasicRoute("Wellington", "Hamilton");
+		BasicRoute route6 = new BasicRoute("Rome", "Wellington");
+		BasicRoute route7 = new BasicRoute("Suva", "Wellington");
+
+
+
+		Mail mail = new Mail(route, Day.FRIDAY, 100, 5, Priority.DOMESTIC_LAND);
+		Mail mail1 = new Mail(route1, Day.FRIDAY, 100, 5, Priority.DOMESTIC_AIR);
+		Mail mail2 = new Mail(route2, Day.FRIDAY, 100, 5, Priority.DOMESTIC_AIR);
+		Mail mail3 = new Mail(route3, Day.FRIDAY, 100, 5, Priority.DOMESTIC_AIR);
+		Mail mail4 = new Mail(route4, Day.FRIDAY, 100, 5, Priority.DOMESTIC_AIR);
+		Mail mail5 = new Mail(route5, Day.FRIDAY, 100, 5, Priority.DOMESTIC_AIR);
+		Mail mail6 = new Mail(route6, Day.FRIDAY, 100, 5, Priority.DOMESTIC_AIR);
+		Mail mail7 = new Mail(route7, Day.FRIDAY, 100, 5, Priority.DOMESTIC_AIR);
+		DijkstraSearch d = new DijkstraSearch(g);
+
+
+		assertTrue(d.isValidMailDelivery(mail));
+		assertTrue(d.isValidMailDelivery(mail1));
+		assertFalse(d.isValidMailDelivery(mail2));
+		assertFalse(d.isValidMailDelivery(mail3));
+
+		assertFalse(d.isValidMailDelivery(mail4));
+		assertFalse(d.isValidMailDelivery(mail5));
+		assertFalse(d.isValidMailDelivery(mail6));
+		assertFalse(d.isValidMailDelivery(mail7));
 	}
 }

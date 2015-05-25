@@ -17,7 +17,7 @@ public class AbstractFormWindow extends JFrame {
 
 	public AbstractFormWindow(String title){
 		super(title);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null); // centers the frame
 	}
 

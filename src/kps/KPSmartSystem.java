@@ -16,6 +16,7 @@ import kps.data.wrappers.BasicRoute;
 import kps.data.wrappers.DeliveryPrice;
 import kps.data.wrappers.EventLog;
 import kps.data.wrappers.MailTransport;
+import kps.data.wrappers.Metrics;
 import kps.enums.Day;
 import kps.enums.Priority;
 import kps.enums.TransportType;
@@ -39,6 +40,8 @@ public class KPSmartSystem {
 	private Map<String,KPSUser> users;
 	private KPSUser currentUser;
 
+	private Metrics metrics;
+
 	private final String EVENT_LOG_FILENAME = Main.XML_FILE_PATH+"kps_data.xml";
 
 	/**
@@ -53,7 +56,7 @@ public class KPSmartSystem {
 		users = new HashMap<String, KPSUser>();
 		currentUser = null;
 	}
-	
+
 	public RouteGraph loadGraph(){
 		List<BusinessEvent> events = new ArrayList<BusinessEvent>();
 		try {
@@ -63,7 +66,7 @@ public class KPSmartSystem {
 		}
 
 		RouteGraph g = new RouteGraph();
-		
+
 		for(BusinessEvent e : events){
 			if(e instanceof TransportCostUpdateEvent){
 				g.addRoute(new Route((TransportCostUpdateEvent)e));
@@ -119,7 +122,7 @@ public class KPSmartSystem {
 	public int getRouteGraphSize(){
 		return routeGraph.getSize();
 	}
-	
+
 	public RouteGraph getRouteGraph(){
 		return this.routeGraph;
 	}
@@ -144,15 +147,19 @@ public class KPSmartSystem {
 	public String getCurrentUser(){
 		return currentUser.getUsername();
 	}
-	
+
+	public Metrics getMetrics(){
+		return metrics;
+	}
+
 	/**
 	 * Adds a new MailDeliveryEvent to the KPSmartSystem based on the specified
 	 * parameters. A new MailDeliveryEvent will not be added if:
-	 * 
+	 *
 	 * 	- KPS does not ship mail to the specified destination
 	 *  - There is no shipping to the specified destination with the specified priority
 	 *  - A transport link cannot be made to the destination with the specified priority
-	 *  
+	 *
 	 * @param to
 	 * 		-- destination of mail
 	 * @param from
@@ -175,17 +182,20 @@ public class KPSmartSystem {
 		if(revenue < 0){
 			// cannot send mail
 		}
+
 		// calculate expenditure
-		
+		double expenditure = 1;
+		metrics.addMailDeliveryEvent(revenue, expenditure);
+
 		long timeLogged = System.currentTimeMillis();
 		eventLog.addBusinessEvent(new MailDeliveryEvent(timeLogged, route, day, weight, volume, priority));
 	}
-	
+
 	/**
 	 * Adds a new PriceUpdateEvent to the KPSmartSystem based on the specified
 	 * parameters. If there is already a price set for sending mail from the
-	 * origin to location with the same priority, this price is updated. 
-	 * 
+	 * origin to location with the same priority, this price is updated.
+	 *
 	 * @param to
 	 * 		-- destination
 	 * @param from
@@ -203,17 +213,17 @@ public class KPSmartSystem {
 			customerRoutes.put(route, new CustomerRoute(route));
 		}
 		customerRoutes.get(route).addDeliveryPrice(gramPrice, volumePrice, priority);
-		
+
 		long timeLogged = System.currentTimeMillis();
 		DeliveryPrice price = new DeliveryPrice(gramPrice, volumePrice);
 		eventLog.addBusinessEvent(new PriceUpdateEvent(timeLogged, route, price, priority));
 	}
-	
+
 	/**
 	 * Adds a new TransportCostUpdateEvent to the KPSmartSystem based on the specified
 	 * parameters. If there is currently not a route with the same origin, destination, company
 	 * and transport type a new route is created. Otherwise the existing route is updated.
-	 * 
+	 *
 	 * @param to
 	 * 		-- destination
 	 * @param from
@@ -237,7 +247,7 @@ public class KPSmartSystem {
 	 * @param day
 	 * 		-- day that transport departs
 	 */
-	public void addTransportCostUpdateEvent(String to, String from, String company, TransportType type, 
+	public void addTransportCostUpdateEvent(String to, String from, String company, TransportType type,
 			double gramPrice, double volumePrice, int maxWeight, int maxVolume, int duration, int frequency, Day day){
 		BasicRoute route = new BasicRoute(from, to);
 		DeliveryPrice price = new DeliveryPrice(gramPrice, volumePrice);
@@ -247,11 +257,11 @@ public class KPSmartSystem {
 		eventLog.addBusinessEvent(event);
 		// add route to graph
 	}
-	
+
 	/**
 	 * Adds a new TransportDiscontinuedEvent to the KPSmartSystem based on the specified
 	 * parameters. Removes the route specified by these parameters from the route graph.
-	 * 
+	 *
 	 * @param to
 	 * 		-- destination
 	 * @param from
@@ -267,11 +277,11 @@ public class KPSmartSystem {
 		long timeLogged = System.currentTimeMillis();
 		eventLog.addBusinessEvent(new TransportDiscontinuedEvent(timeLogged, route, company, type));
 	}
-	
+
 	/**
 	 * Attempts to log the specified user into the system. Returns
 	 * true if login is successful, otherwise returns false.
-	 * 
+	 *
 	 * @param username
 	 * 		-- user to login
 	 * @param passwordHash
@@ -289,7 +299,7 @@ public class KPSmartSystem {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Logs the current user out of the system.
 	 */

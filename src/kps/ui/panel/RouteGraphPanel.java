@@ -13,14 +13,20 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import kps.Main;
+import kps.data.DijkstraSearch;
+import kps.data.Mail;
 import kps.data.Node;
 import kps.data.Route;
 import kps.data.RouteGraph;
+import kps.data.wrappers.BasicRoute;
+import kps.enums.Day;
+import kps.enums.Priority;
 import kps.events.BusinessEvent;
 import kps.events.TransportCostUpdateEvent;
 import kps.parser.KPSParser;
@@ -33,22 +39,28 @@ import kps.ui.graph.DrawRoute;
  * */
 public class RouteGraphPanel extends JPanel implements MouseMotionListener, MouseListener, KeyListener{
 
+	private static final long serialVersionUID = 7116082974955918264L;
 
-	private Color textColor = new Color (0, 0, 0);
-	private Color backgroundColor = new Color (255,255,255);
-
+	//graph to draw
 	private RouteGraph graph;
+
+	//nodes from the graph
 	private ArrayList<DrawNode> drawNodes;
+
+	//routes from the graph
 	private ArrayList<DrawRoute> drawRoutes;
 
-	private double NODE_SIZE = 80;
+	//path of the nodes of the selected route
+	private List<Node> nodePath;
 
+	//frame the panel is on
 	private JFrame frame;
 
 	/**
-	 * @param data - The Event log of the program.
+	 * Created the RouteGraphPanel Object
 	 */
 	public RouteGraphPanel(RouteGraph g, JFrame frame){
+		this.nodePath = new ArrayList<Node>();
 		this.drawNodes = new ArrayList<DrawNode>();
 		this.drawRoutes = new ArrayList<DrawRoute>();
 		this.graph = g;
@@ -56,16 +68,23 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		setUpDrawNodes();
 		setUpDrawRoutes();
 		addMouseListener(this);
-		addMouseMotionListener(this);
 		startThread();
+		setup();
 	}
 
+	/**
+	 * Creates DrawNodes from the graph and adds them to the list of drawNodes
+	 * */
 	public void setUpDrawNodes(){
 		for(Node n : graph.getNodes()){
 			drawNodes.add(new DrawNode(n,(int)(Math.random()*1200), (int)(Math.random()*900)));
 		}
 	}
 
+
+	/**
+	 * Creates DrawRoutes from the graph and adds them to the list of drawRoutes
+	 * */
 	public void setUpDrawRoutes(){
 		for(DrawNode n : drawNodes ){
 			for(Route r : n.getNode().getNeighbours()){
@@ -76,15 +95,55 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 					if(drawNodes.get(i).getNode().getName().equals(r.getSrc()))src = drawNodes.get(i);
 					if(drawNodes.get(i).getNode().getName().equals(r.getDest()))dest = drawNodes.get(i);
 				}
-				drawRoutes.add(new DrawRoute(r,src,dest));
+				boolean added = false;
+				for(DrawRoute dr : drawRoutes){
+					 if(dr.addRouteCheck(r)){
+						 dr.addRoute(r);
+						 added = true;
+					 }
+				}
+				if(!added)drawRoutes.add(new DrawRoute(r,src,dest));
 			}
-
 		}
 	}
 
 	public void setup(){
 		addMouseMotionListener(this);
 		this.validate();
+	}
+
+	/**
+	 * The mail the user currently wants to send through the graph
+	 * */
+	public void setRoute(Mail mail){
+		DijkstraSearch dks = new DijkstraSearch(graph);
+
+		Map<List<Node>,Double> path = dks.getShortestPath(mail);
+
+		for(List<Node> list : path.keySet()){
+			this.nodePath = list;
+		}
+	}
+
+	/**
+	 * Sets the routes taken for the mail
+	 * */
+	public void setRoutesTaken(){
+		for(DrawRoute r : drawRoutes)r.setTaken(false);
+		for(DrawNode n : drawNodes)n.setSelected(false);
+
+		for(DrawNode n : drawNodes){
+			for(int i = 0; i < nodePath.size(); i++){
+				if(nodePath.get(i).getName().equals(n.getNode().getName()))n.setRouteSelected(true);
+			}
+		}
+
+		for(int i = 0; i < nodePath.size() - 1; i++){
+			for(DrawRoute r : drawRoutes){
+				if(r.getNode1Name().equals(nodePath.get(i).getName()) && r.getNode2Name().equals(nodePath.get(i+1).getName())
+				|| r.getNode2Name().equals(nodePath.get(i).getName()) && r.getNode1Name().equals(nodePath.get(i+1).getName()))r.setTaken(true);
+			}
+		}
 	}
 
 	@Override
@@ -95,15 +154,12 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		            RenderingHints.KEY_ANTIALIASING,
 		            RenderingHints.VALUE_ANTIALIAS_ON);
 
-		g2.setColor(backgroundColor );
+		g2.setColor(new Color(238,238,238));//grey to match rest of the program
 		g2.fillRect(0, 0, this.getWidth(), this.getHeight());
-
-		g2.setColor(Color.BLACK);
 		drawRoutes(g2);
-
-
 		for(DrawNode n : drawNodes)n.draw(g2);
 	};
+
 
 	/**
 	 * Simple way of drawing the routes
@@ -114,22 +170,17 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		}
 	}
 
-
-
-
-
 	@Override
 	public void repaint(){
 		Graphics g = this.getGraphics();
 		paint(g);
 	}
 
-	@Override
-	public void mousePressed(MouseEvent e) {
-	}
-
-
-
+	/**
+	 * Returns the node that is on a point
+	 *
+	 * @param point to check
+	 * */
 	private DrawNode nodeOnPoint(Point p){
 		DrawNode n = null;
 
@@ -139,29 +190,35 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		return n;
 	}
 
-
 	@Override
-	public void mouseReleased(MouseEvent e) {
-		if (e.getID() == MouseEvent.MOUSE_RELEASED ){
-			for(DrawNode n : drawNodes){
-				if(n.containsPoint(e.getPoint())){
-				//	n.selected = true;
-				}
-				else n.setSelected(false);
-			}
-			repaint();
+	public void mouseClicked(MouseEvent e) {
+		//set node or routes selected
+		setRouteSelected(e.getPoint());
+		setNodeSelected(e.getPoint());
+	}
+
+	/**
+	 * Sets a route to be selected if point p is on it
+	 * */
+	public void setRouteSelected(Point p){
+		for(DrawRoute r : drawRoutes){
+			if(r.containsPoint(p.getX(),p.getY()))r.setSelected(true);
+			else r.setSelected(false);
 		}
 	}
 
-	public void mouseMoved(MouseEvent e){
+	/**
+	 * Sets a node to be selected if point p is on it
+	 * */
+	public void setNodeSelected(Point p){
 		for(DrawNode n : drawNodes){
-			if(n.containsPoint(e.getPoint())){
+			if(n.containsPoint(p)){
 				n.setSelected(true);
+
 			}
 			else n.setSelected(false);
 		}
 	}
-
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
@@ -179,7 +236,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		List<BusinessEvent> events = new ArrayList<BusinessEvent>();
 
 		try {
-			events = KPSParser.parseFile(Main.XML_FILE_PATH+"graph.xml");
+			events = KPSParser.parseFile(Main.XML_FILE_PATH+"new_dataset.xml");
 		} catch (ParserException e) {
 			e.printStackTrace();
 		}
@@ -198,14 +255,24 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		frame.add(support, BorderLayout.CENTER);
 		frame.setVisible(true);
 		support.setup();
+
+		BasicRoute route = new BasicRoute("Rome", "Wellington");
+		Mail mail = new Mail(route, Day.FRIDAY, 100, 5, Priority.DOMESTIC_AIR);
+
+		support.setRoute(mail);
+		support.setRoutesTaken();
 	}
 
+
+	/**
+	 * Starts the thread to repaint the frame
+	 * */
 	public void startThread(){
-		new WindowThread(40, frame).start();;
+		new WindowThread(20, frame).start();;
 	}
 
 	public class WindowThread extends Thread {
-		private final int delay; // delay between pulses
+		private final int delay; // delay between refreshes
 		private final JFrame display;
 
 		public WindowThread(int delay, JFrame display) {
@@ -230,9 +297,13 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 	}
 
 	@Override
+	public void mousePressed(MouseEvent e) {}
+	@Override
 	public void keyPressed(KeyEvent e) {}
 	@Override
-	public void mouseClicked(MouseEvent e) {}
+	public void mouseReleased(MouseEvent e) {}
+	@Override
+	public void mouseMoved(MouseEvent e){}
 	@Override
 	public void mouseEntered(MouseEvent e) {}
 	@Override

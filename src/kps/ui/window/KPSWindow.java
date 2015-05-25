@@ -18,6 +18,7 @@ import javax.swing.SwingConstants;
 
 import kps.KPSmartSystem;
 import kps.data.Node;
+import kps.data.wrappers.EventLog;
 import kps.enums.Day;
 import kps.enums.Priority;
 import kps.enums.TransportType;
@@ -57,8 +58,8 @@ public class KPSWindow extends JFrame {
 		metrics = new MetricsPanel();
 		routeGraph = new RouteGraphPanel(system.getRouteGraph(),this);
 
-		tabbedPane.addTab("Decision Support", decisionSupport);
 		tabbedPane.addTab("Metrics", metrics);
+		tabbedPane.addTab("Decision Support", decisionSupport);
 		tabbedPane.addTab("Route Graph", routeGraph);
 
 		JPanel sidebar = makeSidebar();

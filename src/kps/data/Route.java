@@ -58,13 +58,18 @@ public class Route {
 	}
 
 	@Override
-	public String toString(){return "src :" + transport.getOrigin() + " Dest :" + transport.getDestination() + " Cost :"+cost;}
+	public String toString(){return  transport.getOrigin() + " To " + transport.getDestination() +
+			" Gram Price :"+transport.getGramPrice() +"\n"+ " Volumder $"+transport.getVolumePrice() +"\n"
+			+ "Type " + transport.getTransportType();}
 
 	public String getSrc(){return transport.getOrigin();}
 	public String getDest(){return transport.getDestination();}
 	public TransportType getType(){return transport.getTransportType();}
 	public double getCost(){return cost;}//TODO change to getCost(double volume, double weight)
-
+	
+	/**
+	 * Calculates The cost
+	 * */
 	public double calculateCost(double volume, double weight){
 		if(volume > transport.getMaxVolume())return -1;
 		if(weight > transport.getMaxWeight())return -1;
