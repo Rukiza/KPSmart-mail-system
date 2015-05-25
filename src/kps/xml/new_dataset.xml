@@ -519,9 +519,9 @@
   </cost>
   <cost>
     <time>1420459500000</time>
-    <company>Toronto</company>
-    <to>Tokyo</to>
-    <from>Asian Airways</from>
+    <company>Asian Airways</company>
+    <to>Toronto</to>
+    <from>Tokyo</from>
     <type>Air</type>
     <weightcost>5</weightcost>
     <volumecost>7</volumecost>
@@ -923,4 +923,4 @@
     <weightcost>17</weightcost>
     <volumecost>17</volumecost>
   </price>
-</simulation> 
+</simulation>

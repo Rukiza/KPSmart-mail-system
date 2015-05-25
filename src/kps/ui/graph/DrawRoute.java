@@ -71,9 +71,6 @@ public class DrawRoute {
 			int change = 5;
 			int limit = 254;
 
-
-
-
 			if(routeSelectedColor.getRed() >= 254 && upper){
 				upper = false;
 			}
@@ -116,19 +113,24 @@ public class DrawRoute {
 		if(node1 !=null && node2 != null)g.drawLine((int)(node1.getX()+nodeSize),(int) (node1.getY()+nodeSize), (int)(node2.getX()+nodeSize), (int)(node2.getY()+nodeSize));
 
 		//check if there is a route going to both nodes
-		if(toNode2 && toNode1){
+		if(toNode1){
+			List<Point> points =  CircleLine.getCircleLineIntersectionPoint(new Point((int)(node2X+nodeSize),(int) (node2Y+nodeSize)),
+																			new Point((int)(node1X+nodeSize),(int) (node1Y+nodeSize)),
+																			new Point((int)(node1X+nodeSize),(int) (node1Y+nodeSize)),nodeSize);
 
+			g.setColor(Color.WHITE);
+			g.fillOval(points.get(0).x-10,points.get(0).y-10, 20, 20);
 		}
-		else if(toNode2){//node 2 is the destination
-			List<Point> points =  CircleLine.getCircleLineIntersectionPoint(new Point((int)(node1X+nodeSize),(int) (node1Y+nodeSize)),new Point((int)(node2X+nodeSize),(int) (node2Y+nodeSize)),new Point((int)(node2X+nodeSize), (int)(node2Y+nodeSize)) , nodeSize);
+		if(toNode2){//node 2 is the destination
+			List<Point> points =  CircleLine.getCircleLineIntersectionPoint(new Point((int)(node1X+nodeSize),(int) (node1Y+nodeSize)),
+																			new Point((int)(node2X+nodeSize),(int) (node2Y+nodeSize)),
+																			new Point((int)(node2X+nodeSize), (int)(node2Y+nodeSize)),nodeSize);
 
 			g.setColor(Color.WHITE);
 			g.fillOval(points.get(0).x-10,points.get(0).y-10, 20, 20);
 
 		}
-		else{//node one is the destination
 
-		}
 		if(selected)drawSelectedBox(g);
 	}
 
