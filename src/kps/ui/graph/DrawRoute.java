@@ -105,7 +105,7 @@ public class DrawRoute {
 
 		double nodeSize = node1.getSize()/2;
 
-		g.setStroke(new BasicStroke(10));
+		g.setStroke(new BasicStroke(5));
 		if(selected)g.setColor(Color.RED);
 
 
@@ -118,6 +118,9 @@ public class DrawRoute {
 																			new Point((int)(node1X+nodeSize),(int) (node1Y+nodeSize)),
 																			new Point((int)(node1X+nodeSize),(int) (node1Y+nodeSize)),nodeSize);
 
+
+			g.setColor(Color.BLACK);
+			g.drawOval(points.get(0).x-10,points.get(0).y-10, 20, 20);
 			g.setColor(Color.WHITE);
 			g.fillOval(points.get(0).x-10,points.get(0).y-10, 20, 20);
 		}
@@ -126,6 +129,8 @@ public class DrawRoute {
 																			new Point((int)(node2X+nodeSize),(int) (node2Y+nodeSize)),
 																			new Point((int)(node2X+nodeSize), (int)(node2Y+nodeSize)),nodeSize);
 
+			g.setColor(Color.BLACK);
+			g.drawOval(points.get(0).x-10,points.get(0).y-10, 20, 20);
 			g.setColor(Color.WHITE);
 			g.fillOval(points.get(0).x-10,points.get(0).y-10, 20, 20);
 
@@ -134,6 +139,9 @@ public class DrawRoute {
 		if(selected)drawSelectedBox(g);
 	}
 
+	/**
+	 * Draws the box that displays all the routes between the two nodes
+	 * */
 	public void drawSelectedBox(Graphics2D g){
 		g.setColor(Color.BLACK);
 		g.fillRect(20,20,600,100);
