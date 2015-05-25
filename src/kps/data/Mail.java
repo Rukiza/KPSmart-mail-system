@@ -4,7 +4,7 @@ import kps.data.wrappers.BasicRoute;
 import kps.enums.Day;
 import kps.enums.Priority;
 
-class Mail{
+public class Mail{
 	private Day day;
 	private int weight; // weight is measured in grams
 	private int volume; // volume is measured in cubic centimeters

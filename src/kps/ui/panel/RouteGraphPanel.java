@@ -13,14 +13,20 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import kps.Main;
+import kps.data.DijkstraSearch;
+import kps.data.Mail;
 import kps.data.Node;
 import kps.data.Route;
 import kps.data.RouteGraph;
+import kps.data.wrappers.BasicRoute;
+import kps.enums.Day;
+import kps.enums.Priority;
 import kps.events.BusinessEvent;
 import kps.events.TransportCostUpdateEvent;
 import kps.parser.KPSParser;
@@ -28,9 +34,6 @@ import kps.parser.ParserException;
 import kps.ui.graph.DrawNode;
 import kps.ui.graph.DrawRoute;
 
-/**
- * @author Nicky van Hulst
- * */
 public class RouteGraphPanel extends JPanel implements MouseMotionListener, MouseListener, KeyListener{
 
 
@@ -41,6 +44,8 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 	private ArrayList<DrawNode> drawNodes;
 	private ArrayList<DrawRoute> drawRoutes;
 
+	private List<Node> nodePath;
+
 	private double NODE_SIZE = 80;
 
 	private JFrame frame;
@@ -49,6 +54,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 	 * @param data - The Event log of the program.
 	 */
 	public RouteGraphPanel(RouteGraph g, JFrame frame){
+		this.nodePath = new ArrayList<Node>();
 		this.drawNodes = new ArrayList<DrawNode>();
 		this.drawRoutes = new ArrayList<DrawRoute>();
 		this.graph = g;
@@ -56,8 +62,8 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		setUpDrawNodes();
 		setUpDrawRoutes();
 		addMouseListener(this);
-		addMouseMotionListener(this);
 		startThread();
+		setup();
 	}
 
 	public void setUpDrawNodes(){
@@ -65,6 +71,8 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 			drawNodes.add(new DrawNode(n,(int)(Math.random()*1200), (int)(Math.random()*900)));
 		}
 	}
+
+
 
 	public void setUpDrawRoutes(){
 		for(DrawNode n : drawNodes ){
@@ -76,7 +84,14 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 					if(drawNodes.get(i).getNode().getName().equals(r.getSrc()))src = drawNodes.get(i);
 					if(drawNodes.get(i).getNode().getName().equals(r.getDest()))dest = drawNodes.get(i);
 				}
-				drawRoutes.add(new DrawRoute(r,src,dest));
+				boolean added = false;
+				for(DrawRoute dr : drawRoutes){
+					 if(dr.addRouteCheck(r)){
+						 dr.addRoute(r);
+						 added = true;
+					 }
+				}
+				if(!added)drawRoutes.add(new DrawRoute(r,src,dest));
 			}
 
 		}
@@ -87,6 +102,36 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		this.validate();
 	}
 
+	public void setRoute(Mail mail){
+		DijkstraSearch dks = new DijkstraSearch(graph);
+
+		Map<List<Node>,Double> path = dks.getShortestPath(mail);
+
+		for(List<Node> list : path.keySet()){
+			this.nodePath = list;
+		}
+	}
+
+	public void setRoutesTaken(){
+		for(DrawRoute r : drawRoutes)r.setTaken(false);
+		for(DrawNode n : drawNodes)n.setSelected(false);
+
+		for(DrawNode n : drawNodes){
+			for(int i = 0; i < nodePath.size(); i++){
+				if(nodePath.get(i).getName().equals(n.getNode().getName()))n.setRouteSelected(true);
+			}
+		}
+
+
+
+		for(int i = 0; i < nodePath.size() - 1; i++){
+			for(DrawRoute r : drawRoutes){
+				if(r.getNode1Name().equals(nodePath.get(i).getName()) && r.getNode2Name().equals(nodePath.get(i+1).getName())
+				|| r.getNode2Name().equals(nodePath.get(i).getName()) && r.getNode1Name().equals(nodePath.get(i+1).getName()))r.setTaken(true);
+			}
+		}
+	}
+
 	@Override
 	public void paint(Graphics g) {
 		if(g == null )return;
@@ -95,12 +140,11 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		            RenderingHints.KEY_ANTIALIASING,
 		            RenderingHints.VALUE_ANTIALIAS_ON);
 
-		g2.setColor(backgroundColor );
+		g2.setColor(Color.BLACK);
 		g2.fillRect(0, 0, this.getWidth(), this.getHeight());
 
 		g2.setColor(Color.BLACK);
 		drawRoutes(g2);
-
 
 		for(DrawNode n : drawNodes)n.draw(g2);
 	};
@@ -160,6 +204,11 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 			}
 			else n.setSelected(false);
 		}
+
+		for(DrawRoute r : drawRoutes){
+			if(r.containsPoint(e.getPoint().getX(),e.getPoint().getY()))r.setSelected(true);
+			else r.setSelected(false);
+		}
 	}
 
 
@@ -184,6 +233,8 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 			e.printStackTrace();
 		}
 
+
+
 		for(BusinessEvent e : events){
 			if(e instanceof TransportCostUpdateEvent){
 				g.addRoute(new Route((TransportCostUpdateEvent)e));
@@ -198,6 +249,12 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		frame.add(support, BorderLayout.CENTER);
 		frame.setVisible(true);
 		support.setup();
+
+		BasicRoute route = new BasicRoute("Wellington", "Rome");
+		Mail mail = new Mail(route, Day.FRIDAY, 100, 5, Priority.DOMESTIC_AIR);
+
+		support.setRoute(mail);
+		support.setRoutesTaken();
 	}
 
 	public void startThread(){
