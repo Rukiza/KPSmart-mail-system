@@ -34,20 +34,21 @@ public class RouteFormWindow extends AbstractFormWindow {
 		JPanel inputPanel = new JPanel();
 		inputPanel.setLayout(new SpringLayout());
 
-		makeTextField("company", fields, inputPanel);
-		makeTextField("from", fields, inputPanel);
-		makeTextField("to", fields, inputPanel);
-		makeComboBox("type", TransportType.values(), fields, inputPanel);
-		makeTextField("weight cost", fields, inputPanel);
-		makeTextField("volume cost", fields, inputPanel);
-		makeTextField("max weight", fields, inputPanel);
-		makeTextField("max volume", fields, inputPanel);
-		makeTextField("duration", fields, inputPanel);
-		makeTextField("frequency", fields, inputPanel);
-		makeComboBox("priority", Priority.values(), fields, inputPanel);
-		makeComboBox("day", Day.values(), fields, inputPanel);
+		makeTextField("company", inputPanel);
+		makeTextField("from", inputPanel);
+		makeTextField("to", inputPanel);
+		makeComboBox("type", TransportType.values(), inputPanel);
+		makeTextField("weight cost", inputPanel);
+		makeTextField("volume cost",  inputPanel);
+		makeTextField("max weight", inputPanel);
+		makeTextField("max volume", inputPanel);
+		makeTextField("duration", inputPanel);
+		makeTextField("frequency", inputPanel);
+		makeComboBox("priority", Priority.values(), inputPanel);
+		makeComboBox("day", Day.values(), inputPanel);
 
-		int fieldCount = fields.size();
+		// TODO: make this variable dynamic
+		int fieldCount = 12; 
 
 		SpringUtilities.makeCompactGrid(inputPanel,
 				fieldCount, 2,	//rows, cols
@@ -68,7 +69,7 @@ public class RouteFormWindow extends AbstractFormWindow {
 
 		// event handling
 		OK.addActionListener((ActionEvent e) -> {
-			if (!isFormComplete(fields)){
+			if (!isFormComplete()){
 				completeFormPrompt();
 				return;
 			}

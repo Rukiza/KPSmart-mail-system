@@ -34,19 +34,17 @@ public class PackageFormWindow extends AbstractFormWindow {
 		setLayout(new BorderLayout());
 
 		// add fields
-		Map<String, Object> fields = new HashMap<>();
-
 		JPanel inputPanel = new JPanel();
 		inputPanel.setLayout(new SpringLayout());
 
-		makeComboBox("day", Day.values(), fields, inputPanel);
-		makeComboBox("from", locations.toArray(), fields, inputPanel);
-		makeComboBox("to", locations.toArray(), fields, inputPanel);
-		makeTextField("weight", fields, inputPanel);
-		makeTextField("volume", fields, inputPanel);
-		makeComboBox("priority", Priority.values(), fields, inputPanel);
+		makeComboBox("day", Day.values(), inputPanel);
+		makeComboBox("from", locations.toArray(), inputPanel);
+		makeComboBox("to", locations.toArray(), inputPanel);
+		makeTextField("weight", inputPanel);
+		makeTextField("volume", inputPanel);
+		makeComboBox("priority", Priority.values(), inputPanel);
 
-		int fieldCount = fields.size();
+		int fieldCount = 6;
 
 		SpringUtilities.makeCompactGrid(inputPanel,
 				fieldCount, 2,	//rows, cols
@@ -67,7 +65,7 @@ public class PackageFormWindow extends AbstractFormWindow {
 
 		// event handling
 		OK.addActionListener((ActionEvent e) -> {
-			if (!isFormComplete(fields)){
+			if (!isFormComplete()){
 				completeFormPrompt();
 				return;
 			}
@@ -81,6 +79,7 @@ public class PackageFormWindow extends AbstractFormWindow {
 
 			Day day = (Day)fields.get("day");
 			String from = (String)fields.get("from").toString();
+			System.out.println(fields.get("to"));
 			String to = (String) fields.get("to").toString();
 			int weight = Integer.parseInt(weightStr);
 			int volume = Integer.parseInt(volStr);
@@ -101,27 +100,30 @@ public class PackageFormWindow extends AbstractFormWindow {
 	}
 
 	@Override
-	protected void makeTextField(String name, Map<String, Object> fields, Container cont) {
-		super.makeTextField(name, fields, cont);
+	protected void makeTextField(String name, Container cont) {
+		super.makeTextField(name, cont);
 		// get the text field that was just added by the super method
-		JTextField textField = (JTextField) cont.getComponent(cont.getComponentCount());
+		JTextField textField = (JTextField) cont.getComponent(cont.getComponentCount() - 1);
 		textField.getDocument().addDocumentListener(new DocumentListener(){
                 @Override
                 public void insertUpdate(DocumentEvent e) {
 					fields.put(name, textField.getText());
 					// listen if all fields are complete
-					if (isFormComplete(fields)) {
+					if (isFormComplete()) {
 						// TODO: reuse this code:
 						
                         // check digit fields
                         String weightStr = (String)fields.get("weight");
                         String volStr = (String)fields.get("volume");
                         if (!UIUtils.isDouble(weightStr, volStr)){
-                                numberFieldsPrompt("weight and volume should only contain digits");
                                 return;
                         }
 
                         Day day = (Day)fields.get("day");
+                        for (String key : fields.keySet()) {
+                        	System.out.println(key + ", " + fields.get(key));
+                        }
+
                         String from = (String)fields.get("from").toString();
                         String to = (String) fields.get("to").toString();
                         int weight = Integer.parseInt(weightStr);

@@ -332,4 +332,8 @@ public class KPSmartSystem {
 		}catch(FileNotFoundException e){e.printStackTrace();}
 		catch(UnsupportedEncodingException e){e.printStackTrace();}
 	}
+
+	public EventLog getEventLog() {
+		return eventLog;
+	}
 }

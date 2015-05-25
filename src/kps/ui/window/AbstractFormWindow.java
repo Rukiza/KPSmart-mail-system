@@ -2,7 +2,7 @@ package kps.ui.window;
 
 import java.awt.Container;
 import java.awt.event.ItemEvent;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JComboBox;
@@ -15,6 +15,8 @@ import javax.swing.event.DocumentListener;
 
 public class AbstractFormWindow extends JFrame {
 
+	protected Map<String, Object> fields = new HashMap<>();
+	
 	public AbstractFormWindow(String title){
 		super(title);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -40,7 +42,7 @@ public class AbstractFormWindow extends JFrame {
 	 * @param fields
 	 * @return whether the form is complete (all fields are filled)
 	 */
-	protected boolean isFormComplete(Map<String, Object> fields) {
+	protected boolean isFormComplete() {
 		for (Object o : fields.values()){
 			if (o == null)
 				return false;
@@ -48,7 +50,7 @@ public class AbstractFormWindow extends JFrame {
 		return true;
 	}
 
-	protected void makeTextField(String name, Map<String, Object> fields, Container cont) {
+	protected void makeTextField(String name, Container cont) {
 		JTextField textField = new JTextField();
 		textField.getDocument().addDocumentListener(new DocumentListener(){
                 @Override
@@ -65,7 +67,7 @@ public class AbstractFormWindow extends JFrame {
 	}
 
 	protected void makeComboBox(String name, Object[] values,
-			Map<String, Object> fields, Container cont) {
+			Container cont) {
 		JComboBox<Object> combo = new JComboBox<>(values);
 		combo.addItemListener((ItemEvent e) -> {
 			fields.put(name, combo.getSelectedItem());

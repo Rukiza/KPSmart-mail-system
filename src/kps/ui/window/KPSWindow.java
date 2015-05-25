@@ -38,10 +38,15 @@ import kps.ui.util.UIUtils;
  */
 public class KPSWindow extends JFrame {
 
-	private KPSmartSystem system = new KPSmartSystem();
+	private KPSmartSystem system;
+	
+	private MetricsPanel metricsPanel;
+	private DecisionSupportPanel dsPanel; 
+	private RouteGraphPanel graphPanel;
 
-	public KPSWindow(EventLog bizEvents){
+	public KPSWindow(KPSmartSystem system){
 		super("KPSmart");
+		this.system = system;
 		final Dimension WINDOW_SIZE = new Dimension(1200,800);
 
 		setSize(WINDOW_SIZE);
@@ -53,9 +58,13 @@ public class KPSWindow extends JFrame {
 		JTabbedPane tabbedPane = new JTabbedPane();
 		add(tabbedPane, BorderLayout.CENTER);
 
-		tabbedPane.addTab("Metrics", new MetricsPanel());
-		tabbedPane.addTab("Decision Support", new DecisionSupportPanel(bizEvents));
-		tabbedPane.addTab("Route Graph", new RouteGraphPanel(system.getRouteGraph(),this));
+		metricsPanel = new MetricsPanel();
+		dsPanel = new DecisionSupportPanel(system.getEventLog());
+		graphPanel = new RouteGraphPanel(system.getRouteGraph(), this);
+		
+		tabbedPane.addTab("Metrics", metricsPanel);
+		tabbedPane.addTab("Decision Support", dsPanel);
+		tabbedPane.addTab("Route graph", graphPanel);
 
 		JPanel sidebar = makeSidebar();
 		add(sidebar, BorderLayout.WEST);
@@ -105,8 +114,9 @@ public class KPSWindow extends JFrame {
 				}
 				@Override public void onCompletedFormUpdate(Day day, String from, String to, int weight, int volume, Priority priority){
 					DijkstraSearch search = new DijkstraSearch(system.getRouteGraph());
-					if (search.isValidMail(new Mail(new BasicRoute(from, to), day, weight, volume, priority))) {
-						// update panel
+					Mail mail = new Mail(new BasicRoute(from, to), day, weight, volume, priority);
+					if (search.isValidMailDelivery(mail)) {
+						graphPanel.setRoute(mail);
 					}
 				}
 				public void onCancel(){

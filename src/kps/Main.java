@@ -19,13 +19,14 @@ public class Main {
 	public static void main(String[] args){
 		try{
 			List<BusinessEvent> bizEvents = KPSParser.parseFile(filename);
+			KPSmartSystem system = new KPSmartSystem(bizEvents);
 
 			new LogonBox(new AuthDetailsListener(){
 
 				@Override
 				public void onReceivedAuthDetails(String un, String pw) {
 					// just assume un and pw are correct for now
-					new KPSWindow(new EventLog(bizEvents));
+					new KPSWindow(system);
 				}
 
 				@Override
