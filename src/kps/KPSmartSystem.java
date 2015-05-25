@@ -178,7 +178,10 @@ public class KPSmartSystem {
 		if(revenue < 0){
 			// cannot send mail
 		}
+
 		// calculate expenditure
+		double expenditure = 1;
+		metrics.addMailDeliveryEvent(revenue, expenditure);
 
 		long timeLogged = System.currentTimeMillis();
 		eventLog.addBusinessEvent(new MailDeliveryEvent(timeLogged, route, day, weight, volume, priority));

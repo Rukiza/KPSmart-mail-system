@@ -56,7 +56,10 @@ public class Metrics{
         return totalMailDeliveryEvents;
     }
 
-    public void addMailDeliveryEvent(){
+    public void addMailDeliveryEvent(double revenue, double expenditure){
+    	totalRevenue += revenue;
+    	totalExpenditure += expenditure;
+    	mailDelivered.add(new Tuple<Double>(revenue, expenditure));
         totalMailDeliveryEvents++;
     }
 
