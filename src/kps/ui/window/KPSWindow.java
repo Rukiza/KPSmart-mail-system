@@ -39,12 +39,13 @@ public class KPSWindow extends JFrame {
 
 	public KPSWindow(EventLog bizEvents){
 		super("KPSmart");
-		final Dimension WINDOW_SIZE = new Dimension(800,600);
+		final Dimension WINDOW_SIZE = new Dimension(1200,800);
 
 		setSize(WINDOW_SIZE);
 		setLocationRelativeTo(null);
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setResizable(false);
 
 		JTabbedPane tabbedPane = new JTabbedPane();
 		add(tabbedPane, BorderLayout.CENTER);
