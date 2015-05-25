@@ -1,6 +1,7 @@
 package kps.ui.window;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.util.Arrays;
@@ -10,8 +11,12 @@ import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SpringLayout;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
+import kps.data.Mail;
 import kps.data.Node;
 import kps.enums.Day;
 import kps.enums.Priority;
@@ -21,8 +26,11 @@ import kps.ui.util.UIUtils;
 
 public class PackageFormWindow extends AbstractFormWindow {
 
+	private PackageFormListener listener;
+	
 	public PackageFormWindow(PackageFormListener listener, List<Node> locations){
 		super("enter package details");
+		this.listener = listener;
 		setLayout(new BorderLayout());
 
 		// add fields
@@ -59,11 +67,10 @@ public class PackageFormWindow extends AbstractFormWindow {
 
 		// event handling
 		OK.addActionListener((ActionEvent e) -> {
-			if (!isFormComplete(fields.values())){
+			if (!isFormComplete(fields)){
 				completeFormPrompt();
 				return;
 			}
-			// assumes form has been filled
 			// check digit fields
 			String weightStr = (String)fields.get("weight");
 			String volStr = (String)fields.get("volume");
@@ -73,12 +80,13 @@ public class PackageFormWindow extends AbstractFormWindow {
 			}
 
 			Day day = (Day)fields.get("day");
-			Node from = (Node)fields.get("from");
-			double weight = Double.parseDouble(weightStr);
-			double volume = Double.parseDouble(volStr);
+			String from = (String)fields.get("from").toString();
+			String to = (String) fields.get("to").toString();
+			int weight = Integer.parseInt(weightStr);
+			int volume = Integer.parseInt(volStr);
 			Priority priority = (Priority) fields.get("priority");
 
-			listener.onPackageFormSubmitted(day, from, null, weight, volume, priority);
+			listener.onPackageFormSubmitted(day, from, to, weight, volume, priority);
 			UIUtils.closeWindow(this);
 		});
 
@@ -92,11 +100,50 @@ public class PackageFormWindow extends AbstractFormWindow {
 		setVisible(true);
 	}
 
+	@Override
+	protected void makeTextField(String name, Map<String, Object> fields, Container cont) {
+		super.makeTextField(name, fields, cont);
+		// get the text field that was just added by the super method
+		JTextField textField = (JTextField) cont.getComponent(cont.getComponentCount());
+		textField.getDocument().addDocumentListener(new DocumentListener(){
+                @Override
+                public void insertUpdate(DocumentEvent e) {
+					fields.put(name, textField.getText());
+					// listen if all fields are complete
+					if (isFormComplete(fields)) {
+						// TODO: reuse this code:
+						
+                        // check digit fields
+                        String weightStr = (String)fields.get("weight");
+                        String volStr = (String)fields.get("volume");
+                        if (!UIUtils.isDouble(weightStr, volStr)){
+                                numberFieldsPrompt("weight and volume should only contain digits");
+                                return;
+                        }
+
+                        Day day = (Day)fields.get("day");
+                        String from = (String)fields.get("from").toString();
+                        String to = (String) fields.get("to").toString();
+                        int weight = Integer.parseInt(weightStr);
+                        int volume = Integer.parseInt(volStr);
+                        Priority priority = (Priority) fields.get("priority");
+
+						listener.onCompletedFormUpdate(day, from, to, weight, volume, priority);
+					}
+                }
+				@Override public void changedUpdate(DocumentEvent e) { }
+                @Override public void removeUpdate(DocumentEvent e) { }
+		});
+	}
+	
 	public static void main(String args[]){
 		new PackageFormWindow(new PackageFormListener(){
 			@Override
-			public void onPackageFormSubmitted(Day day, Node from, Node to, double weight, double volume, Priority priority){
+			public void onPackageFormSubmitted(Day day, String from, String to, int weight, int volume, Priority priority){
 				System.out.println("submitted: " + day + ", " + from + "... etc");
+			}
+			@Override public void onCompletedFormUpdate(Day day, String from, String to, int weight, int volume, Priority priority){
+				System.out.println("updated: " + day + ", " + from + "... etc");
 			}
 
 			@Override
@@ -105,5 +152,4 @@ public class PackageFormWindow extends AbstractFormWindow {
 			}
 		}, Arrays.asList(new Node[]{null, null}));
 	}
-
 }

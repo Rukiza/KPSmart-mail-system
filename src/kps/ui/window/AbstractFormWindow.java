@@ -40,8 +40,8 @@ public class AbstractFormWindow extends JFrame {
 	 * @param fields
 	 * @return whether the form is complete (all fields are filled)
 	 */
-	protected boolean isFormComplete(Collection<Object> fields) {
-		for (Object o : fields){
+	protected boolean isFormComplete(Map<String, Object> fields) {
+		for (Object o : fields.values()){
 			if (o == null)
 				return false;
 		}

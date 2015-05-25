@@ -68,7 +68,7 @@ public class RouteFormWindow extends AbstractFormWindow {
 
 		// event handling
 		OK.addActionListener((ActionEvent e) -> {
-			if (!isFormComplete(fields.values())){
+			if (!isFormComplete(fields)){
 				completeFormPrompt();
 				return;
 			}

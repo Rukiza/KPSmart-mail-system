@@ -17,7 +17,10 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
 import kps.KPSmartSystem;
+import kps.data.DijkstraSearch;
+import kps.data.Mail;
 import kps.data.Node;
+import kps.data.wrappers.BasicRoute;
 import kps.data.wrappers.EventLog;
 import kps.enums.Day;
 import kps.enums.Priority;
@@ -97,8 +100,14 @@ public class KPSWindow extends JFrame {
 		// side bar events
 		addPackage.addActionListener((ActionEvent e) -> {
 			new PackageFormWindow(new PackageFormListener(){
-				public void onPackageFormSubmitted(Day day, Node from, Node to, double price, double volume, Priority priority){
+				@Override public void onPackageFormSubmitted(Day day, String from, String to, int weight, int volume, Priority priority){
 					// package form submitted
+				}
+				@Override public void onCompletedFormUpdate(Day day, String from, String to, int weight, int volume, Priority priority){
+					DijkstraSearch search = new DijkstraSearch(system.getRouteGraph());
+					if (search.isValidMail(new Mail(new BasicRoute(from, to), day, weight, volume, priority))) {
+						// update panel
+					}
 				}
 				public void onCancel(){
 					// cancelled
