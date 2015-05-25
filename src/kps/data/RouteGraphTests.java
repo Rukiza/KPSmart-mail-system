@@ -183,14 +183,14 @@ public class RouteGraphTests {
 		DijkstraSearch d = new DijkstraSearch(g);
 
 
-		assertTrue(d.isValidMail(mail));
-		assertTrue(d.isValidMail(mail1));
-		assertFalse(d.isValidMail(mail2));
-		assertFalse(d.isValidMail(mail3));
+		assertTrue(d.isValidMailDelivery(mail));
+		assertTrue(d.isValidMailDelivery(mail1));
+		assertFalse(d.isValidMailDelivery(mail2));
+		assertFalse(d.isValidMailDelivery(mail3));
 
-		assertFalse(d.isValidMail(mail4));
-		assertFalse(d.isValidMail(mail5));
-		assertFalse(d.isValidMail(mail6));
-		assertFalse(d.isValidMail(mail7));
+		assertFalse(d.isValidMailDelivery(mail4));
+		assertFalse(d.isValidMailDelivery(mail5));
+		assertFalse(d.isValidMailDelivery(mail6));
+		assertFalse(d.isValidMailDelivery(mail7));
 	}
 }

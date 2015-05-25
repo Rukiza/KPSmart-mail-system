@@ -2,6 +2,7 @@ package kps.ui.graph;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Shape;
@@ -23,6 +24,8 @@ public class DrawRoute {
 	private boolean selected;
 	private double nodeRadius = 40;
 
+	private Color routeSelectedColor;
+
 	private ArrayList<Route> routes;
 	private Set<Route> routeSet;
 
@@ -30,6 +33,7 @@ public class DrawRoute {
 	 * Represents a connection between nodes and holds the routes between them
 	 * */
 	public DrawRoute(Route r, DrawNode node1, DrawNode node2){
+		this.routeSelectedColor = new Color(254,0,0);
 		this.routeSet = new HashSet<Route>();
 		this.routeTaken = false;
 		this.selected = false;
@@ -59,11 +63,31 @@ public class DrawRoute {
 		this.routes.add(r);
 		routesToSet();//terrible idea
 	}
+	private boolean upper = true;
 
 	public void draw(Graphics2D g){
-		if(selected)drawSelectedBox(g);
-		if(routeTaken)g.setColor(Color.RED);
-		else g.setColor(Color.WHITE);
+		if(routeTaken){
+			g.setColor(routeSelectedColor);
+			int change = 5;
+			int limit = 254;
+
+
+
+
+			if(routeSelectedColor.getRed() >= 254 && upper){
+				upper = false;
+			}
+			if(routeSelectedColor.getRed() <= 100 && !upper){
+				upper = true;
+			}
+
+			if(upper)change = 3;
+			else change = -3;
+
+			routeSelectedColor = new Color(routeSelectedColor.getRed()+change,0,0);
+
+		}
+		else g.setColor(Color.BLACK);
 
 
 		boolean toNode2 = false;
@@ -85,7 +109,10 @@ public class DrawRoute {
 		double nodeSize = node1.getSize()/2;
 
 		g.setStroke(new BasicStroke(10));
-		if(selected)g.setColor(Color.red);
+		if(selected)g.setColor(Color.RED);
+
+
+
 		if(node1 !=null && node2 != null)g.drawLine((int)(node1.getX()+nodeSize),(int) (node1.getY()+nodeSize), (int)(node2.getX()+nodeSize), (int)(node2.getY()+nodeSize));
 
 		//check if there is a route going to both nodes
@@ -102,15 +129,21 @@ public class DrawRoute {
 		else{//node one is the destination
 
 		}
+		if(selected)drawSelectedBox(g);
 	}
 
 	public void drawSelectedBox(Graphics2D g){
-		g.setColor(Color.white);
-		g.fillRect(10,10,600,100);
-		g.setColor(Color.black);
+		g.setColor(Color.BLACK);
+		g.fillRect(20,20,600,100);
+		g.setColor(Color.WHITE);
+		g.fillRect(25,25,600-10,100-10);
+
+		g.setColor(Color.BLACK);
+		g.setFont(new Font(g.getFont().getFamily(), Font.BOLD, g.getFont().getSize()));
+
 		int y = 30;
 		for(Route r : routeSet){
-			g.drawString(r.toString(), 10, y);
+			g.drawString(r.toString(), 30, y+10);
 			y+=20;
 		}
 	}
