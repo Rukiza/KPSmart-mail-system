@@ -140,10 +140,10 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		            RenderingHints.KEY_ANTIALIASING,
 		            RenderingHints.VALUE_ANTIALIAS_ON);
 
-		g2.setColor(Color.BLACK);
+		g2.setColor(new Color(238,238,238));
 		g2.fillRect(0, 0, this.getWidth(), this.getHeight());
 
-		g2.setColor(Color.BLACK);
+
 		drawRoutes(g2);
 
 		for(DrawNode n : drawNodes)n.draw(g2);
@@ -228,7 +228,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		List<BusinessEvent> events = new ArrayList<BusinessEvent>();
 
 		try {
-			events = KPSParser.parseFile(Main.XML_FILE_PATH+"graph.xml");
+			events = KPSParser.parseFile(Main.XML_FILE_PATH+"new_dataset.xml");
 		} catch (ParserException e) {
 			e.printStackTrace();
 		}
@@ -250,15 +250,17 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		frame.setVisible(true);
 		support.setup();
 
-		BasicRoute route = new BasicRoute("Wellington", "Rome");
+		BasicRoute route = new BasicRoute("Rome", "Wellington");
 		Mail mail = new Mail(route, Day.FRIDAY, 100, 5, Priority.DOMESTIC_AIR);
 
 		support.setRoute(mail);
 		support.setRoutesTaken();
 	}
 
+
+
 	public void startThread(){
-		new WindowThread(40, frame).start();;
+		new WindowThread(20, frame).start();;
 	}
 
 	public class WindowThread extends Thread {
