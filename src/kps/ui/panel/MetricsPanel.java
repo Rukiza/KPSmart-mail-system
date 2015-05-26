@@ -28,7 +28,7 @@ public class MetricsPanel extends JPanel implements ActionListener{
 
     // field
     private Metrics metrics;
-    
+
     // components
     private GraphPanel graph;
     private ProfitPanel profit;
@@ -38,15 +38,15 @@ public class MetricsPanel extends JPanel implements ActionListener{
 
     public MetricsPanel(Metrics metrics){
         super();
-        setPreferredSize(new Dimension(918, 742));
+        setPreferredSize(new Dimension(910, 730));
         this.metrics = metrics;
         // setup components
-        graph = new GraphPanel(918, 371);//new GraphPanel(660, 290);
+        graph = new GraphPanel(910, 359);//new GraphPanel(660, 290);
         graph.setBorder(new TitledKPSBorder("Revenue and Expenditure"));
-        profit = new ProfitPanel(400, 153);//(260, 92);
+        profit = new ProfitPanel(392, 153);//(260, 92);
         SpringUtilities.makeCompactGrid(profit, 3, 2, 6, 6, 6, 6);
         profit.setBorder(new TitledKPSBorder("Income"));
-        events = new BusinessEventPanel(400, 218);//(260, 138);
+        events = new BusinessEventPanel(392, 218);//(260, 138);
         SpringUtilities.makeCompactGrid(events, 5, 2, 6, 6, 6, 6);
         events.setBorder(new TitledKPSBorder("Business Events"));
         routes = new CustomerRoutePanel(518, 371, this);//(400, 230, this);
@@ -394,15 +394,15 @@ public class MetricsPanel extends JPanel implements ActionListener{
         	}
         }
     }
-    
+
     // Layout components
-    
+
     private class TitledKPSBorder extends TitledBorder{
-    	
+
 		private static final long serialVersionUID = 1L;
-		
+
 		private final Font FONT = new Font(Font.DIALOG, Font.BOLD, 22);
-    	
+
     	public TitledKPSBorder(String title){
     		super(title);
     		setTitleFont(FONT);
@@ -410,34 +410,34 @@ public class MetricsPanel extends JPanel implements ActionListener{
     		setTitlePosition(TitledBorder.CENTER);
     	}
     }
-    
+
     private class KPSLabel extends JLabel{
-    	
+
 		private static final long serialVersionUID = 1L;
-		
+
 		private final Font FONT = new Font(Font.DIALOG, Font.BOLD, 20);
-    	
+
     	public KPSLabel(String label){
     		super(label);
     		setupKPSLabel();
     	}
-    	
+
     	public KPSLabel(){
     		super();
     		setupKPSLabel();
     	}
-    	
+
     	private void setupKPSLabel(){
     		setFont(FONT);
     	}
     }
-    
+
     private class KPSButton extends JButton{
-    	
+
 		private static final long serialVersionUID = 1L;
-		
+
 		private final Font FONT = new Font(Font.DIALOG, Font.BOLD, 20);
-    	
+
     	public KPSButton(String text){
     		super(text);
     		setFont(FONT);
