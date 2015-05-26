@@ -38,6 +38,7 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PiePlot;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.Dataset;
 import org.jfree.data.general.DefaultPieDataset;
 
@@ -180,7 +181,8 @@ public class DecisionSupportPanel extends JPanel {
 			case typeString:
 				updateTypeGraph(graphMap.get(typeString), (DefaultPieDataset)datasetMap.get(typeString));
 				break;
-
+			case transString:
+				updateTransportGraph(graphMap.get(transString), (DefaultCategoryDataset)datasetMap.get(transString));
 			default:
 				break;
 			}
@@ -201,7 +203,7 @@ public class DecisionSupportPanel extends JPanel {
 
 		}
 
-		private void updateTransportGraph(){
+		private void updateTransportGraph(JFreeChart chart, DefaultCategoryDataset dataset){
 
 		}
 
@@ -316,8 +318,14 @@ public class DecisionSupportPanel extends JPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
-
+					JPanel p = new ChartPanel(graphMap.get(e.getActionCommand()));
+					p.setBorder(new TitledBorder("Graph"));
+					p.setPreferredSize(DecisionSupportPanel.this.graphPanel.sizeg);
+					DecisionSupportPanel.this.graphPanel.remove(graphPanel);
+					DecisionSupportPanel.this.graphPanel.add(p);
+					graphPanel = p;
+					data.resetEventLogLocation();
+					updateGraph();
 				}
 			};
 		}
@@ -331,7 +339,7 @@ public class DecisionSupportPanel extends JPanel {
 	 */
 	private class GraphPanel extends JPanel {
 		private DataManager manager;
-		private Dimension sizeg = new Dimension(size.width - size.width/3, size.height
+		public Dimension sizeg = new Dimension(size.width - size.width/3, size.height
 				- size.height / 4 );
 
 		public GraphPanel(String title, DataManager eventLog) {
@@ -343,7 +351,11 @@ public class DecisionSupportPanel extends JPanel {
 
 
 		private JPanel setupGraph(DefaultPieDataset dataset) {
-			JFreeChart chart = ChartFactory.createPieChart("Temp", dataset,
+			Dataset temp = new DefaultCategoryDataset();
+			JFreeChart chart = ChartFactory.createBarChart("Transport", "Destination", "Change Frequency", (DefaultCategoryDataset)temp);
+			manager.setupGraphDisplay(transString, chart, null, temp);
+			
+			chart = ChartFactory.createPieChart("Amount of Events", dataset,
 					true, true, false);
 			PiePlot plot = (PiePlot) chart.getPlot();
 			plot.setLabelFont(new Font("SansSerif", Font.PLAIN, 12));
