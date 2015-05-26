@@ -1,41 +1,40 @@
 package kps.ui.panel;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
-import kps.Main;
 import kps.data.wrappers.EventLog;
 import kps.events.BusinessEvent;
 import kps.events.MailDeliveryEvent;
 import kps.events.PriceUpdateEvent;
 import kps.events.TransportCostUpdateEvent;
 import kps.events.TransportDiscontinuedEvent;
-import kps.parser.KPSParser;
-import kps.parser.ParserException;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.data.general.PieDataset;
 
 /**
  * @author Shane Brewer
@@ -48,8 +47,8 @@ public class DecisionSupportPanel extends JPanel {
 	private GraphPanel graphPanel;
 	private DisplayPanel displayPanel;
 	private SelectPanel selectPanel;
-	private Dimension size = new Dimension(600, 600);
-
+	private LoadBarPanel loadBarPanel;
+	private Dimension size = new Dimension(1050, 800);
 
 
 	/**
@@ -65,24 +64,34 @@ public class DecisionSupportPanel extends JPanel {
 		graphPanel = new GraphPanel("Temp", manager);
 		displayPanel = new DisplayPanel(manager);
 		selectPanel = new SelectPanel(manager);
+		loadBarPanel = new LoadBarPanel(data);
 		GridBagConstraints con = new GridBagConstraints();
 		con.fill = GridBagConstraints.NONE;
+		con.anchor = GridBagConstraints.NORTHWEST;
 		con.weightx = 0.5;
 		con.gridx = 0;
 		con.gridy = 0;
+		con.gridheight = 2;
 		this.add(graphPanel, con);
 		con.fill = GridBagConstraints.NONE;
+		con.anchor = GridBagConstraints.NORTHEAST;
 		con.weightx = 0.5;
 		con.gridx = 1;
 		con.gridy = 0;
 		this.add(displayPanel, con);
 		con.fill = GridBagConstraints.NONE;
-		con.anchor = GridBagConstraints.PAGE_END;
-		con.gridx = 0;
+		con.anchor = GridBagConstraints.SOUTHEAST;
+		con.weightx = 0.5;
+		con.gridx = 1;
 		con.gridy = 1;
-		con.gridwidth = 2;
 		this.add(selectPanel, con);
-
+		con.fill = GridBagConstraints.NONE;
+		con.anchor = GridBagConstraints.SOUTH;
+		con.weightx = 0.5;
+		con.gridx = 0;
+		con.gridy = 3;
+		con.gridwidth = 2;
+		this.add(loadBarPanel, con);
 	}
 
 
@@ -96,6 +105,9 @@ public class DecisionSupportPanel extends JPanel {
 		private BusinessEvent event;
 		private JFreeChart chart;
 		private JPanel graphPanel;
+		private DefaultPieDataset dataset;
+		// Thanks to david.
+		private final DecimalFormat FORMAT = new DecimalFormat("$###,###,###.##");
 
 		public DataManager(EventLog eventLog) {
 			data = eventLog;
@@ -132,15 +144,27 @@ public class DecisionSupportPanel extends JPanel {
 			textFields = temp;
 		}
 
-		public void setupGraphDisplay(JFreeChart chart, JPanel panel){
+		public void setupGraphDisplay(JFreeChart chart, JPanel panel, DefaultPieDataset dataset){
 			this.chart = chart;
 			graphPanel = panel;
+			this.dataset = dataset;
 		}
 
 		public void updateGraph(){
 			if (data.isEmpty())
 				return;
-
+			if (data == null) return;
+			List<BusinessEvent>	events = data.getListToCurrent();
+			dataset.clear();
+			for (BusinessEvent e : events){
+				if (dataset.getKeys().contains(e.getDestination())){
+					dataset.setValue(e.getDestination(), 1 + ( dataset.getValue(e.getDestination()).intValue()));
+				}
+				else {
+					dataset.setValue(e.getDestination(), 1);
+				}
+			}
+			graphPanel.paint(graphPanel.getGraphics());
 
 		}
 
@@ -173,9 +197,9 @@ public class DecisionSupportPanel extends JPanel {
 			textFields.get(2).setText("Desitination");
 			textFields.get(3).setText(event.getDestination());
 			textFields.get(4).setText("Volume Price");
-			textFields.get(5).setText("$" + event.getVolumePrice());
+			textFields.get(5).setText(FORMAT.format(event.getVolumePrice()/100));
 			textFields.get(6).setText("Gram Price");
-			textFields.get(7).setText("$" + event.getGramPrice());
+			textFields.get(7).setText(FORMAT.format(event.getGramPrice()/100));
 			textFields.get(8).setText("Priority");
 			textFields.get(9).setText("" + event.getPriority());
 		}
@@ -193,9 +217,9 @@ public class DecisionSupportPanel extends JPanel {
 			textFields.get(2).setText("Desitination");
 			textFields.get(3).setText(event.getDestination());
 			textFields.get(4).setText("Volume Price");
-			textFields.get(5).setText("$" + event.getVolumePrice());
+			textFields.get(5).setText(FORMAT.format(event.getVolumePrice()/100));
 			textFields.get(6).setText("Gram Price");
-			textFields.get(7).setText("$" + event.getGramPrice());
+			textFields.get(7).setText(FORMAT.format(event.getGramPrice()/100));
 			textFields.get(8).setText("Max Volume");
 			textFields.get(9).setText("" + event.getMaxVolume());
 			textFields.get(10).setText("Max Weight");
@@ -220,6 +244,8 @@ public class DecisionSupportPanel extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					event = data.getNextEvent();
 					updateDisplay();
+					updateGraph();
+					loadBarPanel.paint(loadBarPanel.getGraphics());
 				}
 			};
 		}
@@ -230,6 +256,19 @@ public class DecisionSupportPanel extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					event = data.getPrevEvent();
 					updateDisplay();
+					updateGraph();
+					loadBarPanel.paint(loadBarPanel.getGraphics());
+				}
+			};
+		}
+
+		public ActionListener getRadioListener(){
+			return new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+
 				}
 			};
 		}
@@ -243,28 +282,29 @@ public class DecisionSupportPanel extends JPanel {
 	 */
 	private class GraphPanel extends JPanel {
 		private DataManager manager;
-		private Dimension sizeg = new Dimension(size.width / 2, size.height
-				- size.height / 4);
+		private Dimension sizeg = new Dimension(size.width - size.width/3, size.height
+				- size.height / 4 );
 
 		public GraphPanel(String title, DataManager eventLog) {
 			manager = eventLog;
 			this.setPreferredSize(sizeg);
 			this.setSize(sizeg);
-			add(setupGraph(null));
-			this.setBorder(new TitledBorder("Graph"));
+			add(setupGraph(new DefaultPieDataset()));
+			manager.updateGraph();
 		}
 
 
-		private JPanel setupGraph(PieDataset dataset) {
+		private JPanel setupGraph(DefaultPieDataset dataset) {
 			JFreeChart chart = ChartFactory.createPieChart("Temp", dataset,
-					false, true, false);
+					true, true, false);
 			PiePlot plot = (PiePlot) chart.getPlot();
 			plot.setLabelFont(new Font("SansSerif", Font.PLAIN, 12));
 			plot.setNoDataMessage("No data available");
 			plot.setCircular(false);
 			plot.setLabelGap(0.02);
 			JPanel p = new ChartPanel(chart);
-			manager.setupGraphDisplay(chart, p);
+			p.setBorder(new TitledBorder("Graph"));
+			manager.setupGraphDisplay(chart, p, dataset);
 			p.setPreferredSize(sizeg);
 			return p;
 		}
@@ -278,8 +318,8 @@ public class DecisionSupportPanel extends JPanel {
 	 */
 	private class DisplayPanel extends JPanel {
 		private DataManager manager;
-		private Dimension sized = new Dimension(size.width / 2, size.height
-				- size.height / 4);
+		private Dimension sized = new Dimension(size.width / 3, size.height
+				- size.height / 4 - size.height/3);
 		private List<JTextField> textFields;
 
 		public DisplayPanel(DataManager eventLog) {
@@ -327,47 +367,117 @@ public class DecisionSupportPanel extends JPanel {
 
 
 	private class SelectPanel extends JPanel {
-		private DataManager data;
-		private Dimension sizes = new Dimension(size.width, size.height / 10);
+		private DataManager manager;
+		private Dimension sizeSelectPanel = new Dimension(size.width/3, size.height
+				- size.height / 4 - size.height/2+50);
 
 		public SelectPanel(DataManager eventLog) {
-			data = eventLog;
-			this.setPreferredSize(sizes);
-			this.setSize(sizes);
-			buttonSetup();
+			manager = eventLog;
+			this.setPreferredSize(sizeSelectPanel);
+			this.setSize(sizeSelectPanel);
+			JPanel buttonPanel = new JPanel();
+			buttonPanel.setBorder(new TitledBorder("Event Navigation"));
+			buttonPanel.setLayout(new GridBagLayout());
+			GridBagConstraints constraints = new GridBagConstraints();
+			buttonSetup(buttonPanel, constraints);
+			JPanel radioPanel = new JPanel();
+			radioPanel.setBorder(new TitledBorder("Event Filter"));
+			radioPanel.setLayout(new GridBagLayout());
+			radioSetup(radioPanel, constraints);
 			this.setBorder(new TitledBorder("Selection Menu"));
 		}
 
-		public void buttonSetup() {
-			this.setLayout(new GridBagLayout());
+		public void buttonSetup(JPanel panel, GridBagConstraints constraints) {
+			panel.setLayout(new GridBagLayout());
 			GridBagConstraints con = new GridBagConstraints();
 			JButton button = new JButton("Next");
 			con.fill = GridBagConstraints.HORIZONTAL;
 			con.gridx = 0;
 			con.gridy = 0;
-			button.addActionListener(data.getNextLisener());
-			this.add(button, con);
+			button.addActionListener(manager.getNextLisener());
+			panel.add(button, con);
 			button = new JButton("Prev");
 			con.fill = GridBagConstraints.HORIZONTAL;
 			con.gridx = 1;
+			button.addActionListener(manager.getPrevLisener());
+			panel.add(button, con);
+			constraints.fill = GridBagConstraints.HORIZONTAL;
+			constraints.anchor = GridBagConstraints.NORTHWEST;
+			constraints.gridx = 0;
+			constraints.gridy = 0;
+			this.add(panel, constraints);
+
+		}
+
+		public void radioSetup(JPanel panel, GridBagConstraints constraints){
+			JRadioButton destination = new JRadioButton("Events by Destination");
+		    destination.setActionCommand("Destination");
+		    destination.setSelected(true);
+
+		    JRadioButton mailEvents = new JRadioButton("Mail Events only");
+		    mailEvents.setActionCommand("Mail");
+
+		    JRadioButton transport = new JRadioButton("Transport Events only");
+		    transport.setActionCommand("Transport");
+
+		    JRadioButton discontinued = new JRadioButton("Transport Disconinted events only");
+		    discontinued.setActionCommand("Disconinted");
+
+		    JRadioButton priceUpdate = new JRadioButton("Price Update events only");
+		    priceUpdate.setActionCommand("Price");
+
+		    ButtonGroup group = new ButtonGroup();
+		    group.add(priceUpdate);
+		    group.add(destination);
+		    group.add(transport);
+		    group.add(mailEvents);
+		    group.add(discontinued);
+		    destination.addActionListener(manager.getRadioListener());
+		    priceUpdate.addActionListener(manager.getRadioListener());
+		    transport.addActionListener(manager.getRadioListener());
+		    mailEvents.addActionListener(manager.getRadioListener());
+		    discontinued.addActionListener(manager.getRadioListener());
+		    panel.setLayout(new GridBagLayout());
+		    GridBagConstraints con = new GridBagConstraints();
+			con.gridx = 0;
 			con.gridy = 0;
-			button.addActionListener(data.getPrevLisener());
-			this.add(button, con);
+			con.anchor= GridBagConstraints.WEST;
+		    panel.add(destination, con);
+			con.gridy = 1;
+		    panel.add(mailEvents, con);
+			con.gridy = 2;
+		    panel.add(transport, con);
+			con.gridy = 3;
+		    panel.add(discontinued, con);
+			con.gridy = 4;
+		    panel.add(priceUpdate, con);
+			con.gridy = 5;
+		    constraints.fill = GridBagConstraints.HORIZONTAL;
+			constraints.gridx = 0;
+			constraints.gridy = 1;
+			this.add(panel, constraints);
 		}
 	}
 
-	public static void main(String[] arg) {
-		JFrame frame = new JFrame();
-		frame.setSize(1200, 900);
-		DecisionSupportPanel support = null;
-		try {
-			support = new DecisionSupportPanel(new EventLog(
-					KPSParser.parseFile(Main.filename)));
-		} catch (ParserException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	private class LoadBarPanel extends JPanel{
+		private Dimension sizeb = new Dimension(size.width, size.height / 10);
+		private EventLog log;
+
+		public LoadBarPanel(EventLog log){
+			this.log = log;
+			this.setBorder(new TitledBorder("Loading Bar"));
+			this.setPreferredSize(sizeb);
+			this.setSize(sizeb);
+			//System.out.println((int)(sizeb.width * (log.getPosition()/(log.getSize()+0.0))));
 		}
-		frame.add(support, BorderLayout.CENTER);
-		frame.setVisible(true);
+
+		@Override
+		public void print(Graphics g) {
+			// TODO Auto-generated method stub
+			super.print(g);
+			g.setColor(Color.black);
+			g.fillRect(10, 10, (int)(sizeb.width * (log.getPosition()/(log.getSize()+0.0))), sizeb.height);
+		}
+
 	}
 }

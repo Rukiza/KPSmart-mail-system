@@ -116,6 +116,6 @@ public class EventLog {
 	}
 
 	public List<BusinessEvent> getListToCurrent(){
-		return eventLog.subList(0, iterationLocation);
+		return eventLog.subList(0, iterationLocation+1);
 	}
 }
