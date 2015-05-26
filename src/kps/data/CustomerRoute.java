@@ -58,7 +58,7 @@ public class CustomerRoute {
 	public String getDestination(){
 		return route.getDestination();
 	}
-	
+
 	public void addDeliveryPrice(double gramPrice, double volumePrice, Priority priority){
 		if(deliveryPrices.containsKey(priority)){
 			deliveryPrices.get(priority).updateDeliveryPrice(gramPrice, volumePrice);
@@ -100,5 +100,13 @@ public class CustomerRoute {
 	 */
 	public void updateMailDelivered(int weight, int volume){
 		mailDelivered.updateMailDelivered(weight, volume);
+	}
+
+	public String toString(){
+		String data = route.toString()+"\n";
+		for(Priority p : deliveryPrices.keySet()){
+			data += "  "+Priority.convertPriorityToString(p)+" ---> "+deliveryPrices.get(p).toString()+"\n";
+		}
+		return data;
 	}
 }

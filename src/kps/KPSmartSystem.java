@@ -316,7 +316,15 @@ public class KPSmartSystem {
 				metrics.addMailDeliveryEvent(mail.getRevenue(), mail.getExpenditure());
 			}
 			if(event instanceof PriceUpdateEvent){
+				PriceUpdateEvent price = (PriceUpdateEvent)event;
 				metrics.addPriceUpdateEvent();
+				BasicRoute route = new BasicRoute(price.getOrigin(), price.getDestination());
+				if(!customerRoutes.containsKey(route)){
+					customerRoutes.put(route, new CustomerRoute(route));
+				}
+				CustomerRoute cr = customerRoutes.get(route);
+				cr.addDeliveryPrice(price.getGramPrice(), price.getVolumePrice(), price.getPriority());
+				System.out.println();
 			}
 			if(event instanceof TransportCostUpdateEvent){
 				metrics.addTransportCostUpdateEvent();
