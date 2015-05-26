@@ -60,7 +60,7 @@ public class KPSmartSystem {
 	public RouteGraph loadGraph(){
 		List<BusinessEvent> events = new ArrayList<BusinessEvent>();
 		try {
-			events = KPSParser.parseFile(Main.XML_FILE_PATH+"graph.xml");
+			events = KPSParser.parseFile(Main.XML_FILE_PATH+"new_dataset.xml");
 		} catch (ParserException e) {
 			e.printStackTrace();
 		}

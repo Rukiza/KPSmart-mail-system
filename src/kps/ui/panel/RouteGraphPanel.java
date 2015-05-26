@@ -77,7 +77,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 	 * */
 	public void setUpDrawNodes(){
 		for(Node n : graph.getNodes()){
-			drawNodes.add(new DrawNode(n,(int)(Math.random()*1200), (int)(Math.random()*900)));
+			drawNodes.add(new DrawNode(n,(int)(Math.random()*600), (int)(Math.random()*500)));
 		}
 	}
 
@@ -123,6 +123,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		for(List<Node> list : path.keySet()){
 			this.nodePath = list;
 		}
+		setRoutesTaken();
 	}
 
 	/**
@@ -130,7 +131,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 	 * */
 	public void setRoutesTaken(){
 		for(DrawRoute r : drawRoutes)r.setTaken(false);
-		for(DrawNode n : drawNodes)n.setSelected(false);
+		for(DrawNode n : drawNodes)n.setRouteSelected(false);
 
 		for(DrawNode n : drawNodes){
 			for(int i = 0; i < nodePath.size(); i++){
@@ -193,31 +194,40 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		//set node or routes selected
+		if(setNodeSelected(e.getPoint()))return;
 		setRouteSelected(e.getPoint());
-		setNodeSelected(e.getPoint());
+
 	}
 
 	/**
 	 * Sets a route to be selected if point p is on it
 	 * */
-	public void setRouteSelected(Point p){
+	public boolean setRouteSelected(Point p){
+		boolean selected = false;
 		for(DrawRoute r : drawRoutes){
-			if(r.containsPoint(p.getX(),p.getY()))r.setSelected(true);
+			if(r.containsPoint(p.getX(),p.getY())){
+				r.setSelected(true);
+				selected = true;
+			}
 			else r.setSelected(false);
 		}
+		return selected;
 	}
 
 	/**
 	 * Sets a node to be selected if point p is on it
 	 * */
-	public void setNodeSelected(Point p){
+	public boolean setNodeSelected(Point p){
+		boolean selected = false;
 		for(DrawNode n : drawNodes){
 			if(n.containsPoint(p)){
 				n.setSelected(true);
+				selected = true;
 
 			}
 			else n.setSelected(false);
 		}
+		return selected;
 	}
 
 	@Override
