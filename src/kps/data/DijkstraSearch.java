@@ -37,9 +37,6 @@ public class DijkstraSearch  {
 		return !(getShortestPath(mail).isEmpty());
 	}
 
-
-
-
 	/**
 	 * Return the route and cost of the cheapest path as an entry in the map
 	 *
@@ -85,7 +82,7 @@ public class DijkstraSearch  {
 			Node dn = nodeQueue.poll();
 
 	            for (Route r : dn.getRouteOut()){
-	            	if(isFlight && !(r.getType().equals(TransportType.AIR)))continue;//should check if can fly
+	            	if(isFlight && !(r.getType().equals(TransportType.AIR)) && r.maxWeight() < mail.getWeight() && r.maxVolume() < mail.getVolume() )continue;//should check if can fly
 
 	            	Node d = null;
 	            	for(int i =0; i < dijkNodesList.size(); i++){

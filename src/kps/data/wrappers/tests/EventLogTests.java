@@ -12,7 +12,7 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 public class EventLogTests {
-	
+
 	private EventLog setup(){
 		EventLog log = null;
 		try {
@@ -22,18 +22,18 @@ public class EventLogTests {
 		}
 		return log;
 	}
-	
+
 	@Test
 	public void correctOrderingTest(){
 		EventLog eventLog = setup();
 		BusinessEvent oldEvent = eventLog.getCurrentEvent();
 		BusinessEvent newEvent = eventLog.getNextEvent();
-		if (oldEvent.getTimeLogged() >= newEvent.getTimeLogged()){
+		if (oldEvent.getTimeLogged() <= newEvent.getTimeLogged()){
 			return;
 		}
 		fail("Loged times not in disending order");
 	}
-	
+
 	@Test
 	public void addingInDesendingOrder1(){
 		EventLog log = new EventLog();
@@ -47,7 +47,7 @@ public class EventLogTests {
 		fail("Loged times not in disending order" +oldEvent.getTimeLogged()
 				+ " > " +newEvent.getTimeLogged());
 	}
-	
+
 	@Test
 	public void addingInDesendingOrder2(){
 		EventLog log = new EventLog();
@@ -64,7 +64,7 @@ public class EventLogTests {
 			}
 		}
 	}
-	
+
 	@Test
 	public void addingHigherDatedEvent(){
 		EventLog log = setup();
@@ -78,8 +78,8 @@ public class EventLogTests {
 					+ " <= "+ newEvent.getTimeLogged());
 		}
 	}
-	
-	
+
+
 	@Test
 	public void loopingRoundEventLog1(){
 		EventLog log = new EventLog();

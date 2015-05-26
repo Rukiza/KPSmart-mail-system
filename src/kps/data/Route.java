@@ -66,14 +66,22 @@ public class Route {
 	public String getDest(){return transport.getDestination();}
 	public TransportType getType(){return transport.getTransportType();}
 	public double getCost(){return cost;}//TODO change to getCost(double volume, double weight)
-	
+
 	/**
 	 * Calculates The cost
 	 * */
 	public double calculateCost(double volume, double weight){
-		if(volume > transport.getMaxVolume())return -1;
-		if(weight > transport.getMaxWeight())return -1;
+		if(volume > transport.getMaxVolume())return Double.POSITIVE_INFINITY;
+		if(weight > transport.getMaxWeight())return Double.POSITIVE_INFINITY;
 
 		return (volume * transport.getVolumePrice()) + (weight * transport.getGramPrice());
+	}
+
+	public double maxWeight(){
+		return transport.getMaxWeight();
+	}
+
+	public double maxVolume(){
+		return transport.getMaxVolume();
 	}
 }
