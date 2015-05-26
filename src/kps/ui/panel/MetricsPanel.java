@@ -2,14 +2,15 @@ package kps.ui.panel;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
-import java.util.List;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -25,10 +26,9 @@ public class MetricsPanel extends JPanel implements ActionListener{
 
     private static final long serialVersionUID = 1L;
 
-    // fields
-    //private final int WIDTH = 660;
-    //private final int HEIGHT = 520;
-
+    // field
+    private Metrics metrics;
+    
     // components
     private GraphPanel graph;
     private ProfitPanel profit;
@@ -36,23 +36,25 @@ public class MetricsPanel extends JPanel implements ActionListener{
     private CustomerRoutePanel routes;
     private boolean initialised = false;
 
-    public MetricsPanel(){
+    public MetricsPanel(Metrics metrics){
         super();
-        setPreferredSize(new Dimension(660, 520));
+        setPreferredSize(new Dimension(918, 742));
+        this.metrics = metrics;
         // setup components
-        graph = new GraphPanel(660, 290);
-        graph.setBorder(new TitledBorder("Revenue and Expenditure"));
-        profit = new ProfitPanel(260, 92);
+        graph = new GraphPanel(918, 371);//new GraphPanel(660, 290);
+        graph.setBorder(new TitledKPSBorder("Revenue and Expenditure"));
+        profit = new ProfitPanel(400, 153);//(260, 92);
         SpringUtilities.makeCompactGrid(profit, 3, 2, 6, 6, 6, 6);
-        profit.setBorder(new TitledBorder("Income"));
-        events = new BusinessEventPanel(260, 138);
+        profit.setBorder(new TitledKPSBorder("Income"));
+        events = new BusinessEventPanel(400, 218);//(260, 138);
         SpringUtilities.makeCompactGrid(events, 5, 2, 6, 6, 6, 6);
-        events.setBorder(new TitledBorder("Business Events"));
-        routes = new CustomerRoutePanel(400, 230, this);
-        routes.setBorder(new TitledBorder("Customer Routes"));
+        events.setBorder(new TitledKPSBorder("Business Events"));
+        routes = new CustomerRoutePanel(518, 371, this);//(400, 230, this);
+        routes.setBorder(new TitledKPSBorder("Customer Routes"));
         SpringUtilities.makeCompactGrid(events, 2, 2, 6, 6, 6, 6);
         layoutComponents();
         initialised = true;
+        repaint();
     }
 
     private void layoutComponents(){
@@ -88,7 +90,7 @@ public class MetricsPanel extends JPanel implements ActionListener{
         add(routes, constraints);
     }
 
-    public void repaintMetrics(Metrics metrics){
+    /*public void repaintMetrics(Metrics metrics){
     	// update graph panel
 
     	// update profit panel
@@ -102,12 +104,19 @@ public class MetricsPanel extends JPanel implements ActionListener{
     	events.setBusinessEventMetrics(mail, price, cost, discontinued, total);
     	// update customer route panel
     	repaint();
-    }
+    }*/
 
     public void repaint(){
     	if(initialised){
     		graph.repaint();
+    		profit.setProfitMetrics(metrics.getTotalRevenue(), metrics.getTotalExpenditure());
     		profit.repaint();
+    		int mail = metrics.getTotalMailDeliveryEvents();
+        	int price = metrics.getTotalPriceUpdateEvents();
+        	int cost = metrics.getTotalTransportCostUpdateEvents();
+        	int discontinued = metrics.getTotalTransportDiscontinuedEvents();
+        	int total = metrics.getTotalBusinessEvents();
+        	events.setBusinessEventMetrics(mail, price, cost, discontinued, total);
     		events.repaint();
     		routes.repaint();
     	}
@@ -127,27 +136,9 @@ public class MetricsPanel extends JPanel implements ActionListener{
     	if(event.getSource() instanceof JButton){
     		String button = ((JButton)event.getSource()).getText();
     		if(button.equals("Generate Metrics")){
-    			// TEMPORARY
-    			metrics.addMailDeliveryEvent(67, 40);
-    			repaintMetrics(metrics);
+
     		}
     	}
-    }
-
-    private static Metrics metrics;
-
-    public static void main(String[] args){
-    	JFrame frame = new JFrame();
-    	MetricsPanel mp = new MetricsPanel();
-    	frame.add(mp);
-
-    	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    	frame.pack();
-    	frame.setVisible(true);
-
-    	metrics = new Metrics();
-    	mp.update(metrics);
-
     }
 
     private abstract class MetricComponent extends JPanel{
@@ -175,7 +166,6 @@ public class MetricsPanel extends JPanel implements ActionListener{
         public int getHeight(){
             return height;
         }
-
     }
 
     private class GraphPanel extends MetricComponent{
@@ -231,17 +221,17 @@ public class MetricsPanel extends JPanel implements ActionListener{
         private static final long serialVersionUID = 1L;
 
         private final String[] TYPES = {"Total Revenue", "Total Expenditure", "Total Profit"};
-        private JLabel revenue = new JLabel();
-        private JLabel expenditure = new JLabel();
-        private JLabel profit = new JLabel();
-        private final JLabel[] LABELS = {revenue, expenditure, profit};
+        private KPSLabel revenue = new KPSLabel();
+        private KPSLabel expenditure = new KPSLabel();
+        private KPSLabel profit = new KPSLabel();
+        private final KPSLabel[] LABELS = {revenue, expenditure, profit};
         private final DecimalFormat FORMAT = new DecimalFormat("$###,###,###.##");
 
         public ProfitPanel(int width, int height){
             super(width, height);
             setLayout(new SpringLayout());
             for(int i = 0; i < LABELS.length; i++){
-                JLabel label = new JLabel(TYPES[i]+": ");
+                KPSLabel label = new KPSLabel(TYPES[i]+": ");
                 label.setLabelFor(LABELS[i]);
                 add(label);
                 add(LABELS[i]);
@@ -260,18 +250,18 @@ public class MetricsPanel extends JPanel implements ActionListener{
         private static final long serialVersionUID = 1L;
 
         private final String[] TYPES = {"Mail Delivery", "Price Update", "Transport Cost Update", "Transport Discontinued", "Total"};
-        private JLabel mail = new JLabel();
-        private JLabel price = new JLabel();
-        private JLabel cost = new JLabel();
-        private JLabel discontinued = new JLabel();
-        private JLabel total = new JLabel();
-        private final JLabel[] LABELS = {mail, price, cost, discontinued, total};
+        private KPSLabel mail = new KPSLabel();
+        private KPSLabel price = new KPSLabel();
+        private KPSLabel cost = new KPSLabel();
+        private KPSLabel discontinued = new KPSLabel();
+        private KPSLabel total = new KPSLabel();
+        private final KPSLabel[] LABELS = {mail, price, cost, discontinued, total};
 
         public BusinessEventPanel(int width, int height){
             super(width, height);
             setLayout(new SpringLayout());
             for(int i = 0; i < LABELS.length; i++){
-                JLabel label = new JLabel(TYPES[i]+": ");
+                KPSLabel label = new KPSLabel(TYPES[i]+": ");
                 label.setLabelFor(LABELS[i]);
                 add(label);
                 add(LABELS[i]);
@@ -297,18 +287,20 @@ public class MetricsPanel extends JPanel implements ActionListener{
 
         public CustomerRoutePanel(int width, int height, ActionListener listener){
             super(width, height);
+            setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
             add(setupOptionsPanel());
-            JButton button = new JButton("Generate Metrics");
+            KPSButton button = new KPSButton("Generate Metrics");
+            button.setAlignmentX(JButton.CENTER_ALIGNMENT);
             button.addActionListener(listener);
             add(button);
             add(setupMetricsPanel());
         }
 
         public JPanel setupOptionsPanel(){
-        	JLabel originLabel = new JLabel("Origin: ");
+        	KPSLabel originLabel = new KPSLabel("Origin: ");
             origin = new JComboBox<String>();
             originLabel.setLabelFor(origin);
-            JLabel destLabel = new JLabel("Destination: ");
+            KPSLabel destLabel = new KPSLabel("Destination: ");
             destination = new JComboBox<String>();
             destLabel.setLabelFor(destination);
         	JPanel options = new JPanel();
@@ -322,10 +314,10 @@ public class MetricsPanel extends JPanel implements ActionListener{
         public JPanel setupMetricsPanel(){
         	TotalMailPanel mail = new TotalMailPanel((getWidth() / 2) - 11);
         	SpringUtilities.makeCompactGrid(mail, 3, 2, 6, 6, 6, 6);
-        	mail.setBorder(new TitledBorder("Total Amounts"));
+        	mail.setBorder(new TitledKPSBorder("Total Amounts"));
         	AverageTimesPanel times = new AverageTimesPanel((getWidth() / 2) - 11);
         	SpringUtilities.makeCompactGrid(times, 2, 2, 6, 6, 6, 6);
-        	times.setBorder(new TitledBorder("AverageTimes"));
+        	times.setBorder(new TitledKPSBorder("AverageTimes"));
 
         	JPanel metrics = new JPanel();
         	metrics.add(mail);
@@ -339,19 +331,19 @@ public class MetricsPanel extends JPanel implements ActionListener{
 
 			// fields
 			private final String[] TYPES = {"Weight", "Volume", "Amount"};
-        	private JLabel weight = new JLabel();
-        	private JLabel volume = new JLabel();
-        	private JLabel amount = new JLabel();
-        	private final JLabel[] LABELS = {weight, volume, amount};
+        	private KPSLabel weight = new KPSLabel();
+        	private KPSLabel volume = new KPSLabel();
+        	private KPSLabel amount = new KPSLabel();
+        	private final KPSLabel[] LABELS = {weight, volume, amount};
 
 
         	public TotalMailPanel(int width){
         		super();
-        		setPreferredSize(new Dimension(width, 126));
+        		setPreferredSize(new Dimension(width, 254));
 
         		setLayout(new SpringLayout());
         		for(int i = 0; i < TYPES.length; i++){
-        			JLabel label = new JLabel(TYPES[i]+": ");
+        			KPSLabel label = new KPSLabel(TYPES[i]+": ");
         			label.setLabelFor(LABELS[i]);
         			add(label);
         			add(LABELS[i]);
@@ -376,17 +368,17 @@ public class MetricsPanel extends JPanel implements ActionListener{
 
         	// fields
         	private final String[] TYPES = {"Air", "Std"};
-        	private JLabel airTime = new JLabel();
-        	private JLabel standardTime = new JLabel();
-        	private final JLabel[] LABELS = {airTime, standardTime};
+        	private KPSLabel airTime = new KPSLabel();
+        	private KPSLabel standardTime = new KPSLabel();
+        	private final KPSLabel[] LABELS = {airTime, standardTime};
 
         	public AverageTimesPanel(int width){
         		super();
-        		setPreferredSize(new Dimension(width, 126));
+        		setPreferredSize(new Dimension(width, 254));
 
         		setLayout(new SpringLayout());
         		for(int i = 0; i < TYPES.length; i++){
-        			JLabel label = new JLabel(TYPES[i]+": ");
+        			KPSLabel label = new KPSLabel(TYPES[i]+": ");
         			label.setLabelFor(LABELS[i]);
         			add(label);
         			add(LABELS[i]);
@@ -401,5 +393,54 @@ public class MetricsPanel extends JPanel implements ActionListener{
         		this.standardTime.setText(standardTime+" hours");
         	}
         }
+    }
+    
+    // Layout components
+    
+    private class TitledKPSBorder extends TitledBorder{
+    	
+		private static final long serialVersionUID = 1L;
+		
+		private final Font FONT = new Font(Font.DIALOG, Font.BOLD, 22);
+    	
+    	public TitledKPSBorder(String title){
+    		super(title);
+    		setTitleFont(FONT);
+    		setTitleJustification(TitledBorder.CENTER);
+    		setTitlePosition(TitledBorder.CENTER);
+    	}
+    }
+    
+    private class KPSLabel extends JLabel{
+    	
+		private static final long serialVersionUID = 1L;
+		
+		private final Font FONT = new Font(Font.DIALOG, Font.BOLD, 20);
+    	
+    	public KPSLabel(String label){
+    		super(label);
+    		setupKPSLabel();
+    	}
+    	
+    	public KPSLabel(){
+    		super();
+    		setupKPSLabel();
+    	}
+    	
+    	private void setupKPSLabel(){
+    		setFont(FONT);
+    	}
+    }
+    
+    private class KPSButton extends JButton{
+    	
+		private static final long serialVersionUID = 1L;
+		
+		private final Font FONT = new Font(Font.DIALOG, Font.BOLD, 20);
+    	
+    	public KPSButton(String text){
+    		super(text);
+    		setFont(FONT);
+    	}
     }
 }

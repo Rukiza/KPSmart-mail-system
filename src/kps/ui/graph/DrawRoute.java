@@ -103,20 +103,21 @@ public class DrawRoute {
 		double node2Y = node2.getY();
 
 
-		double nodeSize = node1.getSize()/2;
+		double nodeSize1 = node1.getSize()/2;
+		double nodeSize2 = node2.getSize()/2;
 
 		g.setStroke(new BasicStroke(5));
 		if(selected)g.setColor(Color.RED);
 
 
 
-		if(node1 !=null && node2 != null)g.drawLine((int)(node1.getX()+nodeSize),(int) (node1.getY()+nodeSize), (int)(node2.getX()+nodeSize), (int)(node2.getY()+nodeSize));
+		if(node1 !=null && node2 != null)g.drawLine((int)(node1.getX()+nodeSize1),(int) (node1.getY()+nodeSize1), (int)(node2.getX()+nodeSize2), (int)(node2.getY()+nodeSize2));
 
 		//check if there is a route going to both nodes
 		if(toNode1){
-			List<Point> points =  CircleLine.getCircleLineIntersectionPoint(new Point((int)(node2X+nodeSize),(int) (node2Y+nodeSize)),
-																			new Point((int)(node1X+nodeSize),(int) (node1Y+nodeSize)),
-																			new Point((int)(node1X+nodeSize),(int) (node1Y+nodeSize)),nodeSize);
+			List<Point> points =  CircleLine.getCircleLineIntersectionPoint(new Point((int)(node2X+nodeSize2),(int) (node2Y+nodeSize2)),
+																			new Point((int)(node1X+nodeSize1),(int) (node1Y+nodeSize1)),
+																			new Point((int)(node1X+nodeSize1),(int) (node1Y+nodeSize1)),nodeSize1);
 
 
 			g.setColor(Color.BLACK);
@@ -125,9 +126,9 @@ public class DrawRoute {
 			g.fillOval(points.get(0).x-10,points.get(0).y-10, 20, 20);
 		}
 		if(toNode2){//node 2 is the destination
-			List<Point> points =  CircleLine.getCircleLineIntersectionPoint(new Point((int)(node1X+nodeSize),(int) (node1Y+nodeSize)),
-																			new Point((int)(node2X+nodeSize),(int) (node2Y+nodeSize)),
-																			new Point((int)(node2X+nodeSize), (int)(node2Y+nodeSize)),nodeSize);
+			List<Point> points =  CircleLine.getCircleLineIntersectionPoint(new Point((int)(node1X+nodeSize1),(int) (node1Y+nodeSize1)),
+																			new Point((int)(node2X+nodeSize2),(int) (node2Y+nodeSize2)),
+																			new Point((int)(node2X+nodeSize2), (int)(node2Y+nodeSize2)),nodeSize2);
 
 			g.setColor(Color.BLACK);
 			g.drawOval(points.get(0).x-10,points.get(0).y-10, 20, 20);

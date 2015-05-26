@@ -77,7 +77,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 	 * */
 	public void setUpDrawNodes(){
 		for(Node n : graph.getNodes()){
-			drawNodes.add(new DrawNode(n,(int)(Math.random()*1200), (int)(Math.random()*900)));
+			drawNodes.add(new DrawNode(n,(int)(Math.random()*600), (int)(Math.random()*500)));
 		}
 	}
 
@@ -123,6 +123,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		for(List<Node> list : path.keySet()){
 			this.nodePath = list;
 		}
+		setRoutesTaken();
 	}
 
 	/**
@@ -130,7 +131,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 	 * */
 	public void setRoutesTaken(){
 		for(DrawRoute r : drawRoutes)r.setTaken(false);
-		for(DrawNode n : drawNodes)n.setSelected(false);
+		for(DrawNode n : drawNodes)n.setRouteSelected(false);
 
 		for(DrawNode n : drawNodes){
 			for(int i = 0; i < nodePath.size(); i++){
@@ -193,40 +194,82 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		//set node or routes selected
+		if(setNodeSelected(e.getPoint()))return;
 		setRouteSelected(e.getPoint());
-		setNodeSelected(e.getPoint());
+
 	}
 
 	/**
 	 * Sets a route to be selected if point p is on it
 	 * */
-	public void setRouteSelected(Point p){
+	public boolean setRouteSelected(Point p){
+		boolean selected = false;
 		for(DrawRoute r : drawRoutes){
-			if(r.containsPoint(p.getX(),p.getY()))r.setSelected(true);
+			if(r.containsPoint(p.getX(),p.getY())){
+				r.setSelected(true);
+				selected = true;
+			}
 			else r.setSelected(false);
 		}
+		return selected;
 	}
 
 	/**
 	 * Sets a node to be selected if point p is on it
 	 * */
-	public void setNodeSelected(Point p){
+	public boolean setNodeSelected(Point p){
+		boolean selected = false;
 		for(DrawNode n : drawNodes){
 			if(n.containsPoint(p)){
 				n.setSelected(true);
+				selected = true;
 
 			}
 			else n.setSelected(false);
 		}
+		return selected;
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
+			setNodeSelected(e.getPoint());
 			DrawNode n = nodeOnPoint(e.getPoint());
 			if(n!=null){
 				n.setSelected(true);
 				n.setY(e.getY() - n.getSize()/2);
 				n.setX(e.getX() - n.getSize()/2);
+		}
+	}
+	
+	/**
+	 * Starts the thread to repaint the frame
+	 * */
+	public void startThread(){
+		new WindowThread(20, frame).start();;
+	}
+
+	public class WindowThread extends Thread {
+		private final int delay; // delay between refreshes
+		private final JFrame display;
+
+		public WindowThread(int delay, JFrame display) {
+			this.delay = delay;
+			this.display = display;
+		}
+
+		public void run() {
+			while(true) {
+				// Loop forever
+				try {
+					Thread.sleep(delay);
+					if(display != null) {
+						display.repaint();
+
+					}
+				} catch(InterruptedException e) {
+					// should never happen
+				}
+			}
 		}
 	}
 
@@ -264,37 +307,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 	}
 
 
-	/**
-	 * Starts the thread to repaint the frame
-	 * */
-	public void startThread(){
-		new WindowThread(20, frame).start();;
-	}
 
-	public class WindowThread extends Thread {
-		private final int delay; // delay between refreshes
-		private final JFrame display;
-
-		public WindowThread(int delay, JFrame display) {
-			this.delay = delay;
-			this.display = display;
-		}
-
-		public void run() {
-			while(true) {
-				// Loop forever
-				try {
-					Thread.sleep(delay);
-					if(display != null) {
-						display.repaint();
-
-					}
-				} catch(InterruptedException e) {
-					// should never happen
-				}
-			}
-		}
-	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {}

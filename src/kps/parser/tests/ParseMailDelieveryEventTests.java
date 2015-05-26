@@ -15,14 +15,14 @@ import org.junit.Test;
 
 /**
  * Tests to ensure that the parseMailDeliveryEvent in KPSParser is working correctly.
- * 
+ *
  * @author David
  *
  */
 public class ParseMailDelieveryEventTests {
 
 	// fields
-	
+
 	// data for xml tags
 	private long timeData = 0;
 	private Day dayData = Day.MONDAY;
@@ -31,6 +31,8 @@ public class ParseMailDelieveryEventTests {
 	private int weightData = 100;
 	private int volumeData = 5;
 	private Priority priorityData = Priority.INTERNATIONAL_AIR;
+	private double revenueData = 10;
+	private double expenditureData = 2;
 
 	// shortcuts for xml tags
 	private String mail = KPSParser.MAIL_DELIVERY_TAG;
@@ -41,17 +43,19 @@ public class ParseMailDelieveryEventTests {
 	private String weight = "<"+KPSParser.WEIGHT_TAG+"> "+weightData+" </"+KPSParser.WEIGHT_TAG+">";
 	private String volume = "<"+KPSParser.VOLUME_TAG+"> "+volumeData+" </"+KPSParser.VOLUME_TAG+">";
 	private String priority = "<"+KPSParser.PRIORITY_TAG+"> "+Priority.convertPriorityToString(priorityData)+" </"+KPSParser.PRIORITY_TAG+">";
+	private String revenue = "<"+KPSParser.REVENUE_TAG+"> "+revenueData+" </"+KPSParser.REVENUE_TAG+">";
+	private String expenditure = "<"+KPSParser.EXPENDITURE_TAG+"> "+expenditureData+" </"+KPSParser.EXPENDITURE_TAG+">";
 	private String incorrectTag = "<tag> incorrect </tag>";
-	
+
 	// objects for event construction
 	private BasicRoute route = new BasicRoute(fromData, toData);
-	private MailDeliveryEvent event = new MailDeliveryEvent(0, route, dayData, weightData, volumeData, priorityData);
-	
+	private MailDeliveryEvent event = new MailDeliveryEvent(0, route, dayData, weightData, volumeData, priorityData, revenueData, expenditureData);
+
 	/**
 	 * Test that a MailDeliveryEvent can be parsed successfully.
 	 */
 	@Test public void correctParseMailDeliveryEvent_1(){
-		String data = "<"+mail+"> "+time+" "+day+" "+to+" "+from+" "+weight+" "+volume+" "+priority+" </"+mail+">";
+		String data = "<"+mail+"> "+time+" "+day+" "+to+" "+from+" "+weight+" "+volume+" "+priority+" "+revenue+" "+expenditure+" </"+mail+">";
 		Scanner scan = new Scanner(data);
 		try{
 			MailDeliveryEvent test = KPSParser.parseMailDeliveryEvent(scan);
@@ -112,7 +116,7 @@ public class ParseMailDelieveryEventTests {
 		}catch(ParserException e){return;}
 		fail("Error: Should have caught a ParserException.");
 	}
-	
+
 	/**
 	 * Test that an error is thrown when there are an incorrect number of values for
 	 * a MailDeliveryEvent.
@@ -164,7 +168,7 @@ public class ParseMailDelieveryEventTests {
 		}catch(ParserException e){return;}
 		fail("Error: Should have caught a ParserException.");
 	}
-	
+
 	/**
 	 * Test that an error is thrown when there are xml tags which are not formatted
 	 * correctly.

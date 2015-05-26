@@ -12,13 +12,17 @@ public class MailDeliveryEvent extends BusinessEvent {
 	private int weight; // weight is measured in grams
 	private int volume; // volume is measured in cubic centimeters
 	private Priority priority;
+	private double revenue;
+	private double expenditure;
 
-	public MailDeliveryEvent(long timeLogged, BasicRoute route, Day day, int weight, int volume, Priority priority){
+	public MailDeliveryEvent(long timeLogged, BasicRoute route, Day day, int weight, int volume, Priority priority, double revenue, double expenditure){
 		super(timeLogged, route);
 		this.day = day;
 		this.weight = weight;
 		this.volume = volume;
 		this.priority = priority;
+		this.revenue = revenue;
+		this.expenditure = expenditure;
 	}
 
 	/**
@@ -60,6 +64,24 @@ public class MailDeliveryEvent extends BusinessEvent {
 	}
 
 	/**
+	 * Returns the revenue from the mail delivered.
+	 *
+	 * @return revenue
+	 */
+	public double getRevenue(){
+		return revenue;
+	}
+
+	/**
+	 * Returns the expenditure from the mail delivered.
+	 *
+	 * @return expenditure
+	 */
+	public double getExpenditure(){
+		return expenditure;
+	}
+
+	/**
 	 * Returns an XML representation of this event.
 	 */
 	public String toXML(){
@@ -71,6 +93,8 @@ public class MailDeliveryEvent extends BusinessEvent {
 		xml += "\t\t<"+KPSParser.WEIGHT_TAG+">"+weight+"</"+KPSParser.WEIGHT_TAG+">\n";
 		xml += "\t\t<"+KPSParser.VOLUME_TAG+">"+volume+"</"+KPSParser.VOLUME_TAG+">\n";
 		xml += "\t\t<"+KPSParser.PRIORITY_TAG+">"+Priority.convertPriorityToString(priority)+"</"+KPSParser.PRIORITY_TAG+">\n";
+		xml += "\t\t<"+KPSParser.REVENUE_TAG+">"+revenue+"</"+KPSParser.REVENUE_TAG+">\n";
+		xml += "\t\t<"+KPSParser.EXPENDITURE_TAG+">"+expenditure+"</"+KPSParser.EXPENDITURE_TAG+">\n";
 		xml += "\t</"+KPSParser.MAIL_DELIVERY_TAG+">\n";
 		return xml;
 	}
@@ -119,6 +143,14 @@ public class MailDeliveryEvent extends BusinessEvent {
 			}
 			// priority
 			if(obj.getPriority() != priority){
+				return false;
+			}
+			// revenue
+			if(obj.getRevenue() != revenue){
+				return false;
+			}
+			// expenditure
+			if(obj.getExpenditure() != expenditure){
 				return false;
 			}
 		}

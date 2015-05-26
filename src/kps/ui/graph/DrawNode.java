@@ -1,10 +1,14 @@
 package kps.ui.graph;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
+import java.awt.*;
+import java.awt.geom.*;
+import java.awt.font.*;
 
 import kps.data.Node;
 
@@ -24,12 +28,12 @@ public class DrawNode {
 	Map<DrawNode, Integer> connections;
 
 	public DrawNode(Node n, double x, double y){
+		this.size = 40;
 		this.upper = true;
 		this.routeSelectedColor = new Color(255,0,0);
 		this.connections = new HashMap<DrawNode,Integer>();
 		setSelected(false);
 		this.setNode(n);
-		setSize(80);
 		this.setX(x);
 		this.setY(y);
 	}
@@ -47,9 +51,7 @@ public class DrawNode {
 
 		//if selected draw outline red
 		if(isSelected()){
-
 			g.setColor(Color.RED);
-
 		}
 
 		g.fillOval((int)getX(), (int)getY(), (int)getSize(), (int)getSize());
@@ -77,7 +79,26 @@ public class DrawNode {
 
 		//draw the name of the node
 		g.setColor(Color.WHITE);
-		g.drawString(getNode().getName(), (int)getX()+20, (int)(getY()+getSize()/2));
+		g.setFont(new Font(g.getFont().getFamily(), Font.BOLD, g.getFont().getSize()));
+		
+		if(!selected)drawStringCentred(getNode().getName().substring(0, 3), g);
+		else drawStringCentred(getNode().getName(), g);
+	}
+	
+	public void drawStringCentred(String s, Graphics2D g){
+		FontRenderContext context = g.getFontRenderContext();
+		Font font =  g.getFont();
+		
+	    double width =  font.getStringBounds(s, context).getBounds().getWidth();
+	    double height =  font.getStringBounds(s, context).getBounds().getHeight();
+		
+	    Point cCentre = new Point((int)(this.x + (getSize()/2)),(int)( this.y + (getSize()/2)));
+	    
+	    Point sCentre = new Point((int)(width/2),(int)(height/2));
+	    	
+	    
+	    	
+	    g.drawString(s,(int)( cCentre.getX()-sCentre.getX()),(int)( cCentre.getY()+sCentre.getY()/2));
 	}
 
 	public void addConnection(DrawNode destNode){
@@ -120,6 +141,7 @@ public class DrawNode {
 
 
 	public double getSize() {
+		if(selected)return size*2;
 		return size;
 	}
 
@@ -145,20 +167,14 @@ public class DrawNode {
 
 
 	public void setY(double y) {
-		this.y = y;
-	}
+		this.y = y;}
 
 
-	public Node getNode() {
-		return node;
-	}
+	public Node getNode() {return node;}
 
-	public void setRouteSelected(boolean selected){
-		this.routeSelected = selected;
-	}
+	public void setRouteSelected(boolean selected){this.routeSelected = selected;}
 
 
-	public void setNode(Node node) {
-		this.node = node;
-	}
+	public void setNode(Node node) {this.node = node;}
+
 }

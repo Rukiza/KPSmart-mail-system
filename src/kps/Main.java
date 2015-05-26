@@ -15,7 +15,7 @@ import kps.ui.window.LogonBox;
 public class Main {
 
 	public static final String XML_FILE_PATH = "src"+File.separator+"kps"+File.separator+"xml"+File.separator;
-	public static final String filename = XML_FILE_PATH + "kps_data.xml";
+	public static final String filename = XML_FILE_PATH + "eventlog.xml";
 
 	public static void main(String[] args){
 		try{
