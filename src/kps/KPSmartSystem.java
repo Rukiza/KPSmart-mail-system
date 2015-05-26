@@ -188,7 +188,7 @@ public class KPSmartSystem {
 		metrics.addMailDeliveryEvent(revenue, expenditure);
 
 		long timeLogged = System.currentTimeMillis();
-		eventLog.addBusinessEvent(new MailDeliveryEvent(timeLogged, route, day, weight, volume, priority));
+		eventLog.addBusinessEvent(new MailDeliveryEvent(timeLogged, route, day, weight, volume, priority, revenue, expenditure));
 	}
 
 	/**

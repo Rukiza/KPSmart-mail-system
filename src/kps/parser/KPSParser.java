@@ -20,7 +20,7 @@ import kps.events.TransportCostUpdateEvent;
 import kps.events.TransportDiscontinuedEvent;
 
 public class KPSParser {
-	
+
 	// fields
 	public static final String FILE_TAG = "simulation";
 	public static final String SCHEMA = "xsi:noNamespaceSchemaLocation=\"postal.xsd\"";
@@ -38,35 +38,37 @@ public class KPSParser {
 	public static final String VOLUME_TAG = "volume";
 	public static final String VOLUME_COST_TAG = "volumecost";
 	public static final String MAX_VOLUME_TAG = "maxVolume";
+	public static final String REVENUE_TAG = "revenue";
+	public static final String EXPENDITURE_TAG = "expenditure";
 	public static final String TRANSPORT_TYPE_TAG = "type";
 	public static final String PRIORITY_TAG = "priority";
 	public static final String DAY_TAG = "day";
 	public static final String DURATION_TAG = "duration";
 	public static final String FREQUENCY_TAG = "frequency";
-		
-	
+
+
 	/**
 	 * Parses the file specified by the file name and returns the business
 	 * events that are contained within it.
-	 * 
+	 *
 	 * @param filename
 	 * 		-- the name of the file containing business event data
-	 * 
+	 *
 	 * @return a list of business events
-	 * 
+	 *
 	 * @throws ParserException
 	 * 		-- thrown if the file cannot be opened, an incorrect tag is
 	 * 		found or if a null value is attempted to be added to the event log.
 	 */
 	public static List<BusinessEvent> parseFile(String filename) throws ParserException{
 		List<BusinessEvent> eventLog = new ArrayList<BusinessEvent>();
-		
+
 		// load file into scanner
 		Scanner scan = null;
 		try{
 			scan = new Scanner(new File(filename));
 		}catch(IOException e){throw new ParserException("ParseFile: Cannot load file "+filename);}
-		
+
 		// scan all of the file into a string
 		String data = "";
 		while(scan.hasNext()){
@@ -75,11 +77,11 @@ public class KPSParser {
 		// ensure that there are gaps after > and before <
 		data = data.replaceAll(">", "> ");
 		data = data.replaceAll("<", " <");
-		
+
 		// scan string containing data
 		scan.close();
 		scan = new Scanner(data);
-		
+
 		gobble(scan, "<"+FILE_TAG);
 		gobble(scan, SCHEMA+">");
 		// parse data from string
@@ -111,7 +113,7 @@ public class KPSParser {
 				scan.close();
 				throw new ParserException("ParseFile: Incorrect tag found: "+scan.next());
 			}
-			
+
 			// check that event is not null before adding to event log
 			if(event != null){
 				eventLog.add(event);
@@ -125,15 +127,15 @@ public class KPSParser {
 		scan.close();
 		return eventLog;
 	}
-		
+
 	/**
 	 * Parses a Mail Delivery Event from the scanner.
-	 * 
+	 *
 	 * @param scan
 	 * 		-- scanner containing xml data
-	 * 
+	 *
 	 * @return new mail delivery event based on data
-	 * 
+	 *
 	 * @throws ParserException
 	 * 		-- thrown if tags are incorrect or lines do not
 	 * 		match the xml format
@@ -147,20 +149,22 @@ public class KPSParser {
 		int weight = parseInt(scan, WEIGHT_TAG);
 		int volume = parseInt(scan, VOLUME_TAG);
 		Priority priority = Priority.convertStringToPriority(parseString(scan, PRIORITY_TAG));
+		double revenue = parseDouble(scan, REVENUE_TAG);
+		double expenditure = parseDouble(scan, EXPENDITURE_TAG);
 		gobble(scan, "</"+MAIL_DELIVERY_TAG+">");
-		
+
 		// data has been successfully retrieved
-		return new MailDeliveryEvent(time, route, day, weight, volume, priority);
+		return new MailDeliveryEvent(time, route, day, weight, volume, priority, revenue, expenditure);
 	}
-	
+
 	/**
 	 * Parses a Price Update Event from the scanner.
-	 * 
+	 *
 	 * @param scan
 	 * 		-- scanner containing xml data
-	 * 
+	 *
 	 * @return new price update event based on data
-	 * 
+	 *
 	 * @throws ParserException
 	 * 		-- thrown if tags are incorrect or lines do not
 	 * 		match the xml format
@@ -173,19 +177,19 @@ public class KPSParser {
 		Priority priority = Priority.convertStringToPriority(parseString(scan, PRIORITY_TAG));
 		DeliveryPrice price = parseDeliveryPrice(scan);
 		gobble(scan, "</"+PRICE_UPDATE_TAG+">");
-		
+
 		// data has been successfully retrieved
 		return new PriceUpdateEvent(time, route, price, priority);
 	}
-	
+
 	/**
 	 * Parses a Transport Cost Update Event from the scanner.
-	 * 
+	 *
 	 * @param scan
 	 * 		-- scanner containing xml data
-	 * 
+	 *
 	 * @return new transport cost update event based on data
-	 * 
+	 *
 	 * @throws ParserException
 	 * 		-- thrown if tags are incorrect or lines do not
 	 * 		match the xml format
@@ -204,20 +208,20 @@ public class KPSParser {
 		int frequency = parseInt(scan, FREQUENCY_TAG);
 		Day day = Day.convertStringToDay(parseString(scan, DAY_TAG));
 		gobble(scan, "</"+TRANSPORT_COST_UPDATE_TAG+">");
-		
+
 		// data has been successfully retrieved
 		MailTransport transport = new MailTransport(duration, frequency, day);
 		return new TransportCostUpdateEvent(time, route, company, type, price, maxWeight, maxVolume, transport);
 	}
-	
+
 	/**
 	 * Parses a Transport Discontinued Event from the scanner.
-	 * 
+	 *
 	 * @param scan
 	 * 		-- scanner containing xml data
-	 * 
+	 *
 	 * @return new tranpsort discontinued event based on data
-	 * 
+	 *
 	 * @throws ParserException
 	 * 		-- thrown if tags are incorrect or lines do not
 	 * 		match the xml format
@@ -230,20 +234,20 @@ public class KPSParser {
 		BasicRoute route = parseBasicRoute(scan);
 		TransportType type = TransportType.convertStringToTransportType(parseString(scan, TRANSPORT_TYPE_TAG));
 		gobble(scan, "</"+TRANSPORT_DISCONTINUED_TAG+">");
-		
+
 		// data has been successfully retrieved
 		return new TransportDiscontinuedEvent(time, route, company, type);
 	}
-	
+
 	/**
 	 * Parses a basic route, consisting of an origin and destination,
 	 * from the scanner.
-	 * 
+	 *
 	 * @param scan
 	 * 		-- scanner containing xml data
-	 * 
+	 *
 	 * @return new basic route based on data
-	 * 
+	 *
 	 * @throws ParserException
 	 * 		-- thrown if tags are incorrect or lines do not match the xml format
 	 */
@@ -252,16 +256,16 @@ public class KPSParser {
 		String origin = parseString(scan, ORIGIN_TAG);
 		return new BasicRoute(origin, destination);
 	}
-	
+
 	/**
-	 * Parses a delivery price, consisting of a weight and volume 
+	 * Parses a delivery price, consisting of a weight and volume
 	 * price, from the scanner.
-	 * 
+	 *
 	 * @param scan
 	 * 		-- scanner containing xml data
-	 * 
+	 *
 	 * @return new delivery based on data
-	 * 
+	 *
 	 * @throws ParserException
 	 * 		-- thrown if tags are incorrect or lines do not match the xml format
 	 */
@@ -270,7 +274,7 @@ public class KPSParser {
 		double volumeCost = parseDouble(scan, VOLUME_COST_TAG);
 		return new DeliveryPrice(weightCost, volumeCost);
 	}
-	
+
 	/**
 	 * Parses a string value from the scanner using the specified
 	 * XML tags.
@@ -325,7 +329,7 @@ public class KPSParser {
 		// try catch statement to catch trying to parse incorrect type
 		try{
 			data = Integer.parseInt(next);
-		}catch(NumberFormatException e){throw new ParserException("ParserException: Expecting an integer, received "+next);} 
+		}catch(NumberFormatException e){throw new ParserException("ParserException: Expecting an integer, received "+next);}
 		gobble(scan, "</"+tag+">");
 		return data;
 	}
@@ -352,11 +356,11 @@ public class KPSParser {
 		// try catch statement to catch trying to parse an incorrect type
 		try{
 			data = Double.parseDouble(next);
-		}catch(NumberFormatException e){throw new ParserException("ParserException: Expecting a double, recieved "+next);} 
+		}catch(NumberFormatException e){throw new ParserException("ParserException: Expecting a double, recieved "+next);}
 		gobble(scan, "</"+tag+">");
 		return data;
 	}
-	
+
 	/**
 	 * Parses a long value from the scanner using the specified
 	 * XML tags.
@@ -379,21 +383,21 @@ public class KPSParser {
 		// try catch statement to catch trying to parse incorrect type
 		try{
 			data = Long.parseLong(next);
-		}catch(NumberFormatException e){throw new ParserException("ParserException: Expecting an integer, received "+next);} 
+		}catch(NumberFormatException e){throw new ParserException("ParserException: Expecting an integer, received "+next);}
 		gobble(scan, "</"+tag+">");
 		return data;
 	}
-	
+
 	/**
 	 * Attempts to gobble the expected tag from the file currently being
 	 * scanned. Throws a ParserException if the expected tag is not found
 	 * or if the end of the file has been reached prematurely.
-	 * 
+	 *
 	 * @param scan
 	 * 		-- scanner containing xml data
 	 * @param tag
 	 * 		-- the current tag expected to be gobbled
-	 * 
+	 *
 	 * @throws ParserException
 	 * 		-- thrown if the correct tag is not gobbled or the end of
 	 * 		the file has been reached prematurely
@@ -405,7 +409,7 @@ public class KPSParser {
 			try{
 				received = scan.next();
 			}catch(NoSuchElementException e){throw new ParserException("ParserException: End of file reached prematurely.");}
-			
+
 			// expected tag was not found
 			throw new ParserException("ParserException: Expecting "+tag+", received "+received);
 		}
