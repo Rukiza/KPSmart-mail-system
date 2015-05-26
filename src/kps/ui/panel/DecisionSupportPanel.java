@@ -13,7 +13,9 @@ import java.awt.event.KeyListener;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -24,6 +26,8 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
 import kps.data.wrappers.EventLog;
+import kps.enums.Day;
+import kps.enums.Priority;
 import kps.events.BusinessEvent;
 import kps.events.MailDeliveryEvent;
 import kps.events.PriceUpdateEvent;
@@ -34,6 +38,7 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PiePlot;
+import org.jfree.data.general.Dataset;
 import org.jfree.data.general.DefaultPieDataset;
 
 /**
@@ -49,6 +54,13 @@ public class DecisionSupportPanel extends JPanel {
 	private SelectPanel selectPanel;
 	private LoadBarPanel loadBarPanel;
 	private Dimension size = new Dimension(1050, 800);
+
+	private final String typeString = "Type";
+	private final String transString = "Transport";
+	private final String discString = "Discontinued";
+	private final String mailString = "Mail";
+	private final String pricesString = "Price";
+
 
 
 	/**
@@ -92,6 +104,8 @@ public class DecisionSupportPanel extends JPanel {
 		con.gridy = 3;
 		con.gridwidth = 2;
 		this.add(loadBarPanel, con);
+		manager.updateGraph();
+		manager.updateDisplay();
 	}
 
 
@@ -103,11 +117,14 @@ public class DecisionSupportPanel extends JPanel {
 		private EventLog data;
 		private List<JTextField> textFields;
 		private BusinessEvent event;
-		private JFreeChart chart;
 		private JPanel graphPanel;
-		private DefaultPieDataset dataset;
 		// Thanks to david.
 		private final DecimalFormat FORMAT = new DecimalFormat("$###,###,###.##");
+		private ButtonGroup group;
+		private Map<String, JFreeChart> graphMap = new HashMap<String, JFreeChart>();
+		private Map<String, Dataset> datasetMap = new HashMap<String, Dataset>();
+
+
 
 		public DataManager(EventLog eventLog) {
 			data = eventLog;
@@ -144,27 +161,59 @@ public class DecisionSupportPanel extends JPanel {
 			textFields = temp;
 		}
 
-		public void setupGraphDisplay(JFreeChart chart, JPanel panel, DefaultPieDataset dataset){
-			this.chart = chart;
+		public void setupGraphDisplay(String graphName, JFreeChart chart, JPanel panel, Dataset dataset){
 			graphPanel = panel;
-			this.dataset = dataset;
+			graphMap.put(graphName, chart);
+			datasetMap.put(graphName, dataset);
+		}
+
+		public void addButtonGroup(ButtonGroup group){
+			this.group = group;
 		}
 
 		public void updateGraph(){
 			if (data.isEmpty())
 				return;
 			if (data == null) return;
+
+			switch (group.getSelection().getActionCommand()) {
+			case typeString:
+				updateTypeGraph(graphMap.get(typeString), (DefaultPieDataset)datasetMap.get(typeString));
+				break;
+
+			default:
+				break;
+			}
+		}
+
+		private void updateTypeGraph(JFreeChart chart, DefaultPieDataset dataset){
 			List<BusinessEvent>	events = data.getListToCurrent();
 			dataset.clear();
 			for (BusinessEvent e : events){
-				if (dataset.getKeys().contains(e.getDestination())){
-					dataset.setValue(e.getDestination(), 1 + ( dataset.getValue(e.getDestination()).intValue()));
+				if (dataset.getKeys().contains(e.getType())){
+					dataset.setValue(e.getType(), 1 + ( dataset.getValue(e.getType()).intValue()));
 				}
 				else {
-					dataset.setValue(e.getDestination(), 1);
+					dataset.setValue(e.getType(), 1);
 				}
 			}
 			graphPanel.paint(graphPanel.getGraphics());
+
+		}
+
+		private void updateTransportGraph(){
+
+		}
+
+		private void updateDiscontinueGraph(){
+
+		}
+
+		private void updateMailGraph(){
+
+		}
+
+		private void updatePriceGraph(){
 
 		}
 
@@ -201,7 +250,7 @@ public class DecisionSupportPanel extends JPanel {
 			textFields.get(6).setText("Gram Price");
 			textFields.get(7).setText(FORMAT.format(event.getGramPrice()/100));
 			textFields.get(8).setText("Priority");
-			textFields.get(9).setText("" + event.getPriority());
+			textFields.get(9).setText(Priority.convertPriorityToString(event.getPriority()));
 		}
 
 		private void handleDiscountinuedUpdate(TransportDiscontinuedEvent event) {
@@ -235,7 +284,7 @@ public class DecisionSupportPanel extends JPanel {
 			textFields.get(6).setText("Weight");
 			textFields.get(7).setText(event.getWeight() + "");
 			textFields.get(8).setText("Day");
-			textFields.get(9).setText("" + event.getDay());
+			textFields.get(9).setText(Day.convertDayToString(event.getDay()));
 		}
 
 		public ActionListener getNextLisener() {
@@ -290,7 +339,6 @@ public class DecisionSupportPanel extends JPanel {
 			this.setPreferredSize(sizeg);
 			this.setSize(sizeg);
 			add(setupGraph(new DefaultPieDataset()));
-			manager.updateGraph();
 		}
 
 
@@ -304,7 +352,7 @@ public class DecisionSupportPanel extends JPanel {
 			plot.setLabelGap(0.02);
 			JPanel p = new ChartPanel(chart);
 			p.setBorder(new TitledBorder("Graph"));
-			manager.setupGraphDisplay(chart, p, dataset);
+			manager.setupGraphDisplay(typeString, chart, p, dataset);
 			p.setPreferredSize(sizeg);
 			return p;
 		}
@@ -338,7 +386,6 @@ public class DecisionSupportPanel extends JPanel {
 			for (int i = 0; i < 14; i++) {
 				textFields.add(makeTextField(i, com));
 			}
-			manager.updateDisplay();
 		}
 
 
@@ -410,39 +457,40 @@ public class DecisionSupportPanel extends JPanel {
 		}
 
 		public void radioSetup(JPanel panel, GridBagConstraints constraints){
-			JRadioButton destination = new JRadioButton("Events by Destination");
-		    destination.setActionCommand("Destination");
-		    destination.setSelected(true);
+			JRadioButton type = new JRadioButton("All Events by Type");
+		    type.setActionCommand(typeString);
+		    type.setSelected(true);
 
 		    JRadioButton mailEvents = new JRadioButton("Mail Events only");
-		    mailEvents.setActionCommand("Mail");
+		    mailEvents.setActionCommand(mailString);
 
 		    JRadioButton transport = new JRadioButton("Transport Events only");
-		    transport.setActionCommand("Transport");
+		    transport.setActionCommand(transString);
 
 		    JRadioButton discontinued = new JRadioButton("Transport Disconinted events only");
-		    discontinued.setActionCommand("Disconinted");
+		    discontinued.setActionCommand(discString);
 
 		    JRadioButton priceUpdate = new JRadioButton("Price Update events only");
-		    priceUpdate.setActionCommand("Price");
+		    priceUpdate.setActionCommand(pricesString);
 
 		    ButtonGroup group = new ButtonGroup();
 		    group.add(priceUpdate);
-		    group.add(destination);
+		    group.add(type);
 		    group.add(transport);
 		    group.add(mailEvents);
 		    group.add(discontinued);
-		    destination.addActionListener(manager.getRadioListener());
+		    type.addActionListener(manager.getRadioListener());
 		    priceUpdate.addActionListener(manager.getRadioListener());
 		    transport.addActionListener(manager.getRadioListener());
 		    mailEvents.addActionListener(manager.getRadioListener());
 		    discontinued.addActionListener(manager.getRadioListener());
 		    panel.setLayout(new GridBagLayout());
 		    GridBagConstraints con = new GridBagConstraints();
+		    manager.addButtonGroup(group);
 			con.gridx = 0;
 			con.gridy = 0;
 			con.anchor= GridBagConstraints.WEST;
-		    panel.add(destination, con);
+		    panel.add(type, con);
 			con.gridy = 1;
 		    panel.add(mailEvents, con);
 			con.gridy = 2;
