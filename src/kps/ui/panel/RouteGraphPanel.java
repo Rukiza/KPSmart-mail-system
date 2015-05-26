@@ -232,11 +232,44 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
+			setNodeSelected(e.getPoint());
 			DrawNode n = nodeOnPoint(e.getPoint());
 			if(n!=null){
 				n.setSelected(true);
 				n.setY(e.getY() - n.getSize()/2);
 				n.setX(e.getX() - n.getSize()/2);
+		}
+	}
+	
+	/**
+	 * Starts the thread to repaint the frame
+	 * */
+	public void startThread(){
+		new WindowThread(20, frame).start();;
+	}
+
+	public class WindowThread extends Thread {
+		private final int delay; // delay between refreshes
+		private final JFrame display;
+
+		public WindowThread(int delay, JFrame display) {
+			this.delay = delay;
+			this.display = display;
+		}
+
+		public void run() {
+			while(true) {
+				// Loop forever
+				try {
+					Thread.sleep(delay);
+					if(display != null) {
+						display.repaint();
+
+					}
+				} catch(InterruptedException e) {
+					// should never happen
+				}
+			}
 		}
 	}
 
@@ -274,37 +307,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 	}
 
 
-	/**
-	 * Starts the thread to repaint the frame
-	 * */
-	public void startThread(){
-		new WindowThread(20, frame).start();;
-	}
 
-	public class WindowThread extends Thread {
-		private final int delay; // delay between refreshes
-		private final JFrame display;
-
-		public WindowThread(int delay, JFrame display) {
-			this.delay = delay;
-			this.display = display;
-		}
-
-		public void run() {
-			while(true) {
-				// Loop forever
-				try {
-					Thread.sleep(delay);
-					if(display != null) {
-						display.repaint();
-
-					}
-				} catch(InterruptedException e) {
-					// should never happen
-				}
-			}
-		}
-	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {}
