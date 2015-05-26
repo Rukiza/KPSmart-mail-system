@@ -54,7 +54,7 @@ public class DecisionSupportPanel extends JPanel {
 	private DisplayPanel displayPanel;
 	private SelectPanel selectPanel;
 	private LoadBarPanel loadBarPanel;
-	private Dimension size = new Dimension(1050, 800);
+	private Dimension size = new Dimension(900, 790);
 
 	private final String typeString = "Type";
 	private final String transString = "Transport";
