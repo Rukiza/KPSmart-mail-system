@@ -14,6 +14,19 @@ public class EventLog {
 	}
 
 	public EventLog(List<BusinessEvent> eventLog){
+		eventLog.sort(new Comparator<BusinessEvent>() {
+
+			@Override
+			public int compare(BusinessEvent o1, BusinessEvent o2) {
+				if (o1.getTimeLogged() < o2.getTimeLogged()){
+					return 1;
+				}
+				else if (o1.getTimeLogged() == o2.getTimeLogged()){
+					return 0;
+				}
+				else return -1;
+			}
+		});
 		this.eventLog = eventLog;
 	}
 
