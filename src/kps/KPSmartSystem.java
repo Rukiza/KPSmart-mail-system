@@ -32,8 +32,8 @@ import kps.users.KPSUser;
 public class KPSmartSystem {
 
 	// fields
-	private double totalRevenue;
-	private double totalExpenditure;
+	//private double totalRevenue;
+	//private double totalExpenditure;
 	private EventLog eventLog;
 	private Map<BasicRoute, CustomerRoute> customerRoutes;
 	private RouteGraph routeGraph;
@@ -48,13 +48,13 @@ public class KPSmartSystem {
 	 * Constructs an empty instance of KPSmartSystem
 	 */
 	public KPSmartSystem(EventLog eventLog){
-		totalRevenue = 0;
-		totalExpenditure = 0;
 		this.eventLog = eventLog;
 		customerRoutes = new HashMap<BasicRoute, CustomerRoute>();
 		routeGraph = loadGraph();
 		users = new HashMap<String, KPSUser>();
 		currentUser = null;
+		metrics = new Metrics();
+		processBusinessEvents();
 	}
 
 	public RouteGraph loadGraph(){
@@ -83,14 +83,15 @@ public class KPSmartSystem {
 	 * 		-- list of business events
 	 */
 	public KPSmartSystem(List<BusinessEvent> log){
-		totalRevenue = 0;
-		totalExpenditure = 0;
+		//totalRevenue = 0;
+		//totalExpenditure = 0;
 		eventLog = new EventLog(log);
 		customerRoutes = new HashMap<BasicRoute, CustomerRoute>();
 		routeGraph = new RouteGraph();
 		users = new HashMap<String, KPSUser>();
 		currentUser = null;
-		processBusinessEvents(log);
+		metrics = new Metrics();
+		processBusinessEvents();
 	}
 
 	/**
@@ -100,7 +101,7 @@ public class KPSmartSystem {
 	 * 		-- total revenue
 	 */
 	public double getTotalRevenue(){
-		return totalRevenue;
+		return metrics.getTotalRevenue();
 	}
 
 	/**
@@ -110,7 +111,7 @@ public class KPSmartSystem {
 	 * 		-- total expenditure
 	 */
 	public double getTotalExpenditure(){
-		return totalExpenditure;
+		return metrics.getTotalExpenditure();
 	}
 
 	/**
@@ -307,21 +308,26 @@ public class KPSmartSystem {
 		currentUser = null;
 	}
 
-	private void processBusinessEvents(List<BusinessEvent> events){
-		for(BusinessEvent event : events){
+	private void processBusinessEvents(){
+		BusinessEvent event = eventLog.getCurrentEvent();
+		for(int i = 0; i < eventLog.getSize(); i++){
 			if(event instanceof MailDeliveryEvent){
-
+				MailDeliveryEvent mail = (MailDeliveryEvent)event;
+				metrics.addMailDeliveryEvent(mail.getRevenue(), mail.getExpenditure());
 			}
 			if(event instanceof PriceUpdateEvent){
-
+				metrics.addPriceUpdateEvent();
 			}
 			if(event instanceof TransportCostUpdateEvent){
+				metrics.addTransportCostUpdateEvent();
 				routeGraph.addRoute(new Route((TransportCostUpdateEvent)event));
 			}
 			if(event instanceof TransportDiscontinuedEvent){
-
+				metrics.addTransportDiscontinuedEvent();
 			}
+			event = eventLog.getNextEvent();
 		}
+		eventLog.resetEventLogLocation();
 	}
 
 	/**

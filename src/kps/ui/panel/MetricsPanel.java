@@ -26,6 +26,9 @@ public class MetricsPanel extends JPanel implements ActionListener{
 
     private static final long serialVersionUID = 1L;
 
+    // field
+    private Metrics metrics;
+    
     // components
     private GraphPanel graph;
     private ProfitPanel profit;
@@ -33,9 +36,10 @@ public class MetricsPanel extends JPanel implements ActionListener{
     private CustomerRoutePanel routes;
     private boolean initialised = false;
 
-    public MetricsPanel(){
+    public MetricsPanel(Metrics metrics){
         super();
         setPreferredSize(new Dimension(918, 742));
+        this.metrics = metrics;
         // setup components
         graph = new GraphPanel(918, 371);//new GraphPanel(660, 290);
         graph.setBorder(new TitledKPSBorder("Revenue and Expenditure"));
@@ -50,6 +54,7 @@ public class MetricsPanel extends JPanel implements ActionListener{
         SpringUtilities.makeCompactGrid(events, 2, 2, 6, 6, 6, 6);
         layoutComponents();
         initialised = true;
+        repaint();
     }
 
     private void layoutComponents(){
@@ -85,7 +90,7 @@ public class MetricsPanel extends JPanel implements ActionListener{
         add(routes, constraints);
     }
 
-    public void repaintMetrics(Metrics metrics){
+    /*public void repaintMetrics(Metrics metrics){
     	// update graph panel
 
     	// update profit panel
@@ -99,12 +104,19 @@ public class MetricsPanel extends JPanel implements ActionListener{
     	events.setBusinessEventMetrics(mail, price, cost, discontinued, total);
     	// update customer route panel
     	repaint();
-    }
+    }*/
 
     public void repaint(){
     	if(initialised){
     		graph.repaint();
+    		profit.setProfitMetrics(metrics.getTotalRevenue(), metrics.getTotalExpenditure());
     		profit.repaint();
+    		int mail = metrics.getTotalMailDeliveryEvents();
+        	int price = metrics.getTotalPriceUpdateEvents();
+        	int cost = metrics.getTotalTransportCostUpdateEvents();
+        	int discontinued = metrics.getTotalTransportDiscontinuedEvents();
+        	int total = metrics.getTotalBusinessEvents();
+        	events.setBusinessEventMetrics(mail, price, cost, discontinued, total);
     		events.repaint();
     		routes.repaint();
     	}
@@ -127,16 +139,6 @@ public class MetricsPanel extends JPanel implements ActionListener{
 
     		}
     	}
-    }
-
-    public static void main(String[] args){
-    	JFrame frame = new JFrame();
-    	MetricsPanel mp = new MetricsPanel();
-    	frame.add(mp);
-    	
-    	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    	frame.pack();
-    	frame.setVisible(true);
     }
 
     private abstract class MetricComponent extends JPanel{

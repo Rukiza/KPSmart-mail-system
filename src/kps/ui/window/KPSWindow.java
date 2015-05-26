@@ -47,7 +47,7 @@ public class KPSWindow extends JFrame {
 	public KPSWindow(KPSmartSystem system){
 		super("KPSmart");
 		this.system = system;
-		final Dimension WINDOW_SIZE = new Dimension(1200,800);
+		final Dimension WINDOW_SIZE = new Dimension(1050,800);
 
 		setSize(WINDOW_SIZE);
 		setLocationRelativeTo(null);
@@ -58,7 +58,7 @@ public class KPSWindow extends JFrame {
 		JTabbedPane tabbedPane = new JTabbedPane();
 		add(tabbedPane, BorderLayout.CENTER);
 
-		metricsPanel = new MetricsPanel();
+		metricsPanel = new MetricsPanel(system.getMetrics());
 		dsPanel = new DecisionSupportPanel(system.getEventLog());
 		graphPanel = new RouteGraphPanel(system.getRouteGraph(), this);
 
