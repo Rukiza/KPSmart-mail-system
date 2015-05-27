@@ -193,4 +193,39 @@ public class RouteGraphTests {
 		assertFalse(d.isValidMailDelivery(mail6));
 		assertFalse(d.isValidMailDelivery(mail7));
 	}
+
+	@Test
+	public void testMaxWeightExceeded(){
+		BasicRoute route = new BasicRoute("Rome", "Sydney");
+		Mail mail = new Mail(route, Day.FRIDAY, 1000000, 5, Priority.DOMESTIC_LAND);
+
+		RouteGraph g = readGraphFromXML();
+		DijkstraSearch ds = new DijkstraSearch(g);
+
+		assertFalse(ds.isValidMailDelivery(mail));
+
+	}
+
+
+	@Test
+	public void testMaxVolumeExceeded(){
+		BasicRoute route = new BasicRoute("Rome", "Sydney");
+		Mail mail = new Mail(route, Day.FRIDAY, 2, 1000000000, Priority.DOMESTIC_LAND);
+
+		RouteGraph g = readGraphFromXML();
+		DijkstraSearch ds = new DijkstraSearch(g);
+
+		assertFalse(ds.isValidMailDelivery(mail));
+	}
+
+	@Test
+	public void bothMaxExceeded(){
+		BasicRoute route = new BasicRoute("Rome", "Sydney");
+		Mail mail = new Mail(route, Day.FRIDAY, 100000000, 1000000000, Priority.DOMESTIC_LAND);
+
+		RouteGraph g = readGraphFromXML();
+		DijkstraSearch ds = new DijkstraSearch(g);
+
+		assertFalse(ds.isValidMailDelivery(mail));
+	}
 }

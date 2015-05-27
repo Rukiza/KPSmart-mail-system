@@ -214,7 +214,7 @@ public class DrawRoute {
 	 * */
 	public boolean containsPoint(double x, double y){
 		return (int)pointToLineDistance(new Point((int)(node1.getX()+nodeRadius),(int)(node1.getY()+nodeRadius)),new Point((int)(node2.getX()+nodeRadius),(int)(node2.getY()+nodeRadius)), new Point((int)x,(int)y)) >= 0 &&
-				(int)pointToLineDistance(new Point((int)(node1.getX()+nodeRadius),(int)(node1.getY()+nodeRadius)),new Point((int)(node2.getX()+nodeRadius),(int)(node2.getY()+nodeRadius)), new Point((int)x,(int)y)) <= 10;
+				(int)pointToLineDistance(new Point((int)(node1.getX()+nodeRadius),(int)(node1.getY()+nodeRadius)),new Point((int)(node2.getX()+nodeRadius),(int)(node2.getY()+nodeRadius)), new Point((int)x,(int)y))<=5 ;
 
 	}
 

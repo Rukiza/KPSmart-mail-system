@@ -80,9 +80,10 @@ public class DijkstraSearch  {
 
 		while (!nodeQueue.isEmpty()) {
 			Node dn = nodeQueue.poll();
-
 	            for (Route r : dn.getRouteOut()){
-	            	if(isFlight && !(r.getType().equals(TransportType.AIR)) && r.maxWeight() < mail.getWeight() && r.maxVolume() < mail.getVolume() )continue;//should check if can fly
+
+	            	//checks the flying condition and max weight and volume
+	            	if((isFlight && !(r.getType().equals(TransportType.AIR))) || r.maxWeight() < mail.getWeight() || r.maxVolume() < mail.getVolume() )continue;
 
 	            	Node d = null;
 	            	for(int i =0; i < dijkNodesList.size(); i++){
@@ -92,6 +93,7 @@ public class DijkstraSearch  {
 	                double cost = r.calculateCost(mail.getVolume(),mail.getWeight());
 
 	                double distanceThroughR = dn.getMinCost() + cost;
+
 			if (distanceThroughR < d.getMinCost()) {
 			    nodeQueue.remove(d);
 			    d.setMinCost(distanceThroughR);
