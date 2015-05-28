@@ -6,12 +6,15 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Shape;
+import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.FlatteningPathIterator;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import com.sun.javafx.geom.Line2D;
 
 import kps.data.Node;
 import kps.data.Route;
@@ -144,19 +147,66 @@ public class DrawRoute {
 	 * Draws the box that displays all the routes between the two nodes
 	 * */
 	public void drawSelectedBox(Graphics2D g){
+		int stringgap = 10;
 		g.setColor(Color.BLACK);
-		g.fillRect(20,20,600,100);
-		g.setColor(Color.WHITE);
-		g.fillRect(25,25,600-10,100-10);
+
+		double stringwidth = widthOfBox(routeToStringList(routeSet),g);
+		double stringheight = heightOfBox(routeToStringList(routeSet),g);
+		double endanStartBuf = 50;
+
+		double extragap = routeSet.size()*stringgap ; //+ endanStartBuf;
+
+		if(routeSet.size() > 2)extragap -=2*stringgap;
+
+		int boxWidth = (int)(stringwidth + 15);
+		int boxHeight = (int)(stringheight + extragap);
 
 		g.setColor(Color.BLACK);
-		g.setFont(new Font(g.getFont().getFamily(), Font.BOLD, g.getFont().getSize()));
+
+		g.fillRect(20,20,boxWidth + 5,boxHeight + 5);
+		g.setColor(Color.WHITE);
+		g.fillRect(25,25,boxWidth-10+5,boxHeight-10+5);
+
+
+		g.setColor(Color.BLACK);
 
 		int y = 30;
 		for(Route r : routeSet){
 			g.drawString(r.toString(), 30, y+10);
 			y+=20;
 		}
+	}
+
+	public List<String> routeToStringList(Set<Route> routes){
+		List<String> strings = new ArrayList<String>();
+		for(Route r : routes)strings.add(r.toString());
+		return strings;
+	}
+
+	public double heightOfBox(List<String> strings, Graphics2D g){
+		double totalHeight = 0;
+
+		FontRenderContext context = g.getFontRenderContext();
+		Font font =  g.getFont();
+
+		for(String s : strings){
+			totalHeight += font.getStringBounds(s, context).getBounds().getHeight();
+		}
+		return totalHeight+ strings.size();
+	}
+
+	public double widthOfBox(List<String> strings, Graphics2D g){
+		double maxWidth = 0;
+
+		FontRenderContext context = g.getFontRenderContext();
+		Font font =  g.getFont();
+
+		for(String s : strings){
+
+			double width =  font.getStringBounds(s, context).getBounds().getWidth();
+			if(maxWidth < width)maxWidth = width;
+			}
+		return maxWidth;
 	}
 
 
@@ -213,13 +263,14 @@ public class DrawRoute {
 	 * @param point to test
 	 * */
 	public boolean containsPoint(double x, double y){
-		return (int)pointToLineDistance(new Point((int)(node1.getX()+nodeRadius),(int)(node1.getY()+nodeRadius)),new Point((int)(node2.getX()+nodeRadius),(int)(node2.getY()+nodeRadius)), new Point((int)x,(int)y)) >= 0 &&
-				(int)pointToLineDistance(new Point((int)(node1.getX()+nodeRadius),(int)(node1.getY()+nodeRadius)),new Point((int)(node2.getX()+nodeRadius),(int)(node2.getY()+nodeRadius)), new Point((int)x,(int)y))<=5 ;
+		double nodeSize1 = node1.getSize();
+		double nodeSize2 = node2.getSize();
 
+		int boxX = (int) x - 5;
+		int boxY = (int) y - 5;
+
+		Line2D line = new Line2D((float)(node1.getX()+nodeSize1/2), (float)(node1.getY()+nodeSize1/2),(float)(node2.getX()+nodeSize2/2),(float)( node2.getY()+nodeSize2/2));
+
+		return line.intersects(boxX,boxY,10,10);
 	}
-
-	 public double pointToLineDistance(Point A, Point B, Point P) {
-		    double normalLength = Math.sqrt((B.x-A.x)*(B.x-A.x)+(B.y-A.y)*(B.y-A.y));
-		    return Math.abs((P.x-A.x)*(B.y-A.y)-(P.y-A.y)*(B.x-A.x))/normalLength;
-		  }
 }

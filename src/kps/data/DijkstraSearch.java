@@ -100,8 +100,6 @@ public class DijkstraSearch  {
 			    d.setPrev(dn);
 			    nodeQueue.add(d);
 			}
-
-
 	            }
 	        }
 	    }

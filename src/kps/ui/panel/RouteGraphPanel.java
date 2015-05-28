@@ -77,8 +77,26 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 	 * */
 	public void setUpDrawNodes(){
 		for(Node n : graph.getNodes()){
-			drawNodes.add(new DrawNode(n,(int)(Math.random()*600), (int)(Math.random()*500)));
+			drawNodes.add(new DrawNode(n,(int)(Math.random()*1100), (int)(Math.random()*700)));
 		}
+		setUpNonRandomDrawNodes();
+	}
+
+	public void setUpNonRandomDrawNodes(){
+		double sWidth = 1200;
+		double sHeight = 800;
+
+		DrawNode connectedNode = null;
+
+		for(DrawNode n : drawNodes){
+			if(connectedNode == null)connectedNode = n;
+			else if(connectedNode.getNode().getNeighbours().size() < n.getNode().getNeighbours().size())connectedNode = n;
+		}
+
+		connectedNode.setX(sWidth/2);
+		connectedNode.setY(sHeight/2);
+
+
 	}
 
 
@@ -203,15 +221,14 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 	 * Sets a route to be selected if point p is on it
 	 * */
 	public boolean setRouteSelected(Point p){
-		boolean selected = false;
+		for(DrawRoute r : drawRoutes)r.setSelected(false);
 		for(DrawRoute r : drawRoutes){
 			if(r.containsPoint(p.getX(),p.getY())){
 				r.setSelected(true);
-				selected = true;
+				return true;
 			}
-			else r.setSelected(false);
 		}
-		return selected;
+		return false;
 	}
 
 	/**
@@ -223,7 +240,6 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 			if(n.containsPoint(p)){
 				n.setSelected(true);
 				selected = true;
-
 			}
 			else n.setSelected(false);
 		}
@@ -240,7 +256,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 				n.setX(e.getX() - n.getSize()/2);
 		}
 	}
-	
+
 	/**
 	 * Starts the thread to repaint the frame
 	 * */
