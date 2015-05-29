@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
-
 import kps.enums.Priority;
 import kps.enums.TransportType;
 /**
@@ -14,11 +13,12 @@ import kps.enums.TransportType;
  * */
 public class DijkstraSearch  {
 
-	//The graph to be searched
-	private  RouteGraph graph;
-
-	//Nodes of the graph
+	 //Nodes of the graph
 	 private List<Node> dijkNodesList;
+
+	 //the mail to be delivered
+	 private Mail mail;
+
 
 	/**
 	 * Constructor for DijkstraSearch
@@ -26,21 +26,30 @@ public class DijkstraSearch  {
 	 * @param graph to be searched
 	 * */
 	public DijkstraSearch(RouteGraph g){
-		this.graph = g;
 		dijkNodesList = g.getNodes();
 	}
 
-	private Mail mail;
 
-
+	/**
+	 * searching the graph and return if the mail can
+	 * be sent or not
+	 *
+	 * @param Mail to be delivered
+	 *
+	 * @return whether or not the mail can be sent
+	 * */
 	public boolean isValidMailDelivery(Mail mail){
 		return !(getShortestPath(mail).isEmpty());
 	}
 
+
 	/**
-	 * Return the route and cost of the cheapest path as an entry in the map
+	 * Finds the shortest path using the mail source and destination.
+	 *
 	 *
 	 * @param the route of the customer
+	 *
+	 * @return a map containing the shortest path and a cost
 	 * */
 	public Map<List<Node>,Double> getShortestPath(Mail mail){
 		this.mail = mail;
@@ -70,7 +79,13 @@ public class DijkstraSearch  {
 	}
 
 
-	 private  void computePaths(Node source){
+	/**
+	 * Computes the paths from the source
+	 * to all other nodes
+	 *
+	 * @param Node to search from
+	 * */
+	private  void computePaths(Node source){
 		 	boolean isFlight = Priority.isAirPriority(mail.getPriority());
 
 	        source.setMinCost(0);
@@ -104,6 +119,14 @@ public class DijkstraSearch  {
 	        }
 	    }
 
+
+	 /**
+	  * Finds the shortest path to the target
+	  *
+	  * @param the target node
+	  *
+	  * @return The list of nodes representing the shortest path
+	  * */
 	 private  List<Node> getShortestPathTo(Node target)
 	    {
 	        List<Node> path = new ArrayList<Node>();

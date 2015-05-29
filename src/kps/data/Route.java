@@ -1,6 +1,5 @@
 package kps.data;
 
-import sun.rmi.transport.Transport;
 import kps.enums.TransportType;
 import kps.events.TransportCostUpdateEvent;
 
@@ -8,14 +7,76 @@ import kps.events.TransportCostUpdateEvent;
  * @author Nicky van Hulst 300294657
  * */
 public class Route {
+
+
 	private double cost;
+
+	//the type of transport this route supports
 	private TransportType type;
+
+	//the transport event
 	private TransportCostUpdateEvent transport;
 
-	//public Route(String src, String dest, Double cost, TransportType type,TransportCostUpdateEvent trans ){
+	/**
+	 * Constructor for the Route object
+	 *
+	 * @param the immutable event creating the route object
+	 * */
 	public Route(TransportCostUpdateEvent trans){
 		this.transport = trans;
 	}
+
+
+	/**
+	 * Calculates The cost
+	 * */
+	public double calculateCost(double volume, double weight){
+		if(volume > transport.getMaxVolume())return Double.POSITIVE_INFINITY;
+		if(weight > transport.getMaxWeight())return Double.POSITIVE_INFINITY;
+
+		return (volume * transport.getVolumePrice()) + (weight * transport.getGramPrice());
+	}
+
+
+	/**
+	 * returns the max weight of the route
+	 * */
+	public double maxWeight(){
+		return transport.getMaxWeight();
+	}
+
+
+	/**
+	 * returns the max volume of the route
+	 * */
+	public double maxVolume(){
+		return transport.getMaxVolume();
+	}
+
+
+	/**
+	 * returns the source of the route
+	 * */
+	public String getSrc(){return transport.getOrigin();}
+
+
+	/**
+	 * returns the destination of the route
+	 * */
+	public String getDest(){return transport.getDestination();}
+
+
+	/**
+	 * returns the type of the route
+	 * */
+	public TransportType getType(){return transport.getTransportType();}
+
+
+	/**
+	 * returns the cost of the route
+	 * */
+	public double getCost(){return cost;}//TODO change to getCost(double volume, double weight)
+
 
 
 	@Override
@@ -61,27 +122,4 @@ public class Route {
 	public String toString(){return  transport.getOrigin() + " To " + transport.getDestination() +
 			" Gram Price :"+transport.getGramPrice() +"\n"+ " Volumder $"+transport.getVolumePrice() +"\n"
 			+ "Type " + transport.getTransportType();}
-
-	public String getSrc(){return transport.getOrigin();}
-	public String getDest(){return transport.getDestination();}
-	public TransportType getType(){return transport.getTransportType();}
-	public double getCost(){return cost;}//TODO change to getCost(double volume, double weight)
-
-	/**
-	 * Calculates The cost
-	 * */
-	public double calculateCost(double volume, double weight){
-		if(volume > transport.getMaxVolume())return Double.POSITIVE_INFINITY;
-		if(weight > transport.getMaxWeight())return Double.POSITIVE_INFINITY;
-
-		return (volume * transport.getVolumePrice()) + (weight * transport.getGramPrice());
-	}
-
-	public double maxWeight(){
-		return transport.getMaxWeight();
-	}
-
-	public double maxVolume(){
-		return transport.getMaxVolume();
-	}
 }

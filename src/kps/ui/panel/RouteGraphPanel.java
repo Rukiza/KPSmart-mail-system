@@ -56,6 +56,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 	//frame the panel is on
 	private JFrame frame;
 
+
 	/**
 	 * Created the RouteGraphPanel Object
 	 */
@@ -69,7 +70,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		setUpDrawRoutes();
 		addMouseListener(this);
 		startThread();
-		setup();
+		this.validate();
 	}
 
 	/**
@@ -82,6 +83,10 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		setUpNonRandomDrawNodes();
 	}
 
+
+	/**
+	 * Places the most connected node in the centre
+	 * */
 	public void setUpNonRandomDrawNodes(){
 		double sWidth = 1200;
 		double sHeight = 800;
@@ -92,11 +97,8 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 			if(connectedNode == null)connectedNode = n;
 			else if(connectedNode.getNode().getNeighbours().size() < n.getNode().getNeighbours().size())connectedNode = n;
 		}
-
 		connectedNode.setX(sWidth/2);
 		connectedNode.setY(sHeight/2);
-
-
 	}
 
 
@@ -123,11 +125,6 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 				if(!added)drawRoutes.add(new DrawRoute(r,src,dest));
 			}
 		}
-	}
-
-	public void setup(){
-		addMouseMotionListener(this);
-		this.validate();
 	}
 
 	/**
@@ -165,20 +162,6 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		}
 	}
 
-	@Override
-	public void paint(Graphics g) {
-		if(g == null )return;
-		Graphics2D g2 = (Graphics2D)g;
-		 g2.setRenderingHint(
-		            RenderingHints.KEY_ANTIALIASING,
-		            RenderingHints.VALUE_ANTIALIAS_ON);
-
-		g2.setColor(new Color(238,238,238));//grey to match rest of the program
-		g2.fillRect(0, 0, this.getWidth(), this.getHeight());
-		drawRoutes(g2);
-		for(DrawNode n : drawNodes)n.draw(g2);
-	};
-
 
 	/**
 	 * Simple way of drawing the routes
@@ -189,11 +172,6 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		}
 	}
 
-	@Override
-	public void repaint(){
-		Graphics g = this.getGraphics();
-		paint(g);
-	}
 
 	/**
 	 * Returns the node that is on a point
@@ -209,13 +187,6 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		return n;
 	}
 
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		//set node or routes selected
-		if(setNodeSelected(e.getPoint()))return;
-		setRouteSelected(e.getPoint());
-
-	}
 
 	/**
 	 * Sets a route to be selected if point p is on it
@@ -230,6 +201,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		}
 		return false;
 	}
+
 
 	/**
 	 * Sets a node to be selected if point p is on it
@@ -246,6 +218,14 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		return selected;
 	}
 
+
+	/**
+	 * Starts the thread to repaint the frame
+	 * */
+	public void startThread(){
+		new WindowThread(20, frame).start();;
+	}
+
 	@Override
 	public void mouseDragged(MouseEvent e) {
 			setNodeSelected(e.getPoint());
@@ -257,13 +237,38 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		}
 	}
 
-	/**
-	 * Starts the thread to repaint the frame
-	 * */
-	public void startThread(){
-		new WindowThread(20, frame).start();;
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		//set node or routes selected
+		if(setNodeSelected(e.getPoint()))return;
+		setRouteSelected(e.getPoint());
+
 	}
 
+
+	@Override
+	public void repaint(){
+		Graphics g = this.getGraphics();
+		paint(g);
+	}
+
+	@Override
+	public void paint(Graphics g) {
+		if(g == null )return;
+		Graphics2D g2 = (Graphics2D)g;
+		 g2.setRenderingHint(
+		            RenderingHints.KEY_ANTIALIASING,
+		            RenderingHints.VALUE_ANTIALIAS_ON);
+
+		g2.setColor(new Color(238,238,238));//grey to match rest of the program
+		g2.fillRect(0, 0, this.getWidth(), this.getHeight());
+		drawRoutes(g2);
+		for(DrawNode n : drawNodes)n.draw(g2);
+	};
+
+
+	//thread for refreshing the panel
 	public class WindowThread extends Thread {
 		private final int delay; // delay between refreshes
 		private final JFrame display;
@@ -289,6 +294,10 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		}
 	}
 
+
+	/**
+	 * Used for testing the graph panel by itself
+	 * */
 	public static void main(String[] arg){
 		RouteGraph g = new RouteGraph();
 
@@ -313,7 +322,6 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		frame.addKeyListener(support);
 		frame.add(support, BorderLayout.CENTER);
 		frame.setVisible(true);
-		support.setup();
 
 		BasicRoute route = new BasicRoute("Rome", "Wellington");
 		Mail mail = new Mail(route, Day.FRIDAY, 100, 5, Priority.DOMESTIC_AIR);
@@ -321,9 +329,6 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		support.setRoute(mail);
 		support.setRoutesTaken();
 	}
-
-
-
 
 	@Override
 	public void mousePressed(MouseEvent e) {}

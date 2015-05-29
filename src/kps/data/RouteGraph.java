@@ -1,25 +1,19 @@
 package kps.data;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 /**
  * @author Nicky van Hulst 300294657
  * */
 public class RouteGraph implements Iterable<Node> {
 
-
+	//the list of the critical routes in the graph
 	private List<Route> criticalRoutes;
 
-	/**
-	 * the nodes of the graph
-	 */
+	//the nodes of the graph
 	private List<Node> nodes;
+
 
 	/**
 	 * Constructor for RouteGraph
@@ -43,6 +37,9 @@ public class RouteGraph implements Iterable<Node> {
     }
 
 
+    /**
+     * Creates a source node
+     * */
     private void createSrc(Route route, Node destNode){
     	Node src = new Node(route.getSrc());
     	src.addEdge(route);
@@ -50,6 +47,14 @@ public class RouteGraph implements Iterable<Node> {
     	nodes.add(src);
     }
 
+
+    /**
+     * Creates a destination node
+     *
+     * @param route holding dest node
+     *
+     * @param node to add route to
+     * */
     private void createDest(Route route, Node srcNode){
     	Node dest = new Node(route.getDest());
     	dest.addEdge(route);
@@ -57,6 +62,12 @@ public class RouteGraph implements Iterable<Node> {
     	nodes.add(dest);
     }
 
+
+    /**
+     * Creates a source and destination node
+     *
+     * @param route holding src and dest
+     * */
     private void createSrcAndDest(Route route){
     	Node dest = new Node(route.getDest());
     	Node  src= new Node(route.getSrc());
@@ -66,8 +77,11 @@ public class RouteGraph implements Iterable<Node> {
 		nodes.add(src);
     }
 
+
     /**
      * Adds a route to the graph
+     *
+     * @param route to be added
      * */
     public void addRoute(Route route) {
     	Node srcNode = null;
@@ -98,6 +112,7 @@ public class RouteGraph implements Iterable<Node> {
     		return;
     	}
     }
+
 
     /**
      * Removes route from graph

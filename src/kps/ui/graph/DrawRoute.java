@@ -5,32 +5,45 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Shape;
 import java.awt.font.FontRenderContext;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.FlatteningPathIterator;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.sun.javafx.geom.Line2D;
-
-import kps.data.Node;
 import kps.data.Route;
 
+import com.sun.javafx.geom.Line2D;
+
+/**
+ * @author Nicky van Hulst
+ * */
 public class DrawRoute {
 
+	//one of the nodes of the route
 	private DrawNode node1;
-	private DrawNode node2;
-	private boolean routeTaken;
-	private boolean selected;
-	private double nodeRadius = 40;
 
+	//the other node of the route
+	private DrawNode node2;
+
+	//whether the route is taken
+	private boolean routeTaken;
+
+	//whether the route is selected by the mouse
+	private boolean selected;
+
+	//the color when the route is selected
 	private Color routeSelectedColor;
 
+	//the list of routes between the two nodes
 	private ArrayList<Route> routes;
+
+	//the set of routes between the two nodes
 	private Set<Route> routeSet;
+
+	//color pulsing up
+	private boolean upper = true;
+
 
 	/**
 	 * Represents a connection between nodes and holds the routes between them
@@ -46,11 +59,15 @@ public class DrawRoute {
 		this.node1 = node1;
 	}
 
-	public void routesToSet(){
+	/**
+	 * Converts the list of routes to a set of routes
+	 * */
+	private void routesToSet(){
 		for(Route r : routes){
 			routeSet.add(r);
 		}
 	}
+
 
 	/**
 	 * Returns whether a route should be added to a drawNode
@@ -61,18 +78,26 @@ public class DrawRoute {
 			   (r.getSrc().equals(node2.getNode().getName()) || r.getSrc().equals(node1.getNode().getName()));
 	}
 
+
+	/**
+	 * Adds a route to the list of routes
+	 * */
 	public void addRoute(Route r){
 		if(r == null)return;
 		this.routes.add(r);
 		routesToSet();//terrible idea
 	}
-	private boolean upper = true;
 
+
+	/**
+	 * Draws the route on the graphics object
+	 *
+	 * @param g the graphics to draw on
+	 * */
 	public void draw(Graphics2D g){
 		if(routeTaken){
 			g.setColor(routeSelectedColor);
 			int change = 5;
-			int limit = 254;
 
 			if(routeSelectedColor.getRed() >= 254 && upper){
 				upper = false;
@@ -88,7 +113,6 @@ public class DrawRoute {
 
 		}
 		else g.setColor(Color.BLACK);
-
 
 		boolean toNode2 = false;
 		boolean toNode1 = false;
@@ -143,17 +167,16 @@ public class DrawRoute {
 		if(selected)drawSelectedBox(g);
 	}
 
+
 	/**
 	 * Draws the box that displays all the routes between the two nodes
 	 * */
-	public void drawSelectedBox(Graphics2D g){
+	private void drawSelectedBox(Graphics2D g){
 		int stringgap = 10;
 		g.setColor(Color.BLACK);
 
 		double stringwidth = widthOfBox(routeToStringList(routeSet),g);
 		double stringheight = heightOfBox(routeToStringList(routeSet),g);
-		double endanStartBuf = 50;
-
 		double extragap = routeSet.size()*stringgap ; //+ endanStartBuf;
 
 		if(routeSet.size() > 2)extragap -=2*stringgap;
@@ -177,13 +200,21 @@ public class DrawRoute {
 		}
 	}
 
-	public List<String> routeToStringList(Set<Route> routes){
+
+	/**
+	 *Converts a set of routes to a list of strings
+	 * */
+	private List<String> routeToStringList(Set<Route> routes){
 		List<String> strings = new ArrayList<String>();
 		for(Route r : routes)strings.add(r.toString());
 		return strings;
 	}
 
-	public double heightOfBox(List<String> strings, Graphics2D g){
+
+	/**
+	 * Figure out the height the box should be to hold the strings
+	 * */
+	private double heightOfBox(List<String> strings, Graphics2D g){
 		double totalHeight = 0;
 
 		FontRenderContext context = g.getFontRenderContext();
@@ -195,7 +226,11 @@ public class DrawRoute {
 		return totalHeight+ strings.size();
 	}
 
-	public double widthOfBox(List<String> strings, Graphics2D g){
+
+	/**
+	 * Figures out the width of the box to hold all the strings
+	 * */
+	private double widthOfBox(List<String> strings, Graphics2D g){
 		double maxWidth = 0;
 
 		FontRenderContext context = g.getFontRenderContext();
@@ -210,52 +245,37 @@ public class DrawRoute {
 	}
 
 
-	public ArrayList<Point> getShapePoints(Shape s){
-		  FlatteningPathIterator iter;
-
-	        ArrayList<Point> points;
-	        int index=0;
-	            iter=new FlatteningPathIterator(s.getPathIterator(new AffineTransform()), 1);
-	            points=new ArrayList<Point>();
-	            float[] coords=new float[6];
-	            while (!iter.isDone()) {
-	                iter.currentSegment(coords);
-	                int x=(int)coords[0];
-	                int y=(int)coords[1];
-	                points.add(new Point(x,y));
-	                iter.next();
-	            }
-	            return points;
-	}
-
-	public int connectionsTo(Node src, Node dest){
-		int connections = 0;
-
-		for(Route r : src.getRouteOut()){
-			if(r.getDest().equals(dest.getName()))connections++;
-		}
-		for(Route r : dest.getRouteOut()){
-			if(r.getDest().equals(src.getName()))connections++;
-		}
-		return connections;
-	}
-
-
+	/**
+	 * Sets the route taken by the mail
+	 * */
 	public void setTaken(boolean taken){
 		this.routeTaken = taken;
 	}
 
+
+	/**
+	 * returns the name of node1
+	 * */
 	public String getNode1Name(){
 		return this.node1.getNode().getName();
 	}
 
+
+	/**
+	 * Returns the name of node 2
+	 * */
 	public String getNode2Name(){
 		return this.node2.getNode().getName();
 	}
 
+
+	/**
+	 * Sets the route to be selected by the mouse
+	 * */
 	public void setSelected(boolean selected){
 		this.selected = selected;
 	}
+
 
 	/**
 	 * Return if a point is inside the node

@@ -7,22 +7,31 @@ import java.util.Set;
  * */
 public class Node  implements Comparable<Node>{
 
+	//used for searching
 	private Node prev;
+
+	//cost used for searching
 	private double minCost = Double.POSITIVE_INFINITY;
 
-
 	//name of the node
-	String name;
+	private String name;
 
-	//places you can get to from the node
+	//Neighbors of  the node
 	Set<Route> edgesOut;
 	Set<Route> edgesIn;
 
+
+	/**
+	 * Constructor for the node object
+	 *
+	 * @param the name of the node
+	 * */
 	public Node(String name){
 		this.edgesIn = new HashSet<Route>();
 		this.edgesOut = new HashSet<Route>();
 		this.name = name;
 	}
+
 
 	/**
 	 * Adds an edge to the Node
@@ -42,6 +51,12 @@ public class Node  implements Comparable<Node>{
 		return true;
 	}
 
+
+	/**
+	 * Updates the route in the set with the passed in route
+	 *
+	 * @param route to be updated
+	 * */
 	public void updateRoute(Route route){
 		edgesIn.remove(route);
 		edgesOut.remove(route);
@@ -50,6 +65,14 @@ public class Node  implements Comparable<Node>{
 		edgesOut.add(route);
 	}
 
+
+	/**
+	 * Removes a route from the node
+	 *
+	 * @param route to be removed
+	 *
+	 * @return whether the route was removed
+	 * */
 	public boolean removeRoute(Route route){
 		boolean removed = false;
 
@@ -66,6 +89,11 @@ public class Node  implements Comparable<Node>{
 	}
 
 
+	/**
+	 * returns all of the connection in and out of the node
+	 *
+	 * @return the neighbours of the node
+	 * */
 	public Set<Route> getNeighbours(){
 		Set<Route> neighbours = new HashSet<Route>();
 		neighbours.addAll(edgesIn);
@@ -74,9 +102,48 @@ public class Node  implements Comparable<Node>{
 		return neighbours;
 	}
 
+	/**
+	 * returns the connections out of the node
+	 *
+	 * @return set of outgoing connections
+	 * */
 	public Set<Route> getRouteOut(){
 		return edgesOut;
 	}
+
+
+	/**
+	 * returns the connections into of the node
+	 *
+	 * @return set of incoming connections
+	 * */
+	public Set<Route> getRouteIn(){
+		return edgesIn;
+	}
+
+
+	/**
+	 * Prints the routes information used for debugging
+	 * */
+	public void printRoutes(){
+		System.out.println("Node " +this.name + " In size " + edgesIn.size() + " Out Size " + edgesOut.size()  );
+		for(Route r : edgesIn){
+			System.out.println(r);
+		}
+		for(Route r : edgesOut){
+			System.out.println(r);
+		}
+	}
+
+
+	/**
+	 * Resets the node for searching
+	 * */
+	public void resetSearch(){
+		this.minCost = Double.POSITIVE_INFINITY;
+		this.prev = null;
+	}
+
 
 	@Override
 	public int hashCode() {
@@ -85,6 +152,7 @@ public class Node  implements Comparable<Node>{
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
+
 
 	@Override
 	public boolean equals(Object obj) {
@@ -101,25 +169,6 @@ public class Node  implements Comparable<Node>{
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
-	}
-
-	public Set<Route> getRouteIn(){
-		return edgesIn;
-	}
-
-	public void resetSearch(){
-		this.minCost = Double.POSITIVE_INFINITY;
-		this.prev = null;
-	}
-
-	public void printRoutes(){
-		System.out.println("Node " +this.name + " In size " + edgesIn.size() + " Out Size " + edgesOut.size()  );
-		for(Route r : edgesIn){
-			System.out.println(r);
-		}
-		for(Route r : edgesOut){
-			System.out.println(r);
-		}
 	}
 
 
