@@ -69,6 +69,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		setUpDrawNodes();
 		setUpDrawRoutes();
 		addMouseListener(this);
+		addMouseMotionListener(this);
 		startThread();
 		this.validate();
 	}

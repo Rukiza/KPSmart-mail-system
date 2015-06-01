@@ -118,8 +118,10 @@ public class Route {
 		return true;
 	}
 
+	public String getCompany(){return transport.getTransportFirm();}
+
 	@Override
-	public String toString(){return  transport.getOrigin() + " To " + transport.getDestination() +
+	public String toString(){return  transport.getTransportFirm()+", "+transport.getOrigin() + " To " + transport.getDestination() +
 			" Gram Price :"+transport.getGramPrice() +"\n"+ " Volumder $"+transport.getVolumePrice() +"\n"
 			+ "Type " + transport.getTransportType();}
 }

@@ -201,7 +201,18 @@ public class RouteGraph implements Iterable<Node> {
     	return false;
     }
 
-
+    /**
+     * return the route that matches the source destination and company
+     * or null if it does not exist
+     * */
+    public Route getRoute(String company, String src, String dest){
+    	 for(Node n : nodes){
+    		 for(Route r : n.getNeighbours()){
+    			 if(r.getDest().equals(dest) && r.getSrc().equals(src) && r.getCompany().equals(company))return r;
+    		 }
+    	 }
+    	return null;
+    }
 
 
     public int getSize(){return nodes.size();}
