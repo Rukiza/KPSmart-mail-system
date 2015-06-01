@@ -84,6 +84,22 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		setUpNonRandomDrawNodes();
 	}
 
+	/**
+	 * Should be called when a route is added to the graph
+	 * */
+	public void routeAdded(){
+		boolean contains = false;
+
+		for(Node n : graph.getNodes()){
+			for(DrawNode dn : drawNodes ){
+				if(dn.getNode().equals(n))contains = true;
+			}
+			if(!contains)drawNodes.add(new DrawNode(n,(int)(Math.random()*1100), (int)(Math.random()*700)));
+			contains = false;
+		}
+		setUpDrawRoutes();
+	}
+
 
 	/**
 	 * Places the most connected node in the centre
