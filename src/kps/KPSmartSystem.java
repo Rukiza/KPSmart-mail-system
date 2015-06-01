@@ -257,6 +257,8 @@ public class KPSmartSystem {
 		TransportCostUpdateEvent event = new TransportCostUpdateEvent(timeLogged, route, company, type, price, maxWeight, maxVolume, transport);
 		eventLog.addBusinessEvent(event);
 		// add route to graph
+
+		routeGraph.addRoute(new Route(event));
 	}
 
 	/**
