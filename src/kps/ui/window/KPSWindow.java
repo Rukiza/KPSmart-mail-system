@@ -155,6 +155,7 @@ public class KPSWindow extends JFrame {
 			public void onRouteFormSubmitted(String company, String to, String from, TransportType type, double weightCost, double volCost
 					, int maxWeight, int maxVol, int dur, int freq, Day day){
 				system.addTransportCostUpdateEvent(from, to, company, type, weightCost, volCost, maxWeight, maxVol, dur, freq, day);
+				graphPanel.routeAdded();
 			}
 
 			@Override
