@@ -174,7 +174,7 @@ public class KPSmartSystem {
 	 * @param priority
 	 * 		-- priority of mail
 	 */
-	public void addMailDeliveryEvent(String to, String from, Day day, int weight, int volume, Priority priority){
+	public void addMailDeliveryEvent(String from, String to, Day day, int weight, int volume, Priority priority){
 		BasicRoute route = new BasicRoute(from, to);
 		if(!customerRoutes.containsKey(route)){
 			// cannot send mail
@@ -248,7 +248,7 @@ public class KPSmartSystem {
 	 * @param day
 	 * 		-- day that transport departs
 	 */
-	public void addTransportCostUpdateEvent(String to, String from, String company, TransportType type,
+	public void addTransportCostUpdateEvent(String from, String to, String company, TransportType type,
 			double gramPrice, double volumePrice, int maxWeight, int maxVolume, int duration, int frequency, Day day){
 		BasicRoute route = new BasicRoute(from, to);
 		DeliveryPrice price = new DeliveryPrice(gramPrice, volumePrice);
@@ -272,7 +272,7 @@ public class KPSmartSystem {
 	 * @param type
 	 * 		-- transport type
 	 */
-	public void addTransportDiscontinuedEvent(String to, String from, String company, TransportType type){
+	public void addTransportDiscontinuedEvent(String from, String to, String company, TransportType type){
 		BasicRoute route = new BasicRoute(from, to);
 		//RouteGraph.removeRoute(route, transportFirm, transportType); TO BE IMPLEMENTED
 		long timeLogged = System.currentTimeMillis();

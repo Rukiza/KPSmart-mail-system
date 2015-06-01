@@ -9,7 +9,6 @@ import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 
 import kps.enums.Day;
-import kps.enums.Priority;
 import kps.enums.TransportType;
 import kps.ui.formlistener.RouteFormListener;
 import kps.ui.util.SpringUtilities;
@@ -35,11 +34,10 @@ public class RouteFormWindow extends AbstractFormWindow {
 		makeTextField("max volume", inputPanel);
 		makeTextField("duration", inputPanel);
 		makeTextField("frequency", inputPanel);
-		makeComboBox("priority", Priority.values(), inputPanel);
 		makeComboBox("day", Day.values(), inputPanel);
 
 		// TODO: make this variable dynamic
-		int fieldCount = 12; 
+		int fieldCount = 12;
 
 		SpringUtilities.makeCompactGrid(inputPanel,
 				fieldCount, 2,	//rows, cols
@@ -74,7 +72,8 @@ public class RouteFormWindow extends AbstractFormWindow {
 			String durStr = (String)fields.get("duration");
 			String freqStr = (String)fields.get("frequency");
 
-			if (!UIUtils.isInteger(weightCostStr, volCostStr, maxWeightStr, maxVolStr, durStr, freqStr)){
+			if (!UIUtils.isDouble(weightCostStr, volCostStr)
+					|| !UIUtils.isInteger(maxWeightStr, maxVolStr, durStr, freqStr)){
 				numberFieldsPrompt("some fields must only have digits");
 				return;
 			}
@@ -85,15 +84,14 @@ public class RouteFormWindow extends AbstractFormWindow {
 			TransportType type = (TransportType)fields.get("type");
 			double weightCost = Double.parseDouble(weightCostStr);
 			double volCost = Double.parseDouble(volCostStr);
-			double maxWeight = Double.parseDouble(maxWeightStr);
-			double maxVol = Double.parseDouble(maxVolStr);
-			double dur = Double.parseDouble(durStr);
-			double freq = Double.parseDouble(freqStr);
-			Priority priority = (Priority)fields.get("priority");
+			int maxWeight = Integer.parseInt(maxWeightStr);
+			int maxVol = Integer.parseInt(maxVolStr);
+			int dur = Integer.parseInt(durStr);
+			int freq = Integer.parseInt(freqStr);
 			Day day = (Day)fields.get("day");
 
 			listener.onRouteFormSubmitted(company, to, from, type, weightCost, volCost
-						, maxWeight, maxVol, dur, freq, priority, day);
+						, maxWeight, maxVol, dur, freq, day);
 			UIUtils.closeWindow(this);
 		});
 
@@ -114,14 +112,14 @@ public class RouteFormWindow extends AbstractFormWindow {
 			if (input == null)
 				return false;
 		}
-		return true; 
+		return true;
 	}
-	
+
 	public static void main(String[] args){
 		new RouteFormWindow(new RouteFormListener(){
 			@Override
 			public void onRouteFormSubmitted(String company, String to, String from, TransportType type, double weightCost, double volCost
-					, double maxWeight, double maxVol, double dur, double freq, Priority priority, Day day){
+					, int maxWeight, int maxVol, int dur, int freq, Day day){
 				System.out.println("Got form");
 			}
 			public void onCancel(){

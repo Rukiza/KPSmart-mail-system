@@ -23,6 +23,6 @@ public interface RouteFormListener extends FormListener {
 	 * @param day
 	 */
 	public void onRouteFormSubmitted(String company, String to, String from, TransportType type, double weightCost, double volCost
-			, double maxWeight, double maxVol, double dur, double freq, Priority priority, Day day);
+			, int maxWeight, int maxVol, int dur, int freq, Day day);
 
 }

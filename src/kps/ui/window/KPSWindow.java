@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -24,7 +25,9 @@ import kps.enums.Day;
 import kps.enums.Priority;
 import kps.enums.TransportType;
 import kps.events.MailDeliveryEvent;
+import kps.ui.formlistener.DeleteRouteListener;
 import kps.ui.formlistener.PackageFormListener;
+import kps.ui.formlistener.PriceUpdateListener;
 import kps.ui.formlistener.RouteFormListener;
 import kps.ui.panel.DecisionSupportPanel;
 import kps.ui.panel.MetricsPanel;
@@ -85,12 +88,20 @@ public class KPSWindow extends JFrame {
 		// button setup
 		ImageIcon plusIconGreen = null;
 		ImageIcon plusIconBlue = null;
+		ImageIcon deleteIcon = null;
+		ImageIcon updateIcon = null;
 		try {
 			plusIconGreen = new ImageIcon(
 					UIUtils.resizeImage(ImageIO.read(new File("res/plus_icon_green.png")), 30, 30)
 			);
 			plusIconBlue = new ImageIcon(
 					UIUtils.resizeImage(ImageIO.read(new File("res/plus_icon_blue.png")), 30, 30)
+			);
+			deleteIcon = new ImageIcon(
+					UIUtils.resizeImage(ImageIO.read(new File("res/delete_icon.png")), 30, 30)
+			);
+			updateIcon = new ImageIcon(
+					UIUtils.resizeImage(ImageIO.read(new File("res/update_icon.png")), 30, 30)
 			);
 		} catch (IOException e) { e.printStackTrace(); }
 
@@ -106,19 +117,29 @@ public class KPSWindow extends JFrame {
 		addRoute.setHorizontalTextPosition(SwingConstants.CENTER);
 		sidebar.add(addRoute);
 
+		JButton deleteRoute = new JButton("Delete route");
+		deleteRoute.setIcon(deleteIcon);
+		deleteRoute.setVerticalTextPosition(SwingConstants.TOP);
+		deleteRoute.setHorizontalTextPosition(SwingConstants.CENTER);
+		sidebar.add(deleteRoute);
+
+		JButton priceUpdate = new JButton("Update route price");
+		priceUpdate.setIcon(updateIcon);
+		priceUpdate.setVerticalTextPosition(SwingConstants.TOP);
+		priceUpdate.setHorizontalTextPosition(SwingConstants.CENTER);
+		sidebar.add(priceUpdate);
+
 		// side bar events
 		addPackage.addActionListener((ActionEvent e) -> {
 			new PackageFormWindow(new PackageFormListener(){
 				@Override
 				public void onPackageFormSubmitted(Day day, String from, String to, int weight, int volume, Priority priority){
-					system.addMailDeliveryEvent(to, from, day, weight, volume, priority);
+					system.addMailDeliveryEvent(from, to, day, weight, volume, priority);
 				}
-				@Override public void onCompletedFormUpdate(Day day, String from, String to, int weight, int volume, Priority priority){
+				@Override public void onCompletedFormUpdate(Day day, String from, String to, Priority priority, int weight, int volume){
 					DijkstraSearch search = new DijkstraSearch(system.getRouteGraph());
 					Mail mail = new Mail(new BasicRoute(from, to), day, weight, volume, priority);
-					System.out.println("checking valid route with mail object:\n" + mail);
 					if (search.isValidMailDelivery(mail)) {
-						System.out.println("updating graph from window!");
 						graphPanel.setRoute(mail);
 					}
 				}
@@ -132,16 +153,36 @@ public class KPSWindow extends JFrame {
 		addRoute.addActionListener((ActionEvent e) -> new RouteFormWindow(new RouteFormListener(){
 			@Override
 			public void onRouteFormSubmitted(String company, String to, String from, TransportType type, double weightCost, double volCost
-					, double maxWeight, double maxVol, double dur, double freq, Priority priority, Day day){
-				// route form submitted
+					, int maxWeight, int maxVol, int dur, int freq, Day day){
+				system.addTransportCostUpdateEvent(from, to, company, type, weightCost, volCost, maxWeight, maxVol, dur, freq, day);
 			}
 
 			@Override
 			public void onCancel() {
-				// TODO Auto-generated method stub
-
+				// cancelled...
 			}
 		}));
+
+		deleteRoute.addActionListener((ActionEvent e) -> new DeleteRouteWindow(new DeleteRouteListener(){
+			@Override public void onDeleteFormSubmitted(String company, String to, String from, TransportType type){
+				system.addTransportDiscontinuedEvent(to, from, company, type);
+			}
+			@Override public void onCompletedFormUpdate(String company, String to, String from, TransportType type){
+				// updated
+			}
+			@Override public void onCancel(){
+				// cancelled
+			}
+		}, system.getRouteGraph().getNodes()));
+
+		priceUpdate.addActionListener((ActionEvent e) -> new PriceUpdateWindow(new PriceUpdateListener(){
+			@Override public void onPriceUpdateSubmitted(String from, String to, Priority priority, double weightCost, double volumeCost){
+				system.addPriceUpdateEvent(to, from, weightCost, volumeCost, priority);
+			}
+			@Override public void onCancel(){
+				// cancelled
+			}
+		}, system.getRouteGraph().getNodes()));
 
 		return sidebar;
 	}
