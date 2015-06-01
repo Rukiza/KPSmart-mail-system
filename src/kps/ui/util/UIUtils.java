@@ -40,4 +40,15 @@ public class UIUtils {
 	    return dimg;
 	}
 
+	public static boolean isDouble(String... input) {
+		for(String s : input){
+			try {
+				Double.parseDouble(s);
+			} catch (NumberFormatException | NullPointerException e){
+				return false;
+			}
+		}
+		return true;
+	}
+
 }

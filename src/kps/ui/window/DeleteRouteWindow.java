@@ -5,7 +5,6 @@ import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -19,31 +18,31 @@ import javax.swing.event.DocumentListener;
 import kps.data.Node;
 import kps.enums.Day;
 import kps.enums.Priority;
-import kps.ui.formlistener.PackageFormListener;
+import kps.enums.TransportType;
+import kps.ui.formlistener.DeleteRouteListener;
 import kps.ui.util.SpringUtilities;
 import kps.ui.util.UIUtils;
 
-public class PackageFormWindow extends AbstractFormWindow {
+public class DeleteRouteWindow extends AbstractFormWindow{
 
-	private PackageFormListener listener;
+	private DeleteRouteListener listener;
 
-	private String[] fieldNames = new String[] { "day", "to", "from", "priority", "weight", "volume" };
+	String[] fieldNames = new String[] { "company", "to", "from", "type" };
 
-	public PackageFormWindow(PackageFormListener packageFormListener, List<Node> locations){
-		super("Enter package details");
-		this.listener = packageFormListener;
+	public DeleteRouteWindow(DeleteRouteListener deleteRouteListener, List<Node> locations) {
+		super("Delete a route");
+
+		this.listener = deleteRouteListener;
 		setLayout(new BorderLayout());
 
 		// add fields
 		JPanel inputPanel = new JPanel();
 		inputPanel.setLayout(new SpringLayout());
 
-		makeComboBox(fieldNames[0], Day.values(), inputPanel);
+		makeTextField(fieldNames[0], inputPanel);
 		makeComboBox(fieldNames[1], locations.toArray(), inputPanel);
 		makeComboBox(fieldNames[2], locations.toArray(), inputPanel);
-		makeComboBox(fieldNames[3], Priority.values(), inputPanel);
-		makeTextField(fieldNames[4], inputPanel);
-		makeTextField(fieldNames[5], inputPanel);
+		makeComboBox(fieldNames[3], TransportType.values(), inputPanel);
 
 		int fieldCount = fieldNames.length;
 
@@ -70,33 +69,25 @@ public class PackageFormWindow extends AbstractFormWindow {
 				completeFormPrompt();
 				return;
 			}
-			// check digit fields
-			String weightStr = (String)fields.get("weight");
-			String volStr = (String)fields.get("volume");
-			if (!UIUtils.isInteger(weightStr, volStr)){
-				numberFieldsPrompt("weight and volume should only contain digits");
-				return;
-			}
 
-			Day day = (Day)fields.get("day");
+			String company = (String) fields.get("company");
 			String from = (String) fields.get("from").toString();
 			String to = (String) fields.get("to").toString();
-			int weight = Integer.parseInt(weightStr);
-			int volume = Integer.parseInt(volStr);
-			Priority priority = (Priority) fields.get("priority");
+			TransportType type = (TransportType) fields.get("type");
 
-			packageFormListener.onPackageFormSubmitted(day, from, to, weight, volume, priority);
+			deleteRouteListener.onDeleteFormSubmitted(company, from, to, type);
 			UIUtils.closeWindow(this);
 		});
 
 		cancel.addActionListener((ActionEvent e) -> {
-			packageFormListener.onCancel();
-			UIUtils.closeWindow(PackageFormWindow.this);
+			deleteRouteListener.onCancel();
+			UIUtils.closeWindow(DeleteRouteWindow.this);
 		});
 
 		// open window
 		pack();
 		setVisible(true);
+
 	}
 
 	@Override
@@ -137,47 +128,21 @@ public class PackageFormWindow extends AbstractFormWindow {
 
 	private void fireFormUpdate(){
 		// TODO: reuse this code with form submit code
-        // check digit fields
-        String weightStr = (String)fields.get("weight");
-        String volStr = (String)fields.get("volume");
-        if (!UIUtils.isInteger(weightStr, volStr)){
-                return;
-        }
-
-        Day day = (Day)fields.get("day");
-
-        String from = (String)fields.get("from").toString();
+        String company = (String) fields.get("company");
+        String from = (String) fields.get("from").toString();
         String to = (String) fields.get("to").toString();
-        int weight = Integer.parseInt(weightStr);
-        int volume = Integer.parseInt(volStr);
-        Priority priority = (Priority) fields.get("priority");
+        TransportType type = (TransportType) fields.get("type");
 
-        listener.onCompletedFormUpdate(day, from, to, priority, weight, volume);
+        listener.onCompletedFormUpdate(company, from, to, type);
 	}
 
-	protected boolean isFormComplete(){
-		for (String fieldName : fieldNames){
-			if (fields.get(fieldName) == null){
+	@Override
+	protected boolean isFormComplete() {
+		for (Object field : fields.values()){
+			if (field == null)
 				return false;
-			}
 		}
 		return true;
 	}
 
-	public static void main(String args[]){
-		new PackageFormWindow(new PackageFormListener(){
-			@Override
-			public void onPackageFormSubmitted(Day day, String from, String to, int weight, int volume, Priority priority){
-				System.out.println("submitted: " + day + ", " + from + "... etc");
-			}
-			@Override public void onCompletedFormUpdate(Day day, String from, String to, Priority priority, int weight, int volume){
-				System.out.println("updated: " + day + ", " + from + "... etc");
-			}
-
-			@Override
-			public void onCancel(){
-				System.out.println("Cancelled");
-			}
-		}, Arrays.asList(new Node[]{null, null}));
-	}
 }

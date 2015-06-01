@@ -21,9 +21,9 @@ public interface PackageFormListener extends FormListener{
 	 * @param day
 	 * @param from
 	 * @param to
+	 * @param priority
 	 * @param weight
 	 * @param volume
-	 * @param priority
 	 */
-	public void onCompletedFormUpdate(Day day, String from, String to, int weight, int volume, Priority priority);
+	public void onCompletedFormUpdate(Day day, String from, String to, Priority priority, int weight, int volume);
 }
