@@ -155,7 +155,7 @@ public class KPSWindow extends JFrame {
 			public void onRouteFormSubmitted(String company, String to, String from, TransportType type, double weightCost, double volCost
 					, int maxWeight, int maxVol, int dur, int freq, Day day){
 				system.addTransportCostUpdateEvent(from, to, company, type, weightCost, volCost, maxWeight, maxVol, dur, freq, day);
-				graphPanel.routeAdded();
+				graphPanel.graphUpdated();
 			}
 
 			@Override
@@ -166,7 +166,8 @@ public class KPSWindow extends JFrame {
 
 		deleteRoute.addActionListener((ActionEvent e) -> new DeleteRouteWindow(new DeleteRouteListener(){
 			@Override public void onDeleteFormSubmitted(String company, String to, String from, TransportType type){
-				system.addTransportDiscontinuedEvent(to, from, company, type);
+				system.addTransportDiscontinuedEvent(from, to, company, type);
+				graphPanel.graphUpdated();
 			}
 			@Override public void onCompletedFormUpdate(String company, String to, String from, TransportType type){
 				// updated
@@ -178,7 +179,7 @@ public class KPSWindow extends JFrame {
 
 		priceUpdate.addActionListener((ActionEvent e) -> new PriceUpdateWindow(new PriceUpdateListener(){
 			@Override public void onPriceUpdateSubmitted(String from, String to, Priority priority, double weightCost, double volumeCost){
-				system.addPriceUpdateEvent(to, from, weightCost, volumeCost, priority);
+				system.addPriceUpdateEvent(from, to, weightCost, volumeCost, priority);
 			}
 			@Override public void onCancel(){
 				// cancelled

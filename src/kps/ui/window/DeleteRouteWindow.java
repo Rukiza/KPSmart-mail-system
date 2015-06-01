@@ -27,7 +27,7 @@ public class DeleteRouteWindow extends AbstractFormWindow{
 
 	private DeleteRouteListener listener;
 
-	String[] fieldNames = new String[] { "company", "to", "from", "type" };
+	String[] fieldNames = new String[] { "company", "from", "to", "type" };
 
 	public DeleteRouteWindow(DeleteRouteListener deleteRouteListener, List<Node> locations) {
 		super("Delete a route");

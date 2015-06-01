@@ -208,7 +208,7 @@ public class KPSmartSystem {
 	 * @param priority
 	 * 		-- priority of mail
 	 */
-	public void addPriceUpdateEvent(String to, String from, double gramPrice, double volumePrice, Priority priority){
+	public void addPriceUpdateEvent(String from, String to, double gramPrice, double volumePrice, Priority priority){
 		BasicRoute route = new BasicRoute(from, to);
 		if(!customerRoutes.containsKey(route)){
 			customerRoutes.put(route, new CustomerRoute(route));
