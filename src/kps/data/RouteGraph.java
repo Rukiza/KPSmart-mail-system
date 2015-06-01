@@ -84,7 +84,6 @@ public class RouteGraph implements Iterable<Node> {
      * @param route to be added
      * */
     public void addRoute(Route route) {
-    	System.out.println("Adding");
     	Node srcNode = null;
     	Node destNode = null;
 
@@ -93,8 +92,6 @@ public class RouteGraph implements Iterable<Node> {
     		if(n.getName().equals(route.getDest()))destNode = n;
     	}
 
-    	System.out.println("Src " + srcNode == null );
-    	System.out.println("Dest " + destNode == null );
 
     	if( srcNode == null && destNode == null){
     		createSrcAndDest(route);
@@ -112,7 +109,6 @@ public class RouteGraph implements Iterable<Node> {
     		return;
     	}
     	if(destNode == null && srcNode != null){
-    		System.out.println("Src not null ");
     		createDest(route, srcNode);
     		return;
     	}
@@ -187,20 +183,16 @@ public class RouteGraph implements Iterable<Node> {
     }
 
     public boolean isCriticalRoute(Route route){
-    	System.out.println("Starting Critical Route");
-
     	setUpDFS();
 
     	int origSise = visited.size();
 
-    	System.out.println("Orig Size :" + origSise);
     	this.removeRoute(route);
 
     	setUpDFS();
 
     	int finalSize = visited.size();
     	this.addRoute(route);
-    	System.out.println("Final Size : " + finalSize);
     	if(finalSize < origSise )return true;
 
     	return false;
