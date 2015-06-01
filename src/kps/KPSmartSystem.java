@@ -18,6 +18,7 @@ import kps.data.wrappers.EventLog;
 import kps.data.wrappers.MailTransport;
 import kps.data.wrappers.Metrics;
 import kps.enums.Day;
+import kps.enums.Position;
 import kps.enums.Priority;
 import kps.enums.TransportType;
 import kps.events.BusinessEvent;
@@ -311,6 +312,55 @@ public class KPSmartSystem {
 	 */
 	public void logout(){
 		currentUser = null;
+	}
+
+	/**
+	 * Constructs a new KPSUser from the specified parameters and
+	 * adds them to the users of the system.
+	 *
+	 * @param username
+	 * 		-- name of the user
+	 * @param passwordHash
+	 * 		-- hash of the user's password
+	 * @param position
+	 * 		-- the position held of the user
+	 */
+	public void addKPSUser(String username, int passwordHash, Position position){
+		KPSUser user = new KPSUser(username, passwordHash, position);
+		users.put(username, user);
+	}
+
+	/**
+	 * Returns true if there is a user in the KPSmartSystem with
+	 * the specified username. Otherwise returns false.
+	 *
+	 * @param username
+	 * 		-- name of the user
+	 *
+	 * @return true if user is in system, otherwise false
+	 */
+	public boolean containsKPSUser(String username){
+		return users.containsKey(username);
+	}
+
+	/**
+	 * Returns true if the password is correct for the specified user,
+	 * otherwise returns false.
+	 *
+	 * @param username
+	 * 		-- name of the user
+	 * @param passwordHash
+	 * 		-- hash of the user's password
+	 *
+	 * @return true if password is correct, otherwise false.
+	 */
+	public boolean isCorrectPassword(String username, int passwordHash){
+		if(users.containsKey(username)){
+			if(users.get(username).getPasswordHash() == passwordHash){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void processBusinessEvents(){
