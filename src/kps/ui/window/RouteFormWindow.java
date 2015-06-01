@@ -37,7 +37,7 @@ public class RouteFormWindow extends AbstractFormWindow {
 		makeComboBox("day", Day.values(), inputPanel);
 
 		// TODO: make this variable dynamic
-		int fieldCount = 12;
+		int fieldCount = 11;
 
 		SpringUtilities.makeCompactGrid(inputPanel,
 				fieldCount, 2,	//rows, cols
