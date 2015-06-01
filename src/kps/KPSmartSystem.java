@@ -48,6 +48,14 @@ public class KPSmartSystem {
 	/**
 	 * Constructs an empty instance of KPSmartSystem
 	 */
+	public KPSmartSystem(){
+		eventLog = new EventLog();
+		customerRoutes = new HashMap<BasicRoute, CustomerRoute>();
+		routeGraph = new RouteGraph();
+		users = new HashMap<String, KPSUser>();
+		currentUser = null;
+	}
+
 	public KPSmartSystem(EventLog eventLog){
 		this.eventLog = eventLog;
 		customerRoutes = new HashMap<BasicRoute, CustomerRoute>();
@@ -148,6 +156,16 @@ public class KPSmartSystem {
 	 */
 	public String getCurrentUser(){
 		return currentUser.getUsername();
+	}
+
+	/**
+	 * Returns true if there is currently someone logged into the system,
+	 * otherwise returns false.
+	 *
+	 * @return true if logged in, otherwise false
+	 */
+	public boolean isLoggedIn(){
+		return currentUser != null;
 	}
 
 	public Metrics getMetrics(){
