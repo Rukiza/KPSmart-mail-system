@@ -75,7 +75,7 @@ public class DrawRoute {
 	public boolean addRouteCheck(Route r){
 		return (r.getDest().equals(node2.getNode().getName()) || r.getDest().equals(node1.getNode().getName()))
 			   &&
-			   (r.getSrc().equals(node2.getNode().getName()) || r.getSrc().equals(node1.getNode().getName()));
+			   (r.getSrc().equals(node2.getNode().getName())  || r.getSrc().equals(node1.getNode().getName()));
 	}
 
 

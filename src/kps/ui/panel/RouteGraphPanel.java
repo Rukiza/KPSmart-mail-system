@@ -101,6 +101,10 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 			contains = false;
 		}
 		setUpDrawRoutes();
+
+
+		//find out if a graph needs to be removed
+
 	}
 
 
@@ -127,7 +131,9 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 	 * Creates DrawRoutes from the graph and adds them to the list of drawRoutes
 	 * */
 	public void setUpDrawRoutes(){
+		drawRoutes.clear();
 		for(DrawNode n : drawNodes ){
+
 			for(Route r : n.getNode().getNeighbours()){
 
 				DrawNode src = null;

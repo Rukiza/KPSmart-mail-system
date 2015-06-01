@@ -274,11 +274,14 @@ public class KPSmartSystem {
 	 * @param type
 	 * 		-- transport type
 	 */
-	public void addTransportDiscontinuedEvent(String from, String to, String company, TransportType type){
-		BasicRoute route = new BasicRoute(from, to);
+	public void addTransportDiscontinuedEvent(Route route){
+		BasicRoute bRoute = new BasicRoute(route.getSrc(), route.getDest());
 		//RouteGraph.removeRoute(route, transportFirm, transportType); TO BE IMPLEMENTED
 		long timeLogged = System.currentTimeMillis();
-		eventLog.addBusinessEvent(new TransportDiscontinuedEvent(timeLogged, route, company, type));
+
+		eventLog.addBusinessEvent(new TransportDiscontinuedEvent(timeLogged, bRoute, route.getCompany(), route.getType()));
+
+		routeGraph.removeRoute(route);
 	}
 
 	/**

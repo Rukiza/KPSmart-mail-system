@@ -1,8 +1,10 @@
 package kps.data;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 /**
  * @author Nicky van Hulst 300294657
  * */
@@ -121,12 +123,13 @@ public class RouteGraph implements Iterable<Node> {
      * @param route to be removed
      * */
     public boolean removeRoute(Route route){
-    	if(criticalRoutes.contains(route))return false;//cannot remove a critical route
+		System.out.println("Removing Start");
+
     	boolean toReturn = false;
 
     	for(int i = 0; i < nodes.size(); i++){
     		if(nodes.get(i).getNeighbours().contains(route)){
-
+    			System.out.println("Removing");
     			nodes.get(i).removeRoute(route);
     			if(nodes.get(i).getNeighbours().size() == 0)nodes.remove(i);//remove the node as it no longer has any routes
     			toReturn = true;
@@ -209,6 +212,20 @@ public class RouteGraph implements Iterable<Node> {
     		 }
     	 }
     	return null;
+    }
+
+    /**
+     * Returns all of the routes in the graph
+     * */
+    public Set<Route> getRoutes(){
+    	Set<Route> routes = new HashSet<Route>();
+
+    	for(Node n: nodes){
+    		for(Route r : n.getNeighbours()){
+    			routes.add(r);
+    		}
+    	}
+    	return routes;
     }
 
 
