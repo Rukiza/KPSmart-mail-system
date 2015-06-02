@@ -3,7 +3,9 @@ package kps.parser;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -11,6 +13,7 @@ import kps.data.wrappers.BasicRoute;
 import kps.data.wrappers.DeliveryPrice;
 import kps.data.wrappers.MailTransport;
 import kps.enums.Day;
+import kps.enums.Position;
 import kps.enums.Priority;
 import kps.enums.TransportType;
 import kps.events.BusinessEvent;
@@ -18,6 +21,7 @@ import kps.events.MailDeliveryEvent;
 import kps.events.PriceUpdateEvent;
 import kps.events.TransportCostUpdateEvent;
 import kps.events.TransportDiscontinuedEvent;
+import kps.users.KPSUser;
 
 public class KPSParser {
 
@@ -45,6 +49,11 @@ public class KPSParser {
 	public static final String DAY_TAG = "day";
 	public static final String DURATION_TAG = "duration";
 	public static final String FREQUENCY_TAG = "frequency";
+	public static final String USERS_FILE_TAG = "users";
+	public static final String USER_TAG = "user";
+	public static final String USERNAME_TAG = "username";
+	public static final String PASSWORD_TAG = "passwordHash";
+	public static final String POSITION_TAG = "position";
 
 
 	/**
@@ -70,15 +79,7 @@ public class KPSParser {
 		}catch(IOException e){throw new ParserException("ParseFile: Cannot load file "+filename);}
 
 		// scan all of the file into a string
-		String data = "";
-		while(scan.hasNext()){
-			data += scan.next()+" ";
-		}
-		// ensure that there are gaps after > and before <
-		data = data.replaceAll(">", "> ");
-		data = data.replaceAll("<", " <");
-
-		// scan string containing data
+		String data = convertXMLDataToString(scan);
 		scan.close();
 		scan = new Scanner(data);
 
@@ -126,6 +127,74 @@ public class KPSParser {
 		// file parsing successful
 		scan.close();
 		return eventLog;
+	}
+
+	/**
+	 * Parses the file specified by the file name and returns the KPSUsers that
+	 * are contained within it.
+	 *
+	 * @param filename
+	 * 		-- name of the file to be parsed
+	 *
+	 * @return a map of user names to users
+	 *
+	 * @throws ParserException
+	 * 		-- thrown if the file cannot be opened, an incorrect tag is found
+	 */
+	public static Map<String, KPSUser> parseKPSUsers(String filename) throws ParserException{
+		Map<String, KPSUser> users = new HashMap<String, KPSUser>();
+
+		// load file into the scanner
+		Scanner scan = null;
+		try{
+			scan = new Scanner(new File(filename));
+		}catch(IOException e){throw new ParserException("ParseKPSUsers: Cannot load file "+filename);}
+
+		String data = convertXMLDataToString(scan);
+		scan.close();
+		scan = new Scanner(data);
+
+		gobble(scan, "<"+USERS_FILE_TAG+">");
+		while(scan.hasNext()){
+			// check if there is another user to parse
+			if(scan.hasNext("<"+USER_TAG+">")){
+				KPSUser user = parseKPSUser(scan);
+				users.put(user.getUsername(), user);
+			}
+			// check if the end of the file has been reached
+			else if(scan.hasNext("</"+USER_TAG+">")){
+				scan.next();
+				break;
+			}
+			// an invalid tag has been found
+			else{
+				scan.close();
+				throw new ParserException("ParseKPSUsers: Incorrect tag found: "+scan.next());
+			}
+		}
+
+		// file parsing successful
+		scan.close();
+		return users;
+	}
+
+	/**
+	 * Converts the XML data contained in the scanner into a String.
+	 *
+	 * @param scan
+	 * 		-- scanner containing xml data
+	 *
+	 * @return string of xml data
+	 */
+	private static String convertXMLDataToString(Scanner scan){
+		String data = "";
+		while(scan.hasNext()){
+			data += scan.next() + " ";
+		}
+		// ensure that there are gaps after > and before <
+		data = data.replaceAll(">", "> ");
+		data = data.replaceAll("<", " <");
+		return data;
 	}
 
 	/**
@@ -237,6 +306,30 @@ public class KPSParser {
 
 		// data has been successfully retrieved
 		return new TransportDiscontinuedEvent(time, route, company, type);
+	}
+
+	/**
+	 * Parses a KPSUser, consisting of a username, passoword hash and position,
+	 * from the scanner.
+	 *
+	 * @param scan
+	 * 		-- scanner containing xml data
+	 *
+	 * @return new KPSUser based on data
+	 *
+	 * @throws ParserException
+	 * 		-- thrown if tags are incorrect or lines do not match the xml format
+	 */
+	public static KPSUser parseKPSUser(Scanner scan) throws ParserException{
+		// parse data from file
+		gobble(scan, "<"+USER_TAG+">");
+		String username = parseString(scan, USERNAME_TAG);
+		int passwordHash = parseInt(scan, PASSWORD_TAG);
+		Position position = Position.convertStringToPosition(parseString(scan, POSITION_TAG));
+		gobble(scan, "</"+USER_TAG+">");
+
+		// data has been successfully retrieved
+		return new KPSUser(username, passwordHash, position);
 	}
 
 	/**
