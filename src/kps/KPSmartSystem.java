@@ -10,6 +10,8 @@ import java.util.Map;
 
 import kps.Main;
 import kps.data.CustomerRoute;
+import kps.data.DijkstraSearch;
+import kps.data.Mail;
 import kps.data.Route;
 import kps.data.RouteGraph;
 import kps.data.wrappers.BasicRoute;
@@ -178,10 +180,21 @@ public class KPSmartSystem {
 		BasicRoute route = new BasicRoute(from, to);
 		if(!customerRoutes.containsKey(route)){
 			// cannot send mail
+			System.out.println("cannot send mail, No cutsomer cost for route" );
+			return;
 		}
 		double revenue = customerRoutes.get(route).calculateDeliveryPrice(weight, volume, priority);
 		if(revenue < 0){
 			// cannot send mail
+			System.out.println("cannot send mail, No cutsomer cost for priority" );
+			return;
+		}
+
+		//check if the route is valid
+		if(!(new DijkstraSearch(routeGraph).isValidMailDelivery(new Mail(route, day, weight, volume, priority)))){
+			// cannot send mail
+			System.out.println("No valid route available in the graph" );
+			return;
 		}
 
 		// calculate expenditure
