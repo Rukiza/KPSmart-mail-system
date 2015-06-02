@@ -59,7 +59,7 @@ public class KPSmartSystem {
 	public KPSmartSystem(EventLog eventLog){
 		this.eventLog = eventLog;
 		customerRoutes = new HashMap<BasicRoute, CustomerRoute>();
-		routeGraph = loadGraph();
+		routeGraph = new RouteGraph();//loadGraph();
 		users = new HashMap<String, KPSUser>();
 		currentUser = null;
 		metrics = new Metrics();
