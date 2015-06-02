@@ -16,7 +16,7 @@ public class EventLogTests {
 	private EventLog setup(){
 		EventLog log = null;
 		try {
-			log = new EventLog(KPSParser.parseFile(Main.filename));
+			log = new EventLog(KPSParser.parseFile(Main.EVENT_LOG));
 		} catch (ParserException e) {
 			e.printStackTrace();
 		}

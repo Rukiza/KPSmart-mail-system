@@ -14,12 +14,13 @@ import kps.ui.window.LogonBox;
 
 public class Main {
 
-	public static final String XML_FILE_PATH = "src"+File.separator+"kps"+File.separator+"xml"+File.separator;
-	public static final String filename = XML_FILE_PATH + "eventlog.xml";
+	public static final String XML_FILE_PATH = "xml"+File.separator;
+	public static final String EVENT_LOG = XML_FILE_PATH + "eventlog.xml";
+	public static final String USERS = XML_FILE_PATH + "users.xml";
 
 	public static void main(String[] args){
 		try{
-			List<BusinessEvent> bizEvents = KPSParser.parseFile(filename);
+			List<BusinessEvent> bizEvents = KPSParser.parseFile(EVENT_LOG);
             EventLog eventLog = new EventLog(bizEvents);
             KPSmartSystem system = new KPSmartSystem(eventLog);
 
