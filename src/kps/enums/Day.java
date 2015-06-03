@@ -70,4 +70,33 @@ public enum Day {
 			return null;
 		}
 	}
+
+	/**
+	 * Returns the day proceeding the specified day.
+	 *
+	 * @param day
+	 *
+	 * @return the next day
+	 */
+	public static Day getNextDay(Day day){
+		switch(day){
+		case MONDAY:
+			return TUESDAY;
+		case TUESDAY:
+			return WEDNESDAY;
+		case WEDNESDAY:
+			return THURSDAY;
+		case THURSDAY:
+			return FRIDAY;
+		case FRIDAY:
+			return SATURDAY;
+		case SATURDAY:
+			return SUNDAY;
+		case SUNDAY:
+			return MONDAY;
+		default:
+			// will not reach this stage as a day can only be one of the above cases
+			return null;
+		}
+	}
 }
