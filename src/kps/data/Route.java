@@ -1,5 +1,6 @@
 package kps.data;
 
+import kps.enums.Day;
 import kps.enums.TransportType;
 import kps.events.TransportCostUpdateEvent;
 
@@ -76,6 +77,29 @@ public class Route {
 	 * returns the cost of the route
 	 * */
 	public double getCost(){return cost;}//TODO change to getCost(double volume, double weight)
+
+	/**
+	 * Gets the duration for the route to get to the destination
+	 * */
+	public int getDuration(){
+		return transport.getTripDuration();
+	}
+
+	/**
+	 * Returns the day the route can send the package away
+	 * */
+	public Day getDay(){
+		return transport.getDayDelivered();
+	}
+
+
+	/**
+	 * Returns the day the route can send the package away
+	 * */
+	public int  getFrequency() {
+		return transport.getDepartureFrequency();
+	}
+
 
 
 

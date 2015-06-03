@@ -12,6 +12,7 @@ public class Node  implements Comparable<Node>{
 
 	//cost used for searching
 	private double minCost = Double.POSITIVE_INFINITY;
+	private Route routeTaken;
 
 	//name of the node
 	private String name;
@@ -37,7 +38,9 @@ public class Node  implements Comparable<Node>{
 	 * Adds an edge to the Node
 	 * */
 	public boolean addEdge(Route route){
-				if(!(route.getSrc().equals(name) || route.getDest().equals(name))){
+		if(route == null)return false;
+
+		if(!(route.getSrc().equals(name) || route.getDest().equals(name))){
 			return false;
 		}
 
@@ -58,6 +61,8 @@ public class Node  implements Comparable<Node>{
 	 * @param route to be updated
 	 * */
 	public void updateRoute(Route route){
+		if(route == null)return;
+
 		edgesIn.remove(route);
 		edgesOut.remove(route);
 
@@ -74,6 +79,8 @@ public class Node  implements Comparable<Node>{
 	 * @return whether the route was removed
 	 * */
 	public boolean removeRoute(Route route){
+		if(route == null)return false;
+
 		boolean removed = false;
 
 		if(edgesOut.contains(route)){
@@ -92,7 +99,7 @@ public class Node  implements Comparable<Node>{
 	/**
 	 * returns all of the connection in and out of the node
 	 *
-	 * @return the neighbours of the node
+	 * @return the neighbors of the node
 	 * */
 	public Set<Route> getNeighbours(){
 		Set<Route> neighbours = new HashSet<Route>();
@@ -179,6 +186,8 @@ public class Node  implements Comparable<Node>{
 	public void setPrev(Node n){this.prev = n;}
 	public double getMinCost(){return this.minCost;}
 	public void setMinCost(double minCost){this.minCost = minCost;}
+	public void setRouteTaken(Route r){this.routeTaken = r;}
+	public Route getRouteTaken(){return this.routeTaken;}
 
 
 	@Override

@@ -86,6 +86,8 @@ public class RouteGraph implements Iterable<Node> {
      * @param route to be added
      * */
     public void addRoute(Route route) {
+    	if(route == null)return;
+
     	Node srcNode = null;
     	Node destNode = null;
 
@@ -123,13 +125,12 @@ public class RouteGraph implements Iterable<Node> {
      * @param route to be removed
      * */
     public boolean removeRoute(Route route){
-		System.out.println("Removing Start");
+		if(route == null)return false;
 
     	boolean toReturn = false;
 
     	for(int i = 0; i < nodes.size(); i++){
     		if(nodes.get(i).getNeighbours().contains(route)){
-    			System.out.println("Removing");
     			nodes.get(i).removeRoute(route);
     			if(nodes.get(i).getNeighbours().size() == 0)nodes.remove(i);//remove the node as it no longer has any routes
     			toReturn = true;
@@ -158,8 +159,9 @@ public class RouteGraph implements Iterable<Node> {
     	}
     }
 
-    List<SearchNode> visited;
-    List<SearchNode> allnodes;
+    //for Depth First Search
+    private List<SearchNode> visited;
+    private List<SearchNode> allnodes;
 
     public void setUpDFS(){
     	allnodes =  new ArrayList<SearchNode>();//resets searchNode list
@@ -245,5 +247,4 @@ public class RouteGraph implements Iterable<Node> {
 		}
 		return null;
 	}
-
 }
