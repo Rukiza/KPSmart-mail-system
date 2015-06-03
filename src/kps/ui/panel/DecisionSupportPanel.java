@@ -65,6 +65,7 @@ public class DecisionSupportPanel extends JPanel {
 
 
 	/**
+	 * Sets up the panels within it.
 	 * @param data
 	 *            - The Event log of the program.
 	 */
@@ -72,12 +73,14 @@ public class DecisionSupportPanel extends JPanel {
 		this.data = data;
 		this.setPreferredSize(size);
 		this.setSize(size);
+		// Warning must be added in this order.
 		manager = new DataManager(this.data);
 		this.setLayout(new GridBagLayout());
 		graphPanel = new GraphPanel("Temp", manager);
 		displayPanel = new DisplayPanel(manager);
 		selectPanel = new SelectPanel(manager);
 		loadBarPanel = new LoadBarPanel(data);
+		// Warning
 		GridBagConstraints con = new GridBagConstraints();
 		con.fill = GridBagConstraints.NONE;
 		con.anchor = GridBagConstraints.NORTHWEST;
@@ -109,11 +112,21 @@ public class DecisionSupportPanel extends JPanel {
 		manager.updateDisplay();
 	}
 
-
+	/**
+	 * Gets the key listener for the movement of the
+	 * decision panel.
+	 * @return - Keylistener that pressing left and right effects the 
+	 * 				panel.
+	 */
 	public KeyListener getKeyListener() {
 		return manager.getKeyListener();
 	}
 
+	/**
+	 * This class manages the data and comunication between the other panels.
+	 * @author Shane Brewer
+	 *
+	 */
 	private class DataManager {
 		private EventLog data;
 		private List<JTextField> textFields;
@@ -125,12 +138,18 @@ public class DecisionSupportPanel extends JPanel {
 		private Map<String, JFreeChart> graphMap = new HashMap<String, JFreeChart>();
 		private Map<String, Dataset> datasetMap = new HashMap<String, Dataset>();
 
-
-
+		/**
+		 * Sets up the data manager with the event log.
+		 * @param eventLog
+		 */
 		public DataManager(EventLog eventLog) {
 			data = eventLog;
 		}
-
+		
+		/**
+		 * Makes a key listener for the decision support panel.
+		 * @return - Returns the key listener for use on them main panel.
+		 */
 		public KeyListener getKeyListener() {
 			return new KeyListener() {
 
@@ -157,21 +176,38 @@ public class DecisionSupportPanel extends JPanel {
 				}
 			};
 		}
-
+		/**
+		 * Sets up the event display.
+		 * @param temp - is a list of jtext fields for modification. 
+		 */
 		public void setupEventDisplay(List<JTextField> temp) {
 			textFields = temp;
 		}
 
+		/**
+		 * Sets up the graph panel display data.
+		 * @param graphName - Name of the graph
+		 * @param chart - the chart it is accociated to.
+		 * @param panel - The panel that it is to be displayed on.
+		 * @param dataset - The data set that is to be used.
+		 */
 		public void setupGraphDisplay(String graphName, JFreeChart chart, JPanel panel, Dataset dataset){
 			graphPanel = panel;
 			graphMap.put(graphName, chart);
 			datasetMap.put(graphName, dataset);
 		}
 
+		/**
+		 * Adds a button group to the panel to manage modifications.
+		 * @param group - Button Group
+		 */
 		public void addButtonGroup(ButtonGroup group){
 			this.group = group;
 		}
 
+		/**
+		 * Updates the Graph panel depending on the current selected button group and graph avaliblity.
+		 */
 		public void updateGraph(){
 			if (data.isEmpty())
 				return;
@@ -187,7 +223,8 @@ public class DecisionSupportPanel extends JPanel {
 				break;
 			}
 		}
-
+		
+		/* All updates that invove a graph are updating the data from individual graphs. */
 		private void updateTypeGraph(JFreeChart chart, DefaultPieDataset dataset){
 			List<BusinessEvent>	events = data.getListToCurrent();
 			dataset.clear();
@@ -203,22 +240,29 @@ public class DecisionSupportPanel extends JPanel {
 
 		}
 
+		/* All updates that invove a graph are updating the data from individual graphs. */
 		private void updateTransportGraph(JFreeChart chart, DefaultCategoryDataset dataset){
 
 		}
 
+		/* All updates that invove a graph are updating the data from individual graphs. */
 		private void updateDiscontinueGraph(){
 
 		}
 
+		/* All updates that invove a graph are updating the data from individual graphs. */
 		private void updateMailGraph(){
 
 		}
 
+		/* All updates that invove a graph are updating the data from individual graphs. */
 		private void updatePriceGraph(){
 
 		}
 
+		/**
+		 * This updates the Display panel with using the text fields passed in eirler.
+		 */
 		public void updateDisplay() {
 			if (data.isEmpty())
 				return;
@@ -243,7 +287,8 @@ public class DecisionSupportPanel extends JPanel {
 			textFields.get(13).setText(
 					new Date(event.getTimeLogged()).toString());
 		}
-
+		
+		/*Modifys the text fields depending on event type.*/
 		private void handlePriceUpdate(PriceUpdateEvent event) {
 			textFields.get(2).setText("Desitination");
 			textFields.get(3).setText(event.getDestination());
@@ -255,6 +300,7 @@ public class DecisionSupportPanel extends JPanel {
 			textFields.get(9).setText(Priority.convertPriorityToString(event.getPriority()));
 		}
 
+		/*Modifys the text fields depending on event type.*/
 		private void handleDiscountinuedUpdate(TransportDiscontinuedEvent event) {
 			textFields.get(2).setText("Desitination");
 			textFields.get(3).setText(event.getDestination());
@@ -264,6 +310,7 @@ public class DecisionSupportPanel extends JPanel {
 			textFields.get(7).setText(""+event.getTransportType());
 		}
 
+		/*Modifys the text fields depending on event type.*/
 		private void handleCostUpdate(TransportCostUpdateEvent event) {
 			textFields.get(2).setText("Desitination");
 			textFields.get(3).setText(event.getDestination());
@@ -278,6 +325,7 @@ public class DecisionSupportPanel extends JPanel {
 			textFields.get(12).setText("Mail Transport");
 		}
 
+		/*Modifys the text fields depending on event type.*/
 		private void handleMailUpdate(MailDeliveryEvent event) {
 			textFields.get(2).setText("Desitination");
 			textFields.get(3).setText(event.getDestination());
@@ -289,6 +337,10 @@ public class DecisionSupportPanel extends JPanel {
 			textFields.get(9).setText(Day.convertDayToString(event.getDay()));
 		}
 
+		/**
+		 * Passes a listner to be atached to the main buttons on the selecton panel.
+		 * @return - Listner that listens for the next press.
+		 */
 		public ActionListener getNextLisener() {
 			return new ActionListener() {
 				@Override
@@ -301,6 +353,10 @@ public class DecisionSupportPanel extends JPanel {
 			};
 		}
 
+		/**
+		 * Passes a listner to be atached to the main buttons on the selecton panel.
+		 * @return - Listner that listens for the prev press.
+		 */
 		public ActionListener getPrevLisener() {
 			return new ActionListener() {
 				@Override
@@ -313,6 +369,10 @@ public class DecisionSupportPanel extends JPanel {
 			};
 		}
 
+		/**
+		 * Passes a listner to be atached to the main buttons on the selecton panel.
+		 * @return - Listner that listens for the select of radio buttons.
+		 */
 		public ActionListener getRadioListener(){
 			return new ActionListener() {
 
@@ -349,7 +409,12 @@ public class DecisionSupportPanel extends JPanel {
 			add(setupGraph(new DefaultPieDataset()));
 		}
 
-
+		/**
+		 * Sets up the graph and adds it to a jpanel.
+		 * It also adds it to the data manager class.
+		 * @param dataset
+		 * @return
+		 */
 		private JPanel setupGraph(DefaultPieDataset dataset) {
 			Dataset temp = new DefaultCategoryDataset();
 			JFreeChart chart = ChartFactory.createBarChart("Transport", "Destination", "Change Frequency", (DefaultCategoryDataset)temp);
@@ -391,7 +456,10 @@ public class DecisionSupportPanel extends JPanel {
 			textFieldSetup();
 			this.setBorder(new TitledBorder("Event Details"));
 		}
-
+		
+		/**
+		 * Sets up the text fields
+		 */
 		private void textFieldSetup() {
 			this.setLayout(new GridBagLayout());
 			GridBagConstraints com = new GridBagConstraints();
@@ -400,7 +468,13 @@ public class DecisionSupportPanel extends JPanel {
 			}
 		}
 
-
+		/**
+		 * Makes all the text firelds and adds them to the panel.
+		 * Makes ure they are all in the correct grid bag layout.
+		 * @param counter - number of componets.
+		 * @param com - grid bag conraints.
+		 * @return - the new text field
+		 */
 		private JTextField makeTextField(int counter, GridBagConstraints com) {
 			JTextField field = new JTextField() {
 				@Override
@@ -424,7 +498,11 @@ public class DecisionSupportPanel extends JPanel {
 		}
 	}
 
-
+	/**
+	 * Selection Panel.
+	 * @author Shane Brewer, 300289850
+	 *
+	 */
 	private class SelectPanel extends JPanel {
 		private DataManager manager;
 		private Dimension sizeSelectPanel = new Dimension(size.width/3, size.height
@@ -445,7 +523,13 @@ public class DecisionSupportPanel extends JPanel {
 			radioSetup(radioPanel, constraints);
 			this.setBorder(new TitledBorder("Selection Menu"));
 		}
-
+		
+		/**
+		 * Sets up the buttons and adds them to the 
+		 * panel and the data manager.
+		 * @param panel - panel they are to added to.
+		 * @param constraints - contraints to be followed
+		 */
 		public void buttonSetup(JPanel panel, GridBagConstraints constraints) {
 			panel.setLayout(new GridBagLayout());
 			GridBagConstraints con = new GridBagConstraints();
@@ -467,7 +551,13 @@ public class DecisionSupportPanel extends JPanel {
 			this.add(panel, constraints);
 
 		}
-
+		
+		/** 
+		 * Sets up the radio menu and adds it to the panel
+		 * and passes it to the manager class.
+		 * @param panel - panel it is to be added to 
+		 * @param constraints - constraints to be followed.
+		 */
 		public void radioSetup(JPanel panel, GridBagConstraints constraints){
 			JRadioButton type = new JRadioButton("All Events by Type");
 		    type.setActionCommand(typeString);
@@ -518,7 +608,12 @@ public class DecisionSupportPanel extends JPanel {
 			this.add(panel, constraints);
 		}
 	}
-
+	
+	/**
+	 * Load bar panel for displaying the load bar.
+	 * @author Shane Brewer
+	 *
+	 */
 	private class LoadBarPanel extends JPanel{
 		private Dimension sizeb = new Dimension(size.width, size.height / 10);
 		private EventLog log;
