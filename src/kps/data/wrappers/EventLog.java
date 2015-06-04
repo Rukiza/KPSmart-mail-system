@@ -63,6 +63,19 @@ public class EventLog {
 	 * @return - Business event
 	 */
 	public BusinessEvent getNextEvent(){
+		if (iterationLocation + 1 >= eventLog.size()){
+			iterationLocation = 0;
+			return eventLog.get(iterationLocation);
+		}
+		return eventLog.get(++iterationLocation);
+	}
+
+	/**
+	 * Uses the applied filter to get the next event in the list
+	 * if there is not filter then normal action will happen.
+	 * @return
+	 */
+	public BusinessEvent getFilterNextEvent(){
 		if (currentFilter != null){
 			return currentFilter.getNextEvent();
 		}
@@ -82,6 +95,19 @@ public class EventLog {
 	 * @return - Business event
 	 */
 	public BusinessEvent getPrevEvent(){
+		if (iterationLocation - 1 < 0){
+			iterationLocation = eventLog.size() -1;
+			return eventLog.get(iterationLocation);
+		}
+		return eventLog.get(--iterationLocation);
+
+	}
+
+	/**
+	 * Uses applied filter to get the previous event.
+	 * @return -
+	 */
+	public BusinessEvent getFilterPrevEvent(){
 		if (currentFilter != null){
 			return currentFilter.getPrevEvent();
 		}
@@ -100,6 +126,15 @@ public class EventLog {
 	 * @return - Current Business event.
 	 */
 	public BusinessEvent getCurrentEvent(){
+		return eventLog.get(iterationLocation);
+	}
+
+	/**
+	 * Gets the current business event From the filtered list.
+	 * If there is none then the origonal action will ocure
+	 * @return - Current Business event.
+	 */
+	public BusinessEvent getFilterCurrentEvent(){
 		if (currentFilter != null){
 			return currentFilter.getCurrentEvent();
 		}
@@ -112,6 +147,14 @@ public class EventLog {
 	 * Resets the eventLog iteration.
 	 */
 	public void resetEventLogLocation(){
+		iterationLocation = 0;
+	}
+
+	/**
+	 * Resets the filter eventLog iteration.
+	 * If there is not filter normal reset happens.
+	 */
+	public void resetFilterEventLogLocation(){
 		if (currentFilter != null){
 			currentFilter.resetEventLogLocation();;
 		}
@@ -120,11 +163,21 @@ public class EventLog {
 		}
 	}
 
+
 	/**
 	 * Check if the event log is empty
 	 * @return - true if its empty
 	 */
 	public boolean isEmpty(){
+		return eventLog.isEmpty();
+	}
+
+	/**
+	 * Check if the event log is empty from the applied filter
+	 * If the filter is not aplied then the origonal action happens.
+	 * @return - true if its empty
+	 */
+	public boolean isFilterEmpty(){
 		if (currentFilter != null){
 			return currentFilter.isEmpty();
 		}
@@ -137,6 +190,13 @@ public class EventLog {
 	 * @return - Size of the event log
 	 */
 	public int getSize(){
+		return eventLog.size();
+	}
+
+	/**
+	 * @return - Size of the filtered event log
+	 */
+	public int getFilterSize(){
 		if (currentFilter != null){
 			return currentFilter.getSize();
 		}
@@ -145,7 +205,19 @@ public class EventLog {
 		}
 	}
 
+	/**
+	 * Gets the position though the list currently.
+	 * @return -
+	 */
 	public int getPosition(){
+			return iterationLocation;
+	}
+
+	/**
+	 * Gets the position of the pointer based on filters.
+	 * @return - filter iteration postion.
+	 */
+	public int getFilterPosition(){
 		if (currentFilter != null){
 			return currentFilter.getPosition();
 		}
@@ -168,7 +240,19 @@ public class EventLog {
 		return xml;
 	}
 
+	/**
+	 * Gets the sublist to the current postion.
+	 * @return - returns sublist with refrences intact
+	 */
 	public List<BusinessEvent> getListToCurrent(){
+			return eventLog.subList(0, iterationLocation+1);
+	}
+
+	/**
+	 * Gets the sublist with filters aplied to the current postion.
+	 * @return - returns sublist with refrences intact
+	 */
+	public List<BusinessEvent> getFilterListToCurrent(){
 		if (currentFilter != null){
 			return currentFilter.getListToCurrent();
 		}

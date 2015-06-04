@@ -101,9 +101,9 @@ public class EventLogTests {
 	public void mailFilterTest(){
 		EventLog log = setup();
 		log.applyMailDeliveryFilter();
-		BusinessEvent oldEvent = log.getCurrentEvent();
-		log.getNextEvent();
-		BusinessEvent newEvent = log.getNextEvent();
+		BusinessEvent oldEvent = log.getFilterCurrentEvent();
+		log.getFilterNextEvent();
+		BusinessEvent newEvent = log.getFilterNextEvent();
 		if (oldEvent instanceof MailDeliveryEvent && newEvent instanceof MailDeliveryEvent){
 			return;
 		}
@@ -114,12 +114,12 @@ public class EventLogTests {
 	public void mailFilterTest2(){
 		EventLog log = setup();
 		log.applyMailDeliveryFilter();
-		BusinessEvent oldEvent = log.getCurrentEvent();
-		int size = log.getSize();
+		BusinessEvent oldEvent = log.getFilterCurrentEvent();
+		int size = log.getFilterSize();
 		for (int i =0 ; i< size; i++){
-			System.out.println(log.getNextEvent());
+			System.out.println(log.getFilterNextEvent());
 		}
-		BusinessEvent newEvent = log.getCurrentEvent();
+		BusinessEvent newEvent = log.getFilterCurrentEvent();
 		if (oldEvent instanceof MailDeliveryEvent && newEvent instanceof MailDeliveryEvent && oldEvent == newEvent){
 			return;
 		}
@@ -130,12 +130,12 @@ public class EventLogTests {
 	public void mailFilterTest3(){
 		EventLog log = setup();
 		log.applyMailDeliveryFilter();
-		BusinessEvent oldEvent = log.getCurrentEvent();
-		int size = log.getSize();
+		BusinessEvent oldEvent = log.getFilterCurrentEvent();
+		int size = log.getFilterSize();
 		for (int i = size -1 ; i >= 0; i--){
-			log.getPrevEvent();
+			log.getFilterPrevEvent();
 		}
-		BusinessEvent newEvent = log.getCurrentEvent();
+		BusinessEvent newEvent = log.getFilterCurrentEvent();
 		if (oldEvent instanceof MailDeliveryEvent && newEvent instanceof MailDeliveryEvent && oldEvent == newEvent){
 			return;
 		}
@@ -146,9 +146,9 @@ public class EventLogTests {
 	public void priceFilterTest(){
 		EventLog log = setup();
 		log.applyPriceUpdateFilter();
-		BusinessEvent oldEvent = log.getCurrentEvent();
-		log.getNextEvent();
-		BusinessEvent newEvent = log.getNextEvent();
+		BusinessEvent oldEvent = log.getFilterCurrentEvent();
+		log.getFilterNextEvent();
+		BusinessEvent newEvent = log.getFilterNextEvent();
 		if (oldEvent instanceof PriceUpdateEvent && newEvent instanceof PriceUpdateEvent){
 			return;
 		}
@@ -159,12 +159,12 @@ public class EventLogTests {
 	public void priceFilterTest2(){
 		EventLog log = setup();
 		log.applyPriceUpdateFilter();
-		BusinessEvent oldEvent = log.getCurrentEvent();
-		int size = log.getSize();
+		BusinessEvent oldEvent = log.getFilterCurrentEvent();
+		int size = log.getFilterSize();
 		for (int i =0 ; i< size; i++){
-			log.getNextEvent();
+			log.getFilterNextEvent();
 		}
-		BusinessEvent newEvent = log.getCurrentEvent();
+		BusinessEvent newEvent = log.getFilterCurrentEvent();
 		if (oldEvent instanceof PriceUpdateEvent && newEvent instanceof PriceUpdateEvent && oldEvent == newEvent){
 			return;
 		}
@@ -175,12 +175,12 @@ public class EventLogTests {
 	public void priceFilterTest3(){
 		EventLog log = setup();
 		log.applyPriceUpdateFilter();
-		BusinessEvent oldEvent = log.getCurrentEvent();
-		int size = log.getSize();
+		BusinessEvent oldEvent = log.getFilterCurrentEvent();
+		int size = log.getFilterSize();
 		for (int i = size -1 ; i >= 0; i--){
-			log.getPrevEvent();
+			log.getFilterPrevEvent();
 		}
-		BusinessEvent newEvent = log.getCurrentEvent();
+		BusinessEvent newEvent = log.getFilterCurrentEvent();
 		if (oldEvent instanceof PriceUpdateEvent && newEvent instanceof PriceUpdateEvent && oldEvent == newEvent){
 			return;
 		}
@@ -191,9 +191,9 @@ public class EventLogTests {
 	public void transportUpdateTest(){
 		EventLog log = setup();
 		log.applyTransportCostUpdateFilter();
-		BusinessEvent oldEvent = log.getCurrentEvent();
-		log.getNextEvent();
-		BusinessEvent newEvent = log.getNextEvent();
+		BusinessEvent oldEvent = log.getFilterCurrentEvent();
+		log.getFilterNextEvent();
+		BusinessEvent newEvent = log.getFilterNextEvent();
 		if (oldEvent instanceof TransportCostUpdateEvent && newEvent instanceof TransportCostUpdateEvent){
 			return;
 		}
@@ -204,16 +204,16 @@ public class EventLogTests {
 	public void transportUpdateTest2(){
 		EventLog log = setup();
 		log.applyTransportCostUpdateFilter();
-		BusinessEvent oldEvent = log.getCurrentEvent();
-		int size = log.getSize();
+		BusinessEvent oldEvent = log.getFilterCurrentEvent();
+		int size = log.getFilterSize();
 		for (int i =0 ; i< size; i++){
-			log.getNextEvent();
+			log.getFilterNextEvent();
 		}
-		BusinessEvent newEvent = log.getCurrentEvent();
+		BusinessEvent newEvent = log.getFilterCurrentEvent();
 		if (oldEvent instanceof TransportCostUpdateEvent && newEvent instanceof TransportCostUpdateEvent && oldEvent == newEvent){
 			return;
 		}
-		else if (log.isEmpty()){
+		else if (log.isFilterEmpty()){
 			return;
 		}
 		fail("Log should be in the same memory location");
@@ -223,16 +223,16 @@ public class EventLogTests {
 	public void transportUpdateTest3(){
 		EventLog log = setup();
 		log.applyTransportCostUpdateFilter();
-		BusinessEvent oldEvent = log.getCurrentEvent();
-		int size = log.getSize();
+		BusinessEvent oldEvent = log.getFilterCurrentEvent();
+		int size = log.getFilterSize();
 		for (int i = size -1 ; i >= 0; i--){
-			log.getPrevEvent();
+			log.getFilterPrevEvent();
 		}
-		BusinessEvent newEvent = log.getCurrentEvent();
+		BusinessEvent newEvent = log.getFilterCurrentEvent();
 		if (oldEvent instanceof TransportCostUpdateEvent && newEvent instanceof TransportCostUpdateEvent && oldEvent == newEvent){
 			return;
 		}
-		else if (log.isEmpty()){
+		else if (log.isFilterEmpty()){
 			return;
 		}
 		fail("Log should be in the same memory location");
@@ -242,13 +242,13 @@ public class EventLogTests {
 	public void transportDiscontiuedTest(){
 		EventLog log = setup();
 		log.applyTransportDiscontinuedFilter();
-		BusinessEvent oldEvent = log.getCurrentEvent();
-		log.getNextEvent();
-		BusinessEvent newEvent = log.getNextEvent();
+		BusinessEvent oldEvent = log.getFilterCurrentEvent();
+		log.getFilterNextEvent();
+		BusinessEvent newEvent = log.getFilterNextEvent();
 		if (oldEvent instanceof TransportDiscontinuedEvent && newEvent instanceof TransportDiscontinuedEvent){
 			return;
 		}
-		else if (log.isEmpty()){
+		else if (log.isFilterEmpty()){
 			return;
 		}
 		fail("Log should be in the same memory location");
@@ -258,16 +258,16 @@ public class EventLogTests {
 	public void transportDiscontiuedTest2(){
 		EventLog log = setup();
 		log.applyTransportDiscontinuedFilter();
-		BusinessEvent oldEvent = log.getCurrentEvent();
-		int size = log.getSize();
+		BusinessEvent oldEvent = log.getFilterCurrentEvent();
+		int size = log.getFilterSize();
 		for (int i =0 ; i< size; i++){
-			log.getNextEvent();
+			log.getFilterNextEvent();
 		}
-		BusinessEvent newEvent = log.getCurrentEvent();
+		BusinessEvent newEvent = log.getFilterCurrentEvent();
 		if (oldEvent instanceof TransportDiscontinuedEvent && newEvent instanceof TransportDiscontinuedEvent && oldEvent == newEvent){
 			return;
 		}
-		else if (log.isEmpty()){
+		else if (log.isFilterEmpty()){
 			return;
 		}
 		fail("Log should be in the same memory location");
@@ -277,16 +277,16 @@ public class EventLogTests {
 	public void transportDiscontiuedTest3(){
 		EventLog log = setup();
 		log.applyTransportDiscontinuedFilter();
-		BusinessEvent oldEvent = log.getCurrentEvent();
-		int size = log.getSize();
+		BusinessEvent oldEvent = log.getFilterCurrentEvent();
+		int size = log.getFilterSize();
 		for (int i = size -1 ; i >= 0; i--){
-			log.getPrevEvent();
+			log.getFilterPrevEvent();
 		}
-		BusinessEvent newEvent = log.getCurrentEvent();
+		BusinessEvent newEvent = log.getFilterCurrentEvent();
 		if (oldEvent instanceof TransportDiscontinuedEvent && newEvent instanceof TransportDiscontinuedEvent && oldEvent == newEvent){
 			return;
 		}
-		else if (log.isEmpty()){
+		else if (log.isFilterEmpty()){
 			return;
 		}
 		fail("Log should be in the same memory location");
