@@ -3,15 +3,19 @@ package kps;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sun.xml.internal.bind.v2.TODO;
+
 import kps.Main;
 import kps.data.CustomerRoute;
 import kps.data.DijkstraSearch;
 import kps.data.Mail;
+import kps.data.Node;
 import kps.data.Route;
 import kps.data.RouteGraph;
 import kps.data.wrappers.BasicRoute;
@@ -44,6 +48,7 @@ public class KPSmartSystem {
 	private KPSUser currentUser;
 
 	private Metrics metrics;
+	private int avarageDeliveryTime;
 
 	private final String EVENT_LOG_FILENAME = Main.XML_FILE_PATH+"kps_data.xml";
 
@@ -205,7 +210,7 @@ public class KPSmartSystem {
 		double revenue = customerRoutes.get(route).calculateDeliveryPrice(weight, volume, priority);
 		if(revenue < 0){
 			// cannot send mail
-			System.out.println("cannot send mail, No cutsomer cost for priority" );
+			System.out.println("cannot send mail, No customer cost for priority" );
 			return;
 		}
 
@@ -217,7 +222,24 @@ public class KPSmartSystem {
 		}
 
 		// calculate expenditure
-		double expenditure = 1;
+		double expenditure = -1;
+		List<Node> path = null;
+
+		DijkstraSearch ds = new DijkstraSearch(routeGraph);
+		Map<List<Node>, Double> routeAndCost = ds.getShortestPath(new Mail(route, day, weight, volume, priority));
+
+		//sets the path and the expenditure
+		for(List<Node> ln : routeAndCost.keySet()){expenditure = routeAndCost.get(ln).doubleValue(); path = ln;}
+
+		if(revenue == -1 || routeAndCost.size() > 1 || path == null){
+			System.out.println("Error");
+			return;
+		}
+
+		//time to deliver in hours
+		this.avarageDeliveryTime = timeToDeliver(path, day);//TODO make it not just be the price for one delivery
+
+
 		metrics.addMailDeliveryEvent(revenue, expenditure);
 
 		long timeLogged = System.currentTimeMillis();
@@ -410,6 +432,7 @@ public class KPSmartSystem {
 				}
 				CustomerRoute cr = customerRoutes.get(route);
 				cr.addDeliveryPrice(price.getGramPrice(), price.getVolumePrice(), price.getPriority());
+				System.out.println(cr);
 			}
 			if(event instanceof TransportCostUpdateEvent){
 				metrics.addTransportCostUpdateEvent();
@@ -435,6 +458,88 @@ public class KPSmartSystem {
 		}catch(FileNotFoundException e){e.printStackTrace();}
 		catch(UnsupportedEncodingException e){e.printStackTrace();}
 	}
+
+	/**
+	 * Returns the delivery time of a delivery hour
+	 * */
+	public int  timeToDeliver(List<Node> path, Day day){
+		//Assume package arrives 12am on the day
+		int timeTaken = 0;
+		Day currentDay = day;
+		int currentTime = 0;//12am to start with
+
+		for(int i = 1; i < path.size(); i++){
+			Route r = path.get(i).getRouteTaken();
+
+			boolean sent = false;
+
+			while(!sent){
+				while(currentDay !=r.getDay()){
+					currentDay = Day.getNextDay(currentDay);
+					timeTaken +=24 - currentTime;
+					currentTime = 0;
+				}
+
+					//should always be true at this point
+					int waitTime = timeToWait(currentTime, r.getFrequency());
+
+					//cannot be sent that day
+					if(waitTime == -1){
+						timeTaken+= 24;
+
+						//increment the day
+						currentDay = Day.getNextDay(currentDay);
+						continue;
+					}
+
+
+					currentTime =incrementTime(currentTime,waitTime);
+					currentTime = incrementTime(currentTime, r.getDuration());
+
+					timeTaken += r.getDuration();
+					timeTaken+= waitTime;
+					sent = true;
+			}
+		}
+		return timeTaken;
+	}
+
+	/**
+	 * Returns the time with the added time -1 if invalid
+	 * */
+	public int incrementTime(int currentTime,int addTime){
+		if(currentTime < 0 || addTime < 0 )return -1;
+
+		if(currentTime + addTime >= 24){
+			return currentTime + addTime - 24;
+		}
+		return currentTime + addTime;
+	}
+
+	/**
+	 *Returns the time to wait before the package can be sent on the day
+	 *or -1 if it cannot be sent that day
+	 * */
+	public int timeToWait(int currentTime , int frequency){
+		List<Integer> canSend = new ArrayList<Integer>();
+
+		//add all the times a package can be sent in a list
+		for(int time = 0; time <= 24; time+=frequency){
+			canSend.add(time);
+		}
+
+		//works out the earliest time it can send the package and return the time it has to wait to send it
+		for(int i = 0; i < canSend.size(); i++){
+			if(currentTime <= canSend.get(i))return canSend.get(i) - currentTime;
+		}
+		//cannot send it that day
+		return -1;
+	}
+
+	public int getAvarageDeliveryTime(){
+		return this.avarageDeliveryTime;
+	}
+
 
 	public EventLog getEventLog() {
 		return eventLog;

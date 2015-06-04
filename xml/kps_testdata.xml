@@ -1,0 +1,126 @@
+<simulation xsi:noNamespaceSchemaLocation="postal.xsd">
+    <cost>
+        <time>0</time>
+		<company>Test</company>
+		<to>Node 2</to>
+		<from>Node 1</from>
+		<type>Land</type>
+		<weightcost>50</weightcost>
+		<volumecost>50</volumecost>
+		<maxWeight>100</maxWeight>
+		<maxVolume>100</maxVolume>
+		<duration>5</duration>
+		<frequency>5</frequency>
+		<day>Monday</day>
+    </cost>
+    <cost>
+        <time>0</time>
+		<company>Test</company>
+		<to>Node 2</to>
+		<from>Node 1</from>
+		<type>Air</type>
+		<weightcost>60</weightcost>
+		<volumecost>60</volumecost>
+		<maxWeight>100</maxWeight>
+		<maxVolume>100</maxVolume>
+		<duration>5</duration>
+		<frequency>5</frequency>
+		<day>Monday</day>
+    </cost>
+    <cost>
+        <time>0</time>
+		<company>Test</company>
+		<to>Node 3</to>
+		<from>Node 2</from>
+		<type>Air</type>
+		<weightcost>50</weightcost>
+		<volumecost>50</volumecost>
+		<maxWeight>100</maxWeight>
+		<maxVolume>100</maxVolume>
+		<duration>5</duration>
+		<frequency>5</frequency>
+		<day>Tuesday</day>
+    </cost>
+    <cost>
+        <time>0</time>
+		<company>Test</company>
+		<to>Node 4</to>
+		<from>Node 2</from>
+		<type>Land</type>
+		<weightcost>60</weightcost>
+		<volumecost>70</volumecost>
+		<maxWeight>100</maxWeight>
+		<maxVolume>100</maxVolume>
+		<duration>5</duration>
+		<frequency>5</frequency>
+		<day>Tuesday</day>
+    </cost>
+    <cost>
+        <time>0</time>
+		<company>Test</company>
+		<to>Node 4</to>
+		<from>Node 2</from>
+		<type>Air</type>
+		<weightcost>80</weightcost>
+		<volumecost>80</volumecost>
+		<maxWeight>100</maxWeight>
+		<maxVolume>100</maxVolume>
+		<duration>5</duration>
+		<frequency>5</frequency>
+		<day>Tuesday</day>
+    </cost>
+    <cost>
+        <time>0</time>
+		<company>Test</company>
+		<to>Node 5</to>
+		<from>Node 4</from>
+		<type>Sea</type>
+		<weightcost>60</weightcost>
+		<volumecost>50</volumecost>
+		<maxWeight>100</maxWeight>
+		<maxVolume>100</maxVolume>
+		<duration>5</duration>
+		<frequency>5</frequency>
+		<day>Wednesday</day>
+    </cost>
+	<price>
+		<time>0</time>
+		<to>Node 4</to>
+		<from>Node 1</from>
+		<priority>International Air</priority>
+		<weightcost>160</weightcost>
+		<volumecost>180</volumecost>
+	</price>
+	<price>
+		<time>0</time>
+		<to>Node 3</to>
+		<from>Node 1</from>
+		<priority>International Air</priority>
+		<weightcost>155</weightcost>
+		<volumecost>160</volumecost>
+	</price>
+	<price>
+		<time>0</time>
+		<to>Node 5</to>
+		<from>Node 1</from>
+		<priority>International Standard</priority>
+		<weightcost>210</weightcost>
+		<volumecost>215</volumecost>
+	</price>
+	<price>
+		<time>0</time>
+		<to>Node 4</to>
+		<from>Node 1</from>
+		<priority>International Standard</priority>
+		<weightcost>130</weightcost>
+		<volumecost>140</volumecost>
+	</price>
+	<price>
+		<time>0</time>
+		<to>Node 3</to>
+		<from>Node 1</from>
+		<priority>International Standard</priority>
+		<weightcost>110</weightcost>
+		<volumecost>120</volumecost>
+	</price>
+</simulation>
