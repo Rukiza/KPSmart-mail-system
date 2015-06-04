@@ -161,11 +161,11 @@ public class DecisionSupportPanel extends JPanel {
 				public void keyReleased(KeyEvent e) {
 					if (DecisionSupportPanel.this.isShowing()) {
 						if (e.getID() == KeyEvent.VK_RIGHT) {
-							event = data.getNextEvent();
+							event = data.getFilterNextEvent();
 							updateDisplay();
 						}
 						if (e.getID() == KeyEvent.VK_LEFT) {
-							event = data.getPrevEvent();
+							event = data.getFilterPrevEvent();
 							updateDisplay();
 						}
 					}
@@ -209,7 +209,7 @@ public class DecisionSupportPanel extends JPanel {
 		 * Updates the Graph panel depending on the current selected button group and graph avaliblity.
 		 */
 		public void updateGraph(){
-			if (data.isEmpty())
+			if (data.isFilterEmpty())
 				return;
 			if (data == null) return;
 
@@ -226,7 +226,7 @@ public class DecisionSupportPanel extends JPanel {
 
 		/* All updates that invove a graph are updating the data from individual graphs. */
 		private void updateTypeGraph(JFreeChart chart, DefaultPieDataset dataset){
-			List<BusinessEvent>	events = data.getListToCurrent();
+			List<BusinessEvent>	events = data.getFilterListToCurrent();
 			dataset.clear();
 			for (BusinessEvent e : events){
 				if (dataset.getKeys().contains(e.getType())){
@@ -264,9 +264,9 @@ public class DecisionSupportPanel extends JPanel {
 		 * This updates the Display panel with using the text fields passed in eirler.
 		 */
 		public void updateDisplay() {
-			if (data.isEmpty())
+			if (data.isFilterEmpty())
 				return;
-			event = data.getCurrentEvent();
+			event = data.getFilterCurrentEvent();
 			for (JTextField text : textFields) {
 				text.setText(null);
 			}
@@ -351,7 +351,7 @@ public class DecisionSupportPanel extends JPanel {
 			return new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					event = data.getNextEvent();
+					event = data.getFilterNextEvent();
 					updateDisplay();
 					updateGraph();
 					loadBarPanel.paint(loadBarPanel.getGraphics());
@@ -367,7 +367,7 @@ public class DecisionSupportPanel extends JPanel {
 			return new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					event = data.getPrevEvent();
+					event = data.getFilterPrevEvent();
 					updateDisplay();
 					updateGraph();
 					loadBarPanel.paint(loadBarPanel.getGraphics());
@@ -389,8 +389,23 @@ public class DecisionSupportPanel extends JPanel {
 					p.setPreferredSize(DecisionSupportPanel.this.graphPanel.sizeg);
 					DecisionSupportPanel.this.graphPanel.remove(graphPanel);
 					DecisionSupportPanel.this.graphPanel.add(p);
+					switch (e.getActionCommand()) {
+					case typeString:
+						data.removeFilter();
+						break;
+					case transString:
+						data.applyTransportCostUpdateFilter();
+					case discString:
+						data.applyTransportDiscontinuedFilter();
+					case mailString:
+						data.applyMailDeliveryFilter();
+					case pricesString:
+						data.applyPriceUpdateFilter();
+					default:
+						break;
+					}
 					graphPanel = p;
-					data.resetEventLogLocation();
+					data.resetFilterEventLogLocation();
 					updateGraph();
 				}
 			};
