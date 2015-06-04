@@ -139,6 +139,16 @@ public class RouteGraph implements Iterable<Node> {
     	return toReturn;
     }
 
+    /**
+     * return whether or not the graph contains the route
+     * */
+    public boolean containsRoute(Route route){
+    	for(Route r : getAllRoutes()){
+    		if(route.equals(r))return true;
+    	}
+    	return false;
+    }
+
     class SearchNode{
     	boolean visited;
     	Node node;

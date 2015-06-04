@@ -239,6 +239,10 @@ public class KPSmartSystem {
 
 		//sets the path and the expenditure
 		for(List<Node> ln : routeAndCost.keySet()){expenditure = routeAndCost.get(ln).doubleValue(); path = ln;}
+
+
+
+
 		expenditure /= 100; // convert to dollars
 
 		if(revenue == -1 || routeAndCost.size() > 1 || path == null){
@@ -322,7 +326,9 @@ public class KPSmartSystem {
 		eventLog.addBusinessEvent(event);
 		// add route to graph
 
-		routeGraph.addRoute(new Route(event));
+		Route r = new Route(event);
+		if(routeGraph.containsRoute(r))routeGraph.updateRoute(r);
+		else routeGraph.addRoute(r);
 	}
 
 	/**
@@ -442,7 +448,6 @@ public class KPSmartSystem {
 				}
 				CustomerRoute cr = customerRoutes.get(route);
 				cr.addDeliveryPrice(price.getGramPrice(), price.getVolumePrice(), price.getPriority());
-				System.out.println(cr);
 			}
 			if(event instanceof TransportCostUpdateEvent){
 				metrics.addTransportCostUpdateEvent();
