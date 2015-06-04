@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.Map;
 
 import kps.data.CustomerRoute;
+import kps.data.Route;
 import kps.data.wrappers.BasicRoute;
 import kps.data.wrappers.EventLog;
 import kps.enums.Day;
@@ -370,11 +371,13 @@ public class KPSmartSystemTests {
 		}
 	}
 
+
+	/*
 	@Test public void testCorrectTransportDiscontinuedEvent_1(){
 		KPSmartSystem kps = constructSystemWithRoutes();
 		int graphSize = kps.getRouteGraph().getAllRoutes().size();
 		int logSize = kps.getEventLogSize();
-		//kps.addTransportDiscontinuedEvent(new Route());
+		kps.addTransportDiscontinuedEvent(new Route());
 		int newGraphSize = kps.getRouteGraph().getAllRoutes().size();
 		int newLogSize = kps.getEventLogSize();
 		if(newGraphSize != graphSize + 1){
@@ -383,7 +386,9 @@ public class KPSmartSystemTests {
 		if(newLogSize != logSize + 1){
 			fail("Expecting event log size of "+(graphSize + 1)+", received "+newGraphSize);
 		}
-	}
+
+	}*/
+
 
 	private KPSmartSystem constructSystemWithRoutes(){
 		try{
