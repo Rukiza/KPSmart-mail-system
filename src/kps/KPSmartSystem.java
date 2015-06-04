@@ -164,6 +164,15 @@ public class KPSmartSystem {
 	public String getCurrentUser(){
 		return currentUser.getUsername();
 	}
+	
+	public boolean hasCustomerRoute(String origin, String destination, Priority priority){
+		BasicRoute route = new BasicRoute(origin, destination);
+		if(customerRoutes.containsKey(route)){
+			CustomerRoute cr = customerRoutes.get(route);
+			return cr.hasPriority(priority);
+		}
+		return false;
+	}
 
 	/**
 	 * Returns true if there is currently someone logged into the system,
