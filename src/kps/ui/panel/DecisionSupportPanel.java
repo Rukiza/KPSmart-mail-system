@@ -115,7 +115,7 @@ public class DecisionSupportPanel extends JPanel {
 	/**
 	 * Gets the key listener for the movement of the
 	 * decision panel.
-	 * @return - Keylistener that pressing left and right effects the 
+	 * @return - Keylistener that pressing left and right effects the
 	 * 				panel.
 	 */
 	public KeyListener getKeyListener() {
@@ -133,7 +133,7 @@ public class DecisionSupportPanel extends JPanel {
 		private BusinessEvent event;
 		private JPanel graphPanel;
 		// Thanks to david.
-		private final DecimalFormat FORMAT = new DecimalFormat("$###,###,###.##");
+		private final DecimalFormat TEXTFORMAT = new DecimalFormat("$###,###,###.##");
 		private ButtonGroup group;
 		private Map<String, JFreeChart> graphMap = new HashMap<String, JFreeChart>();
 		private Map<String, Dataset> datasetMap = new HashMap<String, Dataset>();
@@ -145,7 +145,7 @@ public class DecisionSupportPanel extends JPanel {
 		public DataManager(EventLog eventLog) {
 			data = eventLog;
 		}
-		
+
 		/**
 		 * Makes a key listener for the decision support panel.
 		 * @return - Returns the key listener for use on them main panel.
@@ -178,7 +178,7 @@ public class DecisionSupportPanel extends JPanel {
 		}
 		/**
 		 * Sets up the event display.
-		 * @param temp - is a list of jtext fields for modification. 
+		 * @param temp - is a list of jtext fields for modification.
 		 */
 		public void setupEventDisplay(List<JTextField> temp) {
 			textFields = temp;
@@ -223,7 +223,7 @@ public class DecisionSupportPanel extends JPanel {
 				break;
 			}
 		}
-		
+
 		/* All updates that invove a graph are updating the data from individual graphs. */
 		private void updateTypeGraph(JFreeChart chart, DefaultPieDataset dataset){
 			List<BusinessEvent>	events = data.getListToCurrent();
@@ -283,19 +283,19 @@ public class DecisionSupportPanel extends JPanel {
 			} else if (event instanceof PriceUpdateEvent) {
 				handlePriceUpdate((PriceUpdateEvent) event);
 			}
-			textFields.get(12).setText("Date: ");
-			textFields.get(13).setText(
+			textFields.get(14).setText("Date: ");
+			textFields.get(15).setText(
 					new Date(event.getTimeLogged()).toString());
 		}
-		
+
 		/*Modifys the text fields depending on event type.*/
 		private void handlePriceUpdate(PriceUpdateEvent event) {
 			textFields.get(2).setText("Desitination");
 			textFields.get(3).setText(event.getDestination());
 			textFields.get(4).setText("Volume Price");
-			textFields.get(5).setText(FORMAT.format(event.getVolumePrice()/100));
+			textFields.get(5).setText(TEXTFORMAT.format(event.getVolumePrice()/100));
 			textFields.get(6).setText("Gram Price");
-			textFields.get(7).setText(FORMAT.format(event.getGramPrice()/100));
+			textFields.get(7).setText(TEXTFORMAT.format(event.getGramPrice()/100));
 			textFields.get(8).setText("Priority");
 			textFields.get(9).setText(Priority.convertPriorityToString(event.getPriority()));
 		}
@@ -315,14 +315,15 @@ public class DecisionSupportPanel extends JPanel {
 			textFields.get(2).setText("Desitination");
 			textFields.get(3).setText(event.getDestination());
 			textFields.get(4).setText("Volume Price");
-			textFields.get(5).setText(FORMAT.format(event.getVolumePrice()/100));
+			textFields.get(5).setText(TEXTFORMAT.format(event.getVolumePrice()/100));
 			textFields.get(6).setText("Gram Price");
-			textFields.get(7).setText(FORMAT.format(event.getGramPrice()/100));
+			textFields.get(7).setText(TEXTFORMAT.format(event.getGramPrice()/100));
 			textFields.get(8).setText("Max Volume");
-			textFields.get(9).setText("" + event.getMaxVolume());
+			textFields.get(9).setText("" + event.getMaxVolume()+"g");
 			textFields.get(10).setText("Max Weight");
-			textFields.get(11).setText("" + event.getMaxWeight());
-			textFields.get(12).setText("Mail Transport");
+			textFields.get(11).setText("" + event.getMaxWeight()+"g");
+			textFields.get(12).setText("Mail Transport Type");
+			textFields.get(13).setText(""+ event.getTransportType());
 		}
 
 		/*Modifys the text fields depending on event type.*/
@@ -335,6 +336,11 @@ public class DecisionSupportPanel extends JPanel {
 			textFields.get(7).setText(event.getWeight() + "");
 			textFields.get(8).setText("Day");
 			textFields.get(9).setText(Day.convertDayToString(event.getDay()));
+			textFields.get(10).setText("Revenue");
+			textFields.get(11).setText(TEXTFORMAT.format(event.getRevenue()));
+			textFields.get(12).setText("Expenditure");
+			textFields.get(13).setText(TEXTFORMAT.format(event.getExpenditure()));
+
 		}
 
 		/**
@@ -419,7 +425,7 @@ public class DecisionSupportPanel extends JPanel {
 			Dataset temp = new DefaultCategoryDataset();
 			JFreeChart chart = ChartFactory.createBarChart("Transport", "Destination", "Change Frequency", (DefaultCategoryDataset)temp);
 			manager.setupGraphDisplay(transString, chart, null, temp);
-			
+
 			chart = ChartFactory.createPieChart("Amount of Events", dataset,
 					true, true, false);
 			PiePlot plot = (PiePlot) chart.getPlot();
@@ -456,14 +462,14 @@ public class DecisionSupportPanel extends JPanel {
 			textFieldSetup();
 			this.setBorder(new TitledBorder("Event Details"));
 		}
-		
+
 		/**
 		 * Sets up the text fields
 		 */
 		private void textFieldSetup() {
 			this.setLayout(new GridBagLayout());
 			GridBagConstraints com = new GridBagConstraints();
-			for (int i = 0; i < 14; i++) {
+			for (int i = 0; i < 17; i++) {
 				textFields.add(makeTextField(i, com));
 			}
 		}
@@ -482,7 +488,7 @@ public class DecisionSupportPanel extends JPanel {
 				}
 			};
 			field.setEditable(false);
-			field.setFont(new Font("SansSerif", Font.PLAIN, 16));
+			field.setFont(new Font("SansSerif", Font.PLAIN, 14));
 			com.fill = GridBagConstraints.NONE;
 			int temp = counter % 2;
 			com.weightx = counter % 2 == 1 ? 0.5 : 0;
@@ -523,9 +529,9 @@ public class DecisionSupportPanel extends JPanel {
 			radioSetup(radioPanel, constraints);
 			this.setBorder(new TitledBorder("Selection Menu"));
 		}
-		
+
 		/**
-		 * Sets up the buttons and adds them to the 
+		 * Sets up the buttons and adds them to the
 		 * panel and the data manager.
 		 * @param panel - panel they are to added to.
 		 * @param constraints - contraints to be followed
@@ -551,11 +557,11 @@ public class DecisionSupportPanel extends JPanel {
 			this.add(panel, constraints);
 
 		}
-		
-		/** 
+
+		/**
 		 * Sets up the radio menu and adds it to the panel
 		 * and passes it to the manager class.
-		 * @param panel - panel it is to be added to 
+		 * @param panel - panel it is to be added to
 		 * @param constraints - constraints to be followed.
 		 */
 		public void radioSetup(JPanel panel, GridBagConstraints constraints){
@@ -608,7 +614,7 @@ public class DecisionSupportPanel extends JPanel {
 			this.add(panel, constraints);
 		}
 	}
-	
+
 	/**
 	 * Load bar panel for displaying the load bar.
 	 * @author Shane Brewer

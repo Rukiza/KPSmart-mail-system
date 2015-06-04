@@ -3,7 +3,10 @@ package kps.data.wrappers.tests;
 import kps.Main;
 import kps.data.wrappers.EventLog;
 import kps.events.BusinessEvent;
+import kps.events.MailDeliveryEvent;
 import kps.events.PriceUpdateEvent;
+import kps.events.TransportCostUpdateEvent;
+import kps.events.TransportDiscontinuedEvent;
 import kps.parser.KPSParser;
 import kps.parser.ParserException;
 
@@ -89,6 +92,201 @@ public class EventLogTests {
 		log.getNextEvent();
 		BusinessEvent newEvent = log.getNextEvent();
 		if (oldEvent == newEvent){
+			return;
+		}
+		fail("Log should be in the same memory location");
+	}
+
+	@Test
+	public void mailFilterTest(){
+		EventLog log = setup();
+		log.applyMailDeliveryFilter();
+		BusinessEvent oldEvent = log.getCurrentEvent();
+		log.getNextEvent();
+		BusinessEvent newEvent = log.getNextEvent();
+		if (oldEvent instanceof MailDeliveryEvent && newEvent instanceof MailDeliveryEvent){
+			return;
+		}
+		fail("Log should be in the same memory location");
+	}
+
+	@Test
+	public void mailFilterTest2(){
+		EventLog log = setup();
+		log.applyMailDeliveryFilter();
+		BusinessEvent oldEvent = log.getCurrentEvent();
+		int size = log.getSize();
+		for (int i =0 ; i< size; i++){
+			System.out.println(log.getNextEvent());
+		}
+		BusinessEvent newEvent = log.getCurrentEvent();
+		if (oldEvent instanceof MailDeliveryEvent && newEvent instanceof MailDeliveryEvent && oldEvent == newEvent){
+			return;
+		}
+		fail("Log should be in the same memory location" + oldEvent + "    "+ newEvent);
+	}
+
+	@Test
+	public void mailFilterTest3(){
+		EventLog log = setup();
+		log.applyMailDeliveryFilter();
+		BusinessEvent oldEvent = log.getCurrentEvent();
+		int size = log.getSize();
+		for (int i = size -1 ; i >= 0; i--){
+			log.getPrevEvent();
+		}
+		BusinessEvent newEvent = log.getCurrentEvent();
+		if (oldEvent instanceof MailDeliveryEvent && newEvent instanceof MailDeliveryEvent && oldEvent == newEvent){
+			return;
+		}
+		fail("Log should be in the same memory location");
+	}
+
+	@Test
+	public void priceFilterTest(){
+		EventLog log = setup();
+		log.applyPriceUpdateFilter();
+		BusinessEvent oldEvent = log.getCurrentEvent();
+		log.getNextEvent();
+		BusinessEvent newEvent = log.getNextEvent();
+		if (oldEvent instanceof PriceUpdateEvent && newEvent instanceof PriceUpdateEvent){
+			return;
+		}
+		fail("Log should be in the same memory location");
+	}
+
+	@Test
+	public void priceFilterTest2(){
+		EventLog log = setup();
+		log.applyPriceUpdateFilter();
+		BusinessEvent oldEvent = log.getCurrentEvent();
+		int size = log.getSize();
+		for (int i =0 ; i< size; i++){
+			log.getNextEvent();
+		}
+		BusinessEvent newEvent = log.getCurrentEvent();
+		if (oldEvent instanceof PriceUpdateEvent && newEvent instanceof PriceUpdateEvent && oldEvent == newEvent){
+			return;
+		}
+		fail("Log should be in the same memory location");
+	}
+
+	@Test
+	public void priceFilterTest3(){
+		EventLog log = setup();
+		log.applyPriceUpdateFilter();
+		BusinessEvent oldEvent = log.getCurrentEvent();
+		int size = log.getSize();
+		for (int i = size -1 ; i >= 0; i--){
+			log.getPrevEvent();
+		}
+		BusinessEvent newEvent = log.getCurrentEvent();
+		if (oldEvent instanceof PriceUpdateEvent && newEvent instanceof PriceUpdateEvent && oldEvent == newEvent){
+			return;
+		}
+		fail("Log should be in the same memory location");
+	}
+
+	@Test
+	public void transportUpdateTest(){
+		EventLog log = setup();
+		log.applyTransportCostUpdateFilter();
+		BusinessEvent oldEvent = log.getCurrentEvent();
+		log.getNextEvent();
+		BusinessEvent newEvent = log.getNextEvent();
+		if (oldEvent instanceof TransportCostUpdateEvent && newEvent instanceof TransportCostUpdateEvent){
+			return;
+		}
+		fail("Log should be in the same memory location");
+	}
+
+	@Test
+	public void transportUpdateTest2(){
+		EventLog log = setup();
+		log.applyTransportCostUpdateFilter();
+		BusinessEvent oldEvent = log.getCurrentEvent();
+		int size = log.getSize();
+		for (int i =0 ; i< size; i++){
+			log.getNextEvent();
+		}
+		BusinessEvent newEvent = log.getCurrentEvent();
+		if (oldEvent instanceof TransportCostUpdateEvent && newEvent instanceof TransportCostUpdateEvent && oldEvent == newEvent){
+			return;
+		}
+		else if (log.isEmpty()){
+			return;
+		}
+		fail("Log should be in the same memory location");
+	}
+
+	@Test
+	public void transportUpdateTest3(){
+		EventLog log = setup();
+		log.applyTransportCostUpdateFilter();
+		BusinessEvent oldEvent = log.getCurrentEvent();
+		int size = log.getSize();
+		for (int i = size -1 ; i >= 0; i--){
+			log.getPrevEvent();
+		}
+		BusinessEvent newEvent = log.getCurrentEvent();
+		if (oldEvent instanceof TransportCostUpdateEvent && newEvent instanceof TransportCostUpdateEvent && oldEvent == newEvent){
+			return;
+		}
+		else if (log.isEmpty()){
+			return;
+		}
+		fail("Log should be in the same memory location");
+	}
+
+	@Test
+	public void transportDiscontiuedTest(){
+		EventLog log = setup();
+		log.applyTransportDiscontinuedFilter();
+		BusinessEvent oldEvent = log.getCurrentEvent();
+		log.getNextEvent();
+		BusinessEvent newEvent = log.getNextEvent();
+		if (oldEvent instanceof TransportDiscontinuedEvent && newEvent instanceof TransportDiscontinuedEvent){
+			return;
+		}
+		else if (log.isEmpty()){
+			return;
+		}
+		fail("Log should be in the same memory location");
+	}
+
+	@Test
+	public void transportDiscontiuedTest2(){
+		EventLog log = setup();
+		log.applyTransportDiscontinuedFilter();
+		BusinessEvent oldEvent = log.getCurrentEvent();
+		int size = log.getSize();
+		for (int i =0 ; i< size; i++){
+			log.getNextEvent();
+		}
+		BusinessEvent newEvent = log.getCurrentEvent();
+		if (oldEvent instanceof TransportDiscontinuedEvent && newEvent instanceof TransportDiscontinuedEvent && oldEvent == newEvent){
+			return;
+		}
+		else if (log.isEmpty()){
+			return;
+		}
+		fail("Log should be in the same memory location");
+	}
+
+	@Test
+	public void transportDiscontiuedTest3(){
+		EventLog log = setup();
+		log.applyTransportDiscontinuedFilter();
+		BusinessEvent oldEvent = log.getCurrentEvent();
+		int size = log.getSize();
+		for (int i = size -1 ; i >= 0; i--){
+			log.getPrevEvent();
+		}
+		BusinessEvent newEvent = log.getCurrentEvent();
+		if (oldEvent instanceof TransportDiscontinuedEvent && newEvent instanceof TransportDiscontinuedEvent && oldEvent == newEvent){
+			return;
+		}
+		else if (log.isEmpty()){
 			return;
 		}
 		fail("Log should be in the same memory location");
