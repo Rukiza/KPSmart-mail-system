@@ -80,7 +80,5 @@ public abstract class AbstractFormWindow extends JFrame {
 
 	protected void comboBoxUpdated(JComboBox<Object> comboBox, String name){
 			fields.put(name, comboBox.getSelectedItem());
-			System.out.println("updated combobox: " + name);
 	}
-
 }

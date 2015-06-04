@@ -31,6 +31,7 @@ public class DeleteRouteWindow extends AbstractFormWindow{
 
 	// to and from comboboxes
 	// items change dynamically
+	private JComboBox<Object> fromComboBox;
 	private JComboBox<Object> toComboBox;
 	private JComboBox<Object> routesComboBox;
 
@@ -49,9 +50,12 @@ public class DeleteRouteWindow extends AbstractFormWindow{
 
 		// to and from fields are different
 		// the combobox objects must be accessible for dynamic item changing
-		makeFromComboBox(routeGraph.getNodes().toArray(new Node[]{}), inputPanel);
+		fromComboBox = makeFromComboBox(routeGraph.getNodes().toArray(new Node[]{}), inputPanel);
 		toComboBox = makeToComboBox(inputPanel);
 		routesComboBox = makeComboBox(fieldNames[2], new Object[]{}, inputPanel);
+		
+		// populate the to combobox (and also the routes combo)
+		populateToCombo();
 
 		int fieldCount = fieldNames.length;
 
@@ -89,7 +93,7 @@ public class DeleteRouteWindow extends AbstractFormWindow{
 		});
 
 		// open window
-		setSize(new Dimension(600, 50 + fieldCount * 35));
+		setSize(new Dimension(600, 50 + fieldCount * 40));
 		setVisible(true);
 	}
 
@@ -134,6 +138,7 @@ public class DeleteRouteWindow extends AbstractFormWindow{
 	 * @param name
 	 * @param items
 	 * @param cont
+	 * @return the combobox which is created
 	 */
 	private JComboBox<Object> makeFromComboBox(Node[] sources, Container cont){
 		JComboBox<Object> fromComboBox = makeComboBox(fieldNames[0], sources, cont);
@@ -141,33 +146,38 @@ public class DeleteRouteWindow extends AbstractFormWindow{
 
 		fromComboBox.addActionListener((ActionEvent e) -> {
 			comboBoxUpdated(fromComboBox, fieldNames[0]);
-			// update to combo
-			Node from = (Node) fromComboBox.getSelectedItem();
-			Set<String> validDests = routeGraph.destsFromSource(from.getName());
-            toComboBox.setModel(new DefaultComboBoxModel<Object>(validDests.toArray()));
-            comboBoxUpdated(toComboBox, fieldNames[1]);
-            // update routes combo
-            updateRoutesCombo();
+            populateToCombo();
 		});
 		return fromComboBox;
 	}
 
+	/**
+	 * make a combobox for the "to" field
+	 * @param cont
+	 * @return the combobox which is created
+	 */
 	private JComboBox<Object> makeToComboBox(Container cont){
 		JComboBox<Object> toComboBox = makeComboBox(fieldNames[1], new Node[]{}, cont);
 		toComboBox.removeActionListener(toComboBox.getActionListeners()[0]);
 		toComboBox.addActionListener((ActionEvent e) -> {
-			comboBoxUpdated(toComboBox, fieldNames[0]);
-			updateRoutesCombo();
+			comboBoxUpdated(toComboBox, fieldNames[1]);
+			populateRouteCombo();
 		});
 		return toComboBox;
 	}
+	
+	private void populateToCombo(){
+        comboBoxUpdated(toComboBox, fieldNames[1]);
+        Node from = (Node) fromComboBox.getSelectedItem();
+        Set<String> validDests = routeGraph.destsFromSource(from.getName());
+        toComboBox.setModel(new DefaultComboBoxModel<Object>(validDests.toArray()));
+        populateRouteCombo();
+	}
 
-	private void updateRoutesCombo(){
-        String source = (String) fields.get(fieldNames[0]).toString();
+	private void populateRouteCombo(){
+        String source = (String) fromComboBox.getSelectedItem().toString();
         String dest = (String) toComboBox.getSelectedItem().toString();
         Set<Route> validRoutes = routeGraph.getRoutes(source, dest);
-
-        System.out.println("updating routes: " + validRoutes);
 
         routesComboBox.setModel(new DefaultComboBoxModel<Object>(validRoutes.toArray()));
         comboBoxUpdated(routesComboBox, fieldNames[2]);
@@ -180,13 +190,10 @@ public class DeleteRouteWindow extends AbstractFormWindow{
 
 	@Override
 	protected boolean isFormComplete() {
-		System.out.println("form contains:");
 		for (Object field : fields.values()){
-			System.out.println(field);
 			if (field == null)
 				return false;
 		}
-		System.out.println("-------------");
 		return true;
 	}
 
