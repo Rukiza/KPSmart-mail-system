@@ -44,20 +44,27 @@ public class MetricsPanel extends JPanel implements ActionListener{
     private CustomerRoutePanel routes;
     private boolean initialised = false;
 
+    /**
+     * Constructs a new MetricsPanel Object with the specified metrics.
+     * Sets up all of the components of the panel.
+     *
+     * @param metrics
+     * 		-- metrics data to be displayed
+     */
     public MetricsPanel(Metrics metrics){
         super();
         setPreferredSize(new Dimension(910, 730));
         this.metrics = metrics;
         // setup components
-        graph = new GraphPanel(910, 428);//new GraphPanel(660, 290);
+        graph = new GraphPanel(910, 428);
         //graph.setBorder(new TitledKPSBorder("Revenue and Expenditure"));
-        profit = new ProfitPanel(392, 125);//(260, 92);
+        profit = new ProfitPanel(392, 125);
         SpringUtilities.makeCompactGrid(profit, 3, 2, 6, 6, 6, 6);
         profit.setBorder(new TitledKPSBorder("Income"));
-        events = new BusinessEventPanel(392, 177);//(260, 138);
+        events = new BusinessEventPanel(392, 177);
         SpringUtilities.makeCompactGrid(events, 5, 2, 6, 6, 6, 6);
         events.setBorder(new TitledKPSBorder("Business Events"));
-        routes = new CustomerRoutePanel(518, 302, this);//(400, 230, this);
+        routes = new CustomerRoutePanel(518, 302, this);
         routes.setBorder(new TitledKPSBorder("Customer Routes"));
         SpringUtilities.makeCompactGrid(events, 2, 2, 6, 6, 6, 6);
         layoutComponents();
@@ -65,6 +72,10 @@ public class MetricsPanel extends JPanel implements ActionListener{
         repaint();
     }
 
+    /**
+     * Lays out the components in this MetricsPanel using
+     * the GridBagLayout.
+     */
     private void layoutComponents(){
         setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
@@ -160,35 +171,57 @@ public class MetricsPanel extends JPanel implements ActionListener{
         }
     }
 
+    /**
+     * Private class that is used to draw the graph showing the progression
+     * of revenue and expenditure for the company.
+     *
+     * @author David Sheridan
+     *
+     */
     private class GraphPanel extends MetricComponent{
 
         private static final long serialVersionUID = 1L;
 
-        private final int WIDTH;
-        private final int HEIGHT;
-
+        /**
+         * Constructs a new GraphPanel Object with the specified
+         * width and height.
+         *
+         * @param width
+         * 		-- width of component
+         * @param height
+         * 		-- height of component
+         */
         public GraphPanel(int width, int height){
             super(width, height);
-            WIDTH = width;
-            HEIGHT = height;
         }
 
+        /**
+         * Paints the graph to the GraphPanel.
+         */
         public void paintComponent(Graphics g){
         	JFreeChart chart = ChartFactory.createXYLineChart("Revenue and Expenditure", "Mail Deliveries", "Money (NZD)", createDataset());
         	ChartPanel panel = new ChartPanel(chart);
-        	panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        	panel.setPreferredSize(new Dimension(getWidth(), getHeight()));
         	add(panel);
         }
 
+        /**
+         * Creates the data set used to display the revenue and
+         * expenditure data on the graph.
+         *
+         * @return data set
+         */
         private XYDataset createDataset(){
         	XYSeries revenue = new XYSeries("Revenue");
         	XYSeries expenditure = new XYSeries("Expenditure");
         	List<Double> revenueData = metrics.getAllRevenue();
         	List<Double> expenditureData = metrics.getAllExpenditure();
+        	// initalise start values to zero
         	double currentRevenue = 0;
         	double currentExpenditure = 0;
         	revenue.add(0, currentRevenue);
         	expenditure.add(0, currentExpenditure);
+        	// add revenue and expenditure data from each mail delivery event
         	for(int i = 0; i < revenueData.size(); i++){
         		currentRevenue += revenueData.get(i);
         		currentExpenditure += expenditureData.get(i);
@@ -202,10 +235,18 @@ public class MetricsPanel extends JPanel implements ActionListener{
         }
     }
 
+    /**
+     * Private class that is used to display the total revenue and expenditure
+     * data from the system, as well as the profit that has been made.
+     *
+     * @author David Sheridan
+     *
+     */
     private class ProfitPanel extends MetricComponent{
 
         private static final long serialVersionUID = 1L;
 
+        // fields
         private final String[] TYPES = {"Total Revenue", "Total Expenditure", "Total Profit"};
         private KPSLabel revenue = new KPSLabel();
         private KPSLabel expenditure = new KPSLabel();
@@ -213,6 +254,15 @@ public class MetricsPanel extends JPanel implements ActionListener{
         private final KPSLabel[] LABELS = {revenue, expenditure, profit};
         private final DecimalFormat FORMAT = new DecimalFormat("$###,###,###.##");
 
+        /**
+         * Constructs a new ProfitPanel Object with the specified
+         * width and height.
+         *
+         * @param width
+         * 		-- width of component
+         * @param height
+         * 		-- height of component
+         */
         public ProfitPanel(int width, int height){
             super(width, height);
             setLayout(new SpringLayout());
@@ -224,6 +274,15 @@ public class MetricsPanel extends JPanel implements ActionListener{
             }
         }
 
+        /**
+         * Set the revenue and expenditure values to the specified values.
+         * Profit is calculated from (revenue - expenditure)
+         *
+         * @param revenue
+         * 		-- new revenue value
+         * @param expenditure
+         * 		-- new expenditure value
+         */
         public void setProfitMetrics(double revenue, double expenditure){
         	this.revenue.setText(FORMAT.format(revenue));
         	this.expenditure.setText(FORMAT.format(expenditure));
@@ -231,10 +290,18 @@ public class MetricsPanel extends JPanel implements ActionListener{
         }
     }
 
+    /**
+     * Private class that is used to display the total number of MailDeliveryEvents,
+     * PriceUpdateEvents, TransportCostUpdateEvents and TransportDiscontinuedEvents.
+     *
+     * @author David Sheridan
+     *
+     */
     private class BusinessEventPanel extends MetricComponent{
 
         private static final long serialVersionUID = 1L;
 
+        // fields
         private final String[] TYPES = {"Mail Delivery", "Price Update", "Transport Cost Update", "Transport Discontinued", "Total"};
         private KPSLabel mail = new KPSLabel();
         private KPSLabel price = new KPSLabel();
@@ -243,6 +310,15 @@ public class MetricsPanel extends JPanel implements ActionListener{
         private KPSLabel total = new KPSLabel();
         private final KPSLabel[] LABELS = {mail, price, cost, discontinued, total};
 
+        /**
+         * Constructs a new BusinessEventPanel Object with the specified
+         * width and height.
+         *
+         * @param width
+         * 		-- width of component
+         * @param height
+         * 		-- height of component
+         */
         public BusinessEventPanel(int width, int height){
             super(width, height);
             setLayout(new SpringLayout());
@@ -254,6 +330,21 @@ public class MetricsPanel extends JPanel implements ActionListener{
             }
         }
 
+        /**
+         * Sets the counts displayed for all the business events currently
+         * in the system.
+         *
+         * @param mail
+         * 		-- mail delivery event count
+         * @param price
+         * 		-- price update event count
+         * @param cost
+         * 		-- transport cost update event count
+         * @param discontinued
+         * 		-- transport discontinued event count
+         * @param total
+         * 		-- total business event count
+         */
         public void setBusinessEventMetrics(int mail, int price, int cost, int discontinued, int total){
         	this.mail.setText(Integer.toString(mail));
         	this.price.setText(Integer.toString(price));
@@ -284,10 +375,10 @@ public class MetricsPanel extends JPanel implements ActionListener{
 
         public JPanel setupOptionsPanel(){
         	KPSLabel originLabel = new KPSLabel("Origin: ");
-            origin = new JComboBox<String>();
+            origin = new JComboBox<String>(metrics.getOrigins());
             originLabel.setLabelFor(origin);
             KPSLabel destLabel = new KPSLabel("Destination: ");
-            destination = new JComboBox<String>();
+            destination = new JComboBox<String>(metrics.getDestinations());
             destLabel.setLabelFor(destination);
         	JPanel options = new JPanel();
         	options.add(originLabel);
@@ -341,7 +432,7 @@ public class MetricsPanel extends JPanel implements ActionListener{
         	}
 
         	public void setVolume(int volume){
-        		this.volume.setText(volume+" cm3");
+        		this.volume.setText(volume+" cm³");
 
         	}
 

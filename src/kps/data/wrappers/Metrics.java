@@ -1,6 +1,7 @@
 package kps.data.wrappers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +36,8 @@ public class Metrics{
         totalTransportDiscontinuedEvents = 0;
         allRevenue = new ArrayList<Double>();
         allExpenditure = new ArrayList<Double>();
+        origins = new ArrayList<String>();
+        destinations = new ArrayList<String>();
     }
 
     /**
@@ -55,6 +58,8 @@ public class Metrics{
         totalTransportDiscontinuedEvents = 0;
         allRevenue = new ArrayList<Double>();
         allExpenditure = new ArrayList<Double>();
+        origins = new ArrayList<String>();
+        destinations = new ArrayList<String>();
     }
 
     /**
@@ -67,6 +72,16 @@ public class Metrics{
     }
 
     /**
+	 * Returns the list of all the revenue received from each mail delivery
+	 * event.
+	 *
+	 * @return List of revenue
+	 */
+	public List<Double> getAllRevenue(){
+		return allRevenue;
+	}
+
+	/**
      * Adds the specified revenue amount to the
      * revenue total.
      *
@@ -87,6 +102,16 @@ public class Metrics{
     }
 
     /**
+	 * Returns the list of all the expenditure received from each mail
+	 * delivery event.
+	 *
+	 * @return List of expenditure
+	 */
+	public List<Double> getAllExpenditure(){
+		return allExpenditure;
+	}
+
+	/**
      * Adds the specifed expenditure amount to the
      * total expenditure.
      *
@@ -104,6 +129,96 @@ public class Metrics{
      */
     public int getTotalMailDeliveryEvents(){
         return totalMailDeliveryEvents;
+    }
+
+    /**
+     * Returns an array of all the origin locations for
+     * customer routes.
+     *
+     * @return list of origins
+     */
+    public String[] getOrigins(){
+    	Collections.sort(this.origins);
+    	String[] origins = new String[this.origins.size()];
+    	for(int i = 0; i < origins.length; i++){
+    		origins[i] = this.origins.get(i);
+    	}
+    	return origins;
+    }
+
+    /**
+     * Returns an array of destination locations for
+     * customer routes.
+     *
+     * @return list of destinations
+     */
+    public String[] getDestinations(){
+    	Collections.sort(this.destinations);
+    	String[] destinations = new String[this.destinations.size()];
+    	for(int i = 0; i < destinations.length; i++){
+    		destinations[i] = this.destinations.get(i);
+    	}
+    	return destinations;
+    }
+
+    /**
+     * Returns the total weight from all the packages sent from
+     * the specified origin to the specified destination. If there
+     * is no route between the parameters a value of zero is returned.
+     *
+     * @param origin
+     * 		-- origin of mail
+     * @param destination
+     * 		-- destination of mail
+     *
+     * @return total weight of mail
+     */
+    public int getTotalMailWeight(String origin, String destination){
+    	BasicRoute route = new BasicRoute(origin, destination);
+    	if(mailDelivered.containsKey(route)){
+    		return mailDelivered.get(route).getTotalWeight();
+    	}
+    	return 0;
+    }
+
+    /**
+     * Returns the total volume from all the packages sent from
+     * the specified origin to the specified destination. If there
+     * is no route between the parameters a value of zero is returned.
+     *
+     * @param origin
+     * 		-- origin of mail
+     * @param destination
+     * 		-- destination of mail
+     *
+     * @return total volume of mail
+     */
+    public int getTotalMailVolume(String origin, String destination){
+    	BasicRoute route = new BasicRoute(origin, destination);
+    	if(mailDelivered.containsKey(route)){
+    		return mailDelivered.get(route).getTotalVolume();
+    	}
+    	return 0;
+    }
+
+    /**
+     * Returns the total amount of packages sent from the specified origin
+     * to the specified destination. If there is no route between the parameters
+     * a value of zero is returned.
+     *
+     * @param origin
+     * 		-- origin of mail
+     * @param destination
+     * 		-- destination of mail
+     *
+     * @return total weight of mail
+     */
+    public int getTotalMailAmount(String origin, String destination){
+    	BasicRoute route = new BasicRoute(origin, destination);
+    	if(mailDelivered.containsKey(route)){
+    		return mailDelivered.get(route).getTotalAmount();
+    	}
+    	return 0;
     }
 
     /**
@@ -132,6 +247,17 @@ public class Metrics{
      * Increments the price update event count by one.
      */
     public void addPriceUpdateEvent(String origin, String destination, Priority priority){
+    	// only add origin and destination if they aren't already in
+    	// their corresponding lists
+    	if(!origins.contains(origin)){
+    		origins.add(origin);
+    	}
+    	if(!destinations.contains(destination)){
+    		destinations.add(destination);
+    	}
+
+    	//BasicRoute route = new BasicRoute(origin, destination);
+
         totalPriceUpdateEvents++;
     }
 
@@ -174,25 +300,5 @@ public class Metrics{
      */
     public int getTotalBusinessEvents(){
         return totalMailDeliveryEvents + totalPriceUpdateEvents + totalTransportCostUpdateEvents + totalTransportDiscontinuedEvents;
-    }
-
-    /**
-     * Returns the list of all the revenue received from each mail delivery
-     * event.
-     *
-     * @return List of revenue
-     */
-    public List<Double> getAllRevenue(){
-    	return allRevenue;
-    }
-
-    /**
-     * Returns the list of all the expenditure received from each mail
-     * delivery event.
-     *
-     * @return List of expenditure
-     */
-    public List<Double> getAllExpenditure(){
-    	return allExpenditure;
     }
 }
