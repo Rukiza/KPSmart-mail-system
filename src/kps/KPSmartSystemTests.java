@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.Map;
 
 import kps.data.CustomerRoute;
+import kps.data.Route;
 import kps.data.wrappers.BasicRoute;
 import kps.data.wrappers.EventLog;
 import kps.enums.Day;
@@ -193,14 +194,14 @@ public class KPSmartSystemTests {
 		}
 		return kps;
 	}
-	
+
 	@Test public void testIncorrectMailDeliveryEvent_1(){
-		
+
 	}
-	
+
 	/**
 	 * Test sending mail that should be correct.
-	 * 
+	 *
 	 * Node 1 to Node 4 (AIR) weight = 6, volume = 6
 	 * Expected revenue = $20.40
 	 * Expected expenditure = $16.80
@@ -211,10 +212,10 @@ public class KPSmartSystemTests {
 		EventLog log = kps.getEventLog();
 		checkMailDeliveryEvent(log.getCurrentEvent(), 20.4, 16.8);
 	}
-	
+
 	/**
 	 * Test sending mail that should be correct.
-	 * 
+	 *
 	 * Node 1 to Node 4 (STD) weight = 5, volume = 5
 	 * Expected revenue = $13.50
 	 * Expected expenditure = $11.50
@@ -225,10 +226,10 @@ public class KPSmartSystemTests {
 		EventLog log = kps.getEventLog();
 		checkMailDeliveryEvent(log.getCurrentEvent(), 13.5, 11.5);
 	}
-	
+
 	/**
 	 * Test sending mail that should be correct.
-	 * 
+	 *
 	 * Node 1 to Node 3 (AIR) weight = 5, volume = 6
 	 * Expected revenue = $17.35
 	 * Expected expenditure = $12.10
@@ -239,10 +240,10 @@ public class KPSmartSystemTests {
 		EventLog log = kps.getEventLog();
 		checkMailDeliveryEvent(log.getCurrentEvent(), 17.35, 12.1);
 	}
-	
+
 	/**
 	 * Test sending mail that should be correct.
-	 * 
+	 *
 	 * Node 1 to Node 5 (STD) weight = 6, volume = 5
 	 * Expected revenue = $23.35
 	 * Expected expenditure = $17.10
@@ -253,10 +254,10 @@ public class KPSmartSystemTests {
 		EventLog log = kps.getEventLog();
 		checkMailDeliveryEvent(log.getCurrentEvent(), 23.35, 17.1);
 	}
-	
+
 	/**
 	 * Test sending mail that should be correct.
-	 * 
+	 *
 	 * Node 1 to Node 3 (STD) weight = 6, volume = 6
 	 * Expected revenue = $13.80
 	 * Expected expenditure = $12.00
@@ -267,34 +268,34 @@ public class KPSmartSystemTests {
 		EventLog log = kps.getEventLog();
 		checkMailDeliveryEvent(log.getCurrentEvent(), 13.8, 12);
 	}
-	
-	
+
+
 	/**
 	 * Test adding a price update that should be correct.
-	 * 
+	 *
 	 */
 	@Test public void testCorrectPriceUpdateEvent_1(){
 		KPSmartSystem kps = constructSystemWithRoutes();
 		kps.addPriceUpdateEvent("Node 2", "Node 3", 4, 3, Priority.INTERNATIONAL_STANDARD);
-		
+
 	}
-	
+
 	/**
 	 * Test adding a price update that should be correct.
 	 */
 	@Test public void testCorrectPriceUpdateEvent_2(){
 		KPSmartSystem kps = constructSystemWithRoutes();
-		
+
 	}
-	
+
 	/**
 	 * Test adding a price update that should be correct.
 	 */
 	@Test public void testCorrectPriceUpdateEvent_3(){
 		KPSmartSystem kps = constructSystemWithRoutes();
-		
+
 	}
-	
+
 	/**
 	 * Test adding a TransportCostUpdate to the system which does
 	 * not currently exist.
@@ -313,7 +314,7 @@ public class KPSmartSystemTests {
 			fail("Expecting event log size of "+(graphSize + 1)+", received "+newGraphSize);
 		}
 	}
-	
+
 	/**
 	 * Test updating a TransportCostUpdateEvent in the system.
 	 */
@@ -331,7 +332,7 @@ public class KPSmartSystemTests {
 			fail("Expecting event log size of "+(graphSize + 1)+", received "+newGraphSize);
 		}
 	}
-	
+
 	/**
 	 * Test adding a new TransportCostUpdateEvent via the same route
 	 * and priority with a different company.
@@ -350,7 +351,7 @@ public class KPSmartSystemTests {
 			fail("Expecting event log size of "+(graphSize + 1)+", received "+newGraphSize);
 		}
 	}
-	
+
 	/**
 	 * Test adding a new TransportCostUpdateEvent via the same route
 	 * with a different priority.
@@ -369,12 +370,13 @@ public class KPSmartSystemTests {
 			fail("Expecting event log size of "+(graphSize + 1)+", received "+newGraphSize);
 		}
 	}
-	
+
+	/*
 	@Test public void testCorrectTransportDiscontinuedEvent_1(){
 		KPSmartSystem kps = constructSystemWithRoutes();
 		int graphSize = kps.getRouteGraph().getAllRoutes().size();
 		int logSize = kps.getEventLogSize();
-		kps.addTransportDiscontinuedEvent(new Route())
+		kps.addTransportDiscontinuedEvent(new Route());
 		int newGraphSize = kps.getRouteGraph().getAllRoutes().size();
 		int newLogSize = kps.getEventLogSize();
 		if(newGraphSize != graphSize + 1){
@@ -383,8 +385,8 @@ public class KPSmartSystemTests {
 		if(newLogSize != logSize + 1){
 			fail("Expecting event log size of "+(graphSize + 1)+", received "+newGraphSize);
 		}
-	}
-	
+	}*/
+
 	private KPSmartSystem constructSystemWithRoutes(){
 		try{
 			EventLog log = new EventLog(KPSParser.parseFile(Main.XML_FILE_PATH+"kps_testdata.xml"));
@@ -392,7 +394,7 @@ public class KPSmartSystemTests {
 		}catch(ParserException e){}
 		return null;
 	}
-	
+
 	private void checkMailDeliveryEvent(BusinessEvent event, double revenue, double expenditure){
 		if(event instanceof MailDeliveryEvent){
 			MailDeliveryEvent mail = (MailDeliveryEvent)event;
