@@ -230,7 +230,8 @@ public class KPSmartSystem {
 
 		//sets the path and the expenditure
 		for(List<Node> ln : routeAndCost.keySet()){expenditure = routeAndCost.get(ln).doubleValue(); path = ln;}
-
+		expenditure /= 100; // convert to dollars
+		
 		if(revenue == -1 || routeAndCost.size() > 1 || path == null){
 			System.out.println("Error");
 			return;

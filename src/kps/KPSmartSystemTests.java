@@ -6,6 +6,8 @@ import kps.enums.Day;
 import kps.enums.Position;
 import kps.enums.Priority;
 import kps.enums.TransportType;
+import kps.events.BusinessEvent;
+import kps.events.MailDeliveryEvent;
 import kps.parser.KPSParser;
 import kps.parser.ParserException;
 import kps.users.KPSUser;
@@ -185,6 +187,103 @@ public class KPSmartSystemTests {
 			kps.addKPSUser(users[i], passwords[i].hashCode(), Position.CLERK);
 		}
 		return kps;
+	}
+	
+	@Test public void testIncorrectMailDeliveryEvent_1(){
+		
+	}
+	
+	/**
+	 * Test sending mail that should be correct.
+	 * 
+	 * Node 1 to Node 4 (AIR) weight = 6, volume = 6
+	 * Expected revenue = $20.40
+	 * Expected expenditure = $16.80
+	 */
+	@Test public void testCorrectMailDeliveryEvent_1(){
+		KPSmartSystem kps = constructSystemWithRoutes();
+		kps.addMailDeliveryEvent("Node 1", "Node 4", Day.MONDAY, 6, 6, Priority.INTERNATIONAL_AIR);
+		EventLog log = kps.getEventLog();
+		checkMailDeliveryEvent(log.getCurrentEvent(), 20.4, 16.8);
+	}
+	
+	/**
+	 * Test sending mail that should be correct.
+	 * 
+	 * Node 1 to Node 4 (STD) weight = 5, volume = 5
+	 * Expected revenue = $13.50
+	 * Expected expenditure = $11.50
+	 */
+	@Test public void testCorrectMailDeliveryEvent_2(){
+		KPSmartSystem kps = constructSystemWithRoutes();
+		kps.addMailDeliveryEvent("Node 1", "Node 4", Day.MONDAY, 5, 5, Priority.INTERNATIONAL_STANDARD);
+		EventLog log = kps.getEventLog();
+		checkMailDeliveryEvent(log.getCurrentEvent(), 13.5, 11.5);
+	}
+	
+	/**
+	 * Test sending mail that should be correct.
+	 * 
+	 * Node 1 to Node 3 (AIR) weight = 5, volume = 6
+	 * Expected revenue = $17.35
+	 * Expected expenditure = $12.10
+	 */
+	@Test public void testCorrectMailDeliveryEvent_3(){
+		KPSmartSystem kps = constructSystemWithRoutes();
+		kps.addMailDeliveryEvent("Node 1", "Node 3", Day.MONDAY, 5, 6, Priority.INTERNATIONAL_AIR);
+		EventLog log = kps.getEventLog();
+		checkMailDeliveryEvent(log.getCurrentEvent(), 17.35, 12.1);
+	}
+	
+	/**
+	 * Test sending mail that should be correct.
+	 * 
+	 * Node 1 to Node 5 (STD) weight = 6, volume = 5
+	 * Expected revenue = $23.35
+	 * Expected expenditure = $17.10
+	 */
+	@Test public void testCorrectMailDeliveryEvent_4(){
+		KPSmartSystem kps = constructSystemWithRoutes();
+		kps.addMailDeliveryEvent("Node 1", "Node 5", Day.MONDAY, 6, 5, Priority.INTERNATIONAL_STANDARD);
+		EventLog log = kps.getEventLog();
+		checkMailDeliveryEvent(log.getCurrentEvent(), 23.35, 17.1);
+	}
+	
+	/**
+	 * Test sending mail that should be correct.
+	 * 
+	 * Node 1 to Node 3 (STD) weight = 6, volume = 6
+	 * Expected revenue = $13.80
+	 * Expected expenditure = $12.00
+	 */
+	@Test public void testCorrectMailDeliveryEvent_5(){
+		KPSmartSystem kps = constructSystemWithRoutes();
+		kps.addMailDeliveryEvent("Node 1", "Node 3", Day.MONDAY, 6, 6, Priority.INTERNATIONAL_STANDARD);
+		EventLog log = kps.getEventLog();
+		checkMailDeliveryEvent(log.getCurrentEvent(), 13.8, 12);
+	}
+	
+	private KPSmartSystem constructSystemWithRoutes(){
+		try{
+			EventLog log = new EventLog(KPSParser.parseFile(Main.XML_FILE_PATH+"kps_testdata.xml"));
+			return new KPSmartSystem(log);
+		}catch(ParserException e){}
+		return null;
+	}
+	
+	private void checkMailDeliveryEvent(BusinessEvent event, double revenue, double expenditure){
+		if(event instanceof MailDeliveryEvent){
+			MailDeliveryEvent mail = (MailDeliveryEvent)event;
+			if(revenue != mail.getRevenue()){
+				fail("Expecting revenue of "+revenue+", received "+mail.getRevenue());
+			}
+			if(expenditure != mail.getExpenditure()){
+				fail("Expecting expenditure of "+expenditure+", received "+mail.getExpenditure());
+			}
+		}
+		else{
+			fail("Expecting a MailDeliveryEvent");
+		}
 	}
 
 	@Test
