@@ -1,6 +1,11 @@
 package kps;
 
 import static org.junit.Assert.*;
+
+import java.util.Map;
+
+import kps.data.CustomerRoute;
+import kps.data.wrappers.BasicRoute;
 import kps.data.wrappers.EventLog;
 import kps.enums.Day;
 import kps.enums.Position;
@@ -261,6 +266,123 @@ public class KPSmartSystemTests {
 		kps.addMailDeliveryEvent("Node 1", "Node 3", Day.MONDAY, 6, 6, Priority.INTERNATIONAL_STANDARD);
 		EventLog log = kps.getEventLog();
 		checkMailDeliveryEvent(log.getCurrentEvent(), 13.8, 12);
+	}
+	
+	
+	/**
+	 * Test adding a price update that should be correct.
+	 * 
+	 */
+	@Test public void testCorrectPriceUpdateEvent_1(){
+		KPSmartSystem kps = constructSystemWithRoutes();
+		kps.addPriceUpdateEvent("Node 2", "Node 3", 4, 3, Priority.INTERNATIONAL_STANDARD);
+		
+	}
+	
+	/**
+	 * Test adding a price update that should be correct.
+	 */
+	@Test public void testCorrectPriceUpdateEvent_2(){
+		KPSmartSystem kps = constructSystemWithRoutes();
+		
+	}
+	
+	/**
+	 * Test adding a price update that should be correct.
+	 */
+	@Test public void testCorrectPriceUpdateEvent_3(){
+		KPSmartSystem kps = constructSystemWithRoutes();
+		
+	}
+	
+	/**
+	 * Test adding a TransportCostUpdate to the system which does
+	 * not currently exist.
+	 */
+	@Test public void testCorrectTransportCostUpdateEvent_1(){
+		KPSmartSystem kps = constructSystemWithRoutes();
+		int graphSize = kps.getRouteGraph().getAllRoutes().size();
+		int logSize = kps.getEventLogSize();
+		kps.addTransportCostUpdateEvent("Node 1", "Node 6", "Test", TransportType.AIR, 50, 50, 1000, 1000, 5, 5, Day.MONDAY);
+		int newGraphSize = kps.getRouteGraph().getAllRoutes().size();
+		int newLogSize = kps.getEventLogSize();
+		if(newGraphSize != graphSize + 1){
+			fail("Expecting graph size of "+(graphSize + 1)+", received "+newGraphSize);
+		}
+		if(newLogSize != logSize + 1){
+			fail("Expecting event log size of "+(graphSize + 1)+", received "+newGraphSize);
+		}
+	}
+	
+	/**
+	 * Test updating a TransportCostUpdateEvent in the system.
+	 */
+	@Test public void testCorrectTransportCostUpdateEvent_2(){
+		KPSmartSystem kps = constructSystemWithRoutes();
+		int graphSize = kps.getRouteGraph().getAllRoutes().size();
+		int logSize = kps.getEventLogSize();
+		kps.addTransportCostUpdateEvent("Node 1", "Node 2", "Test", TransportType.AIR, 30, 30, 1000, 1000, 5, 5, Day.MONDAY);
+		int newGraphSize = kps.getRouteGraph().getAllRoutes().size();
+		int newLogSize = kps.getEventLogSize();
+		if(newGraphSize != graphSize){
+			fail("Expecting graph size of "+graphSize+", received "+newGraphSize);
+		}
+		if(newLogSize != logSize + 1){
+			fail("Expecting event log size of "+(graphSize + 1)+", received "+newGraphSize);
+		}
+	}
+	
+	/**
+	 * Test adding a new TransportCostUpdateEvent via the same route
+	 * and priority with a different company.
+	 */
+	@Test public void testCorrectTransportCostUpdateEvent_3(){
+		KPSmartSystem kps = constructSystemWithRoutes();
+		int graphSize = kps.getRouteGraph().getAllRoutes().size();
+		int logSize = kps.getEventLogSize();
+		kps.addTransportCostUpdateEvent("Node 1", "Node 2", "Company", TransportType.AIR, 30, 30, 1000, 1000, 5, 5, Day.MONDAY);
+		int newGraphSize = kps.getRouteGraph().getAllRoutes().size();
+		int newLogSize = kps.getEventLogSize();
+		if(newGraphSize != graphSize + 1){
+			fail("Expecting graph size of "+(graphSize + 1)+", received "+newGraphSize);
+		}
+		if(newLogSize != logSize + 1){
+			fail("Expecting event log size of "+(graphSize + 1)+", received "+newGraphSize);
+		}
+	}
+	
+	/**
+	 * Test adding a new TransportCostUpdateEvent via the same route
+	 * with a different priority.
+	 */
+	@Test public void testCorrectTransportCostUpdateEvent_4(){
+		KPSmartSystem kps = constructSystemWithRoutes();
+		int graphSize = kps.getRouteGraph().getAllRoutes().size();
+		int logSize = kps.getEventLogSize();
+		kps.addTransportCostUpdateEvent("Node 3", "Node 5", "Test", TransportType.AIR, 30, 30, 1000, 1000, 5, 5, Day.MONDAY);
+		int newGraphSize = kps.getRouteGraph().getAllRoutes().size();
+		int newLogSize = kps.getEventLogSize();
+		if(newGraphSize != graphSize + 1){
+			fail("Expecting graph size of "+(graphSize + 1)+", received "+newGraphSize);
+		}
+		if(newLogSize != logSize + 1){
+			fail("Expecting event log size of "+(graphSize + 1)+", received "+newGraphSize);
+		}
+	}
+	
+	@Test public void testCorrectTransportDiscontinuedEvent_1(){
+		KPSmartSystem kps = constructSystemWithRoutes();
+		int graphSize = kps.getRouteGraph().getAllRoutes().size();
+		int logSize = kps.getEventLogSize();
+		kps.addTransportDiscontinuedEvent(new Route())
+		int newGraphSize = kps.getRouteGraph().getAllRoutes().size();
+		int newLogSize = kps.getEventLogSize();
+		if(newGraphSize != graphSize + 1){
+			fail("Expecting graph size of "+(graphSize + 1)+", received "+newGraphSize);
+		}
+		if(newLogSize != logSize + 1){
+			fail("Expecting event log size of "+(graphSize + 1)+", received "+newGraphSize);
+		}
 	}
 	
 	private KPSmartSystem constructSystemWithRoutes(){
