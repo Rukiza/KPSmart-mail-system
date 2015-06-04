@@ -12,7 +12,7 @@ public class Node  implements Comparable<Node>{
 
 	//cost used for searching
 	private double minCost = Double.POSITIVE_INFINITY;
-	private Route routeTaken;
+	private Route routeTaken = null;
 
 	//name of the node
 	private String name;

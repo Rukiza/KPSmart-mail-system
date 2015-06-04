@@ -1,7 +1,13 @@
 package kps;
 
 import static org.junit.Assert.*;
+import kps.data.wrappers.EventLog;
+import kps.enums.Day;
 import kps.enums.Position;
+import kps.enums.Priority;
+import kps.enums.TransportType;
+import kps.parser.KPSParser;
+import kps.parser.ParserException;
 import kps.users.KPSUser;
 
 import org.junit.Test;
@@ -180,5 +186,74 @@ public class KPSmartSystemTests {
 		}
 		return kps;
 	}
+
+	@Test
+	public void timeToWaitTestNoTime(){
+		KPSmartSystem kp = new KPSmartSystem();
+
+		//time starts on zero
+		assertTrue(kp.timeToWait(0, 2) == 0 );
+		assertTrue(kp.timeToWait(1, 1) == 0 );
+		assertTrue(kp.timeToWait(12, 2) == 0 );
+		assertTrue(kp.timeToWait(12, 3) == 0 );
+		assertTrue(kp.timeToWait(24, 1) == 0 );
+	}
+
+	@Test
+	public void timeToWaitTestMustWait(){
+		KPSmartSystem kp = new KPSmartSystem();
+
+		//time starts on zero
+
+		assertTrue(kp.timeToWait(2, 3) == 1 );
+		assertTrue(kp.timeToWait(23, 4) == 1 );
+		assertTrue(kp.timeToWait(23, 5) == -1 );
+
+	}
+
+	@Test
+	public void incrementTimeTest(){
+		KPSmartSystem kp = new KPSmartSystem();
+
+
+
+
+	}
+
+
+	@Test
+	public void testTimeTaken(){
+		EventLog log = null;
+		try {
+			log = new EventLog(KPSParser.parseFile(Main.XML_FILE_PATH+"kps_testdata.xml"));
+		} catch (ParserException e) {
+			System.out.println("oh no");
+			e.printStackTrace();
+		}
+		KPSmartSystem kp = new KPSmartSystem(log);
+		kp.addTransportCostUpdateEvent("Node 6", "Node 2", "Test", TransportType.AIR, 50, 50, 1000, 1000, 21, 5, Day.TUESDAY);
+		kp.addPriceUpdateEvent("Node 6", "Node 3", 160, 180, Priority.INTERNATIONAL_STANDARD);
+
+		kp.addMailDeliveryEvent("Node 1", "Node 3", Day.MONDAY,  1,  1, Priority.INTERNATIONAL_STANDARD);
+
+		assertTrue(kp.getAvarageDeliveryTime() == 29);//
+
+		kp.addMailDeliveryEvent("Node 1", "Node 3", Day.TUESDAY,  1,  1, Priority.INTERNATIONAL_STANDARD);
+
+		System.out.println("Avg " + kp.getAvarageDeliveryTime());
+		assertTrue(kp.getAvarageDeliveryTime() == 173);//
+
+		kp.addMailDeliveryEvent("Node 1", "Node 5", Day.THURSDAY,  1,  1, Priority.INTERNATIONAL_STANDARD);
+
+		System.out.println("Avg " + kp.getAvarageDeliveryTime());
+		assertTrue(kp.getAvarageDeliveryTime() == 149);//
+
+		kp.addMailDeliveryEvent("Node 6", "Node 3", Day.TUESDAY,  1,  1, Priority.INTERNATIONAL_STANDARD);
+
+		System.out.println("Avg " + kp.getAvarageDeliveryTime());
+		assertTrue(kp.getAvarageDeliveryTime() == 173);//
+
+	}
+
 
 }

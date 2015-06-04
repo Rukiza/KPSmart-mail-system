@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sun.xml.internal.bind.v2.TODO;
+
 import kps.Main;
 import kps.data.CustomerRoute;
 import kps.data.DijkstraSearch;
@@ -210,7 +212,7 @@ public class KPSmartSystem {
 		double revenue = customerRoutes.get(route).calculateDeliveryPrice(weight, volume, priority);
 		if(revenue < 0){
 			// cannot send mail
-			System.out.println("cannot send mail, No cutsomer cost for priority" );
+			System.out.println("cannot send mail, No customer cost for priority" );
 			return;
 		}
 
@@ -237,7 +239,7 @@ public class KPSmartSystem {
 		}
 
 		//time to deliver in hours
-		int time = timeToDeliver(path, day);
+		this.avarageDeliveryTime = timeToDeliver(path, day);//TODO make it not just be the price for one delivery
 
 
 		metrics.addMailDeliveryEvent(revenue, expenditure);
@@ -432,7 +434,7 @@ public class KPSmartSystem {
 				}
 				CustomerRoute cr = customerRoutes.get(route);
 				cr.addDeliveryPrice(price.getGramPrice(), price.getVolumePrice(), price.getPriority());
-				System.out.println();
+				System.out.println(cr);
 			}
 			if(event instanceof TransportCostUpdateEvent){
 				metrics.addTransportCostUpdateEvent();
@@ -468,29 +470,40 @@ public class KPSmartSystem {
 		Day currentDay = day;
 		int currentTime = 0;//12am to start with
 
-		for(Node n : path){
-			Route r = n.getRouteTaken();
+		for(int i = 1; i < path.size(); i++){
+			Route r = path.get(i).getRouteTaken();
+
+			boolean sent = false;
+
+			while(!sent){
+				while(currentDay !=r.getDay()){
+					currentDay = Day.getNextDay(currentDay);
+					timeTaken +=24 - currentTime;
+					currentTime = 0;
+				}
+
+					//should always be true at this point
+					int waitTime = timeToWait(currentTime, r.getFrequency());
+
+					//cannot be sent that day
+					if(waitTime == -1){
+						timeTaken+= 24;
+
+						//increment the day
+						currentDay = Day.getNextDay(currentDay);
+						continue;
+					}
 
 
-			while(currentDay !=r.getDay()){
-				currentDay = Day.getNextDay(currentDay);
-				timeTaken+=24;
-			}
+					currentTime =incrementTime(currentTime,waitTime);
+					currentTime = incrementTime(currentTime, r.getDuration());
 
-			//should always be true at this point
-			if(r.getDay() == currentDay){
-				int waitTime = timeToWait(currentTime, r.getFrequency());
-
-				currentTime =incrementTime(currentTime,waitTime);
-				currentTime = incrementTime(currentTime, r.getDuration());
-
-				timeTaken += r.getDuration();
-				timeTaken+= waitTime;
+					timeTaken += r.getDuration();
+					timeTaken+= waitTime;
+					sent = true;
 			}
 		}
-		System.out.println("Time Taken " + timeTaken);
 		return timeTaken;
-
 	}
 
 	/**
@@ -506,21 +519,27 @@ public class KPSmartSystem {
 	}
 
 	/**
-	 *Returns the time to wait before the package can be sent
+	 *Returns the time to wait before the package can be sent on the day
+	 *or -1 if it cannot be sent that day
 	 * */
-	private int timeToWait(int currentTime , int frequency){
+	public int timeToWait(int currentTime , int frequency){
 		List<Integer> canSend = new ArrayList<Integer>();
 
 		//add all the times a package can be sent in a list
-		for(int time = 0; time < 24; time+=frequency){
-			canSend.add(frequency);
+		for(int time = 0; time <= 24; time+=frequency){
+			canSend.add(time);
 		}
 
 		//works out the earliest time it can send the package and return the time it has to wait to send it
 		for(int i = 0; i < canSend.size(); i++){
-			if(currentTime < canSend.get(i))return canSend.get(i) - currentTime;
+			if(currentTime <= canSend.get(i))return canSend.get(i) - currentTime;
 		}
+		//cannot send it that day
 		return -1;
+	}
+
+	public int getAvarageDeliveryTime(){
+		return this.avarageDeliveryTime;
 	}
 
 
