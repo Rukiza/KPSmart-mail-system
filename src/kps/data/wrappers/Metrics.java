@@ -162,6 +162,66 @@ public class Metrics{
     }
 
     /**
+     * Returns the total weight from all the packages sent from
+     * the specified origin to the specified destination. If there
+     * is no route between the parameters a value of zero is returned.
+     *
+     * @param origin
+     * 		-- origin of mail
+     * @param destination
+     * 		-- destination of mail
+     *
+     * @return total weight of mail
+     */
+    public int getTotalMailWeight(String origin, String destination){
+    	BasicRoute route = new BasicRoute(origin, destination);
+    	if(mailDelivered.containsKey(route)){
+    		return mailDelivered.get(route).getTotalWeight();
+    	}
+    	return 0;
+    }
+
+    /**
+     * Returns the total volume from all the packages sent from
+     * the specified origin to the specified destination. If there
+     * is no route between the parameters a value of zero is returned.
+     *
+     * @param origin
+     * 		-- origin of mail
+     * @param destination
+     * 		-- destination of mail
+     *
+     * @return total volume of mail
+     */
+    public int getTotalMailVolume(String origin, String destination){
+    	BasicRoute route = new BasicRoute(origin, destination);
+    	if(mailDelivered.containsKey(route)){
+    		return mailDelivered.get(route).getTotalVolume();
+    	}
+    	return 0;
+    }
+
+    /**
+     * Returns the total amount of packages sent from the specified origin
+     * to the specified destination. If there is no route between the parameters
+     * a value of zero is returned.
+     *
+     * @param origin
+     * 		-- origin of mail
+     * @param destination
+     * 		-- destination of mail
+     *
+     * @return total weight of mail
+     */
+    public int getTotalMailAmount(String origin, String destination){
+    	BasicRoute route = new BasicRoute(origin, destination);
+    	if(mailDelivered.containsKey(route)){
+    		return mailDelivered.get(route).getTotalAmount();
+    	}
+    	return 0;
+    }
+
+    /**
      * Adds
      * @param revenue
      * @param expenditure
