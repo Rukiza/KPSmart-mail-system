@@ -1,10 +1,10 @@
 package kps.ui.formlistener;
 
-import kps.enums.TransportType;
+import kps.data.Route;
 
 public interface DeleteRouteListener extends FormListener{
 
-	public void onDeleteFormSubmitted(String company, String to, String from, TransportType type);
+	public void onDeleteFormSubmitted(Route route);
 
-	public void onCompletedFormUpdate(String company, String to, String from, TransportType type);
+	public void onCompletedFormUpdate(Route route);
 }

@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -20,11 +19,11 @@ import javax.swing.SwingConstants;
 import kps.KPSmartSystem;
 import kps.data.DijkstraSearch;
 import kps.data.Mail;
+import kps.data.Route;
 import kps.data.wrappers.BasicRoute;
 import kps.enums.Day;
 import kps.enums.Priority;
 import kps.enums.TransportType;
-import kps.events.MailDeliveryEvent;
 import kps.ui.formlistener.DeleteRouteListener;
 import kps.ui.formlistener.PackageFormListener;
 import kps.ui.formlistener.PriceUpdateListener;
@@ -165,19 +164,17 @@ public class KPSWindow extends JFrame {
 		}));
 
 		deleteRoute.addActionListener((ActionEvent e) -> new DeleteRouteWindow(new DeleteRouteListener(){
-			@Override public void onDeleteFormSubmitted(String company, String to, String from, TransportType type){
-				
-				
-				//system.addTransportDiscontinuedEvent(from, to, company, type);
+			@Override public void onDeleteFormSubmitted(Route route){
+				system.addTransportDiscontinuedEvent(route);
 				graphPanel.graphUpdated();
 			}
-			@Override public void onCompletedFormUpdate(String company, String to, String from, TransportType type){
+			@Override public void onCompletedFormUpdate(Route route){
 				// updated
 			}
 			@Override public void onCancel(){
 				// cancelled
 			}
-		}, system.getRouteGraph().getNodes()));
+		}, system.getRouteGraph()));
 
 		priceUpdate.addActionListener((ActionEvent e) -> new PriceUpdateWindow(new PriceUpdateListener(){
 			@Override public void onPriceUpdateSubmitted(String from, String to, Priority priority, double weightCost, double volumeCost){

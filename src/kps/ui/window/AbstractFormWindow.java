@@ -1,7 +1,7 @@
 package kps.ui.window;
 
 import java.awt.Container;
-import java.awt.event.ItemEvent;
+import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +16,7 @@ import javax.swing.event.DocumentListener;
 public abstract class AbstractFormWindow extends JFrame {
 
 	protected Map<String, Object> fields = new HashMap<>();
-	
+
 	public AbstractFormWindow(String title){
 		super(title);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -44,7 +44,7 @@ public abstract class AbstractFormWindow extends JFrame {
 	 */
 	protected abstract boolean isFormComplete();
 
-	protected void makeTextField(String name, Container cont) {
+	protected JTextField makeTextField(String name, Container cont) {
 		JTextField textField = new JTextField();
 		textField.getDocument().addDocumentListener(new DocumentListener(){
                 @Override
@@ -55,17 +55,19 @@ public abstract class AbstractFormWindow extends JFrame {
                 @Override public void removeUpdate(DocumentEvent e) { }
 		});
 		// put default text in fields
-		fields.put(name, null); 
+		fields.put(name, null);
 		JLabel label = new JLabel(name);
 		label.setLabelFor(textField);
 		cont.add(label);
 		cont.add(textField);
+
+		return textField;
 	}
 
-	protected void makeComboBox(String name, Object[] items, Container cont) {
+	protected JComboBox<Object> makeComboBox(String name, Object[] items, Container cont) {
 		JComboBox<Object> combo = new JComboBox<>(items);
-		combo.addItemListener((ItemEvent e) -> {
-			fields.put(name, combo.getSelectedItem());
+		combo.addActionListener((ActionEvent e) -> {
+			comboBoxUpdated(combo, name);
 		});
 		// put default item in fields
 		fields.put(name, combo.getSelectedItem());
@@ -73,6 +75,12 @@ public abstract class AbstractFormWindow extends JFrame {
 		label.setLabelFor(combo);
 		cont.add(label);
 		cont.add(combo);
+		return combo;
+	}
+
+	protected void comboBoxUpdated(JComboBox<Object> comboBox, String name){
+			fields.put(name, comboBox.getSelectedItem());
+			System.out.println("updated combobox: " + name);
 	}
 
 }

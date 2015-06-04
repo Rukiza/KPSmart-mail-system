@@ -410,7 +410,6 @@ public class KPSmartSystem {
 				}
 				CustomerRoute cr = customerRoutes.get(route);
 				cr.addDeliveryPrice(price.getGramPrice(), price.getVolumePrice(), price.getPriority());
-				System.out.println();
 			}
 			if(event instanceof TransportCostUpdateEvent){
 				metrics.addTransportCostUpdateEvent();
