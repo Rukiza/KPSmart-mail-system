@@ -164,7 +164,7 @@ public class KPSmartSystem {
 	public String getCurrentUser(){
 		return currentUser.getUsername();
 	}
-	
+
 	public boolean hasCustomerRoute(String origin, String destination, Priority priority){
 		BasicRoute route = new BasicRoute(origin, destination);
 		if(customerRoutes.containsKey(route)){
@@ -240,7 +240,7 @@ public class KPSmartSystem {
 		//sets the path and the expenditure
 		for(List<Node> ln : routeAndCost.keySet()){expenditure = routeAndCost.get(ln).doubleValue(); path = ln;}
 		expenditure /= 100; // convert to dollars
-		
+
 		if(revenue == -1 || routeAndCost.size() > 1 || path == null){
 			System.out.println("Error");
 			return;
@@ -435,7 +435,7 @@ public class KPSmartSystem {
 			}
 			if(event instanceof PriceUpdateEvent){
 				PriceUpdateEvent price = (PriceUpdateEvent)event;
-				metrics.addPriceUpdateEvent();
+				metrics.addPriceUpdateEvent(price.getOrigin(), price.getDestination(), price.getPriority());
 				BasicRoute route = new BasicRoute(price.getOrigin(), price.getDestination());
 				if(!customerRoutes.containsKey(route)){
 					customerRoutes.put(route, new CustomerRoute(route));
