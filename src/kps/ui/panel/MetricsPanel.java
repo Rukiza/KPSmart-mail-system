@@ -284,10 +284,10 @@ public class MetricsPanel extends JPanel implements ActionListener{
 
         public JPanel setupOptionsPanel(){
         	KPSLabel originLabel = new KPSLabel("Origin: ");
-            origin = new JComboBox<String>();
+            origin = new JComboBox<String>(metrics.getOrigins());
             originLabel.setLabelFor(origin);
             KPSLabel destLabel = new KPSLabel("Destination: ");
-            destination = new JComboBox<String>();
+            destination = new JComboBox<String>(metrics.getDestinations());
             destLabel.setLabelFor(destination);
         	JPanel options = new JPanel();
         	options.add(originLabel);
