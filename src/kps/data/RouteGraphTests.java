@@ -152,7 +152,7 @@ public class RouteGraphTests {
 				assertTrue(list.get(i).getName().equals(shortestPathNodes[i]));
 			}
 			//Expected shortest path cost
-			assertTrue(shortestPath.get(list).doubleValue() == Double.POSITIVE_INFINITY);//TODO check
+			assertTrue(shortestPath.get(list).doubleValue() == Double.POSITIVE_INFINITY);
 		}
 	}
 

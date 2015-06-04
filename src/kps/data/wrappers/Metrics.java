@@ -8,7 +8,9 @@ public class Metrics{
     // fields
     private double totalRevenue;
     private double totalExpenditure;
-    private List<Tuple<Double>> mailDelivered;
+    //private List<Tuple<Double>> mailDelivered;
+    private List<Double> allRevenue;
+    private List<Double> allExpenditure;
 
     // business event counters
     private int totalMailDeliveryEvents;
@@ -23,7 +25,9 @@ public class Metrics{
         totalPriceUpdateEvents = 0;
         totalTransportCostUpdateEvents = 0;
         totalTransportDiscontinuedEvents = 0;
-        mailDelivered = new ArrayList<Tuple<Double>>();
+        //mailDelivered = new ArrayList<Tuple<Double>>();
+        allRevenue = new ArrayList<Double>();
+        allExpenditure = new ArrayList<Double>();
     }
 
     public Metrics(double totalRevenue, double totalExpenditure){
@@ -33,7 +37,9 @@ public class Metrics{
         totalPriceUpdateEvents = 0;
         totalTransportCostUpdateEvents = 0;
         totalTransportDiscontinuedEvents = 0;
-        mailDelivered = new ArrayList<Tuple<Double>>();
+        //mailDelivered = new ArrayList<Tuple<Double>>();
+        allRevenue = new ArrayList<Double>();
+        allExpenditure = new ArrayList<Double>();
     }
 
     public double getTotalRevenue(){
@@ -59,7 +65,9 @@ public class Metrics{
     public void addMailDeliveryEvent(double revenue, double expenditure){
     	totalRevenue += revenue;
     	totalExpenditure += expenditure;
-    	mailDelivered.add(new Tuple<Double>(revenue, expenditure));
+    	//mailDelivered.add(new Tuple<Double>(revenue, expenditure));
+    	allRevenue.add(revenue);
+    	allExpenditure.add(expenditure);
         totalMailDeliveryEvents++;
     }
 
@@ -91,6 +99,14 @@ public class Metrics{
         return totalMailDeliveryEvents + totalPriceUpdateEvents + totalTransportCostUpdateEvents + totalTransportDiscontinuedEvents;
     }
 
+    public List<Double> getAllRevenue(){
+    	return allRevenue;
+    }
+
+    public List<Double> getAllExpenditure(){
+    	return allExpenditure;
+    }
+    /*
     private class Tuple<E>{
 
         private E[] elements;
@@ -111,4 +127,5 @@ public class Metrics{
             return null;
         }
     }
+    */
 }

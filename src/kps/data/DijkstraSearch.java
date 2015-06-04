@@ -113,6 +113,7 @@ public class DijkstraSearch  {
 			    nodeQueue.remove(d);
 			    d.setMinCost(distanceThroughR);
 			    d.setPrev(dn);
+			    d.setRouteTaken(r);
 			    nodeQueue.add(d);
 			}
 	            }

@@ -100,7 +100,7 @@ public class PackageFormWindow extends AbstractFormWindow {
 	}
 
 	@Override
-	protected void makeTextField(String name, Container cont) {
+	protected JTextField makeTextField(String name, Container cont) {
 		super.makeTextField(name, cont);
 		// get the text field that was just added by the super method
 		JTextField textField = (JTextField) cont.getComponent(cont.getComponentCount() - 1);
@@ -121,18 +121,19 @@ public class PackageFormWindow extends AbstractFormWindow {
 					}
                 }
 		});
+		return textField;
 	}
 
 	@Override
-	protected void makeComboBox(String name, Object[] items, Container cont){
-		super.makeComboBox(name, items, cont);
+	protected JComboBox<Object> makeComboBox(String name, Object[] items, Container cont){
+		JComboBox<Object> combobox = super.makeComboBox(name, items, cont);
 		// get the combobox as most recently added component
-		JComboBox<Object> combobox = (JComboBox<Object>) cont.getComponent(cont.getComponentCount() - 1);
 		combobox.addItemListener((ItemEvent e) -> {
                 if (isFormComplete()) {
                         fireFormUpdate();
                 }
 		});
+		return combobox;
 	}
 
 	private void fireFormUpdate(){

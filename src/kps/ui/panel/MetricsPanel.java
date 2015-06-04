@@ -9,6 +9,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -18,6 +19,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 import javax.swing.border.TitledBorder;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 import kps.data.wrappers.Metrics;
 import kps.ui.util.SpringUtilities;
@@ -41,15 +49,15 @@ public class MetricsPanel extends JPanel implements ActionListener{
         setPreferredSize(new Dimension(910, 730));
         this.metrics = metrics;
         // setup components
-        graph = new GraphPanel(910, 359);//new GraphPanel(660, 290);
-        graph.setBorder(new TitledKPSBorder("Revenue and Expenditure"));
-        profit = new ProfitPanel(392, 153);//(260, 92);
+        graph = new GraphPanel(910, 428);//new GraphPanel(660, 290);
+        //graph.setBorder(new TitledKPSBorder("Revenue and Expenditure"));
+        profit = new ProfitPanel(392, 125);//(260, 92);
         SpringUtilities.makeCompactGrid(profit, 3, 2, 6, 6, 6, 6);
         profit.setBorder(new TitledKPSBorder("Income"));
-        events = new BusinessEventPanel(392, 218);//(260, 138);
+        events = new BusinessEventPanel(392, 177);//(260, 138);
         SpringUtilities.makeCompactGrid(events, 5, 2, 6, 6, 6, 6);
         events.setBorder(new TitledKPSBorder("Business Events"));
-        routes = new CustomerRoutePanel(518, 371, this);//(400, 230, this);
+        routes = new CustomerRoutePanel(518, 302, this);//(400, 230, this);
         routes.setBorder(new TitledKPSBorder("Customer Routes"));
         SpringUtilities.makeCompactGrid(events, 2, 2, 6, 6, 6, 6);
         layoutComponents();
@@ -89,22 +97,6 @@ public class MetricsPanel extends JPanel implements ActionListener{
         constraints.gridheight = 3;
         add(routes, constraints);
     }
-
-    /*public void repaintMetrics(Metrics metrics){
-    	// update graph panel
-
-    	// update profit panel
-    	profit.setProfitMetrics(metrics.getTotalRevenue(), metrics.getTotalExpenditure());
-    	// update events panel
-    	int mail = metrics.getTotalMailDeliveryEvents();
-    	int price = metrics.getTotalPriceUpdateEvents();
-    	int cost = metrics.getTotalTransportCostUpdateEvents();
-    	int discontinued = metrics.getTotalTransportDiscontinuedEvents();
-    	int total = metrics.getTotalBusinessEvents();
-    	events.setBusinessEventMetrics(mail, price, cost, discontinued, total);
-    	// update customer route panel
-    	repaint();
-    }*/
 
     public void repaint(){
     	if(initialised){
@@ -172,48 +164,42 @@ public class MetricsPanel extends JPanel implements ActionListener{
 
         private static final long serialVersionUID = 1L;
 
-        private double[] revenue = {5, 7, 8, 15, 19, 30, 34, 51};
-        private double[] expenditure = {2, 3, 11, 14, 21, 25, 31, 42};
-
-        private final int X = 60;
-        private final int Y = 40;
+        private final int WIDTH;
+        private final int HEIGHT;
 
         public GraphPanel(int width, int height){
             super(width, height);
+            WIDTH = width;
+            HEIGHT = height;
         }
 
         public void paintComponent(Graphics g){
-            g.setColor(Color.WHITE);
-            g.fillRect(X, Y, getWidth() - (X * 2), getHeight() - (Y * 2));
-            drawAxis(g);
-            drawGraph(g);
+        	JFreeChart chart = ChartFactory.createXYLineChart("Revenue and Expenditure", "Mail Deliveries", "Money (NZD)", createDataset());
+        	ChartPanel panel = new ChartPanel(chart);
+        	panel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        	add(panel);
         }
 
-        public void drawAxis(Graphics g){
-            g.setColor(Color.BLACK);
-            g.drawLine(X, Y, X, getHeight() - Y);
-            g.drawLine(X, getHeight() - Y, getWidth() - X, getHeight() - Y);
+        private XYDataset createDataset(){
+        	XYSeries revenue = new XYSeries("Revenue");
+        	XYSeries expenditure = new XYSeries("Expenditure");
+        	List<Double> revenueData = metrics.getAllRevenue();
+        	List<Double> expenditureData = metrics.getAllExpenditure();
+        	double currentRevenue = 0;
+        	double currentExpenditure = 0;
+        	revenue.add(0, currentRevenue);
+        	expenditure.add(0, currentExpenditure);
+        	for(int i = 0; i < revenueData.size(); i++){
+        		currentRevenue += revenueData.get(i);
+        		currentExpenditure += expenditureData.get(i);
+        		revenue.add(i + 1, currentRevenue);
+        		expenditure.add(i + 1, currentExpenditure);
+        	}
+        	XYSeriesCollection data = new XYSeriesCollection();
+        	data.addSeries(revenue);
+        	data.addSeries(expenditure);
+        	return data;
         }
-
-        public void drawGraph(Graphics g){
-            int width = getWidth();
-            int height = getHeight();
-            int run = (width - (X * 2)) / revenue.length;
-            double rise = (height - (Y * 2)) / Math.max(revenue[revenue.length - 1], expenditure[expenditure.length - 1]);
-            int x = X;
-            int revY = height - Y;
-            int expY = height - Y;
-            for(int i = 0; i < revenue.length; i++){
-                g.setColor(Color.BLUE);
-                g.drawLine(x, revY, x + run, height - Y - (int)(revenue[i] * rise));
-                g.setColor(Color.RED);
-                g.drawLine(x, expY, x + run, height - Y - (int)(expenditure[i] * rise));
-                x += run;
-                revY = height - Y - (int)(revenue[i] * rise);
-                expY = height - Y - (int)(expenditure[i] * rise);
-            }
-        }
-
     }
 
     private class ProfitPanel extends MetricComponent{
@@ -415,7 +401,7 @@ public class MetricsPanel extends JPanel implements ActionListener{
 
 		private static final long serialVersionUID = 1L;
 
-		private final Font FONT = new Font(Font.DIALOG, Font.BOLD, 20);
+		private final Font FONT = new Font(Font.DIALOG, Font.BOLD, 18);
 
     	public KPSLabel(String label){
     		super(label);

@@ -86,6 +86,8 @@ public class RouteGraph implements Iterable<Node> {
      * @param route to be added
      * */
     public void addRoute(Route route) {
+    	if(route == null)return;
+
     	Node srcNode = null;
     	Node destNode = null;
 
@@ -123,13 +125,12 @@ public class RouteGraph implements Iterable<Node> {
      * @param route to be removed
      * */
     public boolean removeRoute(Route route){
-		System.out.println("Removing Start");
+		if(route == null)return false;
 
     	boolean toReturn = false;
 
     	for(int i = 0; i < nodes.size(); i++){
     		if(nodes.get(i).getNeighbours().contains(route)){
-    			System.out.println("Removing");
     			nodes.get(i).removeRoute(route);
     			if(nodes.get(i).getNeighbours().size() == 0)nodes.remove(i);//remove the node as it no longer has any routes
     			toReturn = true;
@@ -158,8 +159,9 @@ public class RouteGraph implements Iterable<Node> {
     	}
     }
 
-    List<SearchNode> visited;
-    List<SearchNode> allnodes;
+    //for Depth First Search
+    private List<SearchNode> visited;
+    private List<SearchNode> allnodes;
 
     public void setUpDFS(){
     	allnodes =  new ArrayList<SearchNode>();//resets searchNode list
@@ -202,22 +204,37 @@ public class RouteGraph implements Iterable<Node> {
     }
 
     /**
-     * return the route that matches the source destination and company
-     * or null if it does not exist
+     * return the routes that matches the source destination and company
      * */
-    public Route getRoute(String company, String src, String dest){
+    public Set<Route> getRoutes(String company, String src, String dest){
+    	Set<Route> routes = new HashSet<>();
     	 for(Node n : nodes){
     		 for(Route r : n.getNeighbours()){
-    			 if(r.getDest().equals(dest) && r.getSrc().equals(src) && r.getCompany().equals(company))return r;
+    			 if(r.getDest().equals(dest) && r.getSrc().equals(src) && r.getCompany().equals(company))
+    				 routes.add(r);
     		 }
     	 }
-    	return null;
+    	return routes;
+    }
+
+    /**
+     * return the routes that matches the source destination
+     * */
+    public Set<Route> getRoutes(String src, String dest){
+    	Set<Route> routes = new HashSet<>();
+    	 for(Node n : nodes){
+    		 for(Route r : n.getNeighbours()){
+    			 if(r.getDest().equals(dest) && r.getSrc().equals(src))
+    				 routes.add(r);
+    		 }
+    	 }
+    	return routes;
     }
 
     /**
      * Returns all of the routes in the graph
      * */
-    public Set<Route> getRoutes(){
+    public Set<Route> getAllRoutes(){
     	Set<Route> routes = new HashSet<Route>();
 
     	for(Node n: nodes){
@@ -228,6 +245,29 @@ public class RouteGraph implements Iterable<Node> {
     	return routes;
     }
 
+    public Set<String> sourcesFromDest(String dest){
+    	Set<Route> routes = getAllRoutes();
+    	Set<String> sources = new HashSet<>();
+
+    	for (Route route : routes){
+    		if (route.getDest().equals(dest)){
+    			sources.add(route.getSrc());
+    		}
+    	}
+    	return sources;
+    }
+
+    public Set<String> destsFromSource(String src){
+    	Set<Route> routes = getAllRoutes();
+    	Set<String> dests = new HashSet<>();
+
+    	for (Route route : routes){
+    		if (route.getSrc().equals(src)){
+    			dests.add(route.getDest());
+    		}
+    	}
+    	return dests;
+    }
 
     public int getSize(){return nodes.size();}
 
@@ -245,5 +285,4 @@ public class RouteGraph implements Iterable<Node> {
 		}
 		return null;
 	}
-
 }

@@ -58,6 +58,10 @@ public class CustomerRoute {
 	public String getDestination(){
 		return route.getDestination();
 	}
+	
+	public boolean hasPriority(Priority priority){
+		return deliveryPrices.keySet().contains(priority);
+	}
 
 	public void addDeliveryPrice(double gramPrice, double volumePrice, Priority priority){
 		if(deliveryPrices.containsKey(priority)){
