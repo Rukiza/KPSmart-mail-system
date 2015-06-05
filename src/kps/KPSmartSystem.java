@@ -29,6 +29,7 @@ import kps.events.MailDeliveryEvent;
 import kps.events.PriceUpdateEvent;
 import kps.events.TransportCostUpdateEvent;
 import kps.events.TransportDiscontinuedEvent;
+import kps.parser.KPSParser;
 import kps.users.KPSUser;
 
 /**
@@ -111,6 +112,23 @@ public class KPSmartSystem {
 		this.eventLog = eventLog;
 		customerRoutes = new HashMap<BasicRoute, CustomerRoute>();
 		routeGraph = new RouteGraph();//loadGraph();
+		this.users = users;
+		currentUser = null;
+		metrics = new Metrics();
+		processBusinessEvents();
+	}
+
+	/**
+	 * Constructs an instance of KPSmartSystem with the
+	 * specified EventLog, route graph and users map.
+	 *
+	 * @param eventLog
+	 * 		-- event log
+	 */
+	public KPSmartSystem(EventLog eventLog, RouteGraph routeGraph, Map<String, KPSUser> users){
+		this.eventLog = eventLog;
+		customerRoutes = new HashMap<BasicRoute, CustomerRoute>();
+		this.routeGraph = routeGraph;
 		this.users = users;
 		currentUser = null;
 		metrics = new Metrics();
@@ -598,13 +616,30 @@ public class KPSmartSystem {
 	}
 
 	/**
-	 * Generates and XML file from the event log.
+	 * Generates an XML file from the event log.
 	 */
 	public void convertEventLogToXML(){
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter(EVENT_LOG_FILENAME, "UTF-8");
 			writer.write(eventLog.toXML());
+			writer.close();
+		}catch(FileNotFoundException e){e.printStackTrace();}
+		catch(UnsupportedEncodingException e){e.printStackTrace();}
+	}
+
+	/**
+	 * Generates an XML file from the users map
+	 */
+	public void convertUsersMapToXML(){
+		PrintWriter writer;
+		try{
+			writer = new PrintWriter(Main.XML_FILE_PATH+"users.xml", "UTF-8");
+			writer.write("<"+KPSParser.USERS_FILE_TAG+">\n");
+			for(KPSUser user : users.values()){
+				writer.write(user.toXML());
+			}
+			writer.write("</"+KPSParser.USERS_FILE_TAG+">");
 			writer.close();
 		}catch(FileNotFoundException e){e.printStackTrace();}
 		catch(UnsupportedEncodingException e){e.printStackTrace();}
