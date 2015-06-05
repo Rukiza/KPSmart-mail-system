@@ -36,7 +36,7 @@ public class DrawRoute {
 	private Color routeSelectedColor;
 
 	//the list of routes between the two nodes
-	private ArrayList<Route> routes;
+	//private ArrayList<Route> routes;
 
 	//the set of routes between the two nodes
 	private Set<Route> routeSet;
@@ -53,8 +53,9 @@ public class DrawRoute {
 		this.routeSet = new HashSet<Route>();
 		this.routeTaken = false;
 		this.selected = false;
-		this.routes = new ArrayList<Route>();
-		this.routes.add(r);
+		//this.routes = new ArrayList<Route>();
+		//this.routes.add(r);
+		this.routeSet.add(r);
 		this.node2 = node2;
 		this.node1 = node1;
 	}
@@ -62,11 +63,11 @@ public class DrawRoute {
 	/**
 	 * Converts the list of routes to a set of routes
 	 * */
-	private void routesToSet(){
-		for(Route r : routes){
-			routeSet.add(r);
-		}
-	}
+//	private void routesToSet(){
+//		for(Route r : routes){
+//			//routeSet.add(r);
+//		}
+//	}
 
 
 	/**
@@ -84,8 +85,9 @@ public class DrawRoute {
 	 * */
 	public void addRoute(Route r){
 		if(r == null)return;
-		this.routes.add(r);
-		routesToSet();//terrible idea
+		//this.routes.add(r);
+		routeSet.add(r);
+		//routesToSet();//terrible idea
 	}
 
 
@@ -118,7 +120,7 @@ public class DrawRoute {
 		boolean toNode1 = false;
 
 		//check whether the connection is bidirectional
-		for(Route r : routes){
+		for(Route r : routeSet){//routes
 			if(r.getDest().equals(node2.getNode().getName()))toNode2 = true;
 			if(r.getDest().equals(node1.getNode().getName()))toNode1 = true;
 		}

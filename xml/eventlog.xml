@@ -2147,4 +2147,25 @@
 		<revenue>1376.0</revenue>
 		<expenditure>946.0</expenditure>
 	</mail>
+	<discontinue>
+	    <time>1430754295455</time>
+	    <company>Air Bus</company>
+	    <to>London</to>
+	    <from>Brazil</from>
+	    <type>Air</type>
+	</discontinue>
+	<discontinue>
+	    <time>1430754295456</time>
+	    <company>Ocean Delivery</company>
+	    <to>Brazil</to>
+	    <from>Cape Town</from>
+	    <type>Sea</type>
+	</discontinue>
+	<discontinue>
+	    <time>1430754295457</time>
+	    <company>Ocean Delivery</company>
+	    <to>Cape Town</to>
+	    <from>Brazil</from>
+	    <type>Sea</type>
+	</discontinue>
 </simulation>
