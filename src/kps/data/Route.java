@@ -57,7 +57,7 @@ public class Route {
 	public double getWeightPrice(){
 		return transport.getGramPrice();
 	}
-	
+
 	public double getVolumePrice(){
 		return transport.getVolumePrice();
 	}
@@ -152,6 +152,10 @@ public class Route {
 
 
 	public String getCompany(){return transport.getTransportFirm();}
+
+	public String toXML(){
+		return transport.toXML();
+	}
 
 	@Override
 	public String toString(){return  transport.getTransportFirm()+", "+transport.getOrigin() + " To " + transport.getDestination() +
