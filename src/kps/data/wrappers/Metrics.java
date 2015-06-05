@@ -2,6 +2,7 @@ package kps.data.wrappers;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +39,7 @@ public class Metrics{
         allExpenditure = new ArrayList<Double>();
         origins = new ArrayList<String>();
         destinations = new ArrayList<String>();
+        mailDelivered = new HashMap<BasicRoute, MailDelivered>();
     }
 
     /**
@@ -60,6 +62,7 @@ public class Metrics{
         allExpenditure = new ArrayList<Double>();
         origins = new ArrayList<String>();
         destinations = new ArrayList<String>();
+        mailDelivered = new HashMap<BasicRoute, MailDelivered>();
     }
 
     /**
@@ -226,11 +229,19 @@ public class Metrics{
      * @param revenue
      * @param expenditure
      */
-    public void addMailDeliveryEvent(double revenue, double expenditure){
+    public void addMailDeliveryEvent(double revenue, double expenditure, String origin, String destination, int weight, int volume, Priority priority){
+    	// add the revenue and expenditure data to metrics
     	totalRevenue += revenue;
     	totalExpenditure += expenditure;
     	allRevenue.add(revenue);
     	allExpenditure.add(expenditure);
+
+    	BasicRoute route = new BasicRoute(origin, destination);
+    	if(!mailDelivered.containsKey(route)){
+    		mailDelivered.put(route, new MailDelivered());
+    	}
+    	mailDelivered.get(route).updateMailDelivered(weight, volume);
+
         totalMailDeliveryEvents++;
     }
 

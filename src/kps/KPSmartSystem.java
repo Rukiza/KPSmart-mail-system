@@ -254,7 +254,7 @@ public class KPSmartSystem {
 		this.avarageDeliveryTime = timeToDeliver(path, day);//TODO make it not just be the price for one delivery
 
 
-		metrics.addMailDeliveryEvent(revenue, expenditure);
+		metrics.addMailDeliveryEvent(revenue, expenditure, from, to, weight, volume, priority);
 
 		long timeLogged = System.currentTimeMillis();
 		eventLog.addBusinessEvent(new MailDeliveryEvent(timeLogged, route, day, weight, volume, priority, revenue, expenditure));
@@ -437,7 +437,7 @@ public class KPSmartSystem {
 		for(int i = 0; i < eventLog.getSize(); i++){
 			if(event instanceof MailDeliveryEvent){
 				MailDeliveryEvent mail = (MailDeliveryEvent)event;
-				metrics.addMailDeliveryEvent(mail.getRevenue(), mail.getExpenditure());
+				metrics.addMailDeliveryEvent(mail.getRevenue(), mail.getExpenditure(), mail.getOrigin(), mail.getDestination(), mail.getWeight(), mail.getVolume(), mail.getPriority());
 			}
 			if(event instanceof PriceUpdateEvent){
 				PriceUpdateEvent price = (PriceUpdateEvent)event;

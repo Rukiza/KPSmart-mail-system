@@ -9,6 +9,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -27,6 +28,7 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
+import kps.data.wrappers.BasicRoute;
 import kps.data.wrappers.Metrics;
 import kps.ui.util.SpringUtilities;
 
@@ -42,7 +44,7 @@ public class MetricsPanel extends JPanel implements ActionListener{
     private ProfitPanel profit;
     private BusinessEventPanel events;
     private CustomerRoutePanel routes;
-    private boolean initialised = false;
+    private boolean isInitialised = false;
 
     /**
      * Constructs a new MetricsPanel Object with the specified metrics.
@@ -68,7 +70,7 @@ public class MetricsPanel extends JPanel implements ActionListener{
         routes.setBorder(new TitledKPSBorder("Customer Routes"));
         SpringUtilities.makeCompactGrid(events, 2, 2, 6, 6, 6, 6);
         layoutComponents();
-        initialised = true;
+        isInitialised = true;
         repaint();
     }
 
@@ -110,7 +112,7 @@ public class MetricsPanel extends JPanel implements ActionListener{
     }
 
     public void repaint(){
-    	if(initialised){
+    	if(isInitialised){
     		graph.repaint();
     		profit.setProfitMetrics(metrics.getTotalRevenue(), metrics.getTotalExpenditure());
     		profit.repaint();
@@ -138,8 +140,8 @@ public class MetricsPanel extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent event){
     	if(event.getSource() instanceof JButton){
     		String button = ((JButton)event.getSource()).getText();
-    		if(button.equals("Generate Metrics")){
-
+    		if(button.equals("Generate Metrics") && isInitialised){
+    			routes.repaint();
     		}
     	}
     }
@@ -252,7 +254,7 @@ public class MetricsPanel extends JPanel implements ActionListener{
         private KPSLabel expenditure = new KPSLabel();
         private KPSLabel profit = new KPSLabel();
         private final KPSLabel[] LABELS = {revenue, expenditure, profit};
-        private final DecimalFormat FORMAT = new DecimalFormat("$###,###,###.##");
+        private final DecimalFormat NZD_FORMAT = new DecimalFormat("$###,###,###.##");
 
         /**
          * Constructs a new ProfitPanel Object with the specified
@@ -284,9 +286,9 @@ public class MetricsPanel extends JPanel implements ActionListener{
          * 		-- new expenditure value
          */
         public void setProfitMetrics(double revenue, double expenditure){
-        	this.revenue.setText(FORMAT.format(revenue));
-        	this.expenditure.setText(FORMAT.format(expenditure));
-        	this.profit.setText(FORMAT.format(revenue - expenditure));
+        	this.revenue.setText(NZD_FORMAT.format(revenue));
+        	this.expenditure.setText(NZD_FORMAT.format(expenditure));
+        	this.profit.setText(NZD_FORMAT.format(revenue - expenditure));
         }
     }
 
@@ -309,6 +311,7 @@ public class MetricsPanel extends JPanel implements ActionListener{
         private KPSLabel discontinued = new KPSLabel();
         private KPSLabel total = new KPSLabel();
         private final KPSLabel[] LABELS = {mail, price, cost, discontinued, total};
+        private final NumberFormat NUMBER_FORMAT = NumberFormat.getIntegerInstance();
 
         /**
          * Constructs a new BusinessEventPanel Object with the specified
@@ -346,11 +349,11 @@ public class MetricsPanel extends JPanel implements ActionListener{
          * 		-- total business event count
          */
         public void setBusinessEventMetrics(int mail, int price, int cost, int discontinued, int total){
-        	this.mail.setText(Integer.toString(mail));
-        	this.price.setText(Integer.toString(price));
-        	this.cost.setText(Integer.toString(cost));
-        	this.discontinued.setText(Integer.toString(discontinued));
-        	this.total.setText(Integer.toString(total));
+        	this.mail.setText(NUMBER_FORMAT.format(mail));
+        	this.price.setText(NUMBER_FORMAT.format(price));
+        	this.cost.setText(NUMBER_FORMAT.format(cost));
+        	this.discontinued.setText(NUMBER_FORMAT.format(discontinued));
+        	this.total.setText(NUMBER_FORMAT.format(total));
         }
 
     }
@@ -359,8 +362,12 @@ public class MetricsPanel extends JPanel implements ActionListener{
 
         private static final long serialVersionUID = 1L;
 
-        private JComboBox<String> origin;
-        private JComboBox<String> destination;
+        private JComboBox<String> origins;
+        private JComboBox<String> destinations;
+
+        // components
+        private TotalMailPanel mail;
+        private AverageTimesPanel times;
 
         public CustomerRoutePanel(int width, int height, ActionListener listener){
             super(width, height);
@@ -375,24 +382,24 @@ public class MetricsPanel extends JPanel implements ActionListener{
 
         public JPanel setupOptionsPanel(){
         	KPSLabel originLabel = new KPSLabel("Origin: ");
-            origin = new JComboBox<String>(metrics.getOrigins());
-            originLabel.setLabelFor(origin);
+            origins = new JComboBox<String>(metrics.getOrigins());
+            originLabel.setLabelFor(origins);
             KPSLabel destLabel = new KPSLabel("Destination: ");
-            destination = new JComboBox<String>(metrics.getDestinations());
-            destLabel.setLabelFor(destination);
+            destinations = new JComboBox<String>(metrics.getDestinations());
+            destLabel.setLabelFor(destinations);
         	JPanel options = new JPanel();
         	options.add(originLabel);
-        	options.add(origin);
+        	options.add(origins);
         	options.add(destLabel);
-        	options.add(destination);
+        	options.add(destinations);
         	return options;
         }
 
         public JPanel setupMetricsPanel(){
-        	TotalMailPanel mail = new TotalMailPanel((getWidth() / 2) - 11);
+        	mail = new TotalMailPanel((getWidth() / 2) - 11);
         	SpringUtilities.makeCompactGrid(mail, 3, 2, 6, 6, 6, 6);
         	mail.setBorder(new TitledKPSBorder("Total Amounts"));
-        	AverageTimesPanel times = new AverageTimesPanel((getWidth() / 2) - 11);
+        	times = new AverageTimesPanel((getWidth() / 2) - 11);
         	SpringUtilities.makeCompactGrid(times, 2, 2, 6, 6, 6, 6);
         	times.setBorder(new TitledKPSBorder("AverageTimes"));
 
@@ -400,6 +407,18 @@ public class MetricsPanel extends JPanel implements ActionListener{
         	metrics.add(mail);
         	metrics.add(times);
         	return metrics;
+        }
+
+        public void repaint(){
+        	if(isInitialised){
+        		String origin = (String)origins.getSelectedItem();
+        		String destination = (String)destinations.getSelectedItem();
+        		mail.setWeight(metrics.getTotalMailWeight(origin, destination));
+        		mail.setVolume(metrics.getTotalMailVolume(origin, destination));
+        		mail.setAmount(metrics.getTotalMailAmount(origin, destination));
+        		super.repaint();
+        	}
+
         }
 
         private class TotalMailPanel extends JPanel{
@@ -412,7 +431,7 @@ public class MetricsPanel extends JPanel implements ActionListener{
         	private KPSLabel volume = new KPSLabel();
         	private KPSLabel amount = new KPSLabel();
         	private final KPSLabel[] LABELS = {weight, volume, amount};
-
+        	private final NumberFormat NUMBER_FORMAT = NumberFormat.getIntegerInstance();
 
         	public TotalMailPanel(int width){
         		super();
@@ -428,11 +447,11 @@ public class MetricsPanel extends JPanel implements ActionListener{
         	}
 
         	public void setWeight(int weight){
-        		this.weight.setText(weight+" g");
+        		this.weight.setText(NUMBER_FORMAT.format(weight)+" g");
         	}
 
         	public void setVolume(int volume){
-        		this.volume.setText(volume+" cm³");
+        		this.volume.setText(NUMBER_FORMAT.format(volume)+" cm³");
 
         	}
 
@@ -448,6 +467,7 @@ public class MetricsPanel extends JPanel implements ActionListener{
         	private KPSLabel airTime = new KPSLabel();
         	private KPSLabel standardTime = new KPSLabel();
         	private final KPSLabel[] LABELS = {airTime, standardTime};
+        	private final NumberFormat NUMBER_FORMAT = NumberFormat.getIntegerInstance();
 
         	public AverageTimesPanel(int width){
         		super();
@@ -463,11 +483,11 @@ public class MetricsPanel extends JPanel implements ActionListener{
         	}
 
         	public void setAirTime(double airTime){
-        		this.airTime.setText(airTime+" hours");
+        		this.airTime.setText(NUMBER_FORMAT.format(airTime)+" hours");
         	}
 
         	public void setStandardTime(double standardTime){
-        		this.standardTime.setText(standardTime+" hours");
+        		this.standardTime.setText(NUMBER_FORMAT.format(standardTime)+" hours");
         	}
         }
     }
