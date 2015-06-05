@@ -70,6 +70,16 @@ public class CustomerRoute {
 		return deliveryPrices.size();
 	}
 
+	/**
+	 * Returns the weight cost for sending mail with the specified
+	 * priority. If there is no delivery price for sending mail
+	 * with this priority return zero.
+	 *
+	 * @param priority
+	 * 		-- priority of mail
+	 *
+	 * @return weight cost
+	 */
 	public double getWeightCost(Priority priority){
 		if(deliveryPrices.containsKey(priority)){
 			return deliveryPrices.get(priority).getGramPrice();
@@ -77,6 +87,16 @@ public class CustomerRoute {
 		return 0;
 	}
 
+	/**
+	 * Returns the volume cost for sending mail with the specified
+	 * priority. If there is no delivery price for sending mail
+	 * with this priority return zero.
+	 *
+	 * @param priority
+	 * 		-- priority of mail
+	 *
+	 * @return volume cost
+	 */
 	public double getVolumeCost(Priority priority){
 		if(deliveryPrices.containsKey(priority)){
 			return deliveryPrices.get(priority).getVolumePrice();
@@ -84,10 +104,31 @@ public class CustomerRoute {
 		return 0;
 	}
 
+	/**
+	 * Returns true if this CustomerRoute has a delivery cost for
+	 * the specified priority.
+	 *
+	 * @param priority
+	 * 		-- priority of mail
+	 *
+	 * @return true if has delivery cost, otherwise false
+	 */
 	public boolean hasPriority(Priority priority){
 		return deliveryPrices.keySet().contains(priority);
 	}
 
+	/**
+	 * If there currently is not a delivery price for the specified priority a
+	 * new delivery price is added to this CustomerRoute. Otherwise the current
+	 * delivery price for the specified priority is updated with the new prices.
+	 *
+	 * @param gramPrice
+	 * 		-- new gram price
+	 * @param volumePrice
+	 * 		-- new volume price
+	 * @param priority
+	 * 		-- priority of mail
+	 */
 	public void addDeliveryPrice(double gramPrice, double volumePrice, Priority priority){
 		if(deliveryPrices.containsKey(priority)){
 			deliveryPrices.get(priority).updateDeliveryPrice(gramPrice, volumePrice);
@@ -131,6 +172,9 @@ public class CustomerRoute {
 		mailDelivered.updateMailDelivered(weight, volume);
 	}
 
+	/**
+	 * Returns a String representation of this CustomerRoute.
+	 */
 	public String toString(){
 		String data = route.toString()+"\n";
 		for(Priority p : deliveryPrices.keySet()){
