@@ -14,6 +14,7 @@ import kps.enums.Priority;
 import kps.enums.TransportType;
 import kps.events.BusinessEvent;
 import kps.events.MailDeliveryEvent;
+import kps.events.PriceUpdateEvent;
 import kps.parser.KPSParser;
 import kps.parser.ParserException;
 import kps.users.KPSUser;
@@ -273,27 +274,84 @@ public class KPSmartSystemTests {
 	/**
 	 * Test adding a price update that should be correct.
 	 *
+	 * Adds a new customer route to the system:
+	 * weight cost = 4
+	 * volume cost = 3
+	 *
 	 */
 	@Test public void testCorrectPriceUpdateEvent_1(){
+		String origin = "Node 2";
+		String destination = "Node 3";
+		int weightCost = 4;
+		int volumeCost = 3;
+		Priority priority = Priority.INTERNATIONAL_STANDARD;
+
 		KPSmartSystem kps = constructSystemWithRoutes();
-		kps.addPriceUpdateEvent("Node 2", "Node 3", 4, 3, Priority.INTERNATIONAL_STANDARD);
+		int deliveryPricesCount = kps.getDeliveryPriceCount();
+		kps.addPriceUpdateEvent(origin, destination, weightCost, volumeCost, priority);
+		// there should be one more delivery price in the system
+		if(kps.getDeliveryPriceCount() != deliveryPricesCount + 1){
+			fail("Expecting the number of delivery prices to be "+(deliveryPricesCount + 1)+", received "+kps.getDeliveryPriceCount());
+		}
+
+		// check that parameters match the constructed event
+		checkPriceUpdateEvent(kps.getEventLog().getLastEventAdded(), origin, destination, weightCost, volumeCost, priority);
 
 	}
 
 	/**
 	 * Test adding a price update that should be correct.
+	 *
+	 * Updates an existing customer route priority to a new price:
+	 * new weight cost = 19
+	 * new volume cost = 20
 	 */
 	@Test public void testCorrectPriceUpdateEvent_2(){
-		KPSmartSystem kps = constructSystemWithRoutes();
+		String origin = "Node 1";
+		String destination = "Node 3";
+		int weightCost = 19;
+		int volumeCost = 20;
+		Priority priority = Priority.INTERNATIONAL_STANDARD;
 
+		KPSmartSystem kps = constructSystemWithRoutes();
+		int deliveryPricesCount = kps.getDeliveryPriceCount();
+		kps.addPriceUpdateEvent(origin, destination, weightCost, volumeCost, priority);
+
+		// there should be no change in the number of delivery prices in the system
+		if(kps.getDeliveryPriceCount() != deliveryPricesCount){
+			fail("Expecting the number of delivery prices to be "+deliveryPricesCount+", received "+kps.getDeliveryPriceCount());
+		}
+
+		// check that parameters match the constructed event
+		checkPriceUpdateEvent(kps.getEventLog().getLastEventAdded(), origin, destination, weightCost, volumeCost, priority);
 	}
 
 	/**
 	 * Test adding a price update that should be correct.
+	 *
+	 * Updates a customer route with a new priority delivery price:
+	 * weight cost = 39
+	 * volume cost = 45
+	 *
 	 */
 	@Test public void testCorrectPriceUpdateEvent_3(){
-		KPSmartSystem kps = constructSystemWithRoutes();
+		String origin = "Node 1";
+		String destination = "Node 5";
+		int weightCost = 39;
+		int volumeCost = 45;
+		Priority priority = Priority.INTERNATIONAL_AIR;
 
+		KPSmartSystem kps = constructSystemWithRoutes();
+		int deliveryPricesCount = kps.getDeliveryPriceCount();
+		kps.addPriceUpdateEvent(origin, destination, weightCost, volumeCost, priority);
+
+		// there should be one more delivery price in the system
+		if(kps.getDeliveryPriceCount() != deliveryPricesCount + 1){
+			fail("Expecting the number of delivery prices to be "+(deliveryPricesCount + 1)+", received "+kps.getDeliveryPriceCount());
+		}
+
+		// check that parameters match the constructed event
+		checkPriceUpdateEvent(kps.getEventLog().getLastEventAdded(), origin, destination, weightCost, volumeCost, priority);
 	}
 
 	/**
@@ -413,6 +471,37 @@ public class KPSmartSystemTests {
 		}
 	}
 
+	public void checkPriceUpdateEvent(BusinessEvent event, String origin, String destination, int weightCost, int volumeCost, Priority priority){
+		if(event instanceof PriceUpdateEvent){
+			PriceUpdateEvent price = (PriceUpdateEvent)event;
+			// check origin
+			if(!origin.equals(price.getOrigin())){
+				fail("Expecting "+origin+", retrieved "+price.getOrigin());
+			}
+			// check destination
+			if(!destination.equals(price.getDestination())){
+				fail("Expecting "+destination+", retrieved "+price.getDestination());
+			}
+			// check weight cost
+			if(weightCost != price.getGramPrice()){
+				fail("Expecting "+weightCost+", retrieved "+price.getGramPrice());
+			}
+			// check volume cost
+			if(volumeCost != price.getVolumePrice()){
+				fail("Expecting "+volumeCost+", retrieved "+price.getVolumePrice());
+			}
+			// check priority
+			if(priority != price.getPriority()){
+				fail("Expecting "+Priority.convertPriorityToString(priority)+", retrieved "+Priority.convertPriorityToString(price.getPriority()));
+			}
+		}
+		else{
+			fail("Expecting a PriceUpdateEvent, retrieved"+event.getType());
+		}
+	}
+
+
+
 	@Test
 	public void timeToWaitTestNoTime(){
 		KPSmartSystem kp = new KPSmartSystem();
@@ -436,16 +525,6 @@ public class KPSmartSystemTests {
 		assertTrue(kp.timeToWait(23, 5) == -1 );
 
 	}
-
-	@Test
-	public void incrementTimeTest(){
-		KPSmartSystem kp = new KPSmartSystem();
-
-
-
-
-	}
-
 
 	@Test
 	public void testTimeTaken(){

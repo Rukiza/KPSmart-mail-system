@@ -57,6 +57,13 @@ public class KPSmartSystem {
 		currentUser = null;
 	}
 
+	/**
+	 * Constructs an instance of KPSmartSystem with the
+	 * specified EventLog
+	 *
+	 * @param eventLog
+	 * 		-- event log
+	 */
 	public KPSmartSystem(EventLog eventLog){
 		this.eventLog = eventLog;
 		customerRoutes = new HashMap<BasicRoute, CustomerRoute>();
@@ -67,24 +74,6 @@ public class KPSmartSystem {
 		processBusinessEvents();
 	}
 
-	public RouteGraph loadGraph(){
-		List<BusinessEvent> events = new ArrayList<BusinessEvent>();
-		try {
-			events = KPSParser.parseFile(Main.XML_FILE_PATH+"new_dataset.xml");
-		} catch (ParserException e) {
-			e.printStackTrace();
-		}
-
-		RouteGraph g = new RouteGraph();
-
-		for(BusinessEvent e : events){
-			if(e instanceof TransportCostUpdateEvent){
-				g.addRoute(new Route((TransportCostUpdateEvent)e));
-			}
-		}
-		return g;
-	}
-
 	/**
 	 * Constructs an instance of KPSmartSystem based on the
 	 * specified list of BusinessEvents.
@@ -93,8 +82,6 @@ public class KPSmartSystem {
 	 * 		-- list of business events
 	 */
 	public KPSmartSystem(List<BusinessEvent> log){
-		//totalRevenue = 0;
-		//totalExpenditure = 0;
 		eventLog = new EventLog(log);
 		customerRoutes = new HashMap<BasicRoute, CustomerRoute>();
 		routeGraph = new RouteGraph();
@@ -107,8 +94,7 @@ public class KPSmartSystem {
 	/**
 	 * Returns the current total revenue for the KPSmartSystem.
 	 *
-	 * @return
-	 * 		-- total revenue
+	 * @return total revenue
 	 */
 	public double getTotalRevenue(){
 		return metrics.getTotalRevenue();
@@ -117,11 +103,37 @@ public class KPSmartSystem {
 	/**
 	 * Returns the current total expenditure for the KPSmartSystem.
 	 *
-	 * @return
-	 * 		-- total expenditure
+	 * @return total expenditure
 	 */
 	public double getTotalExpenditure(){
 		return metrics.getTotalExpenditure();
+	}
+
+	/**
+	 * Returns the event log.
+	 *
+	 * @return event log
+	 */
+	public EventLog getEventLog() {
+		return eventLog;
+	}
+
+	/**
+	 * Returns the size of the event log.
+	 *
+	 * @return size of event log
+	 */
+	public int getEventLogSize(){
+		return eventLog.getSize();
+	}
+
+	/**
+	 * Returns the route graph.
+	 *
+	 * @return route graph
+	 */
+	public RouteGraph getRouteGraph(){
+		return this.routeGraph;
 	}
 
 	/**
@@ -134,31 +146,29 @@ public class KPSmartSystem {
 		return routeGraph.getSize();
 	}
 
-	public RouteGraph getRouteGraph(){
-		return this.routeGraph;
+	/**
+	 * Returns the metrics for the system.
+	 *
+	 * @return metrics.
+	 */
+	public Metrics getMetrics(){
+		return metrics;
 	}
 
 	/**
-	 * Returns the size of the event log.
+	 * Returns true if there is a customer route in the system from the specified
+	 * origin to destination as well as the specified priority. Otherwise returns
+	 * false.
 	 *
-	 * @return
-	 * 	-- size of event log
-	 */
-	public int getEventLogSize(){
-		return eventLog.getSize();
-	}
-
-	/**
-	 * Returns the user name of the current user logged into
-	 * the KPSmartSystem.
+	 * @param origin
+	 * 		-- origin of mail
+	 * @param destination
+	 * 		-- destination of mail
+	 * @param priority
+	 * 		-- priority of mail
 	 *
-	 * @return
-	 * 		-- current user's name
+	 * @return true if there is customer route, otherwise false
 	 */
-	public String getCurrentUser(){
-		return currentUser.getUsername();
-	}
-
 	public boolean hasCustomerRoute(String origin, String destination, Priority priority){
 		BasicRoute route = new BasicRoute(origin, destination);
 		if(customerRoutes.containsKey(route)){
@@ -169,17 +179,63 @@ public class KPSmartSystem {
 	}
 
 	/**
-	 * Returns true if there is currently someone logged into the system,
-	 * otherwise returns false.
+	 * Returns the number of individual delivery prices currently
+	 * present in the system.
 	 *
-	 * @return true if logged in, otherwise false
+	 * @return size of customer routes.
 	 */
-	public boolean isLoggedIn(){
-		return currentUser != null;
+	public int getDeliveryPriceCount(){
+		int size = 0;
+		for(CustomerRoute route : customerRoutes.values()){
+			size += route.size();
+		}
+		return size;
 	}
 
-	public Metrics getMetrics(){
-		return metrics;
+	/**
+	 * Returns the weight cost for sending mail from the origin to destination
+	 * with the specified priority. Returns zero if there is no route from
+	 * the origin and destination or if there is a route but without the
+	 * specified priority.
+	 *
+	 * @param origin
+	 * 		-- origin of mail
+	 * @param destination
+	 * 		-- destination of mail
+	 * @param priority
+	 * 		-- priority of mail
+	 *
+	 * @return weight cost per gram
+	 */
+	public double getWeightCost(String origin, String destination, Priority priority){
+		BasicRoute route = new BasicRoute(origin, destination);
+		if(customerRoutes.containsKey(route)){
+			return customerRoutes.get(route).getWeightCost(priority);
+		}
+		return 0;
+	}
+
+	/**
+	 * Returns the volume cost for sending mail from the origin to destination
+	 * with the specified priority. Returns zero if there is no route from
+	 * the origin and destination or if there is a route but without the
+	 * specified priority.
+	 *
+	 * @param origin
+	 * 		-- origin of mail
+	 * @param destination
+	 * 		-- destination of mail
+	 * @param priority
+	 * 		-- priority of mail
+	 *
+	 * @return volume cost per cubic centimeters
+	 */
+	public double getVolumeCost(String origin, String destination, Priority priority){
+		BasicRoute route = new BasicRoute(origin, destination);
+		if(customerRoutes.containsKey(route)){
+			return customerRoutes.get(route).getVolumeCost(priority);
+		}
+		return 0;
 	}
 
 	/**
@@ -243,7 +299,7 @@ public class KPSmartSystem {
 		}
 
 		//time to deliver in hours
-		int deliveryTime = timeToDeliver(path, day);//TODO make it not just be the price for one delivery
+		int deliveryTime = timeToDeliver(path, day);
 
 		metrics.addMailDeliveryEvent(revenue, expenditure, from, to, weight, volume, deliveryTime, priority);
 
@@ -346,32 +402,54 @@ public class KPSmartSystem {
 	}
 
 	/**
-	 * Attempts to log the specified user into the system. Returns
-	 * true if login is successful, otherwise returns false.
-	 *
-	 * @param username
-	 * 		-- user to login
-	 * @param passwordHash
-	 * 		-- password of user
-	 * @return
-	 * 		-- true if login successful, otherwise false
+	 * Process the business events in the event log and add them to the system.
+	 * Called on construction of system.
 	 */
-	public boolean login(String username, int passwordHash){
-		if(users.containsKey(username)){
-			KPSUser user = users.get(username);
-			if(user.getPasswordHash() == passwordHash){
-				currentUser = user;
-				return true;
+	private void processBusinessEvents(){
+		BusinessEvent event = eventLog.getCurrentEvent();
+		for(int i = 0; i < eventLog.getSize(); i++){
+			// mail delivery event
+			if(event instanceof MailDeliveryEvent){
+				MailDeliveryEvent mail = (MailDeliveryEvent)event;
+				metrics.addMailDeliveryEvent(mail.getRevenue(), mail.getExpenditure(), mail.getOrigin(), mail.getDestination(), mail.getWeight(), mail.getVolume(), mail.getDeliveryTime(), mail.getPriority());
 			}
+
+			// price update event
+			if(event instanceof PriceUpdateEvent){
+				PriceUpdateEvent price = (PriceUpdateEvent)event;
+				metrics.addPriceUpdateEvent(price.getOrigin(), price.getDestination(), price.getPriority());
+				BasicRoute route = new BasicRoute(price.getOrigin(), price.getDestination());
+				if(!customerRoutes.containsKey(route)){
+					customerRoutes.put(route, new CustomerRoute(route));
+				}
+				CustomerRoute cr = customerRoutes.get(route);
+				cr.addDeliveryPrice(price.getGramPrice(), price.getVolumePrice(), price.getPriority());
+			}
+
+			// transport cost update event
+			if(event instanceof TransportCostUpdateEvent){
+				metrics.addTransportCostUpdateEvent();
+				routeGraph.addRoute(new Route((TransportCostUpdateEvent)event));
+			}
+
+			// transport discontinued event
+			if(event instanceof TransportDiscontinuedEvent){
+				metrics.addTransportDiscontinuedEvent();
+			}
+			event = eventLog.getNextEvent();
 		}
-		return false;
+		eventLog.resetEventLogLocation();
 	}
 
 	/**
-	 * Logs the current user out of the system.
+	 * Returns the user name of the current user logged into
+	 * the KPSmartSystem.
+	 *
+	 * @return
+	 * 		-- current user's name
 	 */
-	public void logout(){
-		currentUser = null;
+	public String getCurrentUser(){
+		return currentUser.getUsername();
 	}
 
 	/**
@@ -416,6 +494,16 @@ public class KPSmartSystem {
 	}
 
 	/**
+	 * Returns true if there is currently someone logged into the system,
+	 * otherwise returns false.
+	 *
+	 * @return true if logged in, otherwise false
+	 */
+	public boolean isLoggedIn(){
+		return currentUser != null;
+	}
+
+	/**
 	 * Returns true if the password is correct for the specified user,
 	 * otherwise returns false.
 	 *
@@ -435,33 +523,33 @@ public class KPSmartSystem {
 		return false;
 	}
 
-	private void processBusinessEvents(){
-		BusinessEvent event = eventLog.getCurrentEvent();
-		for(int i = 0; i < eventLog.getSize(); i++){
-			if(event instanceof MailDeliveryEvent){
-				MailDeliveryEvent mail = (MailDeliveryEvent)event;
-				metrics.addMailDeliveryEvent(mail.getRevenue(), mail.getExpenditure(), mail.getOrigin(), mail.getDestination(), mail.getWeight(), mail.getVolume(), mail.getDeliveryTime(), mail.getPriority());
+	/**
+	 * Attempts to log the specified user into the system. Returns
+	 * true if login is successful, otherwise returns false.
+	 *
+	 * @param username
+	 * 		-- user to login
+	 * @param passwordHash
+	 * 		-- password of user
+	 * @return
+	 * 		-- true if login successful, otherwise false
+	 */
+	public boolean login(String username, int passwordHash){
+		if(users.containsKey(username)){
+			KPSUser user = users.get(username);
+			if(user.getPasswordHash() == passwordHash){
+				currentUser = user;
+				return true;
 			}
-			if(event instanceof PriceUpdateEvent){
-				PriceUpdateEvent price = (PriceUpdateEvent)event;
-				metrics.addPriceUpdateEvent(price.getOrigin(), price.getDestination(), price.getPriority());
-				BasicRoute route = new BasicRoute(price.getOrigin(), price.getDestination());
-				if(!customerRoutes.containsKey(route)){
-					customerRoutes.put(route, new CustomerRoute(route));
-				}
-				CustomerRoute cr = customerRoutes.get(route);
-				cr.addDeliveryPrice(price.getGramPrice(), price.getVolumePrice(), price.getPriority());
-			}
-			if(event instanceof TransportCostUpdateEvent){
-				metrics.addTransportCostUpdateEvent();
-				routeGraph.addRoute(new Route((TransportCostUpdateEvent)event));
-			}
-			if(event instanceof TransportDiscontinuedEvent){
-				metrics.addTransportDiscontinuedEvent();
-			}
-			event = eventLog.getNextEvent();
 		}
-		eventLog.resetEventLogLocation();
+		return false;
+	}
+
+	/**
+	 * Logs the current user out of the system.
+	 */
+	public void logout(){
+		currentUser = null;
 	}
 
 	/**
@@ -552,9 +640,5 @@ public class KPSmartSystem {
 		}
 		//cannot send it that day
 		return -1;
-	}
-
-	public EventLog getEventLog() {
-		return eventLog;
 	}
 }
