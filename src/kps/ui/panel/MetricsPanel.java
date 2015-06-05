@@ -214,6 +214,12 @@ public class MetricsPanel extends JPanel implements ActionListener{
 
         private static final long serialVersionUID = 1L;
 
+        // fields
+        private JFreeChart chart;
+
+        // components
+        private ChartPanel chartPanel;
+
         /**
          * Constructs a new GraphPanel Object with the specified
          * width and height.
@@ -225,16 +231,16 @@ public class MetricsPanel extends JPanel implements ActionListener{
          */
         public GraphPanel(int width, int height){
             super(width, height);
+            chart = ChartFactory.createXYLineChart("Revenue and Expenditure", "Mail Deliveries", "Money (NZD)", createDataset());
+            chartPanel = new ChartPanel(chart);
+            add(chartPanel);
         }
 
         /**
          * Paints the graph to the GraphPanel.
          */
         public void paintComponent(Graphics g){
-        	JFreeChart chart = ChartFactory.createXYLineChart("Revenue and Expenditure", "Mail Deliveries", "Money (NZD)", createDataset());
-        	ChartPanel panel = new ChartPanel(chart);
-        	panel.setPreferredSize(new Dimension(getWidth(), getHeight()));
-        	add(panel);
+
         }
 
         /**
