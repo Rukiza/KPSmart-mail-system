@@ -178,6 +178,20 @@ public class KPSmartSystem {
 		return currentUser != null;
 	}
 
+	/**
+	 * Returns the number of individual delivery prices currently
+	 * present in the system.
+	 *
+	 * @return size of customer routes.
+	 */
+	public int getDeliveryPriceCount(){
+		int size = 0;
+		for(CustomerRoute route : customerRoutes.values()){
+			size += route.size();
+		}
+		return size;
+	}
+
 	public Metrics getMetrics(){
 		return metrics;
 	}

@@ -58,7 +58,18 @@ public class CustomerRoute {
 	public String getDestination(){
 		return route.getDestination();
 	}
-	
+
+	/**
+	 * Returns the size of this CustomerRoute. Size of customer
+	 * route is dependent on the number of priority-delivery cost
+	 * pairings.
+	 *
+	 * @return size of customer route
+	 */
+	public int size(){
+		return deliveryPrices.size();
+	}
+
 	public boolean hasPriority(Priority priority){
 		return deliveryPrices.keySet().contains(priority);
 	}
