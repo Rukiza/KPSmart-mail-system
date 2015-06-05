@@ -484,17 +484,10 @@ public class KPSmartSystem {
 				cr.addDeliveryPrice(price.getGramPrice(), price.getVolumePrice(), price.getPriority());
 			}
 
-			// transport cost update event
-			if(event instanceof TransportCostUpdateEvent){
-				metrics.addTransportCostUpdateEvent();
-				routeGraph.addRoute(new Route((TransportCostUpdateEvent)event));
-			}
+			// transport cost update events are loaded from a separate file
+			// and transport discontinued events have no need to be added because
+			// the graph file is uptodate.
 
-			// transport discontinued event
-			if(event instanceof TransportDiscontinuedEvent){
-				metrics.addTransportDiscontinuedEvent();
-
-			}
 			event = eventLog.getNextEvent();
 		}
 		eventLog.resetEventLogLocation();
