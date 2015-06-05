@@ -19,6 +19,12 @@ import kps.data.Route;
 import kps.data.RouteGraph;
 import kps.ui.formlistener.RouteUpdateListener;
 
+/**
+ * @author hardwiwill
+ *
+ * Contains boilerplate code for a form containing route selection.
+ * Wasn't adequately used.
+ */
 public class AbstractRouteChooserWindow extends AbstractFormWindow{
 
 	protected RouteUpdateListener listener;
@@ -35,8 +41,7 @@ public class AbstractRouteChooserWindow extends AbstractFormWindow{
 	// items change dynamically
 	private JComboBox<Object> fromComboBox;
 	private JComboBox<Object> toComboBox;
-	// protected because one implementation needs access to it...
-	protected JComboBox<Object> routesComboBox;
+	private JComboBox<Object> routesComboBox;
 
 	private String[] fieldNames = new String[] { FROM, TO, ROUTES };
 

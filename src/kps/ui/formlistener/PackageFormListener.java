@@ -14,8 +14,8 @@ public interface PackageFormListener extends FormListener{
 	 * @param volume
 	 * @param priority
 	 */
-	public void onPackageFormSubmitted(Day day, String from, String to, int weight, int volume, Priority priority);
-	
+	public String onPackageFormSubmitted(Day day, String from, String to, int weight, int volume, Priority priority);
+
 	/**
 	 * Executed when the form has been completed and whenever the completed for has been updated
 	 * @param day

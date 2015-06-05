@@ -14,6 +14,12 @@ import kps.ui.formlistener.DeleteUserListener;
 import kps.ui.util.SpringUtilities;
 import kps.ui.util.UIUtils;
 
+/**
+ * @author hardwiwill
+ *
+ * Prompts user for username of a user to be deleted from the system.
+ * User input will be sent to DeleteUserListener once the form has been submitted
+ */
 public class DeleteUserWindow extends AbstractFormWindow {
 
 	private final String USERNAME = "username";

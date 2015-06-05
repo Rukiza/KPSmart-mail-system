@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
@@ -23,6 +24,15 @@ import kps.ui.formlistener.PackageFormListener;
 import kps.ui.util.SpringUtilities;
 import kps.ui.util.UIUtils;
 
+/**
+ * @author hardwiwill
+ *
+ * A popup window to prompt the user for package details, to submit a package
+ * into the system.
+ * When the users clicks on confirm button, the form details will be sent
+ * to a PackageFormListener
+ *
+ */
 public class PackageFormWindow extends AbstractFormWindow {
 
 	private PackageFormListener listener;
@@ -85,8 +95,12 @@ public class PackageFormWindow extends AbstractFormWindow {
 			int volume = Integer.parseInt(volStr);
 			Priority priority = (Priority) fields.get("priority");
 
-			packageFormListener.onPackageFormSubmitted(day, from, to, weight, volume, priority);
-			UIUtils.closeWindow(this);
+			String message = packageFormListener.onPackageFormSubmitted(day, from, to, weight, volume, priority);
+			if (message == null){
+                UIUtils.closeWindow(this);
+			} else {
+				JOptionPane.showMessageDialog(this, "Package submitted successfully");
+			}
 		});
 
 		cancel.addActionListener((ActionEvent e) -> {
@@ -168,8 +182,9 @@ public class PackageFormWindow extends AbstractFormWindow {
 	public static void main(String args[]){
 		new PackageFormWindow(new PackageFormListener(){
 			@Override
-			public void onPackageFormSubmitted(Day day, String from, String to, int weight, int volume, Priority priority){
+			public String onPackageFormSubmitted(Day day, String from, String to, int weight, int volume, Priority priority){
 				System.out.println("submitted: " + day + ", " + from + "... etc");
+				return "success";
 			}
 			@Override public void onCompletedFormUpdate(Day day, String from, String to, Priority priority, int weight, int volume){
 				System.out.println("updated: " + day + ", " + from + "... etc");

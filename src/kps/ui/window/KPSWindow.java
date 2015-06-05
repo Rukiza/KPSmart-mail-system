@@ -56,7 +56,7 @@ public class KPSWindow extends JFrame {
 	public KPSWindow(KPSmartSystem system, KPSUser user){
 		super("KPSmart");
 		this.system = system;
-		final Dimension WINDOW_SIZE = new Dimension(1050,800);
+		final Dimension WINDOW_SIZE = new Dimension(1090,830);
 
 		setSize(WINDOW_SIZE);
 		setLocationRelativeTo(null);
@@ -91,7 +91,7 @@ public class KPSWindow extends JFrame {
 		JPanel userbar = new JPanel();
 		userbar.setLayout(new BorderLayout());
 
-		JLabel username = new JLabel(user.getUsername());
+		JLabel username = new JLabel("Current user: " + user.getUsername());
 		userbar.add(username, BorderLayout.CENTER);
 
 		JPanel buttons = new JPanel();
@@ -99,7 +99,8 @@ public class KPSWindow extends JFrame {
 		JButton deleteUser = new JButton("Delete user");
 		buttons.add(createUser);
 		buttons.add(deleteUser);
-		add(buttons, BorderLayout.EAST);
+		userbar.add(buttons, BorderLayout.EAST);
+		userbar.setPreferredSize(new Dimension(0, 30));
 
 		// my lambdas didn't work for some reason
 //		createUser.addActionListener((ActionEvent e) -> {
@@ -159,7 +160,7 @@ public class KPSWindow extends JFrame {
 	 */
 	private JPanel makeSidebar(){
 		JPanel sidebar = new JPanel();
-		sidebar.setPreferredSize(new Dimension(120, 0));
+		sidebar.setPreferredSize(new Dimension(160, 0));
 		sidebar.setLayout(new FlowLayout(FlowLayout.CENTER));
 
 		// button setup
@@ -210,8 +211,8 @@ public class KPSWindow extends JFrame {
 		addPackage.addActionListener((ActionEvent e) -> {
 			new PackageFormWindow(new PackageFormListener(){
 				@Override
-				public void onPackageFormSubmitted(Day day, String from, String to, int weight, int volume, Priority priority){
-					system.addMailDeliveryEvent(from, to, day, weight, volume, priority);
+				public String onPackageFormSubmitted(Day day, String from, String to, int weight, int volume, Priority priority){
+					return system.addMailDeliveryEvent(from, to, day, weight, volume, priority);
 				}
 				@Override public void onCompletedFormUpdate(Day day, String from, String to, Priority priority, int weight, int volume){
 					DijkstraSearch search = new DijkstraSearch(system.getRouteGraph());

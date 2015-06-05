@@ -21,6 +21,12 @@ import kps.ui.formlistener.AuthDetailsListener;
 import kps.ui.util.SpringUtilities;
 import kps.ui.util.UIUtils;
 
+/**
+ * @author hardwiwill
+ *
+ * A popup window which prompts a user for a username and password.
+ * Form inputs will be sent to the AuthDetailsListener
+ */
 public class LogonBox extends JFrame {
 
 	public LogonBox(AuthDetailsListener listener, String defaultUN, String defaultPW){
@@ -56,6 +62,7 @@ public class LogonBox extends JFrame {
 		add(fields, BorderLayout.NORTH);
 		add(buttons, BorderLayout.SOUTH);
 
+		// puts inputs in a grid
 		SpringUtilities.makeCompactGrid(fields,
 										2, 2,	//rows, cols
 						                6, 6,	//initX, initY

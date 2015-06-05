@@ -13,8 +13,16 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+/**
+ * @author hardwiwill
+ *
+ * Contains boilerplate code for form windows
+ */
 public abstract class AbstractFormWindow extends JFrame {
 
+	/**
+	 * Stores input from the form
+	 */
 	protected Map<String, Object> fields = new HashMap<>();
 
 	public AbstractFormWindow(String title){
@@ -44,6 +52,12 @@ public abstract class AbstractFormWindow extends JFrame {
 	 */
 	protected abstract boolean isFormComplete();
 
+	/**
+	 * Boilerplate code for creating a text field and adding it to a container
+	 * @param name
+	 * @param cont
+	 * @return the text field created
+	 */
 	protected JTextField makeTextField(String name, Container cont) {
 		JTextField textField = new JTextField();
 		textField.getDocument().addDocumentListener(new DocumentListener(){
@@ -64,6 +78,12 @@ public abstract class AbstractFormWindow extends JFrame {
 		return textField;
 	}
 
+	/**
+	 * Boilerplate code for creating a combo box and adding it to a container
+	 * @param name
+	 * @param cont
+	 * @return the combo box created
+	 */
 	protected JComboBox<Object> makeComboBox(String name, Object[] items, Container cont) {
 		JComboBox<Object> combo = new JComboBox<>(items);
 		combo.addActionListener((ActionEvent e) -> {
@@ -78,6 +98,11 @@ public abstract class AbstractFormWindow extends JFrame {
 		return combo;
 	}
 
+	/**
+	 * boilerplate code for when a combobox is updated
+	 * @param comboBox
+	 * @param name
+	 */
 	protected void comboBoxUpdated(JComboBox<Object> comboBox, String name){
 			fields.put(name, comboBox.getSelectedItem());
 	}

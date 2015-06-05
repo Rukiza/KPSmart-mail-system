@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
@@ -22,6 +23,15 @@ import kps.ui.formlistener.PriceUpdateListener;
 import kps.ui.util.SpringUtilities;
 import kps.ui.util.UIUtils;
 
+/**
+ * @author hardwiwill
+ *
+ * A popup window to prompt the user for details to update the price
+ * of a package.
+ * When the users clicks on confirm button, the form details will be sent
+ * to a PackageFormListener
+ *
+ */
 public class PriceUpdateWindow extends AbstractFormWindow{
 
 	private final String FROM = "from";
@@ -125,6 +135,7 @@ public class PriceUpdateWindow extends AbstractFormWindow{
 			int volumeCost = Integer.parseInt(volStr);
 
 			listener.onPriceUpdateSubmitted(from, to, weightCost, volumeCost, priority);
+			JOptionPane.showMessageDialog(this, "Route prices changed successfully!");
 			UIUtils.closeWindow(this);
 		});
 

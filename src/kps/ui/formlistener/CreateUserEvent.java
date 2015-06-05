@@ -2,6 +2,11 @@ package kps.ui.formlistener;
 
 import kps.enums.Position;
 
+/**
+ * @author hardwiwill
+ *
+ * contains all info for a user being created
+ */
 public class CreateUserEvent {
 
 	private String username;

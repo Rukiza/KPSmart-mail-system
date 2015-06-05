@@ -21,6 +21,14 @@ import kps.ui.formlistener.CreateUserListener;
 import kps.ui.util.SpringUtilities;
 import kps.ui.util.UIUtils;
 
+/**
+ * @author hardwiwill
+ *
+ * A popup window to prompt the user for details to give to a new user
+ * When the users clicks on confirm button, the form details will be sent
+ * to to CreateUserListener
+ *
+ */
 public class CreateUserWindow extends AbstractFormWindow {
 
 	private final String USERNAME = "username"

@@ -4,9 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 
+
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
+
 
 import kps.enums.Day;
 import kps.enums.TransportType;
@@ -14,6 +17,12 @@ import kps.ui.formlistener.RouteFormListener;
 import kps.ui.util.SpringUtilities;
 import kps.ui.util.UIUtils;
 
+/**
+ * @author hardwiwill
+ *
+ * Prompts the user for route details which will be used to make a new route.
+ * Results of the form will be sent to the RouteFormListener
+ */
 public class RouteFormWindow extends AbstractFormWindow {
 
 	public RouteFormWindow(RouteFormListener listener){
@@ -92,6 +101,7 @@ public class RouteFormWindow extends AbstractFormWindow {
 
 			listener.onRouteFormSubmitted(company, to, from, type, weightCost, volCost
 						, maxWeight, maxVol, dur, freq, day);
+			JOptionPane.showMessageDialog(this, "Route successfully added!");
 			UIUtils.closeWindow(this);
 		});
 

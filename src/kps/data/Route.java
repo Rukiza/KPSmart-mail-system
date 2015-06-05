@@ -159,6 +159,6 @@ public class Route {
 
 	@Override
 	public String toString(){return  transport.getTransportFirm()+", "+transport.getOrigin() + " To " + transport.getDestination() +
-			" Gram Price :"+transport.getGramPrice() +"\n"+ " Volumder $"+transport.getVolumePrice() +"\n"
+			" Weight Price: $"+transport.getGramPrice() +"\n"+ " Volume Price: $"+transport.getVolumePrice() +"\n"
 			+ "Type " + transport.getTransportType();}
 }

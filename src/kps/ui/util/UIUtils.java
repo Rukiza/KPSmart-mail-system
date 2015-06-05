@@ -6,12 +6,25 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
+/**
+ * @author hardwiwill
+ *
+ * Contains UI utility methods
+ */
 public class UIUtils {
 
+	/**
+	 * Causes a window to close
+	 * @param frame
+	 */
 	public static void closeWindow(JFrame frame){
 		frame.dispose();
 	}
 
+	/**
+	 * @param input
+	 * @return true if input is an integer
+	 */
 	public static boolean isInteger(String... input){
 		for(String s : input){
 			try {
@@ -27,7 +40,7 @@ public class UIUtils {
 	 * @param image
 	 * @param newW width of new image
 	 * @param newH height of new image
-	 * @return the input image but resized to newW and newH
+	 * @return the input image resized to newW and newH
 	 */
 	public static BufferedImage resizeImage(BufferedImage image, int newW, int newH){
 		Image tmp = image.getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
@@ -40,6 +53,10 @@ public class UIUtils {
 	    return dimg;
 	}
 
+	/**
+	 * @param input
+	 * @return true if input is a double
+	 */
 	public static boolean isDouble(String... input) {
 		for(String s : input){
 			try {

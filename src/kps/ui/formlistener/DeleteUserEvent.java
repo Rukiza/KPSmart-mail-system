@@ -1,5 +1,10 @@
 package kps.ui.formlistener;
 
+/**
+ * @author hardwiwill
+ *
+ * contains all info for a user being deleted
+ */
 public class DeleteUserEvent {
 
 	private String username;
