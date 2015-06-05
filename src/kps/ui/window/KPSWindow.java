@@ -165,8 +165,6 @@ public class KPSWindow extends JFrame {
 
 		deleteRoute.addActionListener((ActionEvent e) -> new DeleteRouteWindow(new DeleteRouteListener(){
 			@Override public void onDeleteFormSubmitted(Route route){
-				System.out.println("route submitted:\n");
-				System.out.println(route);
 				system.addTransportDiscontinuedEvent(route);
 				graphPanel.graphUpdated();
 			}
@@ -189,7 +187,7 @@ public class KPSWindow extends JFrame {
 			@Override public void onCancel(){
 				// cancelled
 			}
-		}, system.getRouteGraph()));
+		}, system));
 
 		return sidebar;
 	}

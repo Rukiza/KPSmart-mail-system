@@ -15,8 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 
+import kps.KPSmartSystem;
 import kps.data.Node;
-import kps.data.RouteGraph;
 import kps.enums.Priority;
 import kps.ui.formlistener.PriceUpdateListener;
 import kps.ui.util.SpringUtilities;
@@ -33,7 +33,7 @@ public class PriceUpdateWindow extends AbstractFormWindow{
 	private final String PRIORITY = "priority";
 	private final String[] fieldNames = new String[] { FROM , TO, OLD_WEIGHT_COST, OLD_VOL_COST, NEW_WEIGHT_COST, NEW_VOL_COST, PRIORITY};
 
-	private RouteGraph routeGraph;
+	private KPSmartSystem system;
 
 	/**
 	 * displays the current weight cost of the currently selected route
@@ -47,10 +47,10 @@ public class PriceUpdateWindow extends AbstractFormWindow{
 	private JComboBox<Object> fromComboBox;
 	private JComboBox<Object> toComboBox;
 
-	public PriceUpdateWindow(PriceUpdateListener listener, RouteGraph routeGraph){
+	public PriceUpdateWindow(PriceUpdateListener listener, KPSmartSystem system){
 
 		super("update route price");
-		this.routeGraph = routeGraph;
+		this.system = system;
 		setLayout(new BorderLayout());
 
 		// add fields
@@ -65,7 +65,7 @@ public class PriceUpdateWindow extends AbstractFormWindow{
 		// populate the to combobox (and also the routes combo)
 		// not dealing with routes, rather just src, dest
 		List<String> nodeStrings = new ArrayList<>();
-		for (Node n : routeGraph.getNodes()){
+		for (Node n : system.getRouteGraph().getNodes()){
 			nodeStrings.add(n.getName());
 		}
 
@@ -138,6 +138,12 @@ public class PriceUpdateWindow extends AbstractFormWindow{
 		setVisible(true);
 	}
 
+	@Override
+	public void comboBoxUpdated(JComboBox<Object> comboBox, String name){
+		super.comboBoxUpdated(comboBox, name);
+		updateOldPrices();
+	}
+
 	/**
 	 * makes a combobox for the "from" field
 	 * @param name
@@ -173,12 +179,22 @@ public class PriceUpdateWindow extends AbstractFormWindow{
 	private void populateToCombo(){
         comboBoxUpdated(toComboBox, TO);
         String from = (String) fromComboBox.getSelectedItem();
-        Set<String> validDests = routeGraph.destsFromSource(from);
+        Set<String> validDests = system.getRouteGraph().destsFromSource(from);
         toComboBox.setModel(new DefaultComboBoxModel<Object>(validDests.toArray()));
+        updateOldPrices();
 	}
 
-	private void populateOldPrices(){
-//		oldWeightCostField.setText();
+	private void updateOldPrices(){
+		String from = (String) fromComboBox.getSelectedItem();
+		String to = (String) toComboBox.getSelectedItem();
+		Priority priority = (Priority) fields.get(PRIORITY);
+		double weightCost = system.getWeightCost(from, to, priority);
+		double volCost = system.getVolumeCost(from, to, priority);
+
+		String weightCostMsg = weightCost == 0 ? "not available" : weightCost + "";
+		String volCostMsg = volCost == 0 ? "not available" : volCost + "";
+		oldWeightCostField.setText(weightCostMsg);
+		oldVolCostField.setText(volCostMsg);
 	}
 
 	@Override
