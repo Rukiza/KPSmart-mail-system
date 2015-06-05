@@ -42,7 +42,7 @@ public class CreateUserWindow extends AbstractFormWindow {
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
 
-		JButton OK = new JButton("OK");
+		JButton OK = new JButton("Create user");
 		JButton cancel = new JButton("Cancel");
 		buttonPanel.add(OK);
 		buttonPanel.add(cancel);

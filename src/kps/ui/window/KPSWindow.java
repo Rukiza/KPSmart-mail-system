@@ -12,6 +12,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
@@ -22,6 +23,7 @@ import kps.data.Mail;
 import kps.data.Route;
 import kps.data.wrappers.BasicRoute;
 import kps.enums.Day;
+import kps.enums.Position;
 import kps.enums.Priority;
 import kps.enums.TransportType;
 import kps.ui.formlistener.CreateUserEvent;
@@ -70,7 +72,10 @@ public class KPSWindow extends JFrame {
 		graphPanel = new RouteGraphPanel(system.getRouteGraph(), this);
 
 		tabbedPane.addTab("Metrics", metricsPanel);
-		tabbedPane.addTab("Decision Support", dsPanel);
+		// if user is a manager, should be able to access decision support
+		if (user.getPosition() == Position.MANAGER){
+                tabbedPane.addTab("Decision Support", dsPanel);
+		}
 		tabbedPane.addTab("Route graph", graphPanel);
 
 		JPanel sidebar = makeSidebar();
@@ -96,9 +101,16 @@ public class KPSWindow extends JFrame {
 		buttons.add(deleteUser);
 		add(buttons, BorderLayout.EAST);
 
+		// my lambdas didn't work for some reason
 //		createUser.addActionListener((ActionEvent e) -> {
 //			new CreateUserWindow((CreateUserEvent e) -> {
 //                        system.addKPSUser(e.getUsername(), e.getPasswordHash(), e.getPosition());
+//			});
+//		});
+
+//		deleteUser.addActionListener((ActionEvent e) -> {
+//			new DeleteUserWindow((DeleteUserEvent e) -> {
+//				system.removeKPSUser(e.getUserName());
 //			});
 //		});
 
@@ -108,6 +120,7 @@ public class KPSWindow extends JFrame {
                        boolean containsUser = system.containsKPSUser(e.getUsername());
                        if (!containsUser){
                             system.addKPSUser(e.getUsername(), e.getPasswordHash(), e.getPosition());
+                            JOptionPane.showMessageDialog(userbar, "User successfully created!");
                             return true;
                        }
                        else {
@@ -120,17 +133,12 @@ public class KPSWindow extends JFrame {
 			});
 		});
 
-//		deleteUser.addActionListener((ActionEvent e) -> {
-//			new DeleteUserWindow((DeleteUserEvent e) -> {
-//				system.removeKPSUser(e.getUserName());
-//			});
-//		});
-
 		deleteUser.addActionListener((ActionEvent e) -> {
 			new DeleteUserWindow(new DeleteUserListener(){
 				@Override public boolean onUserSubmitted(DeleteUserEvent e){
 					if (system.containsKPSUser(e.getUsername())){
                         system.removeKPSUser(e.getUsername());
+                        JOptionPane.showMessageDialog(userbar, "User successfully deleted!");
                         return true;
 					} else {
 						return false;

@@ -2,8 +2,8 @@ package kps;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
-import kps.KPSmartSystem;
 import kps.data.wrappers.EventLog;
 import kps.events.BusinessEvent;
 import kps.parser.KPSParser;
@@ -11,6 +11,7 @@ import kps.parser.ParserException;
 import kps.ui.formlistener.AuthDetailsListener;
 import kps.ui.window.KPSWindow;
 import kps.ui.window.LogonBox;
+import kps.users.KPSUser;
 
 public class Main {
 
@@ -22,19 +23,22 @@ public class Main {
 		try{
 			List<BusinessEvent> bizEvents = KPSParser.parseFile(EVENT_LOG);
             EventLog eventLog = new EventLog(bizEvents);
-            KPSmartSystem system = new KPSmartSystem(eventLog);
+            Map<String, KPSUser> users = KPSParser.parseKPSUsers(USERS);
+            KPSmartSystem system = new KPSmartSystem(eventLog, users);
 
 			new LogonBox(new AuthDetailsListener(){
 
 				@Override
 				public boolean onReceivedAuthDetails(String un, String pw) {
-					KPSUser user = system.login(un, pw.hashCode();
-					if (user != null){
+					System.out.println(un + " " + pw);
+					KPSUser user = system.login(un, pw.hashCode());
+					if (user == null){
 						// login unsuccessful
 						return false;
 					}
 
 					new KPSWindow(system, user);
+					return true;
 				}
 
 				@Override

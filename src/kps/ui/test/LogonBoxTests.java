@@ -10,8 +10,9 @@ public class LogonBoxTests {
 	@Test
 	public void basicTest(){
 		new LogonBox(new AuthDetailsListener(){
-			public void onReceivedAuthDetails(String un, String pw){
+			public boolean onReceivedAuthDetails(String un, String pw){
 				System.out.println(un + ", " + pw);
+				return true;
 			}
 			public void onCancel(){
 				System.out.println("Cancelled");

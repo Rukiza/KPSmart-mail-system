@@ -101,6 +101,24 @@ public class KPSmartSystem {
 	}
 
 	/**
+	 * Constructs an instance of KPSmartSystem with the
+	 * specified EventLog and users map
+	 *
+	 * @param eventLog
+	 * 		-- event log
+	 */
+	public KPSmartSystem(EventLog eventLog, Map<String, KPSUser> users){
+		this.eventLog = eventLog;
+		customerRoutes = new HashMap<BasicRoute, CustomerRoute>();
+		routeGraph = new RouteGraph();//loadGraph();
+		this.users = users;
+		currentUser = null;
+		metrics = new Metrics();
+		processBusinessEvents();
+	}
+
+
+	/**
 	 * Constructs an instance of KPSmartSystem based on the
 	 * specified list of BusinessEvents.
 	 *

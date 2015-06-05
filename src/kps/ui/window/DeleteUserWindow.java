@@ -37,7 +37,7 @@ public class DeleteUserWindow extends AbstractFormWindow {
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout());
 
-		JButton OK = new JButton("OK");
+		JButton OK = new JButton("Delete");
 		JButton cancel = new JButton("Cancel");
 		buttonPanel.add(OK);
 		buttonPanel.add(cancel);
