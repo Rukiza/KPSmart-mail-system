@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import kps.parser.KPSParser;
 /**
  * @author Nicky van Hulst 300294657
  * */
@@ -308,5 +310,14 @@ public class RouteGraph implements Iterable<Node> {
 			if(nodes.get(i).getName().equals(name))return nodes.get(i);
 		}
 		return null;
+	}
+
+	public String toXML(){
+		String xml = "<"+KPSParser.GRAPH_FILE_TAG+">\n";
+		for(Route route : getAllRoutes()){
+			xml += route.toXML();
+		}
+		xml += "</"+KPSParser.GRAPH_FILE_TAG+">\n";
+		return xml;
 	}
 }
