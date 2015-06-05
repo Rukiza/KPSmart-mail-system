@@ -8,6 +8,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.DecimalFormat;
@@ -155,16 +156,10 @@ public class DecisionSupportPanel extends JPanel {
 		 * Makes a key listener for the decision support panel.
 		 * @return - Returns the key listener for use on them main panel.
 		 */
-		public KeyListener getKeyListener() {
-			return new KeyListener() {
+		public KeyAdapter getKeyListener() {
+			return new KeyAdapter() {
 
-				@Override
-				public void keyTyped(KeyEvent e) {
-					System.err.println("Not showing");
-				}
-
-				@Override
-				public void keyReleased(KeyEvent e) {
+	            public void keyPressed(KeyEvent e) {
 					if (DecisionSupportPanel.this.isShowing()) {
 						if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 							event = data.getFilterNextEvent();
@@ -177,11 +172,7 @@ public class DecisionSupportPanel extends JPanel {
 							updateGraph();
 						}
 					}
-				}
-
-				@Override
-				public void keyPressed(KeyEvent e) {
-				}
+	            }
 			};
 		}
 		/**
