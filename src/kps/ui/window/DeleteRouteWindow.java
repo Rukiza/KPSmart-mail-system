@@ -15,11 +15,11 @@ import kps.ui.util.SpringUtilities;
 import kps.ui.util.UIUtils;
 
 public class DeleteRouteWindow extends AbstractRouteChooserWindow{
-	
+
 	private String[] fieldNames = new String[] { FROM, TO, ROUTES };
 
 	public DeleteRouteWindow(DeleteRouteListener deleteRouteListener, RouteGraph routeGraph) {
-		super("Delete a route", routeGraph, deleteRouteListener);
+		super("Delete a route", deleteRouteListener, routeGraph);
 
 		int fieldCount = fieldNames.length;
 

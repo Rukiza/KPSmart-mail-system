@@ -21,7 +21,7 @@ public class PriceUpdateWindow extends AbstractRouteChooserWindow {
 	private final String NEW_WEIGHT_COST = "new weight cost";
 	private final String NEW_VOL_COST = "new volume cost";
 	private final String[] fieldNames = new String[] { FROM , TO, ROUTES, OLD_WEIGHT_COST , OLD_VOL_COST, NEW_WEIGHT_COST, NEW_VOL_COST };
-	
+
 	/**
 	 * displays the current weight cost of the currently selected route
 	 */
@@ -33,7 +33,7 @@ public class PriceUpdateWindow extends AbstractRouteChooserWindow {
 
 	public PriceUpdateWindow(PriceUpdateListener listener, RouteGraph routeGraph){
 
-		super("Update route price", routeGraph, listener);
+		super("Update route price", listener, routeGraph);
 
 		int fieldCount = fieldNames.length;
 
@@ -42,11 +42,11 @@ public class PriceUpdateWindow extends AbstractRouteChooserWindow {
 		oldVolCostField = makeTextField(OLD_VOL_COST, inputPanel);
         oldWeightCostField.setEditable(false);
         oldVolCostField.setEditable(false);
-		
+
 		// fields for new price input
 		makeTextField(NEW_WEIGHT_COST, inputPanel);
 		makeTextField(NEW_VOL_COST, inputPanel);
-		
+
 		SpringUtilities.makeCompactGrid(inputPanel,
 				fieldCount, 2,	//rows, cols
                 6, 6,	//initX, initY
@@ -106,7 +106,7 @@ public class PriceUpdateWindow extends AbstractRouteChooserWindow {
 		oldWeightCostField.setText(weightPrice + "");
 		oldVolCostField.setText(volPrice + "");
 	}
-	
+
 	@Override
 	protected boolean isFormComplete() {
 		for (String fieldName : fieldNames){
