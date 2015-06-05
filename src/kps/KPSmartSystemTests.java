@@ -461,25 +461,101 @@ public class KPSmartSystemTests {
 		kp.addPriceUpdateEvent("Node 6", "Node 3", 160, 180, Priority.INTERNATIONAL_STANDARD);
 
 		kp.addMailDeliveryEvent("Node 1", "Node 3", Day.MONDAY,  1,  1, Priority.INTERNATIONAL_STANDARD);
-
-		assertTrue(kp.getAvarageDeliveryTime() == 29);//
+		assertTrue(kp.getAverageDeliveryTime() == 29);
+		//checkValidTimeTaken(kp.getEventLog().getCurrentEvent(), 29);
+		System.out.println("Passed second");
 
 		kp.addMailDeliveryEvent("Node 1", "Node 3", Day.TUESDAY,  1,  1, Priority.INTERNATIONAL_STANDARD);
+		assertTrue(kp.getAverageDeliveryTime() == 173);
+		//checkValidTimeTaken(kp.getEventLog().getCurrentEvent(), 173);
+		System.out.println("Passed third");
 
-		System.out.println("Avg " + kp.getAvarageDeliveryTime());
-		assertTrue(kp.getAvarageDeliveryTime() == 173);//
+		//kp.addMailDeliveryEvent("Node 1", "Node 5", Day.THURSDAY,  1,  1, Priority.INTERNATIONAL_STANDARD);
+		//checkValidTimeTaken(kp.getEventLog().getCurrentEvent(), 149);
+		//System.out.println("Passed fourth");
 
-		kp.addMailDeliveryEvent("Node 1", "Node 5", Day.THURSDAY,  1,  1, Priority.INTERNATIONAL_STANDARD);
-
-		System.out.println("Avg " + kp.getAvarageDeliveryTime());
-		assertTrue(kp.getAvarageDeliveryTime() == 149);//
-
-		kp.addMailDeliveryEvent("Node 6", "Node 3", Day.TUESDAY,  1,  1, Priority.INTERNATIONAL_STANDARD);
-
-		System.out.println("Avg " + kp.getAvarageDeliveryTime());
-		assertTrue(kp.getAvarageDeliveryTime() == 173);//
+		//kp.addMailDeliveryEvent("Node 6", "Node 3", Day.TUESDAY,  1,  1, Priority.INTERNATIONAL_STANDARD);
+		//checkValidTimeTaken(kp.getEventLog().getCurrentEvent(), 173);
+		//System.out.println("Passed fifth");
 
 	}
 
+	@Test public void testCorrectTimeTaken_1(){
+		EventLog log = null;
+		try {
+			log = new EventLog(KPSParser.parseFile(Main.XML_FILE_PATH+"kps_testdata.xml"));
+		} catch (ParserException e) {
+			System.out.println("oh no");
+			e.printStackTrace();
+		}
+		KPSmartSystem kp = new KPSmartSystem(log);
+		kp.addTransportCostUpdateEvent("Node 6", "Node 2", "Test", TransportType.AIR, 50, 50, 1000, 1000, 21, 5, Day.TUESDAY);
+		kp.addPriceUpdateEvent("Node 6", "Node 3", 160, 180, Priority.INTERNATIONAL_STANDARD);
 
+		kp.addMailDeliveryEvent("Node 1", "Node 3", Day.MONDAY,  1,  1, Priority.INTERNATIONAL_STANDARD);
+		checkValidTimeTaken(kp.getEventLog().getLastEventAdded(), 29);
+	}
+
+	@Test public void testCorrectTimeTaken_2(){
+		EventLog log = null;
+		try {
+			log = new EventLog(KPSParser.parseFile(Main.XML_FILE_PATH+"kps_testdata.xml"));
+		} catch (ParserException e) {
+			System.out.println("oh no");
+			e.printStackTrace();
+		}
+		KPSmartSystem kp = new KPSmartSystem(log);
+		kp.addTransportCostUpdateEvent("Node 6", "Node 2", "Test", TransportType.AIR, 50, 50, 1000, 1000, 21, 5, Day.TUESDAY);
+		kp.addPriceUpdateEvent("Node 6", "Node 3", 160, 180, Priority.INTERNATIONAL_STANDARD);
+
+		kp.addMailDeliveryEvent("Node 1", "Node 3", Day.TUESDAY,  1,  1, Priority.INTERNATIONAL_STANDARD);
+		checkValidTimeTaken(kp.getEventLog().getLastEventAdded(), 173);
+	}
+
+
+	@Test public void testCorrectTimeTaken_3(){
+		EventLog log = null;
+		try {
+			log = new EventLog(KPSParser.parseFile(Main.XML_FILE_PATH+"kps_testdata.xml"));
+		} catch (ParserException e) {
+			System.out.println("oh no");
+			e.printStackTrace();
+		}
+		KPSmartSystem kp = new KPSmartSystem(log);
+		kp.addTransportCostUpdateEvent("Node 6", "Node 2", "Test", TransportType.AIR, 50, 50, 1000, 1000, 21, 5, Day.TUESDAY);
+		kp.addPriceUpdateEvent("Node 6", "Node 3", 160, 180, Priority.INTERNATIONAL_STANDARD);
+
+		kp.addMailDeliveryEvent("Node 1", "Node 5", Day.THURSDAY,  1,  1, Priority.INTERNATIONAL_STANDARD);
+		checkValidTimeTaken(kp.getEventLog().getLastEventAdded(), 149);
+	}
+
+
+	@Test public void testCorrectTimeTaken_4(){
+		EventLog log = null;
+		try {
+			log = new EventLog(KPSParser.parseFile(Main.XML_FILE_PATH+"kps_testdata.xml"));
+		} catch (ParserException e) {
+			System.out.println("oh no");
+			e.printStackTrace();
+		}
+		KPSmartSystem kp = new KPSmartSystem(log);
+		kp.addTransportCostUpdateEvent("Node 6", "Node 2", "Test", TransportType.AIR, 50, 50, 1000, 1000, 21, 5, Day.TUESDAY);
+		kp.addPriceUpdateEvent("Node 6", "Node 3", 160, 180, Priority.INTERNATIONAL_STANDARD);
+
+		kp.addMailDeliveryEvent("Node 6", "Node 3", Day.TUESDAY,  1,  1, Priority.INTERNATIONAL_STANDARD);
+		checkValidTimeTaken(kp.getEventLog().getLastEventAdded(), 173);
+
+	}
+
+	private void checkValidTimeTaken(BusinessEvent event, int expectedTime){
+		if(event instanceof MailDeliveryEvent){
+			MailDeliveryEvent mail = (MailDeliveryEvent)event;
+			if(mail.getDeliveryTime() != expectedTime){
+				fail("Expecting delivery time of "+expectedTime+" hours, received time of "+mail.getDeliveryTime()+" hours.");
+			}
+		}
+		else{
+			fail("Expecting a MailDeliveryEvent, received a "+event.getClass());
+		}
+	}
 }
