@@ -1,12 +1,19 @@
 package kps.ui.window;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.SpringLayout;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import kps.enums.Position;
 import kps.ui.formlistener.CreateUserEvent;
@@ -25,14 +32,16 @@ public class CreateUserWindow extends AbstractFormWindow {
 	public CreateUserWindow(CreateUserListener listener) {
 		super("Create a user");
 
+		setLayout(new BorderLayout());
 		JPanel inputPanel = new JPanel();
 
 		makeTextField(USERNAME, inputPanel);
-		makeTextField(PASSWORD, inputPanel);
+		makePasswordField(PASSWORD, inputPanel);
 		makeComboBox(POSITION, Position.values(), inputPanel);
 
 		int fieldCount = fieldNames.length;
 
+		inputPanel.setLayout(new SpringLayout());
 		SpringUtilities.makeCompactGrid(inputPanel,
 				fieldCount, 2,	//rows, cols
                 6, 6,	//initX, initY
@@ -75,6 +84,27 @@ public class CreateUserWindow extends AbstractFormWindow {
 		setVisible(true);
 	}
 
+	protected JPasswordField makePasswordField(String name, Container cont) {
+		JPasswordField passwordField = new JPasswordField();
+		passwordField.getDocument().addDocumentListener(new DocumentListener(){
+                @Override
+                public void insertUpdate(DocumentEvent e) {
+					fields.put(name, passwordField.getPassword());
+                }
+				@Override public void changedUpdate(DocumentEvent e) { }
+                @Override public void removeUpdate(DocumentEvent e) { }
+		});
+		passwordField.setEchoChar('~');
+
+		// put default text in fields
+		fields.put(name, null);
+		JLabel label = new JLabel(name);
+		label.setLabelFor(passwordField);
+		cont.add(label);
+		cont.add(passwordField);
+
+		return passwordField;
+	}
 
 	@Override
 	protected boolean isFormComplete() {

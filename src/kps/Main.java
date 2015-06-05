@@ -30,7 +30,6 @@ public class Main {
 
 				@Override
 				public boolean onReceivedAuthDetails(String un, String pw) {
-					System.out.println(un + " " + pw);
 					KPSUser user = system.login(un, pw.hashCode());
 					if (user == null){
 						// login unsuccessful
@@ -46,7 +45,7 @@ public class Main {
 					// do nothing
 				}
 
-			},"monkey", "bananas");
+			},"admin", "admin");
 
 
 		}catch(ParserException e){ e.printStackTrace(); }

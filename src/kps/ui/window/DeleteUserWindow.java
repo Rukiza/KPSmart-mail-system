@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SpringLayout;
 
 import kps.ui.formlistener.DeleteUserEvent;
 import kps.ui.formlistener.DeleteUserListener;
@@ -22,12 +23,14 @@ public class DeleteUserWindow extends AbstractFormWindow {
 	public DeleteUserWindow(DeleteUserListener listener) {
 		super("Delete a user");
 
+		setLayout(new BorderLayout());
 		JPanel inputPanel = new JPanel();
 
 		makeTextField(USERNAME, inputPanel);
 
 		int fieldCount = fieldNames.length;
 
+		inputPanel.setLayout(new SpringLayout());
 		SpringUtilities.makeCompactGrid(inputPanel,
 				fieldCount, 2,	//rows, cols
                 6, 6,	//initX, initY

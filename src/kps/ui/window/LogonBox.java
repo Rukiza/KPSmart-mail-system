@@ -69,7 +69,7 @@ public class LogonBox extends JFrame {
 			);
 
 			if (!result){
-				JOptionPane.showMessageDialog(this, "username - password combination was not recognised");
+				JOptionPane.showMessageDialog(this, "username & password combination was not recognised");
 			} else {
 				UIUtils.closeWindow(this);
 			}
