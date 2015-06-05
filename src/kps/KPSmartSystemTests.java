@@ -527,12 +527,6 @@ public class KPSmartSystemTests {
 	}
 
 	@Test
-	public void incrementTimeTest(){
-		KPSmartSystem kp = new KPSmartSystem();
-	}
-
-
-	@Test
 	public void testTimeTaken(){
 		EventLog log = null;
 		try {
