@@ -146,6 +146,7 @@ public class TransportCostUpdateEvent extends BusinessEvent{
 	 * returns true if the object shares the same field values as this event.
 	 * Will not return true if the object is null or not of the same type.
 	 */
+	@Override
 	public boolean equals(Object o){
 		// return true if o is the same object
 		if(o == this){

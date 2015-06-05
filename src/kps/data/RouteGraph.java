@@ -31,9 +31,14 @@ public class RouteGraph implements Iterable<Node> {
 	 * */
     public boolean updateRoute(Route route){
     	if(route == null)return false;
+
     	for(Node n : nodes){
-    		if(n.getNeighbours().contains(route))n.updateRoute(route);
-    		return true;
+    		for(Route r : n.getNeighbours()){
+    			if(route.equals(r)){
+    				n.updateRoute(route);
+    				return true;
+    			}
+    		}
     	}
     	return false;
     }
@@ -129,11 +134,18 @@ public class RouteGraph implements Iterable<Node> {
 
     	boolean toReturn = false;
 
+    	for(Node n : nodes){
+
+    	}
+
     	for(int i = 0; i < nodes.size(); i++){
-    		if(nodes.get(i).getNeighbours().contains(route)){
-    			nodes.get(i).removeRoute(route);
-    			if(nodes.get(i).getNeighbours().size() == 0)nodes.remove(i);//remove the node as it no longer has any routes
-    			toReturn = true;
+    		for(Route r : nodes.get(i).getNeighbours()){
+    			if(r.equals(route)){
+    				nodes.get(i).removeRoute(route);
+        			if(nodes.get(i).getNeighbours().size() == 0){nodes.remove(i);//remove the node as it no longer has any routes
+        			}
+        			toReturn = true;
+    			}
     		}
     	}
     	return toReturn;
@@ -144,7 +156,9 @@ public class RouteGraph implements Iterable<Node> {
      * */
     public boolean containsRoute(Route route){
     	for(Route r : getAllRoutes()){
-    		if(route.equals(r))return true;
+    		if(route.equals(r)){
+    			return true;
+    		}
     	}
     	return false;
     }
