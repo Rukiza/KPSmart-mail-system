@@ -483,7 +483,12 @@ public class KPSmartSystem {
 				CustomerRoute cr = customerRoutes.get(route);
 				cr.addDeliveryPrice(price.getGramPrice(), price.getVolumePrice(), price.getPriority());
 			}
-
+			if(event instanceof TransportCostUpdateEvent){
+				metrics.addTransportCostUpdateEvent();
+			}
+			if(event instanceof TransportDiscontinuedEvent){
+				metrics.addTransportDiscontinuedEvent();
+			}
 			// transport cost update events are loaded from a separate file
 			// and transport discontinued events have no need to be added because
 			// the graph file is uptodate.

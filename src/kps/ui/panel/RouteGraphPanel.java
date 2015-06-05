@@ -133,6 +133,8 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 			if(connectedNode == null)connectedNode = n;
 			else if(connectedNode.getNode().getNeighbours().size() < n.getNode().getNeighbours().size())connectedNode = n;
 		}
+		
+		if(connectedNode == null){return;}
 		connectedNode.setX(sWidth/2);
 		connectedNode.setY(sHeight/2);
 	}

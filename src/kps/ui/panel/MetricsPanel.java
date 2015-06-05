@@ -239,8 +239,14 @@ public class MetricsPanel extends JPanel implements ActionListener{
         /**
          * Paints the graph to the GraphPanel.
          */
-        public void paintComponent(Graphics g){
-
+        public void repaint(){
+        	if(isInitialised){
+        		System.out.println("dfsdf");
+        		chart = ChartFactory.createXYLineChart("Revenue and Expenditure", "Mail Deliveries", "Money (NZD)", createDataset());
+        		chartPanel = new ChartPanel(chart);
+        		chartPanel.paint(chartPanel.getGraphics());
+        		super.repaint();
+        	}
         }
 
         /**

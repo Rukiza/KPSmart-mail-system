@@ -128,7 +128,10 @@ public class EventLog {
 	 * @return - Current Business event.
 	 */
 	public BusinessEvent getCurrentEvent(){
-		return eventLog.get(iterationLocation);
+		if(eventLog.size() > 0){
+			return eventLog.get(iterationLocation);
+		}
+		return null;
 	}
 
 	/**

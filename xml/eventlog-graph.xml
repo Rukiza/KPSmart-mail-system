@@ -1,9 +1,37 @@
 <graph>
 	<cost>
-		<time>1430732244470</time>
-		<company>Air New Zealand</company>
+		<time>1430733865302</time>
+		<company>Freedom Freight</company>
 		<to>Los Angeles</to>
-		<from>Auckland</from>
+		<from>Toronto</from>
+		<type>Land</type>
+		<weightcost>6.0</weightcost>
+		<volumecost>5.0</volumecost>
+		<maxWeight>1200</maxWeight>
+		<maxVolume>200</maxVolume>
+		<duration>44</duration>
+		<frequency>15</frequency>
+		<day>Thursday</day>
+	</cost>
+	<cost>
+		<time>1430734838187</time>
+		<company>Asian Airways</company>
+		<to>Hong Kong</to>
+		<from>Los Angeles</from>
+		<type>Air</type>
+		<weightcost>8.0</weightcost>
+		<volumecost>8.0</volumecost>
+		<maxWeight>380</maxWeight>
+		<maxVolume>55</maxVolume>
+		<duration>15</duration>
+		<frequency>5</frequency>
+		<day>Monday</day>
+	</cost>
+	<cost>
+		<time>1430732380093</time>
+		<company>Air New Zealand</company>
+		<to>Auckland</to>
+		<from>Los Angeles</from>
 		<type>Air</type>
 		<weightcost>9.0</weightcost>
 		<volumecost>8.0</volumecost>
@@ -11,146 +39,34 @@
 		<maxVolume>50</maxVolume>
 		<duration>12</duration>
 		<frequency>4</frequency>
-		<day>Tuesday</day>
-	</cost>
-	<cost>
-		<time>1430732091980</time>
-		<company>Quantas</company>
-		<to>Samoa</to>
-		<from>Wellington</from>
-		<type>Air</type>
-		<weightcost>8.0</weightcost>
-		<volumecost>9.0</volumecost>
-		<maxWeight>365</maxWeight>
-		<maxVolume>45</maxVolume>
-		<duration>4</duration>
-		<frequency>7</frequency>
-		<day>Wednesday</day>
-	</cost>
-	<cost>
-		<time>1430732505865</time>
-		<company>Pacific Freight</company>
-		<to>Samoa</to>
-		<from>Sydney</from>
-		<type>Sea</type>
-		<weightcost>6.0</weightcost>
-		<volumecost>5.0</volumecost>
-		<maxWeight>1500</maxWeight>
-		<maxVolume>700</maxVolume>
-		<duration>145</duration>
-		<frequency>36</frequency>
-		<day>Monday</day>
-	</cost>
-	<cost>
-		<time>1430731646501</time>
-		<company>Pacific Freight</company>
-		<to>Samoa</to>
-		<from>Wellington</from>
-		<type>Sea</type>
-		<weightcost>6.0</weightcost>
-		<volumecost>5.0</volumecost>
-		<maxWeight>1500</maxWeight>
-		<maxVolume>700</maxVolume>
-		<duration>110</duration>
-		<frequency>24</frequency>
-		<day>Tuesday</day>
-	</cost>
-	<cost>
-		<time>1433499591339</time>
-		<company>VUW</company>
-		<to>co242</to>
-		<from>co236</from>
-		<type>Land</type>
-		<weightcost>12.0</weightcost>
-		<volumecost>12.0</volumecost>
-		<maxWeight>2</maxWeight>
-		<maxVolume>2</maxVolume>
-		<duration>2</duration>
-		<frequency>2</frequency>
-		<day>Monday</day>
-	</cost>
-	<cost>
-		<time>1430737251649</time>
-		<company>Air Bus</company>
-		<to>London</to>
-		<from>Cape Town</from>
-		<type>Air</type>
-		<weightcost>9.0</weightcost>
-		<volumecost>8.0</volumecost>
-		<maxWeight>500</maxWeight>
-		<maxVolume>50</maxVolume>
-		<duration>12</duration>
-		<frequency>8</frequency>
 		<day>Thursday</day>
 	</cost>
 	<cost>
-		<time>1430735190446</time>
-		<company>Air Bus</company>
-		<to>Los Angeles</to>
-		<from>London</from>
-		<type>Air</type>
-		<weightcost>9.0</weightcost>
-		<volumecost>8.0</volumecost>
-		<maxWeight>500</maxWeight>
-		<maxVolume>50</maxVolume>
-		<duration>11</duration>
-		<frequency>3</frequency>
-		<day>Friday</day>
-	</cost>
-	<cost>
-		<time>1430732718171</time>
+		<time>1430733010019</time>
 		<company>Aussie Air</company>
-		<to>Samoa</to>
+		<to>Cape Town</to>
 		<from>Sydney</from>
 		<type>Air</type>
 		<weightcost>9.0</weightcost>
 		<volumecost>9.0</volumecost>
 		<maxWeight>450</maxWeight>
 		<maxVolume>60</maxVolume>
-		<duration>6</duration>
-		<frequency>10</frequency>
-		<day>Thursday</day>
+		<duration>14</duration>
+		<frequency>12</frequency>
+		<day>Friday</day>
 	</cost>
 	<cost>
-		<time>1430736743702</time>
-		<company>United Delivery</company>
-		<to>London</to>
-		<from>Brazil</from>
-		<type>Sea</type>
-		<weightcost>6.0</weightcost>
-		<volumecost>6.0</volumecost>
-		<maxWeight>900</maxWeight>
-		<maxVolume>150</maxVolume>
-		<duration>313</duration>
-		<frequency>144</frequency>
-		<day>Tuesday</day>
-	</cost>
-	<cost>
-		<time>1430735410822</time>
-		<company>Asian Airways</company>
-		<to>Tokyo</to>
-		<from>Hong Kong</from>
+		<time>1430736920340</time>
+		<company>Air Bus</company>
+		<to>Rome</to>
+		<from>London</from>
 		<type>Air</type>
-		<weightcost>8.0</weightcost>
+		<weightcost>9.0</weightcost>
 		<volumecost>8.0</volumecost>
-		<maxWeight>380</maxWeight>
-		<maxVolume>55</maxVolume>
-		<duration>4</duration>
+		<maxWeight>500</maxWeight>
+		<maxVolume>50</maxVolume>
+		<duration>2</duration>
 		<frequency>1</frequency>
-		<day>Monday</day>
-	</cost>
-	<cost>
-		<time>1430734586245</time>
-		<company>Anchor Shipping</company>
-		<to>Los Angeles</to>
-		<from>Hong Kong</from>
-		<type>Sea</type>
-		<weightcost>5.0</weightcost>
-		<volumecost>5.0</volumecost>
-		<maxWeight>1200</maxWeight>
-		<maxVolume>500</maxVolume>
-		<duration>389</duration>
-		<frequency>72</frequency>
 		<day>Friday</day>
 	</cost>
 	<cost>
@@ -168,10 +84,10 @@
 		<day>Wednesday</day>
 	</cost>
 	<cost>
-		<time>1430736327075</time>
+		<time>1430736498795</time>
 		<company>United Delivery</company>
-		<to>Cape Town</to>
-		<from>London</from>
+		<to>London</to>
+		<from>Cape Town</from>
 		<type>Sea</type>
 		<weightcost>6.0</weightcost>
 		<volumecost>6.0</volumecost>
@@ -179,34 +95,146 @@
 		<maxVolume>150</maxVolume>
 		<duration>321</duration>
 		<frequency>144</frequency>
-		<day>Monday</day>
-	</cost>
-	<cost>
-		<time>1430733527315</time>
-		<company>Aussie Air</company>
-		<to>Hong Kong</to>
-		<from>Sydney</from>
-		<type>Air</type>
-		<weightcost>9.0</weightcost>
-		<volumecost>9.0</volumecost>
-		<maxWeight>450</maxWeight>
-		<maxVolume>60</maxVolume>
-		<duration>10</duration>
-		<frequency>7</frequency>
 		<day>Wednesday</day>
 	</cost>
 	<cost>
-		<time>1430733257087</time>
+		<time>1430732244470</time>
+		<company>Air New Zealand</company>
+		<to>Los Angeles</to>
+		<from>Auckland</from>
+		<type>Air</type>
+		<weightcost>9.0</weightcost>
+		<volumecost>8.0</volumecost>
+		<maxWeight>350</maxWeight>
+		<maxVolume>50</maxVolume>
+		<duration>12</duration>
+		<frequency>4</frequency>
+		<day>Tuesday</day>
+	</cost>
+	<cost>
+		<time>1430735190446</time>
+		<company>Air Bus</company>
+		<to>Los Angeles</to>
+		<from>London</from>
+		<type>Air</type>
+		<weightcost>9.0</weightcost>
+		<volumecost>8.0</volumecost>
+		<maxWeight>500</maxWeight>
+		<maxVolume>50</maxVolume>
+		<duration>11</duration>
+		<frequency>3</frequency>
+		<day>Friday</day>
+	</cost>
+	<cost>
+		<time>1430733754031</time>
+		<company>Freedom Freight</company>
+		<to>Toronto</to>
+		<from>Los Angeles</from>
+		<type>Land</type>
+		<weightcost>6.0</weightcost>
+		<volumecost>5.0</volumecost>
+		<maxWeight>1200</maxWeight>
+		<maxVolume>200</maxVolume>
+		<duration>44</duration>
+		<frequency>15</frequency>
+		<day>Monday</day>
+	</cost>
+	<cost>
+		<time>1430731825259</time>
+		<company>Air New Zealand</company>
+		<to>Sydney</to>
+		<from>Auckland</from>
+		<type>Air</type>
+		<weightcost>9.0</weightcost>
+		<volumecost>8.0</volumecost>
+		<maxWeight>350</maxWeight>
+		<maxVolume>50</maxVolume>
+		<duration>3</duration>
+		<frequency>5</frequency>
+		<day>Thursday</day>
+	</cost>
+	<cost>
+		<time>1430734245842</time>
+		<company>Anchor Shipping</company>
+		<to>Tokyo</to>
+		<from>Los Angeles</from>
+		<type>Sea</type>
+		<weightcost>5.0</weightcost>
+		<volumecost>5.0</volumecost>
+		<maxWeight>1200</maxWeight>
+		<maxVolume>500</maxVolume>
+		<duration>294</duration>
+		<frequency>48</frequency>
+		<day>Monday</day>
+	</cost>
+	<cost>
+		<time>1430734586245</time>
+		<company>Anchor Shipping</company>
+		<to>Los Angeles</to>
+		<from>Hong Kong</from>
+		<type>Sea</type>
+		<weightcost>5.0</weightcost>
+		<volumecost>5.0</volumecost>
+		<maxWeight>1200</maxWeight>
+		<maxVolume>500</maxVolume>
+		<duration>389</duration>
+		<frequency>72</frequency>
+		<day>Friday</day>
+	</cost>
+	<cost>
+		<time>1430731646501</time>
+		<company>Pacific Freight</company>
+		<to>Samoa</to>
+		<from>Wellington</from>
+		<type>Sea</type>
+		<weightcost>6.0</weightcost>
+		<volumecost>5.0</volumecost>
+		<maxWeight>1500</maxWeight>
+		<maxVolume>700</maxVolume>
+		<duration>110</duration>
+		<frequency>24</frequency>
+		<day>Tuesday</day>
+	</cost>
+	<cost>
+		<time>1430733171263</time>
 		<company>Aussie Air</company>
-		<to>London</to>
-		<from>Sydney</from>
+		<to>Sydney</to>
+		<from>Cape Town</from>
 		<type>Air</type>
 		<weightcost>9.0</weightcost>
 		<volumecost>9.0</volumecost>
 		<maxWeight>450</maxWeight>
 		<maxVolume>60</maxVolume>
-		<duration>22</duration>
-		<frequency>24</frequency>
+		<duration>14</duration>
+		<frequency>12</frequency>
+		<day>Wednesday</day>
+	</cost>
+	<cost>
+		<time>1430737483743</time>
+		<company>Air Bus</company>
+		<to>London</to>
+		<from>Brazil</from>
+		<type>Air</type>
+		<weightcost>9.0</weightcost>
+		<volumecost>8.0</volumecost>
+		<maxWeight>500</maxWeight>
+		<maxVolume>50</maxVolume>
+		<duration>11</duration>
+		<frequency>3</frequency>
+		<day>Tuesday</day>
+	</cost>
+	<cost>
+		<time>1430734676919</time>
+		<company>Air Bus</company>
+		<to>Toronto</to>
+		<from>Los Angeles</from>
+		<type>Air</type>
+		<weightcost>9.0</weightcost>
+		<volumecost>8.0</volumecost>
+		<maxWeight>500</maxWeight>
+		<maxVolume>50</maxVolume>
+		<duration>5</duration>
+		<frequency>2</frequency>
 		<day>Tuesday</day>
 	</cost>
 	<cost>
@@ -224,90 +252,6 @@
 		<day>Friday</day>
 	</cost>
 	<cost>
-		<time>1430732380093</time>
-		<company>Air New Zealand</company>
-		<to>Auckland</to>
-		<from>Los Angeles</from>
-		<type>Air</type>
-		<weightcost>9.0</weightcost>
-		<volumecost>8.0</volumecost>
-		<maxWeight>350</maxWeight>
-		<maxVolume>50</maxVolume>
-		<duration>12</duration>
-		<frequency>4</frequency>
-		<day>Thursday</day>
-	</cost>
-	<cost>
-		<time>1430737313341</time>
-		<company>Air Bus</company>
-		<to>Brazil</to>
-		<from>London</from>
-		<type>Air</type>
-		<weightcost>9.0</weightcost>
-		<volumecost>8.0</volumecost>
-		<maxWeight>500</maxWeight>
-		<maxVolume>50</maxVolume>
-		<duration>11</duration>
-		<frequency>3</frequency>
-		<day>Monday</day>
-	</cost>
-	<cost>
-		<time>1430735326441</time>
-		<company>Asian Airways</company>
-		<to>Hong Kong</to>
-		<from>Tokyo</from>
-		<type>Air</type>
-		<weightcost>8.0</weightcost>
-		<volumecost>8.0</volumecost>
-		<maxWeight>380</maxWeight>
-		<maxVolume>55</maxVolume>
-		<duration>4</duration>
-		<frequency>1</frequency>
-		<day>Wednesday</day>
-	</cost>
-	<cost>
-		<time>1430734676919</time>
-		<company>Air Bus</company>
-		<to>Toronto</to>
-		<from>Los Angeles</from>
-		<type>Air</type>
-		<weightcost>9.0</weightcost>
-		<volumecost>8.0</volumecost>
-		<maxWeight>500</maxWeight>
-		<maxVolume>50</maxVolume>
-		<duration>5</duration>
-		<frequency>2</frequency>
-		<day>Tuesday</day>
-	</cost>
-	<cost>
-		<time>1430735074360</time>
-		<company>Air Bus</company>
-		<to>London</to>
-		<from>Los Angeles</from>
-		<type>Air</type>
-		<weightcost>9.0</weightcost>
-		<volumecost>8.0</volumecost>
-		<maxWeight>500</maxWeight>
-		<maxVolume>50</maxVolume>
-		<duration>11</duration>
-		<frequency>3</frequency>
-		<day>Wednesday</day>
-	</cost>
-	<cost>
-		<time>1430733952032</time>
-		<company>Anchor Shipping</company>
-		<to>Toronto</to>
-		<from>Los Angeles</from>
-		<type>Sea</type>
-		<weightcost>5.0</weightcost>
-		<volumecost>5.0</volumecost>
-		<maxWeight>1200</maxWeight>
-		<maxVolume>500</maxVolume>
-		<duration>117</duration>
-		<frequency>18</frequency>
-		<day>Tuesday</day>
-	</cost>
-	<cost>
 		<time>1430734075898</time>
 		<company>Anchor Shipping</company>
 		<to>Los Angeles</to>
@@ -320,230 +264,6 @@
 		<duration>117</duration>
 		<frequency>18</frequency>
 		<day>Wednesday</day>
-	</cost>
-	<cost>
-		<time>1430736920340</time>
-		<company>Air Bus</company>
-		<to>Rome</to>
-		<from>London</from>
-		<type>Air</type>
-		<weightcost>9.0</weightcost>
-		<volumecost>8.0</volumecost>
-		<maxWeight>500</maxWeight>
-		<maxVolume>50</maxVolume>
-		<duration>2</duration>
-		<frequency>1</frequency>
-		<day>Friday</day>
-	</cost>
-	<cost>
-		<time>1430732894718</time>
-		<company>Aussie Air</company>
-		<to>Sydney</to>
-		<from>Samoa</from>
-		<type>Air</type>
-		<weightcost>9.0</weightcost>
-		<volumecost>9.0</volumecost>
-		<maxWeight>450</maxWeight>
-		<maxVolume>60</maxVolume>
-		<duration>6</duration>
-		<frequency>10</frequency>
-		<day>Tuesday</day>
-	</cost>
-	<cost>
-		<time>1430732155785</time>
-		<company>Quantas</company>
-		<to>Wellington</to>
-		<from>Samoa</from>
-		<type>Air</type>
-		<weightcost>8.0</weightcost>
-		<volumecost>9.0</volumecost>
-		<maxWeight>365</maxWeight>
-		<maxVolume>45</maxVolume>
-		<duration>4</duration>
-		<frequency>7</frequency>
-		<day>Friday</day>
-	</cost>
-	<cost>
-		<time>1430733617180</time>
-		<company>Aussie Air</company>
-		<to>Sydney</to>
-		<from>Hong Kong</from>
-		<type>Air</type>
-		<weightcost>9.0</weightcost>
-		<volumecost>9.0</volumecost>
-		<maxWeight>450</maxWeight>
-		<maxVolume>60</maxVolume>
-		<duration>10</duration>
-		<frequency>7</frequency>
-		<day>Friday</day>
-	</cost>
-	<cost>
-		<time>1430736195440</time>
-		<company>United Delivery</company>
-		<to>London</to>
-		<from>Rome</from>
-		<type>Sea</type>
-		<weightcost>6.0</weightcost>
-		<volumecost>6.0</volumecost>
-		<maxWeight>900</maxWeight>
-		<maxVolume>150</maxVolume>
-		<duration>48</duration>
-		<frequency>24</frequency>
-		<day>Tuesday</day>
-	</cost>
-	<cost>
-		<time>1430736084560</time>
-		<company>United Delivery</company>
-		<to>Rome</to>
-		<from>London</from>
-		<type>Sea</type>
-		<weightcost>6.0</weightcost>
-		<volumecost>6.0</volumecost>
-		<maxWeight>900</maxWeight>
-		<maxVolume>150</maxVolume>
-		<duration>48</duration>
-		<frequency>24</frequency>
-		<day>Friday</day>
-	</cost>
-	<cost>
-		<time>1430734838187</time>
-		<company>Asian Airways</company>
-		<to>Hong Kong</to>
-		<from>Los Angeles</from>
-		<type>Air</type>
-		<weightcost>8.0</weightcost>
-		<volumecost>8.0</volumecost>
-		<maxWeight>380</maxWeight>
-		<maxVolume>55</maxVolume>
-		<duration>15</duration>
-		<frequency>5</frequency>
-		<day>Monday</day>
-	</cost>
-	<cost>
-		<time>1430731378966</time>
-		<company>Pacific Freight</company>
-		<to>Sydney</to>
-		<from>Auckland</from>
-		<type>Sea</type>
-		<weightcost>6.0</weightcost>
-		<volumecost>5.0</volumecost>
-		<maxWeight>1500</maxWeight>
-		<maxVolume>700</maxVolume>
-		<duration>72</duration>
-		<frequency>24</frequency>
-		<day>Monday</day>
-	</cost>
-	<cost>
-		<time>1430731982807</time>
-		<company>Air New Zealand</company>
-		<to>Auckland</to>
-		<from>Sydney</from>
-		<type>Air</type>
-		<weightcost>9.0</weightcost>
-		<volumecost>8.0</volumecost>
-		<maxWeight>350</maxWeight>
-		<maxVolume>50</maxVolume>
-		<duration>3</duration>
-		<frequency>5</frequency>
-		<day>Monday</day>
-	</cost>
-	<cost>
-		<time>1430737644017</time>
-		<company>Ocean Delivery</company>
-		<to>Cape Town</to>
-		<from>Brazil</from>
-		<type>Sea</type>
-		<weightcost>5.0</weightcost>
-		<volumecost>6.0</volumecost>
-		<maxWeight>1800</maxWeight>
-		<maxVolume>600</maxVolume>
-		<duration>302</duration>
-		<frequency>144</frequency>
-		<day>Wednesday</day>
-	</cost>
-	<cost>
-		<time>1430733010019</time>
-		<company>Aussie Air</company>
-		<to>Cape Town</to>
-		<from>Sydney</from>
-		<type>Air</type>
-		<weightcost>9.0</weightcost>
-		<volumecost>9.0</volumecost>
-		<maxWeight>450</maxWeight>
-		<maxVolume>60</maxVolume>
-		<duration>14</duration>
-		<frequency>12</frequency>
-		<day>Friday</day>
-	</cost>
-	<cost>
-		<time>1430737483743</time>
-		<company>Air Bus</company>
-		<to>London</to>
-		<from>Brazil</from>
-		<type>Air</type>
-		<weightcost>9.0</weightcost>
-		<volumecost>8.0</volumecost>
-		<maxWeight>500</maxWeight>
-		<maxVolume>50</maxVolume>
-		<duration>11</duration>
-		<frequency>3</frequency>
-		<day>Tuesday</day>
-	</cost>
-	<cost>
-		<time>1430733754031</time>
-		<company>Freedom Freight</company>
-		<to>Toronto</to>
-		<from>Los Angeles</from>
-		<type>Land</type>
-		<weightcost>6.0</weightcost>
-		<volumecost>5.0</volumecost>
-		<maxWeight>1200</maxWeight>
-		<maxVolume>200</maxVolume>
-		<duration>44</duration>
-		<frequency>15</frequency>
-		<day>Monday</day>
-	</cost>
-	<cost>
-		<time>1430735711338</time>
-		<company>Asian Airways</company>
-		<to>Tokyo</to>
-		<from>Toronto</from>
-		<type>Air</type>
-		<weightcost>8.0</weightcost>
-		<volumecost>8.0</volumecost>
-		<maxWeight>380</maxWeight>
-		<maxVolume>55</maxVolume>
-		<duration>13</duration>
-		<frequency>5</frequency>
-		<day>Friday</day>
-	</cost>
-	<cost>
-		<time>1430736007380</time>
-		<company>Asian Airways</company>
-		<to>Hong Kong</to>
-		<from>Rome</from>
-		<type>Air</type>
-		<weightcost>8.0</weightcost>
-		<volumecost>8.0</volumecost>
-		<maxWeight>380</maxWeight>
-		<maxVolume>55</maxVolume>
-		<duration>20</duration>
-		<frequency>13</frequency>
-		<day>Monday</day>
-	</cost>
-	<cost>
-		<time>1430731738759</time>
-		<company>Pacific Freight</company>
-		<to>Wellington</to>
-		<from>Samoa</from>
-		<type>Sea</type>
-		<weightcost>6.0</weightcost>
-		<volumecost>5.0</volumecost>
-		<maxWeight>1500</maxWeight>
-		<maxVolume>700</maxVolume>
-		<duration>110</duration>
-		<frequency>24</frequency>
-		<day>Thursday</day>
 	</cost>
 	<cost>
 		<time>1430734747033</time>
@@ -560,6 +280,146 @@
 		<day>Thursday</day>
 	</cost>
 	<cost>
+		<time>1430735074360</time>
+		<company>Air Bus</company>
+		<to>London</to>
+		<from>Los Angeles</from>
+		<type>Air</type>
+		<weightcost>9.0</weightcost>
+		<volumecost>8.0</volumecost>
+		<maxWeight>500</maxWeight>
+		<maxVolume>50</maxVolume>
+		<duration>11</duration>
+		<frequency>3</frequency>
+		<day>Wednesday</day>
+	</cost>
+	<cost>
+		<time>1430735410822</time>
+		<company>Asian Airways</company>
+		<to>Tokyo</to>
+		<from>Hong Kong</from>
+		<type>Air</type>
+		<weightcost>8.0</weightcost>
+		<volumecost>8.0</volumecost>
+		<maxWeight>380</maxWeight>
+		<maxVolume>55</maxVolume>
+		<duration>4</duration>
+		<frequency>1</frequency>
+		<day>Monday</day>
+	</cost>
+	<cost>
+		<time>1430732505865</time>
+		<company>Pacific Freight</company>
+		<to>Samoa</to>
+		<from>Sydney</from>
+		<type>Sea</type>
+		<weightcost>6.0</weightcost>
+		<volumecost>5.0</volumecost>
+		<maxWeight>1500</maxWeight>
+		<maxVolume>700</maxVolume>
+		<duration>145</duration>
+		<frequency>36</frequency>
+		<day>Monday</day>
+	</cost>
+	<cost>
+		<time>1430736084560</time>
+		<company>United Delivery</company>
+		<to>Rome</to>
+		<from>London</from>
+		<type>Sea</type>
+		<weightcost>6.0</weightcost>
+		<volumecost>6.0</volumecost>
+		<maxWeight>900</maxWeight>
+		<maxVolume>150</maxVolume>
+		<duration>48</duration>
+		<frequency>24</frequency>
+		<day>Friday</day>
+	</cost>
+	<cost>
+		<time>1430731505640</time>
+		<company>Pacific Freight</company>
+		<to>Auckland</to>
+		<from>Sydney</from>
+		<type>Sea</type>
+		<weightcost>6.0</weightcost>
+		<volumecost>5.0</volumecost>
+		<maxWeight>1500</maxWeight>
+		<maxVolume>700</maxVolume>
+		<duration>72</duration>
+		<frequency>24</frequency>
+		<day>Wednesday</day>
+	</cost>
+	<cost>
+		<time>1430731378966</time>
+		<company>Pacific Freight</company>
+		<to>Sydney</to>
+		<from>Auckland</from>
+		<type>Sea</type>
+		<weightcost>6.0</weightcost>
+		<volumecost>5.0</volumecost>
+		<maxWeight>1500</maxWeight>
+		<maxVolume>700</maxVolume>
+		<duration>72</duration>
+		<frequency>24</frequency>
+		<day>Monday</day>
+	</cost>
+	<cost>
+		<time>1430737554525</time>
+		<company>Ocean Delivery</company>
+		<to>Brazil</to>
+		<from>Cape Town</from>
+		<type>Sea</type>
+		<weightcost>5.0</weightcost>
+		<volumecost>6.0</volumecost>
+		<maxWeight>1800</maxWeight>
+		<maxVolume>600</maxVolume>
+		<duration>302</duration>
+		<frequency>144</frequency>
+		<day>Monday</day>
+	</cost>
+	<cost>
+		<time>1430732718171</time>
+		<company>Aussie Air</company>
+		<to>Samoa</to>
+		<from>Sydney</from>
+		<type>Air</type>
+		<weightcost>9.0</weightcost>
+		<volumecost>9.0</volumecost>
+		<maxWeight>450</maxWeight>
+		<maxVolume>60</maxVolume>
+		<duration>6</duration>
+		<frequency>10</frequency>
+		<day>Thursday</day>
+	</cost>
+	<cost>
+		<time>1430737251649</time>
+		<company>Air Bus</company>
+		<to>London</to>
+		<from>Cape Town</from>
+		<type>Air</type>
+		<weightcost>9.0</weightcost>
+		<volumecost>8.0</volumecost>
+		<maxWeight>500</maxWeight>
+		<maxVolume>50</maxVolume>
+		<duration>12</duration>
+		<frequency>8</frequency>
+		<day>Thursday</day>
+	</cost>
+	<cost>
+		<time>1430736743702</time>
+		<company>United Delivery</company>
+		<to>London</to>
+		<from>Brazil</from>
+		<type>Sea</type>
+		<weightcost>6.0</weightcost>
+		<volumecost>6.0</volumecost>
+		<maxWeight>900</maxWeight>
+		<maxVolume>150</maxVolume>
+		<duration>313</duration>
+		<frequency>144</frequency>
+		<day>Tuesday</day>
+	</cost>
+	<cost>
 		<time>1430734410959</time>
 		<company>Anchor Shipping</company>
 		<to>Hong Kong</to>
@@ -572,20 +432,6 @@
 		<duration>389</duration>
 		<frequency>72</frequency>
 		<day>Wednesday</day>
-	</cost>
-	<cost>
-		<time>1430731825259</time>
-		<company>Air New Zealand</company>
-		<to>Sydney</to>
-		<from>Auckland</from>
-		<type>Air</type>
-		<weightcost>9.0</weightcost>
-		<volumecost>8.0</volumecost>
-		<maxWeight>350</maxWeight>
-		<maxVolume>50</maxVolume>
-		<duration>3</duration>
-		<frequency>5</frequency>
-		<day>Thursday</day>
 	</cost>
 	<cost>
 		<time>1430733387243</time>
@@ -602,18 +448,32 @@
 		<day>Monday</day>
 	</cost>
 	<cost>
-		<time>1430733865302</time>
-		<company>Freedom Freight</company>
-		<to>Los Angeles</to>
-		<from>Toronto</from>
-		<type>Land</type>
+		<time>1430736195440</time>
+		<company>United Delivery</company>
+		<to>London</to>
+		<from>Rome</from>
+		<type>Sea</type>
 		<weightcost>6.0</weightcost>
-		<volumecost>5.0</volumecost>
-		<maxWeight>1200</maxWeight>
-		<maxVolume>200</maxVolume>
-		<duration>44</duration>
-		<frequency>15</frequency>
-		<day>Thursday</day>
+		<volumecost>6.0</volumecost>
+		<maxWeight>900</maxWeight>
+		<maxVolume>150</maxVolume>
+		<duration>48</duration>
+		<frequency>24</frequency>
+		<day>Tuesday</day>
+	</cost>
+	<cost>
+		<time>1430731982807</time>
+		<company>Air New Zealand</company>
+		<to>Auckland</to>
+		<from>Sydney</from>
+		<type>Air</type>
+		<weightcost>9.0</weightcost>
+		<volumecost>8.0</volumecost>
+		<maxWeight>350</maxWeight>
+		<maxVolume>50</maxVolume>
+		<duration>3</duration>
+		<frequency>5</frequency>
+		<day>Monday</day>
 	</cost>
 	<cost>
 		<time>1430736645059</time>
@@ -630,10 +490,38 @@
 		<day>Thursday</day>
 	</cost>
 	<cost>
-		<time>1430735837730</time>
+		<time>1433499591339</time>
+		<company>VUW</company>
+		<to>co242</to>
+		<from>co236</from>
+		<type>Land</type>
+		<weightcost>12.0</weightcost>
+		<volumecost>12.0</volumecost>
+		<maxWeight>2</maxWeight>
+		<maxVolume>2</maxVolume>
+		<duration>2</duration>
+		<frequency>2</frequency>
+		<day>Monday</day>
+	</cost>
+	<cost>
+		<time>1430735557502</time>
 		<company>Asian Airways</company>
-		<to>Rome</to>
-		<from>Hong Kong</from>
+		<to>Toronto</to>
+		<from>Tokyo</from>
+		<type>Air</type>
+		<weightcost>8.0</weightcost>
+		<volumecost>8.0</volumecost>
+		<maxWeight>380</maxWeight>
+		<maxVolume>55</maxVolume>
+		<duration>13</duration>
+		<frequency>5</frequency>
+		<day>Thursday</day>
+	</cost>
+	<cost>
+		<time>1430736007380</time>
+		<company>Asian Airways</company>
+		<to>Hong Kong</to>
+		<from>Rome</from>
 		<type>Air</type>
 		<weightcost>8.0</weightcost>
 		<volumecost>8.0</volumecost>
@@ -641,6 +529,90 @@
 		<maxVolume>55</maxVolume>
 		<duration>20</duration>
 		<frequency>13</frequency>
+		<day>Monday</day>
+	</cost>
+	<cost>
+		<time>1430733617180</time>
+		<company>Aussie Air</company>
+		<to>Sydney</to>
+		<from>Hong Kong</from>
+		<type>Air</type>
+		<weightcost>9.0</weightcost>
+		<volumecost>9.0</volumecost>
+		<maxWeight>450</maxWeight>
+		<maxVolume>60</maxVolume>
+		<duration>10</duration>
+		<frequency>7</frequency>
+		<day>Friday</day>
+	</cost>
+	<cost>
+		<time>1430733527315</time>
+		<company>Aussie Air</company>
+		<to>Hong Kong</to>
+		<from>Sydney</from>
+		<type>Air</type>
+		<weightcost>9.0</weightcost>
+		<volumecost>9.0</volumecost>
+		<maxWeight>450</maxWeight>
+		<maxVolume>60</maxVolume>
+		<duration>10</duration>
+		<frequency>7</frequency>
+		<day>Wednesday</day>
+	</cost>
+	<cost>
+		<time>1430737313341</time>
+		<company>Air Bus</company>
+		<to>Brazil</to>
+		<from>London</from>
+		<type>Air</type>
+		<weightcost>9.0</weightcost>
+		<volumecost>8.0</volumecost>
+		<maxWeight>500</maxWeight>
+		<maxVolume>50</maxVolume>
+		<duration>11</duration>
+		<frequency>3</frequency>
+		<day>Monday</day>
+	</cost>
+	<cost>
+		<time>1430737051202</time>
+		<company>Air Bus</company>
+		<to>London</to>
+		<from>Rome</from>
+		<type>Air</type>
+		<weightcost>9.0</weightcost>
+		<volumecost>8.0</volumecost>
+		<maxWeight>500</maxWeight>
+		<maxVolume>50</maxVolume>
+		<duration>2</duration>
+		<frequency>1</frequency>
+		<day>Monday</day>
+	</cost>
+	<cost>
+		<time>1430737118655</time>
+		<company>Air Bus</company>
+		<to>Cape Town</to>
+		<from>London</from>
+		<type>Air</type>
+		<weightcost>9.0</weightcost>
+		<volumecost>8.0</volumecost>
+		<maxWeight>500</maxWeight>
+		<maxVolume>50</maxVolume>
+		<duration>12</duration>
+		<frequency>8</frequency>
+		<day>Wednesday</day>
+	</cost>
+	<cost>
+		<time>1430732894718</time>
+		<company>Aussie Air</company>
+		<to>Sydney</to>
+		<from>Samoa</from>
+		<type>Air</type>
+		<weightcost>9.0</weightcost>
+		<volumecost>9.0</volumecost>
+		<maxWeight>450</maxWeight>
+		<maxVolume>60</maxVolume>
+		<duration>6</duration>
+		<frequency>10</frequency>
 		<day>Tuesday</day>
 	</cost>
 	<cost>
@@ -658,24 +630,66 @@
 		<day>Thursday</day>
 	</cost>
 	<cost>
-		<time>1430737051202</time>
-		<company>Air Bus</company>
-		<to>London</to>
-		<from>Rome</from>
+		<time>1430732091980</time>
+		<company>Quantas</company>
+		<to>Samoa</to>
+		<from>Wellington</from>
 		<type>Air</type>
-		<weightcost>9.0</weightcost>
-		<volumecost>8.0</volumecost>
-		<maxWeight>500</maxWeight>
-		<maxVolume>50</maxVolume>
-		<duration>2</duration>
-		<frequency>1</frequency>
-		<day>Monday</day>
+		<weightcost>8.0</weightcost>
+		<volumecost>9.0</volumecost>
+		<maxWeight>365</maxWeight>
+		<maxVolume>45</maxVolume>
+		<duration>4</duration>
+		<frequency>7</frequency>
+		<day>Wednesday</day>
 	</cost>
 	<cost>
-		<time>1430736498795</time>
-		<company>United Delivery</company>
+		<time>1430732155785</time>
+		<company>Quantas</company>
+		<to>Wellington</to>
+		<from>Samoa</from>
+		<type>Air</type>
+		<weightcost>8.0</weightcost>
+		<volumecost>9.0</volumecost>
+		<maxWeight>365</maxWeight>
+		<maxVolume>45</maxVolume>
+		<duration>4</duration>
+		<frequency>7</frequency>
+		<day>Friday</day>
+	</cost>
+	<cost>
+		<time>1430733257087</time>
+		<company>Aussie Air</company>
 		<to>London</to>
-		<from>Cape Town</from>
+		<from>Sydney</from>
+		<type>Air</type>
+		<weightcost>9.0</weightcost>
+		<volumecost>9.0</volumecost>
+		<maxWeight>450</maxWeight>
+		<maxVolume>60</maxVolume>
+		<duration>22</duration>
+		<frequency>24</frequency>
+		<day>Tuesday</day>
+	</cost>
+	<cost>
+		<time>1430735326441</time>
+		<company>Asian Airways</company>
+		<to>Hong Kong</to>
+		<from>Tokyo</from>
+		<type>Air</type>
+		<weightcost>8.0</weightcost>
+		<volumecost>8.0</volumecost>
+		<maxWeight>380</maxWeight>
+		<maxVolume>55</maxVolume>
+		<duration>4</duration>
+		<frequency>1</frequency>
+		<day>Wednesday</day>
+	</cost>
+	<cost>
+		<time>1430736327075</time>
+		<company>United Delivery</company>
+		<to>Cape Town</to>
+		<from>London</from>
 		<type>Sea</type>
 		<weightcost>6.0</weightcost>
 		<volumecost>6.0</volumecost>
@@ -683,83 +697,13 @@
 		<maxVolume>150</maxVolume>
 		<duration>321</duration>
 		<frequency>144</frequency>
-		<day>Wednesday</day>
-	</cost>
-	<cost>
-		<time>1430735557502</time>
-		<company>Asian Airways</company>
-		<to>Toronto</to>
-		<from>Tokyo</from>
-		<type>Air</type>
-		<weightcost>8.0</weightcost>
-		<volumecost>8.0</volumecost>
-		<maxWeight>380</maxWeight>
-		<maxVolume>55</maxVolume>
-		<duration>13</duration>
-		<frequency>5</frequency>
-		<day>Thursday</day>
-	</cost>
-	<cost>
-		<time>1430737118655</time>
-		<company>Air Bus</company>
-		<to>Cape Town</to>
-		<from>London</from>
-		<type>Air</type>
-		<weightcost>9.0</weightcost>
-		<volumecost>8.0</volumecost>
-		<maxWeight>500</maxWeight>
-		<maxVolume>50</maxVolume>
-		<duration>12</duration>
-		<frequency>8</frequency>
-		<day>Wednesday</day>
-	</cost>
-	<cost>
-		<time>1430734245842</time>
-		<company>Anchor Shipping</company>
-		<to>Tokyo</to>
-		<from>Los Angeles</from>
-		<type>Sea</type>
-		<weightcost>5.0</weightcost>
-		<volumecost>5.0</volumecost>
-		<maxWeight>1200</maxWeight>
-		<maxVolume>500</maxVolume>
-		<duration>294</duration>
-		<frequency>48</frequency>
 		<day>Monday</day>
 	</cost>
 	<cost>
-		<time>1430733171263</time>
-		<company>Aussie Air</company>
-		<to>Sydney</to>
-		<from>Cape Town</from>
-		<type>Air</type>
-		<weightcost>9.0</weightcost>
-		<volumecost>9.0</volumecost>
-		<maxWeight>450</maxWeight>
-		<maxVolume>60</maxVolume>
-		<duration>14</duration>
-		<frequency>12</frequency>
-		<day>Wednesday</day>
-	</cost>
-	<cost>
-		<time>1430731505640</time>
-		<company>Pacific Freight</company>
-		<to>Auckland</to>
-		<from>Sydney</from>
-		<type>Sea</type>
-		<weightcost>6.0</weightcost>
-		<volumecost>5.0</volumecost>
-		<maxWeight>1500</maxWeight>
-		<maxVolume>700</maxVolume>
-		<duration>72</duration>
-		<frequency>24</frequency>
-		<day>Wednesday</day>
-	</cost>
-	<cost>
-		<time>1430737554525</time>
+		<time>1430737644017</time>
 		<company>Ocean Delivery</company>
-		<to>Brazil</to>
-		<from>Cape Town</from>
+		<to>Cape Town</to>
+		<from>Brazil</from>
 		<type>Sea</type>
 		<weightcost>5.0</weightcost>
 		<volumecost>6.0</volumecost>
@@ -767,6 +711,62 @@
 		<maxVolume>600</maxVolume>
 		<duration>302</duration>
 		<frequency>144</frequency>
-		<day>Monday</day>
+		<day>Wednesday</day>
+	</cost>
+	<cost>
+		<time>1430733952032</time>
+		<company>Anchor Shipping</company>
+		<to>Toronto</to>
+		<from>Los Angeles</from>
+		<type>Sea</type>
+		<weightcost>5.0</weightcost>
+		<volumecost>5.0</volumecost>
+		<maxWeight>1200</maxWeight>
+		<maxVolume>500</maxVolume>
+		<duration>117</duration>
+		<frequency>18</frequency>
+		<day>Tuesday</day>
+	</cost>
+	<cost>
+		<time>1430735837730</time>
+		<company>Asian Airways</company>
+		<to>Rome</to>
+		<from>Hong Kong</from>
+		<type>Air</type>
+		<weightcost>8.0</weightcost>
+		<volumecost>8.0</volumecost>
+		<maxWeight>380</maxWeight>
+		<maxVolume>55</maxVolume>
+		<duration>20</duration>
+		<frequency>13</frequency>
+		<day>Tuesday</day>
+	</cost>
+	<cost>
+		<time>1430731738759</time>
+		<company>Pacific Freight</company>
+		<to>Wellington</to>
+		<from>Samoa</from>
+		<type>Sea</type>
+		<weightcost>6.0</weightcost>
+		<volumecost>5.0</volumecost>
+		<maxWeight>1500</maxWeight>
+		<maxVolume>700</maxVolume>
+		<duration>110</duration>
+		<frequency>24</frequency>
+		<day>Thursday</day>
+	</cost>
+	<cost>
+		<time>1430735711338</time>
+		<company>Asian Airways</company>
+		<to>Tokyo</to>
+		<from>Toronto</from>
+		<type>Air</type>
+		<weightcost>8.0</weightcost>
+		<volumecost>8.0</volumecost>
+		<maxWeight>380</maxWeight>
+		<maxVolume>55</maxVolume>
+		<duration>13</duration>
+		<frequency>5</frequency>
+		<day>Friday</day>
 	</cost>
 </graph>
