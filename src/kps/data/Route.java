@@ -54,6 +54,13 @@ public class Route {
 		return transport.getMaxVolume();
 	}
 
+	public double getWeightPrice(){
+		return transport.getGramPrice();
+	}
+	
+	public double getVolumePrice(){
+		return transport.getVolumePrice();
+	}
 
 	/**
 	 * returns the source of the route

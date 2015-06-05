@@ -170,7 +170,8 @@ public class KPSWindow extends JFrame {
 				system.addTransportDiscontinuedEvent(route);
 				graphPanel.graphUpdated();
 			}
-			@Override public void onCompletedFormUpdate(Route route){
+			@Override
+			public void onRouteUpdate(Route route) {
 				// updated
 			}
 			@Override public void onCancel(){
@@ -179,13 +180,17 @@ public class KPSWindow extends JFrame {
 		}, system.getRouteGraph()));
 
 		priceUpdate.addActionListener((ActionEvent e) -> new PriceUpdateWindow(new PriceUpdateListener(){
-			@Override public void onPriceUpdateSubmitted(String from, String to, Priority priority, double weightCost, double volumeCost){
-				system.addPriceUpdateEvent(from, to, weightCost, volumeCost, priority);
+			@Override public void onPriceUpdateSubmitted(Route route, double weightCost, double volumeCost){
+				// TODO: interface..
+//				system.addPriceUpdateEvent(from, to, weightCost, volumeCost, priority);
+			}
+			@Override public void onRouteUpdate(Route r){
+				// update
 			}
 			@Override public void onCancel(){
 				// cancelled
 			}
-		}, system.getRouteGraph().getNodes()));
+		}, system.getRouteGraph()));
 
 		return sidebar;
 	}

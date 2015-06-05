@@ -3,39 +3,50 @@ package kps.ui.window;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.SpringLayout;
+import javax.swing.JTextField;
 
-import kps.data.Node;
-import kps.enums.Priority;
+import kps.data.Route;
+import kps.data.RouteGraph;
 import kps.ui.formlistener.PriceUpdateListener;
 import kps.ui.util.SpringUtilities;
 import kps.ui.util.UIUtils;
 
-public class PriceUpdateWindow extends AbstractFormWindow {
+public class PriceUpdateWindow extends AbstractRouteChooserWindow {
 
-	private String[] fieldNames = new String[] { "from", "to", "priority", "weight cost", "volume cost" };
+	private final String OLD_WEIGHT_COST = "old weight cost";
+	private final String OLD_VOL_COST = "old volume cost";
+	private final String NEW_WEIGHT_COST = "new weight cost";
+	private final String NEW_VOL_COST = "new volume cost";
+	private final String[] fieldNames = new String[] { FROM , TO, ROUTES, OLD_WEIGHT_COST , OLD_VOL_COST, NEW_WEIGHT_COST, NEW_VOL_COST };
+	
+	/**
+	 * displays the current weight cost of the currently selected route
+	 */
+	private JTextField oldWeightCostField;
+	/**
+	 * displays the current volume cost of the currently selected route
+	 */
+	private JTextField oldVolCostField;
 
-	public PriceUpdateWindow(PriceUpdateListener listener, List<Node> locations){
+	public PriceUpdateWindow(PriceUpdateListener listener, RouteGraph routeGraph){
 
-		super("Update route price");
-		setLayout(new BorderLayout());
-
-		// add fields
-		JPanel inputPanel = new JPanel();
-		inputPanel.setLayout(new SpringLayout());
-
-		makeComboBox(fieldNames[0], locations.toArray(), inputPanel);
-		makeComboBox(fieldNames[1], locations.toArray(), inputPanel);
-		makeComboBox(fieldNames[2], Priority.values(), inputPanel);
-		makeTextField(fieldNames[3], inputPanel);
-		makeTextField(fieldNames[4], inputPanel);
+		super("Update route price", routeGraph, listener);
 
 		int fieldCount = fieldNames.length;
 
+		// fields for the old (or current) prices
+		oldWeightCostField = makeTextField(OLD_WEIGHT_COST, inputPanel);
+		oldVolCostField = makeTextField(OLD_VOL_COST, inputPanel);
+        oldWeightCostField.setEditable(false);
+        oldVolCostField.setEditable(false);
+		
+		// fields for new price input
+		makeTextField(NEW_WEIGHT_COST, inputPanel);
+		makeTextField(NEW_VOL_COST, inputPanel);
+		
 		SpringUtilities.makeCompactGrid(inputPanel,
 				fieldCount, 2,	//rows, cols
                 6, 6,	//initX, initY
@@ -60,20 +71,18 @@ public class PriceUpdateWindow extends AbstractFormWindow {
 				return;
 			}
 			// check digit fields
-			String weightStr = (String)fields.get("weight cost");
-			String volStr = (String)fields.get("volume cost");
+			String weightStr = (String)fields.get(NEW_WEIGHT_COST);
+			String volStr = (String)fields.get(NEW_VOL_COST);
 			if (!UIUtils.isInteger(weightStr, volStr)){
-				numberFieldsPrompt("weight and volume should only contain digits");
+				numberFieldsPrompt("weight and volume costs should only contain digits");
 				return;
 			}
 
-			String from = (String) fields.get("from").toString();
-			String to = (String) fields.get("to").toString();
+			Route route = (Route) fields.get(ROUTES);
 			int weightCost = Integer.parseInt(weightStr);
 			int volumeCost = Integer.parseInt(volStr);
-			Priority priority = (Priority) fields.get("priority");
 
-			listener.onPriceUpdateSubmitted(from, to, priority, weightCost, volumeCost);
+			listener.onPriceUpdateSubmitted(route, weightCost, volumeCost);
 			UIUtils.closeWindow(this);
 		});
 
@@ -83,14 +92,26 @@ public class PriceUpdateWindow extends AbstractFormWindow {
 		});
 
 		// open window
-		pack();
 		setVisible(true);
 	}
 
 	@Override
+	protected void populateRouteCombo(){
+		super.populateRouteCombo();
+		// update the old cost fields
+		Route route = ((Route)fields.get(ROUTES));
+		double weightPrice = route.getWeightPrice();
+		double volPrice = route.getVolumePrice();
+
+		oldWeightCostField.setText(weightPrice + "");
+		oldVolCostField.setText(volPrice + "");
+	}
+	
+	@Override
 	protected boolean isFormComplete() {
-		for (Object value : fields.values()){
-			if (value == null)
+		for (String fieldName : fieldNames){
+			Object val = fields.get(fieldName);
+			if (val == null)
 				return false;
 		}
 		return true;
