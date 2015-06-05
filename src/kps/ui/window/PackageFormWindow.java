@@ -37,7 +37,7 @@ public class PackageFormWindow extends AbstractFormWindow {
 
 	private PackageFormListener listener;
 
-	private String[] fieldNames = new String[] { "day", "to", "from", "priority", "weight", "volume" };
+	private String[] fieldNames = new String[] { "day", "from", "to", "priority", "weight", "volume" };
 
 	public PackageFormWindow(PackageFormListener packageFormListener, List<Node> locations){
 		super("Enter package details");
@@ -98,8 +98,9 @@ public class PackageFormWindow extends AbstractFormWindow {
 			String message = packageFormListener.onPackageFormSubmitted(day, from, to, weight, volume, priority);
 			if (message == null){
                 UIUtils.closeWindow(this);
-			} else {
 				JOptionPane.showMessageDialog(this, "Package submitted successfully");
+			} else {
+				JOptionPane.showMessageDialog(this, message);
 			}
 		});
 

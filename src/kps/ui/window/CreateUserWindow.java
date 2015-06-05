@@ -70,7 +70,7 @@ public class CreateUserWindow extends AbstractFormWindow {
 		// event handling
 		OK.addActionListener((ActionEvent e) -> {
 			String username = (String)fields.get(USERNAME);
-			int passwordHash = ((String)fields.get(PASSWORD)).hashCode();
+			int passwordHash = ((String)new String((char[])fields.get(PASSWORD))).hashCode();
 			Position position = (Position) fields.get(POSITION);
 
 			boolean result = listener.onUserSubmitted(new CreateUserEvent(username, passwordHash, position));

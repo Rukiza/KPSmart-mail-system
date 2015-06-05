@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import kps.Main;
+import kps.Setup;
 import kps.data.wrappers.BasicRoute;
 import kps.enums.Day;
 import kps.enums.Priority;
@@ -25,7 +25,7 @@ public class RouteGraphTests {
 
 	public RouteGraph readGraphFromXML(){
 		try {
-			events = KPSParser.parseFile(Main.XML_FILE_PATH+"graph.xml");
+			events = KPSParser.parseFile(Setup.XML_FILE_PATH+"graph.xml");
 		} catch (ParserException e) {
 			e.printStackTrace();
 		}

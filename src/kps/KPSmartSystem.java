@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import kps.Main;
+import kps.Setup;
 import kps.data.CustomerRoute;
 import kps.data.DijkstraSearch;
 import kps.data.Mail;
@@ -71,7 +71,7 @@ public class KPSmartSystem {
 
 	private Metrics metrics;
 
-	private final String EVENT_LOG_FILENAME = Main.XML_FILE_PATH+"kps_data.xml";
+	private final String EVENT_LOG_FILENAME = Setup.XML_FILE_PATH+"kps_data.xml";
 
 	/**
 	 * Constructs an empty instance of KPSmartSystem
@@ -647,7 +647,7 @@ public class KPSmartSystem {
 	public void convertUsersMapToXML(){
 		PrintWriter writer;
 		try{
-			writer = new PrintWriter(Main.XML_FILE_PATH+"users.xml", "UTF-8");
+			writer = new PrintWriter(Setup.XML_FILE_PATH+"users.xml", "UTF-8");
 			writer.write("<"+KPSParser.USERS_FILE_TAG+">\n");
 			for(KPSUser user : users.values()){
 				writer.write(user.toXML());

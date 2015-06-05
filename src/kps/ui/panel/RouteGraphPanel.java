@@ -18,7 +18,7 @@ import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import kps.Main;
+import kps.Setup;
 import kps.data.DijkstraSearch;
 import kps.data.Mail;
 import kps.data.Node;
@@ -342,7 +342,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 		List<BusinessEvent> events = new ArrayList<BusinessEvent>();
 
 		try {
-			events = KPSParser.parseFile(Main.XML_FILE_PATH+"new_dataset.xml");
+			events = KPSParser.parseFile(Setup.XML_FILE_PATH+"new_dataset.xml");
 		} catch (ParserException e) {
 			e.printStackTrace();
 		}

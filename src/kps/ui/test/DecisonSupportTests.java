@@ -4,7 +4,7 @@ import javax.swing.JFrame;
 
 import static org.junit.Assert.*;
 
-import kps.Main;
+import kps.Setup;
 import kps.data.wrappers.EventLog;
 import kps.parser.KPSParser;
 import kps.parser.ParserException;
@@ -26,7 +26,7 @@ public class DecisonSupportTests {
 	public void basicTestWithData(){
 		JFrame frame = new JFrame();
 		try {
-			frame.add(new DecisionSupportPanel(new EventLog(KPSParser.parseFile(Main.XML_FILE_PATH+"kps2.xml"))));
+			frame.add(new DecisionSupportPanel(new EventLog(KPSParser.parseFile(Setup.XML_FILE_PATH+"kps2.xml"))));
 			System.out.println("File loaded");
 		} catch (ParserException e) {
 			fail("File Failed to load");

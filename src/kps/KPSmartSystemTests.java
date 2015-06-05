@@ -448,7 +448,7 @@ public class KPSmartSystemTests {
 
 	private KPSmartSystem constructSystemWithRoutes(){
 		try{
-			EventLog log = new EventLog(KPSParser.parseFile(Main.XML_FILE_PATH+"kps_testdata.xml"));
+			EventLog log = new EventLog(KPSParser.parseFile(Setup.XML_FILE_PATH+"kps_testdata.xml"));
 			return new KPSmartSystem(log);
 		}catch(ParserException e){}
 		return null;
@@ -528,7 +528,7 @@ public class KPSmartSystemTests {
 	public void testTimeTaken(){
 		EventLog log = null;
 		try {
-			log = new EventLog(KPSParser.parseFile(Main.XML_FILE_PATH+"kps_testdata.xml"));
+			log = new EventLog(KPSParser.parseFile(Setup.XML_FILE_PATH+"kps_testdata.xml"));
 		} catch (ParserException e) {
 			System.out.println("oh no");
 			e.printStackTrace();

@@ -1,6 +1,6 @@
 package kps.data.wrappers.tests;
 
-import kps.Main;
+import kps.Setup;
 import kps.data.wrappers.EventLog;
 import kps.events.BusinessEvent;
 import kps.events.MailDeliveryEvent;
@@ -19,7 +19,7 @@ public class EventLogTests {
 	private EventLog setup(){
 		EventLog log = null;
 		try {
-			log = new EventLog(KPSParser.parseFile(Main.EVENT_LOG));
+			log = new EventLog(KPSParser.parseFile(Setup.EVENT_LOG));
 		} catch (ParserException e) {
 			e.printStackTrace();
 		}

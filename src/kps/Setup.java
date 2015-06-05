@@ -14,19 +14,27 @@ import kps.ui.window.KPSWindow;
 import kps.ui.window.LogonBox;
 import kps.users.KPSUser;
 
-public class Main {
+public class Setup {
 
 	public static final String XML_FILE_PATH = "xml"+File.separator;
 	public static final String EVENT_LOG = XML_FILE_PATH + "eventlog.xml";
 	public static final String USERS = XML_FILE_PATH + "users.xml";
 
 	public static void main(String[] args){
+		setup();
+	}
+
+	public static void setup(){
 		try{
 			List<BusinessEvent> bizEvents = KPSParser.parseFile(EVENT_LOG);
             EventLog eventLog = new EventLog(bizEvents);
             RouteGraph graph = KPSParser.parseGraph(XML_FILE_PATH+"eventlog-graph.xml");
             Map<String, KPSUser> users = KPSParser.parseKPSUsers(USERS);
             KPSmartSystem system = new KPSmartSystem(eventLog, graph, users);
+            login(system);
+		}catch(ParserException e){ e.printStackTrace(); }
+	}
+	public static void login(KPSmartSystem system){
 			new LogonBox(new AuthDetailsListener(){
 
 				@Override
@@ -47,9 +55,6 @@ public class Main {
 				}
 
 			},"admin", "admin");
-
-
-		}catch(ParserException e){ e.printStackTrace(); }
 	}
 }
 

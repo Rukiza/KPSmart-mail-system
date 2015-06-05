@@ -6,6 +6,8 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -18,14 +20,21 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
 import kps.KPSmartSystem;
+import kps.Setup;
 import kps.data.DijkstraSearch;
 import kps.data.Mail;
 import kps.data.Route;
+import kps.data.RouteGraph;
 import kps.data.wrappers.BasicRoute;
+import kps.data.wrappers.EventLog;
 import kps.enums.Day;
 import kps.enums.Position;
 import kps.enums.Priority;
 import kps.enums.TransportType;
+import kps.events.BusinessEvent;
+import kps.parser.KPSParser;
+import kps.parser.ParserException;
+import kps.ui.formlistener.AuthDetailsListener;
 import kps.ui.formlistener.CreateUserEvent;
 import kps.ui.formlistener.CreateUserListener;
 import kps.ui.formlistener.DeleteRouteListener;
@@ -94,9 +103,12 @@ public class KPSWindow extends JFrame {
 		JLabel username = new JLabel("Current user: " + user.getUsername());
 		userbar.add(username, BorderLayout.CENTER);
 
+
 		JPanel buttons = new JPanel();
 		JButton createUser = new JButton("Create user");
 		JButton deleteUser = new JButton("Delete user");
+		JButton logout = new JButton("Log out");
+		buttons.add(logout);
 		buttons.add(createUser);
 		buttons.add(deleteUser);
 		userbar.add(buttons, BorderLayout.EAST);
@@ -149,6 +161,12 @@ public class KPSWindow extends JFrame {
 					// cancel
 				}
 			});
+		});
+
+		logout.addActionListener((ActionEvent e) -> {
+			system.logout();
+			this.dispose();
+			Setup.login(system);
 		});
 
 		return userbar;
