@@ -18,6 +18,7 @@ public class Metrics{
     private List<String> origins;
     private List<String> destinations;
     Map<BasicRoute, MailDelivered> mailDelivered;
+    Map<BasicRoute, AverageTime> averageTimes;
 
     // business event counters
     private int totalMailDeliveryEvents;
@@ -225,6 +226,28 @@ public class Metrics{
     }
 
     /**
+     * Returns the average delivery time for sending mail from the specified origin
+     * and destination for the specified priority. If there is no route between the
+     * origin and destination then a value of zero is returned.
+     *
+     * @param origin
+     * 		-- origin of mail
+     * @param destination
+     * 		-- destination of mail
+     * @param priority
+     * 		-- priority of mail
+     *
+     * @return average time for sending mail
+     */
+    public double getAverageDeliveryTime(String origin, String destination, Priority priority){
+    	BasicRoute route = new BasicRoute(origin, destination);
+    	if(averageTimes.containsKey(route)){
+    		return averageTimes.get(route).getAverageTime(priority);
+    	}
+    	return 0;
+    }
+
+    /**
      * Adds
      * @param revenue
      * @param expenditure
@@ -311,5 +334,62 @@ public class Metrics{
      */
     public int getTotalBusinessEvents(){
         return totalMailDeliveryEvents + totalPriceUpdateEvents + totalTransportCostUpdateEvents + totalTransportDiscontinuedEvents;
+    }
+
+    /**
+     * Private class that is a wrapper for a map of priorities to list of times.
+     * Used to calculate the average time for a mail delivery depending on the
+     * priority.
+     *
+     * @author David Sheridan
+     *
+     */
+    private class AverageTime{
+
+    	//field
+    	private Map<Priority, List<Integer>> times;
+
+    	/**
+    	 * Constructs an empty AverageTime Object.
+    	 */
+    	public AverageTime(){
+    		times = new HashMap<Priority, List<Integer>>();
+    	}
+
+    	/**
+    	 * Returns the average time for mail delivery for the
+    	 * specified priority.
+    	 *
+    	 * @param priority
+    	 * 		-- priority to get average time for
+    	 *
+    	 * @return the average time for mail delivery
+    	 */
+    	public double getAverageTime(Priority priority){
+    		if(times.containsKey(priority)){
+    			double total = 0;
+    			for(int time : times.get(priority)){
+    				total += time;
+    			}
+    			return total / times.get(priority).size();
+    		}
+    		return 0;
+    	}
+
+    	/**
+    	 * Adds the specified time to the list of times specified
+    	 * by the priority.
+    	 *
+    	 * @param time
+    	 * 		-- time of mail delivery
+    	 * @param priority
+    	 * 		-- priority of mail delivery
+    	 */
+    	public void addTime(int time, Priority priority){
+    		if(!times.containsKey(priority)){
+    			times.put(priority, new ArrayList<Integer>());
+    		}
+    		times.get(priority).add(time);
+    	}
     }
 }

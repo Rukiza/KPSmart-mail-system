@@ -1,6 +1,5 @@
 package kps.ui.panel;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -15,7 +14,6 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
@@ -28,7 +26,6 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-import kps.data.wrappers.BasicRoute;
 import kps.data.wrappers.Metrics;
 import kps.ui.util.SpringUtilities;
 
@@ -38,13 +35,13 @@ public class MetricsPanel extends JPanel implements ActionListener{
 
     // field
     private Metrics metrics;
+    private boolean isInitialised = false; // to prevent repainting of non-initialised components
 
     // components
     private GraphPanel graph;
     private ProfitPanel profit;
     private BusinessEventPanel events;
     private CustomerRoutePanel routes;
-    private boolean isInitialised = false;
 
     /**
      * Constructs a new MetricsPanel Object with the specified metrics.
@@ -146,28 +143,60 @@ public class MetricsPanel extends JPanel implements ActionListener{
     	}
     }
 
+    /**
+     * Private abstract class for all of the sub components of MetricsPanel.
+     * Contains the width and height for the sub component.
+     *
+     * @author David Sheridan
+     *
+     */
     private abstract class MetricComponent extends JPanel{
 
         private static final long serialVersionUID = 1L;
 
+        // fields
         private int width;
         private int height;
 
+        /**
+         * Constructs a new MetricComponent Object with the specified
+         * width and height.
+         *
+         * @param width
+         * 		-- width of component
+         * @param height
+         * 		-- height of component
+         */
         public MetricComponent(int width, int height){
             super();
             setPreferredSize(width, height);
         }
 
+        /**
+         * Sets the preferred size of this component to the specified
+         * width and height.
+         *
+         * @param width
+         * 		-- preferred width
+         * @param height
+         * 		-- preferred height
+         */
         public void setPreferredSize(int width, int height){
             this.width = width;
             this.height = height;
             super.setPreferredSize(new Dimension(this.width, this.height));
         }
 
+        /**
+         * Returns the width of this component.
+         */
         public int getWidth(){
             return width;
         }
 
+        /**
+         * Returns the height of this component.
+         */
         public int getHeight(){
             return height;
         }
@@ -421,6 +450,13 @@ public class MetricsPanel extends JPanel implements ActionListener{
 
         }
 
+        /**
+         * Private class that is used to display the total weight, volume and amount
+         * of mail sent via the customer route specified by the CustomerRoutePanel.
+         *
+         * @author David Sheridan
+         *
+         */
         private class TotalMailPanel extends JPanel{
 
 			private static final long serialVersionUID = 1L;
@@ -433,6 +469,13 @@ public class MetricsPanel extends JPanel implements ActionListener{
         	private final KPSLabel[] LABELS = {weight, volume, amount};
         	private final NumberFormat NUMBER_FORMAT = NumberFormat.getIntegerInstance();
 
+        	/**
+        	 * Constructs a new TotalMailPanel Object with the specified
+        	 * width.
+        	 *
+        	 * @param width
+        	 * 		-- width of component
+        	 */
         	public TotalMailPanel(int width){
         		super();
         		setPreferredSize(new Dimension(width, 254));
@@ -446,17 +489,38 @@ public class MetricsPanel extends JPanel implements ActionListener{
         		}
         	}
 
+        	/**
+        	 * Set the weight currently displayed by the panel to the
+        	 * specified weight.
+        	 *
+        	 * @param weight
+        	 * 		-- weight to display
+        	 */
         	public void setWeight(int weight){
         		this.weight.setText(NUMBER_FORMAT.format(weight)+" g");
         	}
 
+        	/**
+        	 * Set the volume currently displayed by the panel to the
+        	 * specified volume.
+        	 *
+        	 * @param volume
+        	 * 		-- volume to display
+        	 */
         	public void setVolume(int volume){
         		this.volume.setText(NUMBER_FORMAT.format(volume)+" cm³");
 
         	}
 
+        	/**
+        	 * Set the amount currently displayed by the panel to the
+        	 * specified amount.
+        	 *
+        	 * @param amount
+        	 * 		-- amount to display
+        	 */
         	public void setAmount(int amount){
-        		this.amount.setText(""+amount);
+        		this.amount.setText(NUMBER_FORMAT.format(amount));
         	}
         }
 
@@ -494,12 +558,29 @@ public class MetricsPanel extends JPanel implements ActionListener{
 
     // Layout components
 
+    /**
+     * Private class which determines how the TitledBorders look in the MetricsPanel
+     * and all of its sub components.
+     *
+     * @author David Sheridan
+     *
+     */
     private class TitledKPSBorder extends TitledBorder{
 
 		private static final long serialVersionUID = 1L;
 
+		/**
+		 * Font to display the title
+		 */
 		private final Font FONT = new Font(Font.DIALOG, Font.BOLD, 22);
 
+		/**
+		 * Constructs a new TitledKPSBorder Object which displays
+		 * the specified title.
+		 *
+		 * @param title
+		 * 		-- title to display
+		 */
     	public TitledKPSBorder(String title){
     		super(title);
     		setTitleFont(FONT);
@@ -508,33 +589,75 @@ public class MetricsPanel extends JPanel implements ActionListener{
     	}
     }
 
+    /**
+     * Private class which determines how the JLabels look in the MetricsPanel and
+     * all of its sub components.
+     *
+     * @author David Sheridan
+     *
+     */
     private class KPSLabel extends JLabel{
 
 		private static final long serialVersionUID = 1L;
 
+		/**
+		 * Font to display the JLabel text.
+		 */
 		private final Font FONT = new Font(Font.DIALOG, Font.BOLD, 18);
 
+		/**
+		 * Constructs a new KPSLabel Object which displays the
+		 * specified label.
+		 *
+		 * @param label
+		 * 		-- label to display
+		 */
     	public KPSLabel(String label){
     		super(label);
     		setupKPSLabel();
     	}
 
+    	/**
+    	 * Constructs a new KPSLabel Object with no label
+    	 * to display.
+    	 */
     	public KPSLabel(){
     		super();
     		setupKPSLabel();
     	}
 
+    	/**
+    	 * Private method that sets the font of this KPSLabel
+    	 * to the correct font.
+    	 */
     	private void setupKPSLabel(){
     		setFont(FONT);
     	}
     }
 
+    /**
+     * Private class which determines how JButtons look on the MetricsPanel
+     * and all of its sub components.
+     *
+     * @author David Sheridan
+     *
+     */
     private class KPSButton extends JButton{
 
 		private static final long serialVersionUID = 1L;
 
+		/**
+		 * Font to display the JButton text.
+		 */
 		private final Font FONT = new Font(Font.DIALOG, Font.BOLD, 20);
 
+		/**
+		 * Constructs a new KPSButton Object which displays
+		 * the specified text.
+		 *
+		 * @param text
+		 * 		-- text to display
+		 */
     	public KPSButton(String text){
     		super(text);
     		setFont(FONT);
