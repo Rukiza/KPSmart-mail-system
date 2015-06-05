@@ -659,6 +659,19 @@ public class KPSmartSystem {
 	}
 
 	/**
+	 * Generates an XML file from the route graph.
+	 */
+	public void convertGraphToXML(){
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter(Setup.XML_FILE_PATH+"eventlog-graph.xml", "UTF-8");
+			writer.write(routeGraph.toXML());
+			writer.close();
+		}catch(FileNotFoundException e){e.printStackTrace();}
+		catch(UnsupportedEncodingException e){e.printStackTrace();}
+	}
+
+	/**
 	 * Returns the delivery time of a delivery hour
 	 * */
 	public int  timeToDeliver(List<Node> path, Day day){
