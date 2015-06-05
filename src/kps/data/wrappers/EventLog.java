@@ -224,7 +224,7 @@ public class EventLog {
 			return currentFilter.getPosition();
 		}
 		else {
-			return iterationLocation;
+			return iterationLocation+1;
 		}
 	}
 
@@ -374,7 +374,14 @@ public class EventLog {
 
 		@Override
 		public int getPosition() {
-			return filterPosition;
+			int counter = 0;
+			for ( int i = 0; i < eventLog.size(); i++ ){
+				if (eventLog.get(i) instanceof MailDeliveryEvent){
+					counter++;
+					if (i == filterPosition) break;
+				}
+			}
+			return counter;
 		}
 
 		@Override
@@ -494,7 +501,14 @@ public class EventLog {
 
 		@Override
 		public int getPosition() {
-			return filterPosition;
+			int counter = 0;
+			for ( int i = 0; i < eventLog.size(); i++ ){
+				if (eventLog.get(i) instanceof PriceUpdateEvent){
+					counter++;
+					if (i == filterPosition) break;
+				}
+			}
+			return counter;
 		}
 
 		@Override
@@ -613,7 +627,14 @@ public class EventLog {
 
 		@Override
 		public int getPosition() {
-			return filterPosition;
+			int counter = 0;
+			for ( int i = 0; i < eventLog.size(); i++ ){
+				if (eventLog.get(i) instanceof TransportCostUpdateEvent){
+					counter++;
+					if (i == filterPosition) break;
+				}
+			}
+			return counter;
 		}
 
 		@Override
@@ -732,7 +753,14 @@ public class EventLog {
 
 		@Override
 		public int getPosition() {
-			return filterPosition;
+			int counter = 0;
+			for ( int i = 0; i < eventLog.size(); i++ ){
+				if (eventLog.get(i) instanceof TransportDiscontinuedEvent){
+					counter++;
+					if (i == filterPosition) break;
+				}
+			}
+			return counter;
 		}
 
 		@Override

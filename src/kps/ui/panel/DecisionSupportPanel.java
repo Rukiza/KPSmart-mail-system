@@ -1,5 +1,6 @@
 package kps.ui.panel;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -87,7 +88,7 @@ public class DecisionSupportPanel extends JPanel {
 		graphPanel = new GraphPanel("Temp", manager);
 		displayPanel = new DisplayPanel(manager);
 		selectPanel = new SelectPanel(manager);
-		loadBarPanel = new LoadBarPanel(data);
+		loadBarPanel = new LoadBarPanel(manager);
 
 		// Warning
 		GridBagConstraints con = new GridBagConstraints();
@@ -146,6 +147,7 @@ public class DecisionSupportPanel extends JPanel {
 		private ButtonGroup group;
 		private Map<String, JFreeChart> graphMap = new HashMap<String, JFreeChart>();
 		private Map<String, Dataset> datasetMap = new HashMap<String, Dataset>();
+		private JTextField loading;
 
 		/**
 		 * Sets up the data manager with the event log.
@@ -178,6 +180,11 @@ public class DecisionSupportPanel extends JPanel {
 	            }
 			};
 		}
+		
+		public void setLoadingTextField(JTextField field){
+			loading = field;
+		}
+		
 		/**
 		 * Sets up the event display.
 		 * @param temp - is a list of jtext fields for modification.
@@ -376,6 +383,9 @@ public class DecisionSupportPanel extends JPanel {
 			textFields.get(14).setText("Date: ");
 			textFields.get(15).setText(
 					new Date(event.getTimeLogged()).toString());
+			if (loading != null){
+				loading.setText("Current Postions: "+ data.getFilterPosition()+ "  Out of: "+ data.getFilterSize());
+			}
 		}
 
 		/*Modifys the text fields depending on event type.*/
@@ -615,7 +625,7 @@ public class DecisionSupportPanel extends JPanel {
 				}
 			};
 			field.setEditable(false);
-			field.setFont(new Font("SansSerif", Font.PLAIN, 14));
+			field.setFont(new Font("SansSerif", Font.PLAIN, 12));
 			com.fill = GridBagConstraints.NONE;
 			int temp = counter % 2;
 			com.weightx = counter % 2 == 1 ? 0.5 : 0;
@@ -749,23 +759,19 @@ public class DecisionSupportPanel extends JPanel {
 	 */
 	private class LoadBarPanel extends JPanel{
 		private Dimension sizeb = new Dimension(size.width, size.height / 10);
-		private EventLog log;
+		private  DataManager log;
 
-		public LoadBarPanel(EventLog log){
+		public LoadBarPanel(DataManager log){
 			this.log = log;
 			this.setBorder(new TitledBorder("Loading Bar"));
 			this.setPreferredSize(sizeb);
 			this.setSize(sizeb);
-			//System.out.println((int)(sizeb.width * (log.getPosition()/(log.getSize()+0.0))));
+			this.setLayout(new BorderLayout());
+			JTextField loading = new JTextField();
+			loading.setFont(new Font("SansSerif", Font.PLAIN, 18));
+			loading.setSize(sizeb);
+			manager.setLoadingTextField(loading);
+			this.add(loading, BorderLayout.CENTER);
 		}
-
-		@Override
-		public void print(Graphics g) {
-			// TODO Auto-generated method stub
-			super.print(g);
-			g.setColor(Color.black);
-			g.fillRect(10, 10, (int)(sizeb.width * (log.getPosition()/(log.getSize()+0.0))), sizeb.height);
-		}
-
 	}
 }
