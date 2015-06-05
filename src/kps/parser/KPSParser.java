@@ -197,11 +197,25 @@ public class KPSParser {
 
 		gobble(scan, "<"+GRAPH_FILE_TAG+">");
 		while(scan.hasNext()){
+			// check if there is another transport cost update to parse
 			if(scan.hasNext("<"+TRANSPORT_COST_UPDATE_TAG+">")){
 				Route route = new Route(KPSParser.parseTransportCostUpdateEvent(scan));
+				routeGraph.addRoute(route);
+			}
+			// check if the end of the file has been reached
+			else if(scan.hasNext("</"+GRAPH_FILE_TAG+">")){
+				scan.next();
+				break;
+			}
+			// an invalid tag has been found
+			else{
+				scan.close();
+				throw new ParserException("ParseGraph: Incorrect tag found: "+scan.next());
 			}
 		}
 
+		// file parsing was successful
+		scan.close();
 		return routeGraph;
 	}
 
