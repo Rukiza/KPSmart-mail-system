@@ -27,6 +27,7 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import kps.data.wrappers.Metrics;
+import kps.enums.Priority;
 import kps.ui.util.SpringUtilities;
 
 public class MetricsPanel extends JPanel implements ActionListener{
@@ -445,6 +446,8 @@ public class MetricsPanel extends JPanel implements ActionListener{
         		mail.setWeight(metrics.getTotalMailWeight(origin, destination));
         		mail.setVolume(metrics.getTotalMailVolume(origin, destination));
         		mail.setAmount(metrics.getTotalMailAmount(origin, destination));
+        		times.setAirTime(metrics.getAverageDeliveryTime(origin, destination, Priority.INTERNATIONAL_AIR));
+        		times.setStandardTime(metrics.getAverageDeliveryTime(origin, destination, Priority.INTERNATIONAL_STANDARD));
         		super.repaint();
         	}
 
