@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import kps.data.RouteGraph;
 import kps.data.wrappers.EventLog;
 import kps.events.BusinessEvent;
 import kps.parser.KPSParser;
@@ -23,9 +24,9 @@ public class Main {
 		try{
 			List<BusinessEvent> bizEvents = KPSParser.parseFile(EVENT_LOG);
             EventLog eventLog = new EventLog(bizEvents);
+            RouteGraph graph = KPSParser.parseGraph(XML_FILE_PATH+"eventlog-graph.xml");
             Map<String, KPSUser> users = KPSParser.parseKPSUsers(USERS);
-            KPSmartSystem system = new KPSmartSystem(eventLog, users);
-
+            KPSmartSystem system = new KPSmartSystem(eventLog, graph, users);
 			new LogonBox(new AuthDetailsListener(){
 
 				@Override

@@ -29,6 +29,7 @@ import kps.events.MailDeliveryEvent;
 import kps.events.PriceUpdateEvent;
 import kps.events.TransportCostUpdateEvent;
 import kps.events.TransportDiscontinuedEvent;
+import kps.parser.KPSParser;
 import kps.users.KPSUser;
 
 /**
@@ -111,6 +112,23 @@ public class KPSmartSystem {
 		this.eventLog = eventLog;
 		customerRoutes = new HashMap<BasicRoute, CustomerRoute>();
 		routeGraph = new RouteGraph();//loadGraph();
+		this.users = users;
+		currentUser = null;
+		metrics = new Metrics();
+		processBusinessEvents();
+	}
+
+	/**
+	 * Constructs an instance of KPSmartSystem with the
+	 * specified EventLog, route graph and users map.
+	 *
+	 * @param eventLog
+	 * 		-- event log
+	 */
+	public KPSmartSystem(EventLog eventLog, RouteGraph routeGraph, Map<String, KPSUser> users){
+		this.eventLog = eventLog;
+		customerRoutes = new HashMap<BasicRoute, CustomerRoute>();
+		this.routeGraph = routeGraph;
 		this.users = users;
 		currentUser = null;
 		metrics = new Metrics();
@@ -303,26 +321,24 @@ public class KPSmartSystem {
 	 * @param priority
 	 * 		-- priority of mail
 	 */
-	public void addMailDeliveryEvent(String from, String to, Day day, int weight, int volume, Priority priority){
+	public String addMailDeliveryEvent(String from, String to, Day day, int weight, int volume, Priority priority){
 		BasicRoute route = new BasicRoute(from, to);
 		if(!customerRoutes.containsKey(route)){
 			// cannot send mail
-			System.out.println("cannot send mail, No cutsomer cost for route" );
-			return;
+			return "Cannot send mail because there is no customer price for this route.";
 		}
 
 		double revenue = customerRoutes.get(route).calculateDeliveryPrice(weight, volume, priority);
 		if(revenue < 0){
 			// cannot send mail
-			System.out.println("cannot send mail, No customer cost for priority" );
-			return;
+			return "Cannot send mail because there is no customer cost for "+Priority.convertPriorityToString(priority)+" priority on this route.";
 		}
 
 		//check if the route is valid
 		if(!(new DijkstraSearch(routeGraph).isValidMailDelivery(new Mail(route, day, weight, volume, priority)))){
 			// cannot send mail
-			System.out.println("No valid route available in the graph" );
-			return;
+			System.out.println("No valid route available in the graph");
+			return "Cannot send mail because there is no transport route available for this route.";
 		}
 
 		// calculate expenditure
@@ -339,7 +355,7 @@ public class KPSmartSystem {
 
 		if(revenue == -1 || routeAndCost.size() > 1 || path == null){
 			System.out.println("Error");
-			return;
+			return "Cannot send mail because there is no transport route available for this route.";
 		}
 
 		//time to deliver in hours
@@ -349,6 +365,7 @@ public class KPSmartSystem {
 
 		long timeLogged = System.currentTimeMillis();
 		eventLog.addBusinessEvent(new MailDeliveryEvent(timeLogged, route, day, weight, volume, priority, revenue,  expenditure, deliveryTime));
+		return null;
 	}
 
 	/**
@@ -437,11 +454,8 @@ public class KPSmartSystem {
 	 */
 	public void addTransportDiscontinuedEvent(Route route){
 		BasicRoute bRoute = new BasicRoute(route.getSrc(), route.getDest());
-		//RouteGraph.removeRoute(route, transportFirm, transportType); TO BE IMPLEMENTED
 		long timeLogged = System.currentTimeMillis();
-
 		eventLog.addBusinessEvent(new TransportDiscontinuedEvent(timeLogged, bRoute, route.getCompany(), route.getType()));
-
 		routeGraph.removeRoute(route);
 	}
 
@@ -514,14 +528,31 @@ public class KPSmartSystem {
 	}
 
 	/**
-	 * Removes the specified user from the system.
+	 * Removes the specified user from the system. Won't remove
+	 * the user if they are the last manager left in the system.
 	 *
 	 * @param username
 	 * 		-- the user to be removed
 	 */
 	public void removeKPSUser(String username){
 		if(users.containsKey(username)){
-			users.remove(username);
+			// count the number of managers in the system
+			int managerCount = 0;
+			for(KPSUser user : users.values()){
+				if(user.getPosition() == Position.MANAGER){
+					managerCount++;
+				}
+			}
+			// if there's more than one manager it's safe to remove
+			if(managerCount > 1){
+				users.remove(username);
+			}
+			// otherwise check if they are a manager
+			else{
+				if(users.get(username).getPosition() != Position.MANAGER){
+					users.remove(username);
+				}
+			}
 		}
 	}
 
@@ -598,13 +629,30 @@ public class KPSmartSystem {
 	}
 
 	/**
-	 * Generates and XML file from the event log.
+	 * Generates an XML file from the event log.
 	 */
 	public void convertEventLogToXML(){
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter(EVENT_LOG_FILENAME, "UTF-8");
 			writer.write(eventLog.toXML());
+			writer.close();
+		}catch(FileNotFoundException e){e.printStackTrace();}
+		catch(UnsupportedEncodingException e){e.printStackTrace();}
+	}
+
+	/**
+	 * Generates an XML file from the users map
+	 */
+	public void convertUsersMapToXML(){
+		PrintWriter writer;
+		try{
+			writer = new PrintWriter(Main.XML_FILE_PATH+"users.xml", "UTF-8");
+			writer.write("<"+KPSParser.USERS_FILE_TAG+">\n");
+			for(KPSUser user : users.values()){
+				writer.write(user.toXML());
+			}
+			writer.write("</"+KPSParser.USERS_FILE_TAG+">");
 			writer.close();
 		}catch(FileNotFoundException e){e.printStackTrace();}
 		catch(UnsupportedEncodingException e){e.printStackTrace();}
