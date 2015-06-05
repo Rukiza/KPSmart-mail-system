@@ -106,6 +106,7 @@ public class MailDeliveryEvent extends BusinessEvent {
 		xml += "\t\t<"+KPSParser.PRIORITY_TAG+">"+Priority.convertPriorityToString(priority)+"</"+KPSParser.PRIORITY_TAG+">\n";
 		xml += "\t\t<"+KPSParser.REVENUE_TAG+">"+revenue+"</"+KPSParser.REVENUE_TAG+">\n";
 		xml += "\t\t<"+KPSParser.EXPENDITURE_TAG+">"+expenditure+"</"+KPSParser.EXPENDITURE_TAG+">\n";
+		xml += "\t\t<"+KPSParser.DELIVERY_TIME_TAG+">"+deliveryTime+"</"+KPSParser.DELIVERY_TIME_TAG+">\n";
 		xml += "\t</"+KPSParser.MAIL_DELIVERY_TAG+">\n";
 		return xml;
 	}
