@@ -1,28 +1,39 @@
 package kps.ui.window;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SpringLayout;
 
-import kps.data.Route;
+import kps.data.Node;
 import kps.data.RouteGraph;
 import kps.enums.Priority;
 import kps.ui.formlistener.PriceUpdateListener;
 import kps.ui.util.SpringUtilities;
 import kps.ui.util.UIUtils;
 
-public class PriceUpdateWindow extends AbstractRouteChooserWindow {
+public class PriceUpdateWindow extends AbstractFormWindow{
 
+	private final String FROM = "from";
+	private final String TO = "to";
 	private final String OLD_WEIGHT_COST = "old weight cost";
 	private final String OLD_VOL_COST = "old volume cost";
 	private final String NEW_WEIGHT_COST = "new weight cost";
 	private final String NEW_VOL_COST = "new volume cost";
 	private final String PRIORITY = "priority";
 	private final String[] fieldNames = new String[] { FROM , TO, OLD_WEIGHT_COST, OLD_VOL_COST, NEW_WEIGHT_COST, NEW_VOL_COST, PRIORITY};
+
+	private RouteGraph routeGraph;
 
 	/**
 	 * displays the current weight cost of the currently selected route
@@ -33,13 +44,35 @@ public class PriceUpdateWindow extends AbstractRouteChooserWindow {
 	 */
 	private JTextField oldVolCostField;
 
+	private JComboBox<Object> fromComboBox;
+	private JComboBox<Object> toComboBox;
+
 	public PriceUpdateWindow(PriceUpdateListener listener, RouteGraph routeGraph){
 
-		super("Update route price", listener, routeGraph);
-		// not dealing with routes, rather just src, dest
-		inputPanel.remove(routesComboBox);
+		super("update route price");
+		this.routeGraph = routeGraph;
+		setLayout(new BorderLayout());
+
+		// add fields
+		JPanel inputPanel = new JPanel();
+		inputPanel.setLayout(new SpringLayout());
+
+		inputPanel = new JPanel();
+		inputPanel.setLayout(new SpringLayout());
 
 		int fieldCount = fieldNames.length;
+
+		// populate the to combobox (and also the routes combo)
+		// not dealing with routes, rather just src, dest
+		List<String> nodeStrings = new ArrayList<>();
+		for (Node n : routeGraph.getNodes()){
+			nodeStrings.add(n.getName());
+		}
+
+		fromComboBox = makeFromComboBox(nodeStrings.toArray(new String[]{}), inputPanel);
+		toComboBox = makeToComboBox(inputPanel);
+
+		makeComboBox(PRIORITY, Priority.values(), inputPanel);
 
 		// fields for the old (or current) prices
 		oldWeightCostField = makeTextField(OLD_WEIGHT_COST, inputPanel);
@@ -50,12 +83,12 @@ public class PriceUpdateWindow extends AbstractRouteChooserWindow {
 		// fields for new price input
 		makeTextField(NEW_WEIGHT_COST, inputPanel);
 		makeTextField(NEW_VOL_COST, inputPanel);
-		makeComboBox(PRIORITY, Priority.values(), inputPanel);
 
-		populateRoutesCombo();
+		// initialise comboboxes
+		populateToCombo();
 
 		SpringUtilities.makeCompactGrid(inputPanel,
-				fieldCount-2, 2,	//rows, cols
+				fieldCount, 2,	//rows, cols
                 6, 6,	//initX, initY
                 6, 6);	//xPad, yPad)
 
@@ -105,26 +138,60 @@ public class PriceUpdateWindow extends AbstractRouteChooserWindow {
 		setVisible(true);
 	}
 
-	@Override
-	protected void populateToCombo(){
-		super.populateToCombo();
-		// update the old cost fields
-		// TODO
-//		double weightPrice = route.getWeightPrice();
-//		double volPrice = route.getVolumePrice();
-//
-//		if (oldWeightCostField != null){
-//                oldWeightCostField.setText(weightPrice + "");
-//                oldVolCostField.setText(volPrice + "");
-//		}
+	/**
+	 * makes a combobox for the "from" field
+	 * @param name
+	 * @param items
+	 * @param cont
+	 * @return the combobox which is created
+	 */
+	private JComboBox<Object> makeFromComboBox(String[] sources, Container cont){
+		JComboBox<Object> fromComboBox = makeComboBox(FROM, sources, cont);
+		fromComboBox.removeActionListener(fromComboBox.getActionListeners()[0]);
+
+		fromComboBox.addActionListener((ActionEvent e) -> {
+			comboBoxUpdated(fromComboBox, FROM);
+            populateToCombo();
+		});
+		return fromComboBox;
+	}
+
+	/**
+	 * make a combobox for the "to" field
+	 * @param cont
+	 * @return the combobox which is created
+	 */
+	private JComboBox<Object> makeToComboBox(Container cont){
+		JComboBox<Object> toComboBox = makeComboBox(TO, new Node[]{}, cont);
+		toComboBox.removeActionListener(toComboBox.getActionListeners()[0]);
+		toComboBox.addActionListener((ActionEvent e) -> {
+			comboBoxUpdated(toComboBox, TO);
+		});
+		return toComboBox;
+	}
+
+	private void populateToCombo(){
+        comboBoxUpdated(toComboBox, TO);
+        String from = (String) fromComboBox.getSelectedItem();
+        Set<String> validDests = routeGraph.destsFromSource(from);
+        toComboBox.setModel(new DefaultComboBoxModel<Object>(validDests.toArray()));
+	}
+
+	private void populateOldPrices(){
+//		oldWeightCostField.setText();
 	}
 
 	@Override
 	protected boolean isFormComplete() {
 		for (String fieldName : fieldNames){
+			if (fieldName.equals(OLD_WEIGHT_COST) || fieldName.equals(OLD_VOL_COST)){
+				continue;
+			}
 			Object val = fields.get(fieldName);
-			if (val == null)
+			if (val == null){
+				System.out.println(fieldName + " was null");
 				return false;
+			}
 		}
 		return true;
 	}
