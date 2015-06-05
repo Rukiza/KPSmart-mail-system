@@ -146,8 +146,8 @@ public class AbstractRouteChooserWindow extends AbstractFormWindow{
 	}
 
 	protected void populateRoutesCombo(){
-        String source = (String) fromComboBox.getSelectedItem().toString();
-        String dest = (String) toComboBox.getSelectedItem().toString();
+        String source = fromComboBox.getSelectedItem() == null ? "" : fromComboBox.getSelectedItem().toString();
+        String dest = toComboBox.getSelectedItem() == null ? "" : toComboBox.getSelectedItem().toString();
         Set<Route> validRoutes = routeGraph.getRoutes(source, dest);
 
         routesComboBox.setModel(new DefaultComboBoxModel<Object>(validRoutes.toArray()));

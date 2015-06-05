@@ -760,337 +760,337 @@
 		<to>Sydney</to>
 		<from>Auckland</from>
 		<priority>International Air</priority>
-		<weightcost>20</weightcost>
-		<volumecost>20</volumecost>
-	</price>
+		<weightcost>20.0</weightcost>
+		<volumecost>20.0</volumecost>
+		</price>
 	<price>
 		<time>1430737843998</time>
 		<to>Sydney</to>
 		<from>Wellington</from>
 		<priority>International Air</priority>
-		<weightcost>20</weightcost>
-		<volumecost>20</volumecost>
-	</price>
+		<weightcost>20.0</weightcost>
+		<volumecost>20.0</volumecost>
+		</price>
 	<price>
 		<time>1430737923815</time>
 		<to>Sydney</to>
 		<from>Auckland</from>
 		<priority>International Standard</priority>
-		<weightcost>20</weightcost>
-		<volumecost>20</volumecost>
-	</price>
+		<weightcost>20.0</weightcost>
+		<volumecost>20.0</volumecost>
+		</price>
 	<price>
 		<time>1430738068062</time>
 		<to>Sydney</to>
 		<from>Wellington</from>
 		<priority>International Standard</priority>
-		<weightcost>20</weightcost>
-		<volumecost>20</volumecost>
-	</price>
+		<weightcost>20.0</weightcost>
+		<volumecost>20.0</volumecost>
+		</price>
 	<price>
 		<time>1430738201961</time>
 		<to>Samoa</to>
 		<from>Auckland</from>
 		<priority>International Air</priority>
-		<weightcost>24</weightcost>
-		<volumecost>24</volumecost>
-	</price>
+		<weightcost>24.0</weightcost>
+		<volumecost>24.0</volumecost>
+		</price>
 	<price>
 		<time>1430738366306</time>
 		<to>Samoa</to>
 		<from>Wellington</from>
 		<priority>International Air</priority>
-		<weightcost>24</weightcost>
-		<volumecost>24</volumecost>
-	</price>
+		<weightcost>24.0</weightcost>
+		<volumecost>24.0</volumecost>
+		</price>
 	<price>
 		<time>1430738513489</time>
 		<to>Samoa</to>
 		<from>Auckland</from>
 		<priority>International Standard</priority>
-		<weightcost>24</weightcost>
-		<volumecost>24</volumecost>
-	</price>
+		<weightcost>24.0</weightcost>
+		<volumecost>24.0</volumecost>
+		</price>
 	<price>
 		<time>1430738626469</time>
 		<to>Samoa</to>
 		<from>Wellington</from>
 		<priority>International Standard</priority>
-		<weightcost>24</weightcost>
-		<volumecost>24</volumecost>
-	</price>
+		<weightcost>24.0</weightcost>
+		<volumecost>24.0</volumecost>
+		</price>
 	<price>
 		<time>1430738772689</time>
 		<to>Los Angeles</to>
 		<from>Auckland</from>
 		<priority>International Air</priority>
-		<weightcost>36</weightcost>
-		<volumecost>36</volumecost>
-	</price>
+		<weightcost>36.0</weightcost>
+		<volumecost>36.0</volumecost>
+		</price>
 	<price>
 		<time>1430738860410</time>
 		<to>Los Angeles</to>
 		<from>Wellington</from>
 		<priority>International Air</priority>
-		<weightcost>36</weightcost>
-		<volumecost>36</volumecost>
-	</price>
+		<weightcost>36.0</weightcost>
+		<volumecost>36.0</volumecost>
+		</price>
 	<price>
 		<time>1430739019464</time>
 		<to>Toronto</to>
 		<from>Auckland</from>
 		<priority>International Air</priority>
-		<weightcost>38</weightcost>
-		<volumecost>38</volumecost>
-	</price>
+		<weightcost>38.0</weightcost>
+		<volumecost>38.0</volumecost>
+		</price>
 	<price>
 		<time>1430739102463</time>
 		<to>Toronto</to>
 		<from>Wellington</from>
 		<priority>International Air</priority>
-		<weightcost>38</weightcost>
-		<volumecost>38</volumecost>
-	</price>
+		<weightcost>38.0</weightcost>
+		<volumecost>38.0</volumecost>
+		</price>
 	<price>
 		<time>1430739228516</time>
 		<to>Toronto</to>
 		<from>Auckland</from>
 		<priority>International Standard</priority>
-		<weightcost>38</weightcost>
-		<volumecost>38</volumecost>
-	</price>
+		<weightcost>38.0</weightcost>
+		<volumecost>38.0</volumecost>
+		</price>
 	<price>
 		<time>1430739387547</time>
 		<to>Toronto</to>
 		<from>Wellington</from>
 		<priority>International Standard</priority>
-		<weightcost>38</weightcost>
-		<volumecost>38</volumecost>
-	</price>
+		<weightcost>38.0</weightcost>
+		<volumecost>38.0</volumecost>
+		</price>
 	<price>
 		<time>1430739496976</time>
 		<to>Brazil</to>
 		<from>Auckland</from>
 		<priority>International Air</priority>
-		<weightcost>36</weightcost>
-		<volumecost>36</volumecost>
-	</price>
+		<weightcost>36.0</weightcost>
+		<volumecost>36.0</volumecost>
+		</price>
 	<price>
 		<time>1430739660825</time>
 		<to>Brazil</to>
 		<from>Wellington</from>
 		<priority>International Air</priority>
-		<weightcost>36</weightcost>
-		<volumecost>36</volumecost>
-	</price>
+		<weightcost>36.0</weightcost>
+		<volumecost>36.0</volumecost>
+		</price>
 	<price>
 		<time>1430739826689</time>
 		<to>Brazil</to>
 		<from>Auckland</from>
 		<priority>International Standard</priority>
-		<weightcost>36</weightcost>
-		<volumecost>36</volumecost>
-	</price>
+		<weightcost>36.0</weightcost>
+		<volumecost>36.0</volumecost>
+		</price>
 	<price>
 		<time>1430739938388</time>
 		<to>Brazil</to>
 		<from>Wellington</from>
 		<priority>International Standard</priority>
-		<weightcost>36</weightcost>
-		<volumecost>36</volumecost>
-	</price>
+		<weightcost>36.0</weightcost>
+		<volumecost>36.0</volumecost>
+		</price>
 	<price>
 		<time>1430740094953</time>
 		<to>Tokyo</to>
 		<from>Auckland</from>
 		<priority>International Air</priority>
-		<weightcost>28</weightcost>
-		<volumecost>28</volumecost>
-	</price>
+		<weightcost>28.0</weightcost>
+		<volumecost>28.0</volumecost>
+		</price>
 	<price>
 		<time>1430740266955</time>
 		<to>Tokyo</to>
 		<from>Wellington</from>
 		<priority>International Air</priority>
-		<weightcost>28</weightcost>
-		<volumecost>28</volumecost>
-	</price>
+		<weightcost>28.0</weightcost>
+		<volumecost>28.0</volumecost>
+		</price>
 	<price>
 		<time>1430740408030</time>
 		<to>Tokyo</to>
 		<from>Auckland</from>
 		<priority>International Standard</priority>
-		<weightcost>28</weightcost>
-		<volumecost>28</volumecost>
-	</price>
+		<weightcost>28.0</weightcost>
+		<volumecost>28.0</volumecost>
+		</price>
 	<price>
 		<time>1430740537474</time>
 		<to>Tokyo</to>
 		<from>Wellington</from>
 		<priority>International Standard</priority>
-		<weightcost>28</weightcost>
-		<volumecost>28</volumecost>
-	</price>
+		<weightcost>28.0</weightcost>
+		<volumecost>28.0</volumecost>
+		</price>
 	<price>
 		<time>1430740669538</time>
 		<to>Hong Kong</to>
 		<from>Auckland</from>
 		<priority>International Air</priority>
-		<weightcost>28</weightcost>
-		<volumecost>28</volumecost>
-	</price>
+		<weightcost>28.0</weightcost>
+		<volumecost>28.0</volumecost>
+		</price>
 	<price>
 		<time>1430740739557</time>
 		<to>Hong Kong</to>
 		<from>Wellington</from>
 		<priority>International Air</priority>
-		<weightcost>28</weightcost>
-		<volumecost>28</volumecost>
-	</price>
+		<weightcost>28.0</weightcost>
+		<volumecost>28.0</volumecost>
+		</price>
 	<price>
 		<time>1430740906761</time>
 		<to>Hong Kong</to>
 		<from>Auckland</from>
 		<priority>International Standard</priority>
-		<weightcost>28</weightcost>
-		<volumecost>28</volumecost>
-	</price>
+		<weightcost>28.0</weightcost>
+		<volumecost>28.0</volumecost>
+		</price>
 	<price>
 		<time>1430741081369</time>
 		<to>Hong Kong</to>
 		<from>Wellington</from>
 		<priority>International Standard</priority>
-		<weightcost>28</weightcost>
-		<volumecost>28</volumecost>
-	</price>
+		<weightcost>28.0</weightcost>
+		<volumecost>28.0</volumecost>
+		</price>
 	<price>
 		<time>1430741200742</time>
 		<to>Cape Town</to>
 		<from>Auckland</from>
 		<priority>International Air</priority>
-		<weightcost>36</weightcost>
-		<volumecost>36</volumecost>
-	</price>
+		<weightcost>36.0</weightcost>
+		<volumecost>36.0</volumecost>
+		</price>
 	<price>
 		<time>1430741317330</time>
 		<to>Cape Town</to>
 		<from>Wellington</from>
 		<priority>International Air</priority>
-		<weightcost>36</weightcost>
-		<volumecost>36</volumecost>
-	</price>
+		<weightcost>36.0</weightcost>
+		<volumecost>36.0</volumecost>
+		</price>
 	<price>
 		<time>1430741435038</time>
 		<to>Cape Town</to>
 		<from>Auckland</from>
 		<priority>International Standard</priority>
-		<weightcost>36</weightcost>
-		<volumecost>36</volumecost>
-	</price>
+		<weightcost>36.0</weightcost>
+		<volumecost>36.0</volumecost>
+		</price>
 	<price>
 		<time>1430741598345</time>
 		<to>Cape Town</to>
 		<from>Wellington</from>
 		<priority>International Standard</priority>
-		<weightcost>36</weightcost>
-		<volumecost>36</volumecost>
-	</price>
+		<weightcost>36.0</weightcost>
+		<volumecost>36.0</volumecost>
+		</price>
 	<price>
 		<time>1430741707777</time>
 		<to>London</to>
 		<from>Auckland</from>
 		<priority>International Air</priority>
-		<weightcost>42</weightcost>
-		<volumecost>42</volumecost>
-	</price>
+		<weightcost>42.0</weightcost>
+		<volumecost>42.0</volumecost>
+		</price>
 	<price>
 		<time>1430741777885</time>
 		<to>London</to>
 		<from>Wellington</from>
 		<priority>International Air</priority>
-		<weightcost>42</weightcost>
-		<volumecost>42</volumecost>
-	</price>
+		<weightcost>42.0</weightcost>
+		<volumecost>42.0</volumecost>
+		</price>
 	<price>
 		<time>1430741852537</time>
 		<to>London</to>
 		<from>Auckland</from>
 		<priority>International Standard</priority>
-		<weightcost>42</weightcost>
-		<volumecost>42</volumecost>
-	</price>
+		<weightcost>42.0</weightcost>
+		<volumecost>42.0</volumecost>
+		</price>
 	<price>
 		<time>1430741969010</time>
 		<to>London</to>
 		<from>Wellington</from>
 		<priority>International Standard</priority>
-		<weightcost>42</weightcost>
-		<volumecost>42</volumecost>
-	</price>
+		<weightcost>42.0</weightcost>
+		<volumecost>42.0</volumecost>
+		</price>
 	<price>
 		<time>1430742045529</time>
 		<to>Rome</to>
 		<from>Auckland</from>
 		<priority>International Air</priority>
-		<weightcost>8</weightcost>
-		<volumecost>8</volumecost>
-	</price>
+		<weightcost>8.0</weightcost>
+		<volumecost>8.0</volumecost>
+		</price>
 	<price>
 		<time>1430742222460</time>
 		<to>Rome</to>
 		<from>Wellington</from>
 		<priority>International Air</priority>
-		<weightcost>8</weightcost>
-		<volumecost>8</volumecost>
-	</price>
+		<weightcost>8.0</weightcost>
+		<volumecost>8.0</volumecost>
+		</price>
 	<price>
 		<time>1430742389272</time>
 		<to>Rome</to>
 		<from>Auckland</from>
 		<priority>International Standard</priority>
-		<weightcost>8</weightcost>
-		<volumecost>8</volumecost>
-	</price>
+		<weightcost>8.0</weightcost>
+		<volumecost>8.0</volumecost>
+		</price>
 	<price>
 		<time>1430742460282</time>
 		<to>Rome</to>
 		<from>Wellington</from>
 		<priority>International Standard</priority>
-		<weightcost>8</weightcost>
-		<volumecost>8</volumecost>
-	</price>
+		<weightcost>8.0</weightcost>
+		<volumecost>8.0</volumecost>
+		</price>
 	<price>
 		<time>1430742549794</time>
 		<to>Russia</to>
 		<from>Auckland</from>
 		<priority>International Air</priority>
-		<weightcost>8</weightcost>
-		<volumecost>8</volumecost>
-	</price>
+		<weightcost>8.0</weightcost>
+		<volumecost>8.0</volumecost>
+		</price>
 	<price>
 		<time>1430742632967</time>
 		<to>Russia</to>
 		<from>Wellington</from>
 		<priority>International Air</priority>
-		<weightcost>8</weightcost>
-		<volumecost>8</volumecost>
-	</price>
+		<weightcost>8.0</weightcost>
+		<volumecost>8.0</volumecost>
+		</price>
 	<price>
 		<time>1430742807234</time>
 		<to>Russia</to>
 		<from>Auckland</from>
 		<priority>International Standard</priority>
-		<weightcost>8</weightcost>
-		<volumecost>8</volumecost>
-	</price>
+		<weightcost>8.0</weightcost>
+		<volumecost>8.0</volumecost>
+		</price>
 	<price>
 		<time>1430742958643</time>
 		<to>Russia</to>
 		<from>Wellington</from>
 		<priority>International Standard</priority>
-		<weightcost>8</weightcost>
-		<volumecost>8</volumecost>
-	</price>
+		<weightcost>8.0</weightcost>
+		<volumecost>8.0</volumecost>
+		</price>
 	<mail>
 		<time>1430743087034</time>
 		<day>Wednesday</day>
@@ -2244,24 +2244,50 @@
 		<deliveryTime>80</deliveryTime>
 	</mail>
 	<discontinue>
-	    <time>1430754295455</time>
-	    <company>Air Bus</company>
-	    <to>London</to>
-	    <from>Brazil</from>
-	    <type>Air</type>
+		<time>1430754295455</time>
+		<company>Air Bus</company>
+		<to>London</to>
+		<from>Brazil</from>
+		<type>Air</type>
 	</discontinue>
 	<discontinue>
-	    <time>1430754295456</time>
-	    <company>Ocean Delivery</company>
-	    <to>Brazil</to>
-	    <from>Cape Town</from>
-	    <type>Sea</type>
+		<time>1430754295456</time>
+		<company>Ocean Delivery</company>
+		<to>Brazil</to>
+		<from>Cape Town</from>
+		<type>Sea</type>
 	</discontinue>
 	<discontinue>
-	    <time>1430754295457</time>
-	    <company>Ocean Delivery</company>
-	    <to>Cape Town</to>
-	    <from>Brazil</from>
-	    <type>Sea</type>
+		<time>1430754295457</time>
+		<company>Ocean Delivery</company>
+		<to>Cape Town</to>
+		<from>Brazil</from>
+		<type>Sea</type>
 	</discontinue>
+	<mail>
+		<time>1433499331286</time>
+		<day>Monday</day>
+		<to>Sydney</to>
+		<from>Wellington</from>
+		<weight>1</weight>
+		<volume>1</volume>
+		<priority>International Air</priority>
+		<revenue>0.4</revenue>
+		<expenditure>0.35</expenditure>
+		<deliveryTime>198</deliveryTime>
+	</mail>
+	<cost>
+		<time>1433499591339</time>
+		<company>VUW</company>
+		<to>co242</to>
+		<from>co236</from>
+		<type>Land</type>
+		<weightcost>12.0</weightcost>
+		<volumecost>12.0</volumecost>
+		<maxWeight>2</maxWeight>
+		<maxVolume>2</maxVolume>
+		<duration>2</duration>
+		<frequency>2</frequency>
+		<day>Monday</day>
+	</cost>
 </simulation>

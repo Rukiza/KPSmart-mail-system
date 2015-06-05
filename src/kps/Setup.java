@@ -51,12 +51,11 @@ public class Setup {
 
 					KPSWindow window = new KPSWindow(system, user);
 
-					window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 					window.addWindowListener(new WindowAdapter(){
 						@Override public void windowClosing(WindowEvent e){
 							system.convertEventLogToXML();
 							system.convertUsersMapToXML();
-							System.out.println("closed while being listened to");
+							system.convertGraphToXML();
 						}
 					});
 					return true;

@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -70,7 +71,7 @@ public class KPSWindow extends JFrame {
 		setSize(WINDOW_SIZE);
 		setLocationRelativeTo(null);
 		setLayout(new BorderLayout());
-//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
 
 		JTabbedPane tabbedPane = new JTabbedPane();
@@ -165,7 +166,8 @@ public class KPSWindow extends JFrame {
 
 		logout.addActionListener((ActionEvent e) -> {
 			system.logout();
-			this.dispose();
+			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 			Setup.login(system);
 		});
 
