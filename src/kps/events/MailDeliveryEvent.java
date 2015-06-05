@@ -14,8 +14,9 @@ public class MailDeliveryEvent extends BusinessEvent {
 	private Priority priority;
 	private double revenue;
 	private double expenditure;
+	private int deliveryTime; // in hours
 
-	public MailDeliveryEvent(long timeLogged, BasicRoute route, Day day, int weight, int volume, Priority priority, double revenue, double expenditure){
+	public MailDeliveryEvent(long timeLogged, BasicRoute route, Day day, int weight, int volume, Priority priority, double revenue, double expenditure, int deliveryTime){
 		super(timeLogged, route);
 		this.day = day;
 		this.weight = weight;
@@ -23,6 +24,7 @@ public class MailDeliveryEvent extends BusinessEvent {
 		this.priority = priority;
 		this.revenue = revenue;
 		this.expenditure = expenditure;
+		this.deliveryTime = deliveryTime;
 	}
 
 	/**
@@ -79,6 +81,15 @@ public class MailDeliveryEvent extends BusinessEvent {
 	 */
 	public double getExpenditure(){
 		return expenditure;
+	}
+
+	/**
+	 * Returns the delivery time for the mail delivered.
+	 *
+	 * @return delivery time
+	 */
+	public int getDeliveryTime(){
+		return deliveryTime;
 	}
 
 	/**

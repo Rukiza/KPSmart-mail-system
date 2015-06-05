@@ -1,6 +1,5 @@
 package kps.ui.panel;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -9,12 +8,12 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
@@ -28,6 +27,7 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import kps.data.wrappers.Metrics;
+import kps.enums.Priority;
 import kps.ui.util.SpringUtilities;
 
 public class MetricsPanel extends JPanel implements ActionListener{
@@ -36,13 +36,13 @@ public class MetricsPanel extends JPanel implements ActionListener{
 
     // field
     private Metrics metrics;
+    private boolean isInitialised = false; // to prevent repainting of non-initialised components
 
     // components
     private GraphPanel graph;
     private ProfitPanel profit;
     private BusinessEventPanel events;
     private CustomerRoutePanel routes;
-    private boolean initialised = false;
 
     /**
      * Constructs a new MetricsPanel Object with the specified metrics.
@@ -68,7 +68,7 @@ public class MetricsPanel extends JPanel implements ActionListener{
         routes.setBorder(new TitledKPSBorder("Customer Routes"));
         SpringUtilities.makeCompactGrid(events, 2, 2, 6, 6, 6, 6);
         layoutComponents();
-        initialised = true;
+        isInitialised = true;
         repaint();
     }
 
@@ -110,7 +110,7 @@ public class MetricsPanel extends JPanel implements ActionListener{
     }
 
     public void repaint(){
-    	if(initialised){
+    	if(isInitialised){
     		graph.repaint();
     		profit.setProfitMetrics(metrics.getTotalRevenue(), metrics.getTotalExpenditure());
     		profit.repaint();
@@ -138,34 +138,66 @@ public class MetricsPanel extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent event){
     	if(event.getSource() instanceof JButton){
     		String button = ((JButton)event.getSource()).getText();
-    		if(button.equals("Generate Metrics")){
-
+    		if(button.equals("Generate Metrics") && isInitialised){
+    			routes.repaint();
     		}
     	}
     }
 
+    /**
+     * Private abstract class for all of the sub components of MetricsPanel.
+     * Contains the width and height for the sub component.
+     *
+     * @author David Sheridan
+     *
+     */
     private abstract class MetricComponent extends JPanel{
 
         private static final long serialVersionUID = 1L;
 
+        // fields
         private int width;
         private int height;
 
+        /**
+         * Constructs a new MetricComponent Object with the specified
+         * width and height.
+         *
+         * @param width
+         * 		-- width of component
+         * @param height
+         * 		-- height of component
+         */
         public MetricComponent(int width, int height){
             super();
             setPreferredSize(width, height);
         }
 
+        /**
+         * Sets the preferred size of this component to the specified
+         * width and height.
+         *
+         * @param width
+         * 		-- preferred width
+         * @param height
+         * 		-- preferred height
+         */
         public void setPreferredSize(int width, int height){
             this.width = width;
             this.height = height;
             super.setPreferredSize(new Dimension(this.width, this.height));
         }
 
+        /**
+         * Returns the width of this component.
+         */
         public int getWidth(){
             return width;
         }
 
+        /**
+         * Returns the height of this component.
+         */
         public int getHeight(){
             return height;
         }
@@ -182,6 +214,12 @@ public class MetricsPanel extends JPanel implements ActionListener{
 
         private static final long serialVersionUID = 1L;
 
+        // fields
+        private JFreeChart chart;
+
+        // components
+        private ChartPanel chartPanel;
+
         /**
          * Constructs a new GraphPanel Object with the specified
          * width and height.
@@ -193,16 +231,16 @@ public class MetricsPanel extends JPanel implements ActionListener{
          */
         public GraphPanel(int width, int height){
             super(width, height);
+            chart = ChartFactory.createXYLineChart("Revenue and Expenditure", "Mail Deliveries", "Money (NZD)", createDataset());
+            chartPanel = new ChartPanel(chart);
+            add(chartPanel);
         }
 
         /**
          * Paints the graph to the GraphPanel.
          */
         public void paintComponent(Graphics g){
-        	JFreeChart chart = ChartFactory.createXYLineChart("Revenue and Expenditure", "Mail Deliveries", "Money (NZD)", createDataset());
-        	ChartPanel panel = new ChartPanel(chart);
-        	panel.setPreferredSize(new Dimension(getWidth(), getHeight()));
-        	add(panel);
+
         }
 
         /**
@@ -252,7 +290,7 @@ public class MetricsPanel extends JPanel implements ActionListener{
         private KPSLabel expenditure = new KPSLabel();
         private KPSLabel profit = new KPSLabel();
         private final KPSLabel[] LABELS = {revenue, expenditure, profit};
-        private final DecimalFormat FORMAT = new DecimalFormat("$###,###,###.##");
+        private final DecimalFormat NZD_FORMAT = new DecimalFormat("$###,###,###.##");
 
         /**
          * Constructs a new ProfitPanel Object with the specified
@@ -284,9 +322,9 @@ public class MetricsPanel extends JPanel implements ActionListener{
          * 		-- new expenditure value
          */
         public void setProfitMetrics(double revenue, double expenditure){
-        	this.revenue.setText(FORMAT.format(revenue));
-        	this.expenditure.setText(FORMAT.format(expenditure));
-        	this.profit.setText(FORMAT.format(revenue - expenditure));
+        	this.revenue.setText(NZD_FORMAT.format(revenue));
+        	this.expenditure.setText(NZD_FORMAT.format(expenditure));
+        	this.profit.setText(NZD_FORMAT.format(revenue - expenditure));
         }
     }
 
@@ -309,6 +347,7 @@ public class MetricsPanel extends JPanel implements ActionListener{
         private KPSLabel discontinued = new KPSLabel();
         private KPSLabel total = new KPSLabel();
         private final KPSLabel[] LABELS = {mail, price, cost, discontinued, total};
+        private final NumberFormat NUMBER_FORMAT = NumberFormat.getIntegerInstance();
 
         /**
          * Constructs a new BusinessEventPanel Object with the specified
@@ -346,11 +385,11 @@ public class MetricsPanel extends JPanel implements ActionListener{
          * 		-- total business event count
          */
         public void setBusinessEventMetrics(int mail, int price, int cost, int discontinued, int total){
-        	this.mail.setText(Integer.toString(mail));
-        	this.price.setText(Integer.toString(price));
-        	this.cost.setText(Integer.toString(cost));
-        	this.discontinued.setText(Integer.toString(discontinued));
-        	this.total.setText(Integer.toString(total));
+        	this.mail.setText(NUMBER_FORMAT.format(mail));
+        	this.price.setText(NUMBER_FORMAT.format(price));
+        	this.cost.setText(NUMBER_FORMAT.format(cost));
+        	this.discontinued.setText(NUMBER_FORMAT.format(discontinued));
+        	this.total.setText(NUMBER_FORMAT.format(total));
         }
 
     }
@@ -359,8 +398,12 @@ public class MetricsPanel extends JPanel implements ActionListener{
 
         private static final long serialVersionUID = 1L;
 
-        private JComboBox<String> origin;
-        private JComboBox<String> destination;
+        private JComboBox<String> origins;
+        private JComboBox<String> destinations;
+
+        // components
+        private TotalMailPanel mail;
+        private AverageTimesPanel times;
 
         public CustomerRoutePanel(int width, int height, ActionListener listener){
             super(width, height);
@@ -375,24 +418,24 @@ public class MetricsPanel extends JPanel implements ActionListener{
 
         public JPanel setupOptionsPanel(){
         	KPSLabel originLabel = new KPSLabel("Origin: ");
-            origin = new JComboBox<String>(metrics.getOrigins());
-            originLabel.setLabelFor(origin);
+            origins = new JComboBox<String>(metrics.getOrigins());
+            originLabel.setLabelFor(origins);
             KPSLabel destLabel = new KPSLabel("Destination: ");
-            destination = new JComboBox<String>(metrics.getDestinations());
-            destLabel.setLabelFor(destination);
+            destinations = new JComboBox<String>(metrics.getDestinations());
+            destLabel.setLabelFor(destinations);
         	JPanel options = new JPanel();
         	options.add(originLabel);
-        	options.add(origin);
+        	options.add(origins);
         	options.add(destLabel);
-        	options.add(destination);
+        	options.add(destinations);
         	return options;
         }
 
         public JPanel setupMetricsPanel(){
-        	TotalMailPanel mail = new TotalMailPanel((getWidth() / 2) - 11);
+        	mail = new TotalMailPanel((getWidth() / 2) - 11);
         	SpringUtilities.makeCompactGrid(mail, 3, 2, 6, 6, 6, 6);
         	mail.setBorder(new TitledKPSBorder("Total Amounts"));
-        	AverageTimesPanel times = new AverageTimesPanel((getWidth() / 2) - 11);
+        	times = new AverageTimesPanel((getWidth() / 2) - 11);
         	SpringUtilities.makeCompactGrid(times, 2, 2, 6, 6, 6, 6);
         	times.setBorder(new TitledKPSBorder("AverageTimes"));
 
@@ -402,6 +445,27 @@ public class MetricsPanel extends JPanel implements ActionListener{
         	return metrics;
         }
 
+        public void repaint(){
+        	if(isInitialised){
+        		String origin = (String)origins.getSelectedItem();
+        		String destination = (String)destinations.getSelectedItem();
+        		mail.setWeight(metrics.getTotalMailWeight(origin, destination));
+        		mail.setVolume(metrics.getTotalMailVolume(origin, destination));
+        		mail.setAmount(metrics.getTotalMailAmount(origin, destination));
+        		times.setAirTime(metrics.getAverageDeliveryTime(origin, destination, Priority.INTERNATIONAL_AIR));
+        		times.setStandardTime(metrics.getAverageDeliveryTime(origin, destination, Priority.INTERNATIONAL_STANDARD));
+        		super.repaint();
+        	}
+
+        }
+
+        /**
+         * Private class that is used to display the total weight, volume and amount
+         * of mail sent via the customer route specified by the CustomerRoutePanel.
+         *
+         * @author David Sheridan
+         *
+         */
         private class TotalMailPanel extends JPanel{
 
 			private static final long serialVersionUID = 1L;
@@ -412,8 +476,15 @@ public class MetricsPanel extends JPanel implements ActionListener{
         	private KPSLabel volume = new KPSLabel();
         	private KPSLabel amount = new KPSLabel();
         	private final KPSLabel[] LABELS = {weight, volume, amount};
+        	private final NumberFormat NUMBER_FORMAT = NumberFormat.getIntegerInstance();
 
-
+        	/**
+        	 * Constructs a new TotalMailPanel Object with the specified
+        	 * width.
+        	 *
+        	 * @param width
+        	 * 		-- width of component
+        	 */
         	public TotalMailPanel(int width){
         		super();
         		setPreferredSize(new Dimension(width, 254));
@@ -427,17 +498,38 @@ public class MetricsPanel extends JPanel implements ActionListener{
         		}
         	}
 
+        	/**
+        	 * Set the weight currently displayed by the panel to the
+        	 * specified weight.
+        	 *
+        	 * @param weight
+        	 * 		-- weight to display
+        	 */
         	public void setWeight(int weight){
-        		this.weight.setText(weight+" g");
+        		this.weight.setText(NUMBER_FORMAT.format(weight)+" g");
         	}
 
+        	/**
+        	 * Set the volume currently displayed by the panel to the
+        	 * specified volume.
+        	 *
+        	 * @param volume
+        	 * 		-- volume to display
+        	 */
         	public void setVolume(int volume){
-        		this.volume.setText(volume+" cm³");
+        		this.volume.setText(NUMBER_FORMAT.format(volume)+" cm³");
 
         	}
 
+        	/**
+        	 * Set the amount currently displayed by the panel to the
+        	 * specified amount.
+        	 *
+        	 * @param amount
+        	 * 		-- amount to display
+        	 */
         	public void setAmount(int amount){
-        		this.amount.setText(""+amount);
+        		this.amount.setText(NUMBER_FORMAT.format(amount));
         	}
         }
 
@@ -448,6 +540,7 @@ public class MetricsPanel extends JPanel implements ActionListener{
         	private KPSLabel airTime = new KPSLabel();
         	private KPSLabel standardTime = new KPSLabel();
         	private final KPSLabel[] LABELS = {airTime, standardTime};
+        	private final NumberFormat NUMBER_FORMAT = NumberFormat.getIntegerInstance();
 
         	public AverageTimesPanel(int width){
         		super();
@@ -463,23 +556,40 @@ public class MetricsPanel extends JPanel implements ActionListener{
         	}
 
         	public void setAirTime(double airTime){
-        		this.airTime.setText(airTime+" hours");
+        		this.airTime.setText(NUMBER_FORMAT.format(airTime)+" hours");
         	}
 
         	public void setStandardTime(double standardTime){
-        		this.standardTime.setText(standardTime+" hours");
+        		this.standardTime.setText(NUMBER_FORMAT.format(standardTime)+" hours");
         	}
         }
     }
 
     // Layout components
 
+    /**
+     * Private class which determines how the TitledBorders look in the MetricsPanel
+     * and all of its sub components.
+     *
+     * @author David Sheridan
+     *
+     */
     private class TitledKPSBorder extends TitledBorder{
 
 		private static final long serialVersionUID = 1L;
 
+		/**
+		 * Font to display the title
+		 */
 		private final Font FONT = new Font(Font.DIALOG, Font.BOLD, 22);
 
+		/**
+		 * Constructs a new TitledKPSBorder Object which displays
+		 * the specified title.
+		 *
+		 * @param title
+		 * 		-- title to display
+		 */
     	public TitledKPSBorder(String title){
     		super(title);
     		setTitleFont(FONT);
@@ -488,33 +598,75 @@ public class MetricsPanel extends JPanel implements ActionListener{
     	}
     }
 
+    /**
+     * Private class which determines how the JLabels look in the MetricsPanel and
+     * all of its sub components.
+     *
+     * @author David Sheridan
+     *
+     */
     private class KPSLabel extends JLabel{
 
 		private static final long serialVersionUID = 1L;
 
+		/**
+		 * Font to display the JLabel text.
+		 */
 		private final Font FONT = new Font(Font.DIALOG, Font.BOLD, 18);
 
+		/**
+		 * Constructs a new KPSLabel Object which displays the
+		 * specified label.
+		 *
+		 * @param label
+		 * 		-- label to display
+		 */
     	public KPSLabel(String label){
     		super(label);
     		setupKPSLabel();
     	}
 
+    	/**
+    	 * Constructs a new KPSLabel Object with no label
+    	 * to display.
+    	 */
     	public KPSLabel(){
     		super();
     		setupKPSLabel();
     	}
 
+    	/**
+    	 * Private method that sets the font of this KPSLabel
+    	 * to the correct font.
+    	 */
     	private void setupKPSLabel(){
     		setFont(FONT);
     	}
     }
 
+    /**
+     * Private class which determines how JButtons look on the MetricsPanel
+     * and all of its sub components.
+     *
+     * @author David Sheridan
+     *
+     */
     private class KPSButton extends JButton{
 
 		private static final long serialVersionUID = 1L;
 
+		/**
+		 * Font to display the JButton text.
+		 */
 		private final Font FONT = new Font(Font.DIALOG, Font.BOLD, 20);
 
+		/**
+		 * Constructs a new KPSButton Object which displays
+		 * the specified text.
+		 *
+		 * @param text
+		 * 		-- text to display
+		 */
     	public KPSButton(String text){
     		super(text);
     		setFont(FONT);

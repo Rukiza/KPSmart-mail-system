@@ -8,6 +8,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.DecimalFormat;
@@ -16,6 +17,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+
+import javafx.scene.chart.NumberAxis;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -41,6 +45,8 @@ import org.jfree.chart.plot.PiePlot;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.Dataset;
 import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 /**
  * @author Shane Brewer
@@ -75,11 +81,13 @@ public class DecisionSupportPanel extends JPanel {
 		this.setSize(size);
 		// Warning must be added in this order.
 		manager = new DataManager(this.data);
+		this.addKeyListener(manager.getKeyListener());
 		this.setLayout(new GridBagLayout());
 		graphPanel = new GraphPanel("Temp", manager);
 		displayPanel = new DisplayPanel(manager);
 		selectPanel = new SelectPanel(manager);
 		loadBarPanel = new LoadBarPanel(data);
+
 		// Warning
 		GridBagConstraints con = new GridBagConstraints();
 		con.fill = GridBagConstraints.NONE;
@@ -150,30 +158,23 @@ public class DecisionSupportPanel extends JPanel {
 		 * Makes a key listener for the decision support panel.
 		 * @return - Returns the key listener for use on them main panel.
 		 */
-		public KeyListener getKeyListener() {
-			return new KeyListener() {
+		public KeyAdapter getKeyListener() {
+			return new KeyAdapter() {
 
-				@Override
-				public void keyTyped(KeyEvent e) {
-				}
-
-				@Override
-				public void keyReleased(KeyEvent e) {
+	            public void keyPressed(KeyEvent e) {
 					if (DecisionSupportPanel.this.isShowing()) {
-						if (e.getID() == KeyEvent.VK_RIGHT) {
+						if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 							event = data.getFilterNextEvent();
 							updateDisplay();
+							updateGraph();
 						}
-						if (e.getID() == KeyEvent.VK_LEFT) {
+						if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 							event = data.getFilterPrevEvent();
 							updateDisplay();
+							updateGraph();
 						}
 					}
-				}
-
-				@Override
-				public void keyPressed(KeyEvent e) {
-				}
+	            }
 			};
 		}
 		/**
@@ -219,6 +220,16 @@ public class DecisionSupportPanel extends JPanel {
 				break;
 			case transString:
 				updateTransportGraph(graphMap.get(transString), (DefaultCategoryDataset)datasetMap.get(transString));
+				break;
+			case discString:
+				updateDiscontinueGraph(graphMap.get(discString), (DefaultCategoryDataset)datasetMap.get(discString));
+				break;
+			case mailString:
+				updateMailGraph(graphMap.get(mailString), (XYSeriesCollection)datasetMap.get(mailString));
+				break;
+			case pricesString:
+				updatePriceGraph(graphMap.get(pricesString), (XYSeriesCollection)datasetMap.get(pricesString));
+				break;
 			default:
 				break;
 			}
@@ -242,21 +253,94 @@ public class DecisionSupportPanel extends JPanel {
 
 		/* All updates that invove a graph are updating the data from individual graphs. */
 		private void updateTransportGraph(JFreeChart chart, DefaultCategoryDataset dataset){
-
+			List<BusinessEvent>	events = data.getFilterListToCurrent();
+			dataset.clear();
+			final String catagory = "Destination";
+			Map <String, Integer> destinations = new HashMap<String, Integer>();
+			for (BusinessEvent e : events){
+				if (destinations.containsKey(e.getDestination())){
+					destinations.put(e.getDestination(), destinations.get(e.getDestination())+1);
+				}
+				else {
+					destinations.put(e.getDestination(), 1);
+				}
+			}
+			for (Entry<String, Integer> e: destinations.entrySet()){
+				dataset.addValue(e.getValue(), e.getKey(), catagory);
+			}
+			graphPanel.paint(graphPanel.getGraphics());
 		}
 
 		/* All updates that invove a graph are updating the data from individual graphs. */
-		private void updateDiscontinueGraph(){
-
+		private void updateDiscontinueGraph(JFreeChart chart, DefaultCategoryDataset dataset){
+			List<BusinessEvent>	events = data.getFilterListToCurrent();
+			dataset.clear();
+			final String catagory = "Company";
+			Map <String, Integer> destinations = new HashMap<String, Integer>();
+			for (BusinessEvent e : events){
+				if (e instanceof TransportDiscontinuedEvent){
+					TransportDiscontinuedEvent temp = (TransportDiscontinuedEvent)e;
+					if (destinations.containsKey(temp.getTransportFirm())){
+						destinations.put(temp.getTransportFirm(), destinations.get(temp.getTransportFirm())+1);
+					}
+					else {
+						destinations.put(temp.getTransportFirm(), 1);
+					}
+				}
+			}
+			for (Entry<String, Integer> e: destinations.entrySet()){
+				dataset.addValue(e.getValue(), e.getKey(), catagory);
+			}
+			graphPanel.paint(graphPanel.getGraphics());
 		}
 
 		/* All updates that invove a graph are updating the data from individual graphs. */
-		private void updateMailGraph(){
+		private void updateMailGraph(JFreeChart chart, XYSeriesCollection dataset){
+			List<BusinessEvent>	events = data.getFilterListToCurrent();
+			dataset.removeAllSeries();
+			XYSeries revinue = new XYSeries("Revinue");
+			XYSeries expendture = new XYSeries("Expenditure");
+			double totalrev = 0;
+			double totalexp = 0;
+			revinue.add(0, totalrev);
+			expendture.add(0, totalexp);
+			for (int i = 0; i < events.size(); i++){
+				if (events.get(i) instanceof MailDeliveryEvent){
+					MailDeliveryEvent e = (MailDeliveryEvent)events.get(i);
+					totalrev = totalrev + e.getRevenue();
+					totalexp = totalexp + e.getExpenditure();
+					revinue.add(i+1, totalrev);
+					expendture.add(i+1, totalexp);
+				}
 
+			}
+			dataset.addSeries(revinue);
+			dataset.addSeries(expendture);
 		}
 
-		/* All updates that invove a graph are updating the data from individual graphs. */
-		private void updatePriceGraph(){
+		/* All updates that involve a graph are updating the data from individual graphs. */
+		private void updatePriceGraph(JFreeChart chart, XYSeriesCollection dataset){
+			List<BusinessEvent>	events = data.getFilterListToCurrent();
+			dataset.removeAllSeries();
+			Map <String, XYSeries> series = new HashMap<String, XYSeries>();
+			for (int i = 0; i < events.size(); i++){
+				if (events.get(i) instanceof PriceUpdateEvent){
+					PriceUpdateEvent e = (PriceUpdateEvent)events.get(i);
+					if (!series.containsKey(e.getOrigin()+" "+e.getDestination())){
+						series.put(e.getOrigin()+" "+e.getDestination(), new XYSeries(e.getOrigin()+" "+e.getDestination()));
+					}
+				}
+
+			}
+			for (int i = 0; i < events.size(); i++) {
+				if (events.get(i) instanceof PriceUpdateEvent){
+				PriceUpdateEvent e = (PriceUpdateEvent)events.get(i);
+					series.get(e.getOrigin()+" "+e.getDestination()).add(i+1, e.getGramPrice()/100.0);
+				}
+			}
+			for (Entry<String, XYSeries> e: series.entrySet()){
+				dataset.addSeries(e.getValue());
+			}
 
 		}
 
@@ -264,8 +348,13 @@ public class DecisionSupportPanel extends JPanel {
 		 * This updates the Display panel with using the text fields passed in eirler.
 		 */
 		public void updateDisplay() {
-			if (data.isFilterEmpty())
+			if (data.isFilterEmpty()){
+				for (JTextField text : textFields) {
+					text.setText(null);
+				}
+				textFields.get(0).setText("NO EVENTS OF THIS TYPE");
 				return;
+			}
 			event = data.getFilterCurrentEvent();
 			for (JTextField text : textFields) {
 				text.setText(null);
@@ -395,17 +484,22 @@ public class DecisionSupportPanel extends JPanel {
 						break;
 					case transString:
 						data.applyTransportCostUpdateFilter();
+						break;
 					case discString:
 						data.applyTransportDiscontinuedFilter();
+						break;
 					case mailString:
 						data.applyMailDeliveryFilter();
+						break;
 					case pricesString:
 						data.applyPriceUpdateFilter();
+						break;
 					default:
 						break;
 					}
 					graphPanel = p;
 					data.resetFilterEventLogLocation();
+					updateDisplay();
 					updateGraph();
 				}
 			};
@@ -439,10 +533,27 @@ public class DecisionSupportPanel extends JPanel {
 		private JPanel setupGraph(DefaultPieDataset dataset) {
 			Dataset temp = new DefaultCategoryDataset();
 			JFreeChart chart = ChartFactory.createBarChart("Transport", "Destination", "Change Frequency", (DefaultCategoryDataset)temp);
+			chart.getAntiAlias();
 			manager.setupGraphDisplay(transString, chart, null, temp);
+
+			temp = new XYSeriesCollection();
+			chart = ChartFactory.createXYLineChart("Mail Revinue and Expenditure", "Mail Deliverys", "Money (NZD)", (XYSeriesCollection)temp);
+			chart.getAntiAlias();
+			manager.setupGraphDisplay(mailString, chart, null, temp);
+
+			temp = new XYSeriesCollection();
+			chart = ChartFactory.createXYLineChart("Price Updates", "Consumer Routes", "Change in Price over time (NZD)", (XYSeriesCollection)temp);
+			chart.getAntiAlias();
+			manager.setupGraphDisplay(pricesString, chart, null, temp);
+
+			temp = new DefaultCategoryDataset();
+			chart = ChartFactory.createBarChart("Routes discontiuned by Company", "Companys", "Routes discotinued", (DefaultCategoryDataset)temp);
+			chart.getAntiAlias();
+			manager.setupGraphDisplay(discString, chart, null, temp);
 
 			chart = ChartFactory.createPieChart("Amount of Events", dataset,
 					true, true, false);
+			chart.getAntiAlias();
 			PiePlot plot = (PiePlot) chart.getPlot();
 			plot.setLabelFont(new Font("SansSerif", Font.PLAIN, 12));
 			plot.setNoDataMessage("No data available");
@@ -556,13 +667,13 @@ public class DecisionSupportPanel extends JPanel {
 			GridBagConstraints con = new GridBagConstraints();
 			JButton button = new JButton("Next");
 			con.fill = GridBagConstraints.HORIZONTAL;
-			con.gridx = 0;
+			con.gridx = 1;
 			con.gridy = 0;
 			button.addActionListener(manager.getNextLisener());
 			panel.add(button, con);
 			button = new JButton("Prev");
 			con.fill = GridBagConstraints.HORIZONTAL;
-			con.gridx = 1;
+			con.gridx = 0;
 			button.addActionListener(manager.getPrevLisener());
 			panel.add(button, con);
 			constraints.fill = GridBagConstraints.HORIZONTAL;

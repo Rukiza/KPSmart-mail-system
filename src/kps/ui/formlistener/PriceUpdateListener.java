@@ -1,9 +1,9 @@
 package kps.ui.formlistener;
 
-import kps.enums.Priority;
+import kps.data.Route;
 
-public interface PriceUpdateListener extends FormListener{
+public interface PriceUpdateListener extends RouteUpdateListener{
 
-	public void onPriceUpdateSubmitted(String to, String from, Priority priority, double weightCost, double volumeCost);
+	public void onPriceUpdateSubmitted(Route route, double weightCost, double volumeCost);
 
 }

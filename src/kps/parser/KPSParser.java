@@ -49,6 +49,7 @@ public class KPSParser {
 	public static final String DAY_TAG = "day";
 	public static final String DURATION_TAG = "duration";
 	public static final String FREQUENCY_TAG = "frequency";
+	public static final String DELIVERY_TIME_TAG = "deliveryTime";
 	public static final String USERS_FILE_TAG = "users";
 	public static final String USER_TAG = "user";
 	public static final String USERNAME_TAG = "username";
@@ -220,10 +221,11 @@ public class KPSParser {
 		Priority priority = Priority.convertStringToPriority(parseString(scan, PRIORITY_TAG));
 		double revenue = parseDouble(scan, REVENUE_TAG);
 		double expenditure = parseDouble(scan, EXPENDITURE_TAG);
+		int deliveryTime = parseInt(scan, DELIVERY_TIME_TAG);
 		gobble(scan, "</"+MAIL_DELIVERY_TAG+">");
 
 		// data has been successfully retrieved
-		return new MailDeliveryEvent(time, route, day, weight, volume, priority, revenue, expenditure);
+		return new MailDeliveryEvent(time, route, day, weight, volume, priority, revenue, expenditure, deliveryTime);
 	}
 
 	/**
