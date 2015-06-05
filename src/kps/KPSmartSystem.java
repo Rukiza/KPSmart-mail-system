@@ -231,8 +231,26 @@ public class KPSmartSystem {
 		}
 
 		// calculate expenditure
-		double expenditure = -1;
 		List<Node> path = null;
+		double expenditure = calculateExpenditure(route, day, weight, volume, priority, path);
+
+		if(revenue == -1 || expenditure == -1){
+			System.out.println("Error");
+			return;
+		}
+
+		//time to deliver in hours
+		int deliveryTime = timeToDeliver(path, day);
+
+
+		metrics.addMailDeliveryEvent(revenue, expenditure, from, to, weight, volume, priority);
+
+		long timeLogged = System.currentTimeMillis();
+		eventLog.addBusinessEvent(new MailDeliveryEvent(timeLogged, route, day, weight, volume, priority, revenue, expenditure));
+	}
+
+	private double calculateExpenditure(BasicRoute route, Day day, int weight, int volume, Priority priority, List<Node> path){
+		double expenditure = -1;
 
 		DijkstraSearch ds = new DijkstraSearch(routeGraph);
 		Map<List<Node>, Double> routeAndCost = ds.getShortestPath(new Mail(route, day, weight, volume, priority));
@@ -240,24 +258,11 @@ public class KPSmartSystem {
 		//sets the path and the expenditure
 		for(List<Node> ln : routeAndCost.keySet()){expenditure = routeAndCost.get(ln).doubleValue(); path = ln;}
 
-
-
-
-		expenditure /= 100; // convert to dollars
-
-		if(revenue == -1 || routeAndCost.size() > 1 || path == null){
-			System.out.println("Error");
-			return;
+		if(path == null || routeAndCost.size() > 1){
+			return -1;
 		}
 
-		//time to deliver in hours
-		this.avarageDeliveryTime = timeToDeliver(path, day);//TODO make it not just be the price for one delivery
-
-
-		metrics.addMailDeliveryEvent(revenue, expenditure, from, to, weight, volume, priority);
-
-		long timeLogged = System.currentTimeMillis();
-		eventLog.addBusinessEvent(new MailDeliveryEvent(timeLogged, route, day, weight, volume, priority, revenue, expenditure));
+		return expenditure / 100; // return and convert to dollars
 	}
 
 	/**

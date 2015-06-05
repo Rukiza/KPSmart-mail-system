@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javafx.scene.chart.NumberAxis;
+
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -218,10 +220,16 @@ public class DecisionSupportPanel extends JPanel {
 				break;
 			case transString:
 				updateTransportGraph(graphMap.get(transString), (DefaultCategoryDataset)datasetMap.get(transString));
+				break;
+			case discString:
+				updateDiscontinueGraph(graphMap.get(discString), (DefaultCategoryDataset)datasetMap.get(discString));
+				break;
 			case mailString:
 				updateMailGraph(graphMap.get(mailString), (XYSeriesCollection)datasetMap.get(mailString));
+				break;
 			case pricesString:
 				updatePriceGraph(graphMap.get(pricesString), (XYSeriesCollection)datasetMap.get(pricesString));
+				break;
 			default:
 				break;
 			}
@@ -264,8 +272,26 @@ public class DecisionSupportPanel extends JPanel {
 		}
 
 		/* All updates that invove a graph are updating the data from individual graphs. */
-		private void updateDiscontinueGraph(){
-
+		private void updateDiscontinueGraph(JFreeChart chart, DefaultCategoryDataset dataset){
+			List<BusinessEvent>	events = data.getFilterListToCurrent();
+			dataset.clear();
+			final String catagory = "Company";
+			Map <String, Integer> destinations = new HashMap<String, Integer>();
+			for (BusinessEvent e : events){
+				if (e instanceof TransportDiscontinuedEvent){
+					TransportDiscontinuedEvent temp = (TransportDiscontinuedEvent)e;
+					if (destinations.containsKey(temp.getTransportFirm())){
+						destinations.put(temp.getTransportFirm(), destinations.get(temp.getTransportFirm())+1);
+					}
+					else {
+						destinations.put(temp.getTransportFirm(), 1);
+					}
+				}
+			}
+			for (Entry<String, Integer> e: destinations.entrySet()){
+				dataset.addValue(e.getValue(), e.getKey(), catagory);
+			}
+			graphPanel.paint(graphPanel.getGraphics());
 		}
 
 		/* All updates that invove a graph are updating the data from individual graphs. */
@@ -297,14 +323,11 @@ public class DecisionSupportPanel extends JPanel {
 			List<BusinessEvent>	events = data.getFilterListToCurrent();
 			dataset.removeAllSeries();
 			Map <String, XYSeries> series = new HashMap<String, XYSeries>();
-			//Map <String, Integer> totals = new HashMap<String, Integer>();
 			for (int i = 0; i < events.size(); i++){
 				if (events.get(i) instanceof PriceUpdateEvent){
 					PriceUpdateEvent e = (PriceUpdateEvent)events.get(i);
 					if (!series.containsKey(e.getOrigin()+" "+e.getDestination())){
 						series.put(e.getOrigin()+" "+e.getDestination(), new XYSeries(e.getOrigin()+" "+e.getDestination()));
-						//totals.put(e.getOrigin()+" "+e.getDestination(), 0);
-						//series.get(e.getOrigin()+" "+e.getDestination()).add(0, 0);;
 					}
 				}
 
@@ -510,18 +533,27 @@ public class DecisionSupportPanel extends JPanel {
 		private JPanel setupGraph(DefaultPieDataset dataset) {
 			Dataset temp = new DefaultCategoryDataset();
 			JFreeChart chart = ChartFactory.createBarChart("Transport", "Destination", "Change Frequency", (DefaultCategoryDataset)temp);
+			chart.getAntiAlias();
 			manager.setupGraphDisplay(transString, chart, null, temp);
 
 			temp = new XYSeriesCollection();
 			chart = ChartFactory.createXYLineChart("Mail Revinue and Expenditure", "Mail Deliverys", "Money (NZD)", (XYSeriesCollection)temp);
+			chart.getAntiAlias();
 			manager.setupGraphDisplay(mailString, chart, null, temp);
 
 			temp = new XYSeriesCollection();
 			chart = ChartFactory.createXYLineChart("Price Updates", "Consumer Routes", "Change in Price over time (NZD)", (XYSeriesCollection)temp);
+			chart.getAntiAlias();
 			manager.setupGraphDisplay(pricesString, chart, null, temp);
+
+			temp = new DefaultCategoryDataset();
+			chart = ChartFactory.createBarChart("Routes discontiuned by Company", "Companys", "Routes discotinued", (DefaultCategoryDataset)temp);
+			chart.getAntiAlias();
+			manager.setupGraphDisplay(discString, chart, null, temp);
 
 			chart = ChartFactory.createPieChart("Amount of Events", dataset,
 					true, true, false);
+			chart.getAntiAlias();
 			PiePlot plot = (PiePlot) chart.getPlot();
 			plot.setLabelFont(new Font("SansSerif", Font.PLAIN, 12));
 			plot.setNoDataMessage("No data available");
