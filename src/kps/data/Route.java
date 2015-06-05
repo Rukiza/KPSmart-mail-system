@@ -12,8 +12,8 @@ public class Route {
 
 	private double cost;
 
-	//the type of transport this route supports
 	private TransportType type;
+
 
 	//the transport event
 	private TransportCostUpdateEvent transport;
@@ -107,9 +107,6 @@ public class Route {
 		return transport.getDepartureFrequency();
 	}
 
-
-
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -120,7 +117,6 @@ public class Route {
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -153,6 +149,7 @@ public class Route {
 		return true;
 
 	}
+
 
 	public String getCompany(){return transport.getTransportFirm();}
 

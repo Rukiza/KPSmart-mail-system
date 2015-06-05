@@ -79,7 +79,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 	 * */
 	public void setUpDrawNodes(){
 		for(Node n : graph.getNodes()){
-			drawNodes.add(new DrawNode(n,(int)(Math.random()*1000), (int)(Math.random()*700)));
+			drawNodes.add(new DrawNode(n,(int)(Math.random()*500), (int)(Math.random()*500)));
 		}
 		setUpNonRandomDrawNodes();
 	}
@@ -90,13 +90,24 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 	public void graphUpdated(){
 		boolean contains = false;
 
+		//check if the graph has removed any nodes
+		for(int i = 0; i < drawNodes.size(); i++){
+			boolean gHasNode = false;
+			for(Node n : graph.getNodes()){
+				if(n.equals(drawNodes.get(i).getNode()))gHasNode = true;
+			}
+			if(!gHasNode)drawNodes.remove(i);
+			gHasNode = false;
+		}
+
+
 		for(Node n : graph.getNodes()){
 			for(DrawNode dn : drawNodes ){
 				if(dn.getNode().equals(n))contains = true;
 			}
 			if(!contains){
 				System.out.println("Name  " + n.getName());
-				drawNodes.add(new DrawNode(n,(int)(Math.random()*1100), (int)(Math.random()*700)));
+				drawNodes.add(new DrawNode(n,(int)(Math.random()*500), (int)(Math.random()*500)));
 			}
 			contains = false;
 		}
@@ -113,8 +124,8 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 	 * Places the most connected node in the centre
 	 * */
 	public void setUpNonRandomDrawNodes(){
-		double sWidth = 1200;
-		double sHeight = 800;
+		double sWidth = 900;
+		double sHeight = 700;
 
 		DrawNode connectedNode = null;
 

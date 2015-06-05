@@ -63,8 +63,9 @@ public class Node  implements Comparable<Node>{
 	public void updateRoute(Route route){
 		if(route == null)return;
 
-		edgesIn.remove(route);
-		edgesOut.remove(route);
+		boolean removedIn = edgesIn.remove(route);
+		boolean removedOut = edgesOut.remove(route);
+
 
 		edgesIn.add(route);
 		edgesOut.add(route);
@@ -133,7 +134,6 @@ public class Node  implements Comparable<Node>{
 	 * Prints the routes information used for debugging
 	 * */
 	public void printRoutes(){
-		System.out.println("Node " +this.name + " In size " + edgesIn.size() + " Out Size " + edgesOut.size()  );
 		for(Route r : edgesIn){
 			System.out.println(r);
 		}

@@ -41,6 +41,7 @@ public class Metrics{
         origins = new ArrayList<String>();
         destinations = new ArrayList<String>();
         mailDelivered = new HashMap<BasicRoute, MailDelivered>();
+        averageTimes = new HashMap<BasicRoute, AverageTime>();
     }
 
     /**
@@ -64,6 +65,7 @@ public class Metrics{
         origins = new ArrayList<String>();
         destinations = new ArrayList<String>();
         mailDelivered = new HashMap<BasicRoute, MailDelivered>();
+        averageTimes = new HashMap<BasicRoute, AverageTime>();
     }
 
     /**
@@ -252,7 +254,7 @@ public class Metrics{
      * @param revenue
      * @param expenditure
      */
-    public void addMailDeliveryEvent(double revenue, double expenditure, String origin, String destination, int weight, int volume, Priority priority){
+    public void addMailDeliveryEvent(double revenue, double expenditure, String origin, String destination, int weight, int volume, int time, Priority priority){
     	// add the revenue and expenditure data to metrics
     	totalRevenue += revenue;
     	totalExpenditure += expenditure;
@@ -264,6 +266,11 @@ public class Metrics{
     		mailDelivered.put(route, new MailDelivered());
     	}
     	mailDelivered.get(route).updateMailDelivered(weight, volume);
+
+    	if(!averageTimes.containsKey(route)){
+    		averageTimes.put(route, new AverageTime());
+    	}
+    	averageTimes.get(route).addTime(time, priority);
 
         totalMailDeliveryEvents++;
     }

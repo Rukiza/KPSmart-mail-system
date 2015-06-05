@@ -32,6 +32,7 @@ import javax.swing.border.TitledBorder;
 import kps.data.wrappers.EventLog;
 import kps.enums.Day;
 import kps.enums.Priority;
+import kps.enums.TransportType;
 import kps.events.BusinessEvent;
 import kps.events.MailDeliveryEvent;
 import kps.events.PriceUpdateEvent;
@@ -298,7 +299,7 @@ public class DecisionSupportPanel extends JPanel {
 		private void updateMailGraph(JFreeChart chart, XYSeriesCollection dataset){
 			List<BusinessEvent>	events = data.getFilterListToCurrent();
 			dataset.removeAllSeries();
-			XYSeries revinue = new XYSeries("Revinue");
+			XYSeries revinue = new XYSeries("Revenue");
 			XYSeries expendture = new XYSeries("Expenditure");
 			double totalrev = 0;
 			double totalexp = 0;
@@ -379,7 +380,7 @@ public class DecisionSupportPanel extends JPanel {
 
 		/*Modifys the text fields depending on event type.*/
 		private void handlePriceUpdate(PriceUpdateEvent event) {
-			textFields.get(2).setText("Desitination");
+			textFields.get(2).setText("Destination");
 			textFields.get(3).setText(event.getDestination());
 			textFields.get(4).setText("Volume Price");
 			textFields.get(5).setText(TEXTFORMAT.format(event.getVolumePrice()/100));
@@ -391,17 +392,17 @@ public class DecisionSupportPanel extends JPanel {
 
 		/*Modifys the text fields depending on event type.*/
 		private void handleDiscountinuedUpdate(TransportDiscontinuedEvent event) {
-			textFields.get(2).setText("Desitination");
+			textFields.get(2).setText("Destination");
 			textFields.get(3).setText(event.getDestination());
-			textFields.get(4).setText("Tansport Firm");
+			textFields.get(4).setText("Transport Firm");
 			textFields.get(5).setText(event.getTransportFirm());
 			textFields.get(6).setText("Transport Type");
-			textFields.get(7).setText(""+event.getTransportType());
+			textFields.get(7).setText(""+TransportType.convertTransportTypeToString(event.getTransportType()));
 		}
 
 		/*Modifys the text fields depending on event type.*/
 		private void handleCostUpdate(TransportCostUpdateEvent event) {
-			textFields.get(2).setText("Desitination");
+			textFields.get(2).setText("Destination");
 			textFields.get(3).setText(event.getDestination());
 			textFields.get(4).setText("Volume Price");
 			textFields.get(5).setText(TEXTFORMAT.format(event.getVolumePrice()/100));
@@ -412,12 +413,12 @@ public class DecisionSupportPanel extends JPanel {
 			textFields.get(10).setText("Max Weight");
 			textFields.get(11).setText("" + event.getMaxWeight()+"g");
 			textFields.get(12).setText("Mail Transport Type");
-			textFields.get(13).setText(""+ event.getTransportType());
+			textFields.get(13).setText(""+ TransportType.convertTransportTypeToString(event.getTransportType()));
 		}
 
 		/*Modifys the text fields depending on event type.*/
 		private void handleMailUpdate(MailDeliveryEvent event) {
-			textFields.get(2).setText("Desitination");
+			textFields.get(2).setText("Destination");
 			textFields.get(3).setText(event.getDestination());
 			textFields.get(4).setText("Volume");
 			textFields.get(5).setText(event.getVolume() + "");
@@ -537,17 +538,17 @@ public class DecisionSupportPanel extends JPanel {
 			manager.setupGraphDisplay(transString, chart, null, temp);
 
 			temp = new XYSeriesCollection();
-			chart = ChartFactory.createXYLineChart("Mail Revinue and Expenditure", "Mail Deliverys", "Money (NZD)", (XYSeriesCollection)temp);
+			chart = ChartFactory.createXYLineChart("Mail Revenue and Expenditure", "Mail Deliveries", "Money (NZD)", (XYSeriesCollection)temp);
 			chart.getAntiAlias();
 			manager.setupGraphDisplay(mailString, chart, null, temp);
 
 			temp = new XYSeriesCollection();
-			chart = ChartFactory.createXYLineChart("Price Updates", "Consumer Routes", "Change in Price over time (NZD)", (XYSeriesCollection)temp);
+			chart = ChartFactory.createXYLineChart("Price Updates", "Custoumer Routes", "Change in Price Over Time (NZD)", (XYSeriesCollection)temp);
 			chart.getAntiAlias();
 			manager.setupGraphDisplay(pricesString, chart, null, temp);
 
 			temp = new DefaultCategoryDataset();
-			chart = ChartFactory.createBarChart("Routes discontiuned by Company", "Companys", "Routes discotinued", (DefaultCategoryDataset)temp);
+			chart = ChartFactory.createBarChart("Routes Discontinued by Company", "Companies", "Routes Discontinued", (DefaultCategoryDataset)temp);
 			chart.getAntiAlias();
 			manager.setupGraphDisplay(discString, chart, null, temp);
 
@@ -695,16 +696,16 @@ public class DecisionSupportPanel extends JPanel {
 		    type.setActionCommand(typeString);
 		    type.setSelected(true);
 
-		    JRadioButton mailEvents = new JRadioButton("Mail Events only");
+		    JRadioButton mailEvents = new JRadioButton("Mail Events Only");
 		    mailEvents.setActionCommand(mailString);
 
-		    JRadioButton transport = new JRadioButton("Transport Events only");
+		    JRadioButton transport = new JRadioButton("Transport Events Only");
 		    transport.setActionCommand(transString);
 
-		    JRadioButton discontinued = new JRadioButton("Transport Disconinted events only");
+		    JRadioButton discontinued = new JRadioButton("Transport Discontinued Events Only");
 		    discontinued.setActionCommand(discString);
 
-		    JRadioButton priceUpdate = new JRadioButton("Price Update events only");
+		    JRadioButton priceUpdate = new JRadioButton("Price Update Events Only");
 		    priceUpdate.setActionCommand(pricesString);
 
 		    ButtonGroup group = new ButtonGroup();

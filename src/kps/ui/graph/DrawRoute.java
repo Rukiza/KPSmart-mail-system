@@ -61,16 +61,6 @@ public class DrawRoute {
 	}
 
 	/**
-	 * Converts the list of routes to a set of routes
-	 * */
-//	private void routesToSet(){
-//		for(Route r : routes){
-//			//routeSet.add(r);
-//		}
-//	}
-
-
-	/**
 	 * Returns whether a route should be added to a drawNode
 	 * */
 	public boolean addRouteCheck(Route r){
@@ -150,9 +140,9 @@ public class DrawRoute {
 
 
 			g.setColor(Color.BLACK);
-			g.drawOval(points.get(0).x-10,points.get(0).y-10, 20, 20);
+			g.drawOval(points.get(0).x-5,points.get(0).y-5, 10, 10);
 			g.setColor(Color.WHITE);
-			g.fillOval(points.get(0).x-10,points.get(0).y-10, 20, 20);
+			g.fillOval(points.get(0).x-5,points.get(0).y-5, 10, 10);
 		}
 		if(toNode2){//node 2 is the destination
 			List<Point> points =  CircleLine.getCircleLineIntersectionPoint(new Point((int)(node1X+nodeSize1),(int) (node1Y+nodeSize1)),
@@ -160,9 +150,9 @@ public class DrawRoute {
 																			new Point((int)(node2X+nodeSize2), (int)(node2Y+nodeSize2)),nodeSize2);
 
 			g.setColor(Color.BLACK);
-			g.drawOval(points.get(0).x-10,points.get(0).y-10, 20, 20);
+			g.drawOval(points.get(0).x-5,points.get(0).y-5, 10, 10);
 			g.setColor(Color.WHITE);
-			g.fillOval(points.get(0).x-10,points.get(0).y-10, 20, 20);
+			g.fillOval(points.get(0).x-5,points.get(0).y-5, 10, 10);
 
 		}
 

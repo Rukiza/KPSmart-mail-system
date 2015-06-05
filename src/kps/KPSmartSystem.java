@@ -3,13 +3,10 @@ package kps;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.sun.xml.internal.bind.v2.TODO;
 
 import kps.Main;
 import kps.data.CustomerRoute;
@@ -39,8 +36,6 @@ import kps.users.KPSUser;
 public class KPSmartSystem {
 
 	// fields
-	//private double totalRevenue;
-	//private double totalExpenditure;
 	private EventLog eventLog;
 	private Map<BasicRoute, CustomerRoute> customerRoutes;
 	private RouteGraph routeGraph;
@@ -48,7 +43,6 @@ public class KPSmartSystem {
 	private KPSUser currentUser;
 
 	private Metrics metrics;
-	private int avarageDeliveryTime;
 
 	private final String EVENT_LOG_FILENAME = Main.XML_FILE_PATH+"kps_data.xml";
 
@@ -216,6 +210,7 @@ public class KPSmartSystem {
 			System.out.println("cannot send mail, No cutsomer cost for route" );
 			return;
 		}
+
 		double revenue = customerRoutes.get(route).calculateDeliveryPrice(weight, volume, priority);
 		if(revenue < 0){
 			// cannot send mail
@@ -231,56 +226,29 @@ public class KPSmartSystem {
 		}
 
 		// calculate expenditure
-		List<Node> path = null;
-		double expenditure = calculateExpenditure(route, day, weight, volume, priority, path);
-
-		if(revenue == -1 || expenditure == -1){
-			System.out.println("Error");
-			return;
-		}
-
-		//time to deliver in hours
-		int deliveryTime = timeToDeliver(path, day);
-
-
-		metrics.addMailDeliveryEvent(revenue, expenditure, from, to, weight, volume, priority);
-
-		long timeLogged = System.currentTimeMillis();
-		eventLog.addBusinessEvent(new MailDeliveryEvent(timeLogged, route, day, weight, volume, priority, revenue, expenditure, deliveryTime));
-	}
-
-	/**
-	 * Calculates the expenditure cost for sending a package.
-	 *
-	 * @param route
-	 * 		-- route the package is taking
-	 * @param day
-	 * 		-- day delivery started
-	 * @param weight
-	 * 		-- weight of package
-	 * @param volume
-	 * 		-- volume of package
-	 * @param priority
-	 * 		-- pritority of package
-	 * @param path
-	 * 		-- path that the package is going to take (null at method call)
-	 *
-	 * @return expenditure cost
-	 */
-	private double calculateExpenditure(BasicRoute route, Day day, int weight, int volume, Priority priority, List<Node> path){
 		double expenditure = -1;
 
+		List<Node> path = null;
 		DijkstraSearch ds = new DijkstraSearch(routeGraph);
 		Map<List<Node>, Double> routeAndCost = ds.getShortestPath(new Mail(route, day, weight, volume, priority));
 
 		//sets the path and the expenditure
 		for(List<Node> ln : routeAndCost.keySet()){expenditure = routeAndCost.get(ln).doubleValue(); path = ln;}
 
-		if(path == null || routeAndCost.size() > 1){
-			return -1;
+		expenditure /= 100; // convert to dollars
+
+		if(revenue == -1 || routeAndCost.size() > 1 || path == null){
+			System.out.println("Error");
+			return;
 		}
 
-		return expenditure / 100; // return and convert to dollars
+		//time to deliver in hours
+		int deliveryTime = timeToDeliver(path, day);//TODO make it not just be the price for one delivery
+
+		metrics.addMailDeliveryEvent(revenue, expenditure, from, to, weight, volume, deliveryTime, priority);
+
+		long timeLogged = System.currentTimeMillis();
+		eventLog.addBusinessEvent(new MailDeliveryEvent(timeLogged, route, day, weight, volume, priority, revenue,  expenditure, deliveryTime));
 	}
 
 	/**
@@ -423,6 +391,18 @@ public class KPSmartSystem {
 	}
 
 	/**
+	 * Removes the specified user from the system.
+	 *
+	 * @param username
+	 * 		-- the user to be removed
+	 */
+	public void removeKPSUser(String username){
+		if(users.containsKey(username)){
+			users.remove(username);
+		}
+	}
+
+	/**
 	 * Returns true if there is a user in the KPSmartSystem with
 	 * the specified username. Otherwise returns false.
 	 *
@@ -460,7 +440,7 @@ public class KPSmartSystem {
 		for(int i = 0; i < eventLog.getSize(); i++){
 			if(event instanceof MailDeliveryEvent){
 				MailDeliveryEvent mail = (MailDeliveryEvent)event;
-				metrics.addMailDeliveryEvent(mail.getRevenue(), mail.getExpenditure(), mail.getOrigin(), mail.getDestination(), mail.getWeight(), mail.getVolume(), mail.getPriority());
+				metrics.addMailDeliveryEvent(mail.getRevenue(), mail.getExpenditure(), mail.getOrigin(), mail.getDestination(), mail.getWeight(), mail.getVolume(), mail.getDeliveryTime(), mail.getPriority());
 			}
 			if(event instanceof PriceUpdateEvent){
 				PriceUpdateEvent price = (PriceUpdateEvent)event;
@@ -573,11 +553,6 @@ public class KPSmartSystem {
 		//cannot send it that day
 		return -1;
 	}
-
-	public int getAvarageDeliveryTime(){
-		return this.avarageDeliveryTime;
-	}
-
 
 	public EventLog getEventLog() {
 		return eventLog;

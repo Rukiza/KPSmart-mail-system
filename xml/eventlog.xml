@@ -1101,6 +1101,7 @@
 		<priority>International Air</priority>
 		<revenue>5832.0</revenue>
 		<expenditure>1378.0</expenditure>
+		<deliveryTime>26</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430743170570</time>
@@ -1112,6 +1113,7 @@
 		<priority>International Air</priority>
 		<revenue>2820.0</revenue>
 		<expenditure>1216.0</expenditure>
+		<deliveryTime>45</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430743277516</time>
@@ -1123,6 +1125,7 @@
 		<priority>International Standard</priority>
 		<revenue>2940.0</revenue>
 		<expenditure>2045.0</expenditure>
+		<deliveryTime>14</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430743443659</time>
@@ -1134,6 +1137,7 @@
 		<priority>International Standard</priority>
 		<revenue>840.0</revenue>
 		<expenditure>2929.0</expenditure>
+		<deliveryTime>76</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430743512313</time>
@@ -1145,6 +1149,7 @@
 		<priority>International Air</priority>
 		<revenue>2820.0</revenue>
 		<expenditure>1254.0</expenditure>
+		<deliveryTime>134</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430743662445</time>
@@ -1156,6 +1161,7 @@
 		<priority>International Air</priority>
 		<revenue>5304.0</revenue>
 		<expenditure>1856.0</expenditure>
+		<deliveryTime>118</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430743728206</time>
@@ -1167,6 +1173,7 @@
 		<priority>International Air</priority>
 		<revenue>3744.0</revenue>
 		<expenditure>884.0</expenditure>
+		<deliveryTime>25</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430743836496</time>
@@ -1178,6 +1185,7 @@
 		<priority>International Standard</priority>
 		<revenue>2640.0</revenue>
 		<expenditure>1823.0</expenditure>
+		<deliveryTime>153</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430743973052</time>
@@ -1189,6 +1197,7 @@
 		<priority>International Standard</priority>
 		<revenue>4080.0</revenue>
 		<expenditure>2850.0</expenditure>
+		<deliveryTime>174</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430744043555</time>
@@ -1200,6 +1209,7 @@
 		<priority>International Air</priority>
 		<revenue>1120.0</revenue>
 		<expenditure>961.0</expenditure>
+		<deliveryTime>166</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430744173638</time>
@@ -1211,6 +1221,7 @@
 		<priority>International Air</priority>
 		<revenue>1316.0</revenue>
 		<expenditure>1599.0</expenditure>
+		<deliveryTime>139</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430744332763</time>
@@ -1222,6 +1233,7 @@
 		<priority>International Standard</priority>
 		<revenue>2820.0</revenue>
 		<expenditure>1898.0</expenditure>
+		<deliveryTime>100</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430744417582</time>
@@ -1233,6 +1245,7 @@
 		<priority>International Standard</priority>
 		<revenue>882.0</revenue>
 		<expenditure>3927.0</expenditure>
+		<deliveryTime>153</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430744483709</time>
@@ -1244,6 +1257,7 @@
 		<priority>International Air</priority>
 		<revenue>6768.0</revenue>
 		<expenditure>4966.0</expenditure>
+		<deliveryTime>103</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430744567789</time>
@@ -1255,6 +1269,7 @@
 		<priority>International Air</priority>
 		<revenue>5600.0</revenue>
 		<expenditure>3314.0</expenditure>
+		<deliveryTime>47</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430744694425</time>
@@ -1266,6 +1281,7 @@
 		<priority>International Standard</priority>
 		<revenue>760.0</revenue>
 		<expenditure>523.0</expenditure>
+		<deliveryTime>144</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430744819924</time>
@@ -1277,6 +1293,7 @@
 		<priority>International Standard</priority>
 		<revenue>3120.0</revenue>
 		<expenditure>1511.0</expenditure>
+		<deliveryTime>109</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430744899249</time>
@@ -1288,6 +1305,7 @@
 		<priority>International Air</priority>
 		<revenue>4644.0</revenue>
 		<expenditure>2322.0</expenditure>
+		<deliveryTime>157</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430745004879</time>
@@ -1299,6 +1317,7 @@
 		<priority>International Air</priority>
 		<revenue>1862.0</revenue>
 		<expenditure>786.0</expenditure>
+		<deliveryTime>199</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430745068179</time>
@@ -1310,6 +1329,7 @@
 		<priority>International Air</priority>
 		<revenue>3420.0</revenue>
 		<expenditure>1458.0</expenditure>
+		<deliveryTime>121</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430745135017</time>
@@ -1321,6 +1341,7 @@
 		<priority>International Standard</priority>
 		<revenue>1786.0</revenue>
 		<expenditure>485.0</expenditure>
+		<deliveryTime>168</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430745233947</time>
@@ -1332,6 +1353,7 @@
 		<priority>International Air</priority>
 		<revenue>1400.0</revenue>
 		<expenditure>809.0</expenditure>
+		<deliveryTime>31</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430745400108</time>
@@ -1343,6 +1365,7 @@
 		<priority>International Standard</priority>
 		<revenue>1580.0</revenue>
 		<expenditure>2371.0</expenditure>
+		<deliveryTime>82</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430745463947</time>
@@ -1354,6 +1377,7 @@
 		<priority>International Standard</priority>
 		<revenue>1950.0</revenue>
 		<expenditure>1001.0</expenditure>
+		<deliveryTime>95</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430745618221</time>
@@ -1365,6 +1389,7 @@
 		<priority>International Standard</priority>
 		<revenue>516.0</revenue>
 		<expenditure>2228.0</expenditure>
+		<deliveryTime>76</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430745750108</time>
@@ -1376,6 +1401,7 @@
 		<priority>International Standard</priority>
 		<revenue>3840.0</revenue>
 		<expenditure>2666.0</expenditure>
+		<deliveryTime>23</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430745893782</time>
@@ -1387,6 +1413,7 @@
 		<priority>International Air</priority>
 		<revenue>7668.0</revenue>
 		<expenditure>3753.0</expenditure>
+		<deliveryTime>22</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430746004146</time>
@@ -1398,6 +1425,7 @@
 		<priority>International Air</priority>
 		<revenue>1632.0</revenue>
 		<expenditure>5020.0</expenditure>
+		<deliveryTime>160</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430746174633</time>
@@ -1409,6 +1437,7 @@
 		<priority>International Standard</priority>
 		<revenue>948.0</revenue>
 		<expenditure>3238.0</expenditure>
+		<deliveryTime>80</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430746344513</time>
@@ -1420,6 +1449,7 @@
 		<priority>International Air</priority>
 		<revenue>1200.0</revenue>
 		<expenditure>886.0</expenditure>
+		<deliveryTime>50</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430746416833</time>
@@ -1431,6 +1461,7 @@
 		<priority>International Air</priority>
 		<revenue>3960.0</revenue>
 		<expenditure>1702.0</expenditure>
+		<deliveryTime>168</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430746532979</time>
@@ -1442,6 +1473,7 @@
 		<priority>International Standard</priority>
 		<revenue>2430.0</revenue>
 		<expenditure>1166.0</expenditure>
+		<deliveryTime>170</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430746696883</time>
@@ -1453,6 +1485,7 @@
 		<priority>International Air</priority>
 		<revenue>6006.0</revenue>
 		<expenditure>3797.0</expenditure>
+		<deliveryTime>100</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430746840662</time>
@@ -1464,6 +1497,7 @@
 		<priority>International Air</priority>
 		<revenue>3876.0</revenue>
 		<expenditure>1742.0</expenditure>
+		<deliveryTime>40</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430746965841</time>
@@ -1475,6 +1509,7 @@
 		<priority>International Air</priority>
 		<revenue>5824.0</revenue>
 		<expenditure>3453.0</expenditure>
+		<deliveryTime>59</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430747052378</time>
@@ -1486,6 +1521,7 @@
 		<priority>International Standard</priority>
 		<revenue>792.0</revenue>
 		<expenditure>660.0</expenditure>
+		<deliveryTime>116</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430747112672</time>
@@ -1497,6 +1533,7 @@
 		<priority>International Air</priority>
 		<revenue>6876.0</revenue>
 		<expenditure>6556.0</expenditure>
+		<deliveryTime>168</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430747238339</time>
@@ -1508,6 +1545,7 @@
 		<priority>International Standard</priority>
 		<revenue>2976.0</revenue>
 		<expenditure>2480.0</expenditure>
+		<deliveryTime>137</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430747366751</time>
@@ -1519,6 +1557,7 @@
 		<priority>International Standard</priority>
 		<revenue>3624.0</revenue>
 		<expenditure>3890.0</expenditure>
+		<deliveryTime>60</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430747532948</time>
@@ -1530,6 +1569,7 @@
 		<priority>International Air</priority>
 		<revenue>3168.0</revenue>
 		<expenditure>1566.0</expenditure>
+		<deliveryTime>44</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430747635900</time>
@@ -1541,6 +1581,7 @@
 		<priority>International Standard</priority>
 		<revenue>2800.0</revenue>
 		<expenditure>4124.0</expenditure>
+		<deliveryTime>161</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430747791944</time>
@@ -1552,6 +1593,7 @@
 		<priority>International Standard</priority>
 		<revenue>2603.0</revenue>
 		<expenditure>1486.0</expenditure>
+		<deliveryTime>78</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430747877683</time>
@@ -1563,6 +1605,7 @@
 		<priority>International Standard</priority>
 		<revenue>3940.0</revenue>
 		<expenditure>4009.0</expenditure>
+		<deliveryTime>37</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430748056578</time>
@@ -1574,6 +1617,7 @@
 		<priority>International Standard</priority>
 		<revenue>2660.0</revenue>
 		<expenditure>1820.0</expenditure>
+		<deliveryTime>147</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430748148009</time>
@@ -1585,6 +1629,7 @@
 		<priority>International Standard</priority>
 		<revenue>3344.0</revenue>
 		<expenditure>2334.0</expenditure>
+		<deliveryTime>174</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430748246091</time>
@@ -1596,6 +1641,7 @@
 		<priority>International Standard</priority>
 		<revenue>1710.0</revenue>
 		<expenditure>855.0</expenditure>
+		<deliveryTime>31</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430748406004</time>
@@ -1607,6 +1653,7 @@
 		<priority>International Air</priority>
 		<revenue>3780.0</revenue>
 		<expenditure>2799.0</expenditure>
+		<deliveryTime>122</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430748487142</time>
@@ -1618,6 +1665,7 @@
 		<priority>International Air</priority>
 		<revenue>1296.0</revenue>
 		<expenditure>5552.0</expenditure>
+		<deliveryTime>116</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430748655684</time>
@@ -1629,6 +1677,7 @@
 		<priority>International Air</priority>
 		<revenue>1248.0</revenue>
 		<expenditure>3851.0</expenditure>
+		<deliveryTime>74</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430748733767</time>
@@ -1640,6 +1689,7 @@
 		<priority>International Air</priority>
 		<revenue>4500.0</revenue>
 		<expenditure>2196.0</expenditure>
+		<deliveryTime>135</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430748847771</time>
@@ -1651,6 +1701,7 @@
 		<priority>International Air</priority>
 		<revenue>3724.0</revenue>
 		<expenditure>4587.0</expenditure>
+		<deliveryTime>37</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430749023082</time>
@@ -1662,6 +1713,7 @@
 		<priority>International Standard</priority>
 		<revenue>2592.0</revenue>
 		<expenditure>2160.0</expenditure>
+		<deliveryTime>164</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430749119160</time>
@@ -1673,6 +1725,7 @@
 		<priority>International Standard</priority>
 		<revenue>4186.0</revenue>
 		<expenditure>4863.0</expenditure>
+		<deliveryTime>128</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430749280133</time>
@@ -1684,6 +1737,7 @@
 		<priority>International Standard</priority>
 		<revenue>468.0</revenue>
 		<expenditure>1575.0</expenditure>
+		<deliveryTime>14</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430749383054</time>
@@ -1695,6 +1749,7 @@
 		<priority>International Standard</priority>
 		<revenue>1116.0</revenue>
 		<expenditure>3842.0</expenditure>
+		<deliveryTime>88</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430749474748</time>
@@ -1706,6 +1761,7 @@
 		<priority>International Standard</priority>
 		<revenue>2128.0</revenue>
 		<expenditure>1592.0</expenditure>
+		<deliveryTime>122</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430749602771</time>
@@ -1717,6 +1773,7 @@
 		<priority>International Standard</priority>
 		<revenue>880.0</revenue>
 		<expenditure>852.0</expenditure>
+		<deliveryTime>55</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430749663168</time>
@@ -1728,6 +1785,7 @@
 		<priority>International Air</priority>
 		<revenue>5148.0</revenue>
 		<expenditure>4875.0</expenditure>
+		<deliveryTime>82</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430749810691</time>
@@ -1739,6 +1797,7 @@
 		<priority>International Air</priority>
 		<revenue>408.0</revenue>
 		<expenditure>1751.0</expenditure>
+		<deliveryTime>28</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430749881157</time>
@@ -1750,6 +1809,7 @@
 		<priority>International Standard</priority>
 		<revenue>732.0</revenue>
 		<expenditure>2546.0</expenditure>
+		<deliveryTime>85</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430750002824</time>
@@ -1761,6 +1821,7 @@
 		<priority>International Air</priority>
 		<revenue>1476.0</revenue>
 		<expenditure>726.0</expenditure>
+		<deliveryTime>76</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430750108301</time>
@@ -1772,6 +1833,7 @@
 		<priority>International Air</priority>
 		<revenue>712.0</revenue>
 		<expenditure>2197.0</expenditure>
+		<deliveryTime>79</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430750190094</time>
@@ -1783,6 +1845,7 @@
 		<priority>International Standard</priority>
 		<revenue>1560.0</revenue>
 		<expenditure>748.0</expenditure>
+		<deliveryTime>146</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430750346421</time>
@@ -1794,6 +1857,7 @@
 		<priority>International Air</priority>
 		<revenue>5586.0</revenue>
 		<expenditure>6253.0</expenditure>
+		<deliveryTime>56</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430750434482</time>
@@ -1805,6 +1869,7 @@
 		<priority>International Air</priority>
 		<revenue>6480.0</revenue>
 		<expenditure>4734.0</expenditure>
+		<deliveryTime>142</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430750522667</time>
@@ -1816,6 +1881,7 @@
 		<priority>International Standard</priority>
 		<revenue>3078.0</revenue>
 		<expenditure>898.0</expenditure>
+		<deliveryTime>187</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430750660401</time>
@@ -1827,6 +1893,7 @@
 		<priority>International Air</priority>
 		<revenue>8474.0</revenue>
 		<expenditure>3844.0</expenditure>
+		<deliveryTime>85</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430750749931</time>
@@ -1838,6 +1905,7 @@
 		<priority>International Standard</priority>
 		<revenue>2160.0</revenue>
 		<expenditure>1494.0</expenditure>
+		<deliveryTime>87</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430750834890</time>
@@ -1849,6 +1917,7 @@
 		<priority>International Standard</priority>
 		<revenue>4080.0</revenue>
 		<expenditure>2756.0</expenditure>
+		<deliveryTime>197</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430750941729</time>
@@ -1860,6 +1929,7 @@
 		<priority>International Air</priority>
 		<revenue>2616.0</revenue>
 		<expenditure>1890.0</expenditure>
+		<deliveryTime>132</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430751064859</time>
@@ -1871,6 +1941,7 @@
 		<priority>International Standard</priority>
 		<revenue>3180.0</revenue>
 		<expenditure>2118.0</expenditure>
+		<deliveryTime>102</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430751131504</time>
@@ -1882,6 +1953,7 @@
 		<priority>International Air</priority>
 		<revenue>2712.0</revenue>
 		<expenditure>2009.0</expenditure>
+		<deliveryTime>27</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430751268249</time>
@@ -1893,6 +1965,7 @@
 		<priority>International Air</priority>
 		<revenue>1224.0</revenue>
 		<expenditure>3737.0</expenditure>
+		<deliveryTime>26</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430751415865</time>
@@ -1904,6 +1977,7 @@
 		<priority>International Standard</priority>
 		<revenue>2800.0</revenue>
 		<expenditure>1953.0</expenditure>
+		<deliveryTime>66</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430751580839</time>
@@ -1915,6 +1989,7 @@
 		<priority>International Air</priority>
 		<revenue>3140.0</revenue>
 		<expenditure>1355.0</expenditure>
+		<deliveryTime>142</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430751686860</time>
@@ -1926,6 +2001,7 @@
 		<priority>International Standard</priority>
 		<revenue>468.0</revenue>
 		<expenditure>1609.0</expenditure>
+		<deliveryTime>187</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430751802009</time>
@@ -1937,6 +2013,7 @@
 		<priority>International Standard</priority>
 		<revenue>5088.0</revenue>
 		<expenditure>4280.0</expenditure>
+		<deliveryTime>85</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430751974160</time>
@@ -1948,6 +2025,7 @@
 		<priority>International Standard</priority>
 		<revenue>3666.0</revenue>
 		<expenditure>4355.0</expenditure>
+		<deliveryTime>87</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430752118861</time>
@@ -1959,6 +2037,7 @@
 		<priority>International Standard</priority>
 		<revenue>3570.0</revenue>
 		<expenditure>2373.0</expenditure>
+		<deliveryTime>197</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430752197559</time>
@@ -1970,6 +2049,7 @@
 		<priority>International Standard</priority>
 		<revenue>2280.0</revenue>
 		<expenditure>2426.0</expenditure>
+		<deliveryTime>132</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430752319581</time>
@@ -1981,6 +2061,7 @@
 		<priority>International Air</priority>
 		<revenue>3492.0</revenue>
 		<expenditure>2517.0</expenditure>
+		<deliveryTime>102</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430752499010</time>
@@ -1992,6 +2073,7 @@
 		<priority>International Air</priority>
 		<revenue>3456.0</revenue>
 		<expenditure>3360.0</expenditure>
+		<deliveryTime>27</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430752628304</time>
@@ -2003,6 +2085,7 @@
 		<priority>International Air</priority>
 		<revenue>1480.0</revenue>
 		<expenditure>1275.0</expenditure>
+		<deliveryTime>26</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430752720731</time>
@@ -2014,6 +2097,7 @@
 		<priority>International Air</priority>
 		<revenue>4396.0</revenue>
 		<expenditure>3872.0</expenditure>
+		<deliveryTime>66</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430752885028</time>
@@ -2025,6 +2109,7 @@
 		<priority>International Standard</priority>
 		<revenue>3384.0</revenue>
 		<expenditure>2088.0</expenditure>
+		<deliveryTime>142</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430753027883</time>
@@ -2036,6 +2121,7 @@
 		<priority>International Standard</priority>
 		<revenue>3936.0</revenue>
 		<expenditure>3328.0</expenditure>
+		<deliveryTime>38</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430753123616</time>
@@ -2047,6 +2133,7 @@
 		<priority>International Air</priority>
 		<revenue>2556.0</revenue>
 		<expenditure>577.0</expenditure>
+		<deliveryTime>134</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430753290548</time>
@@ -2058,6 +2145,7 @@
 		<priority>International Air</priority>
 		<revenue>5376.0</revenue>
 		<expenditure>3404.0</expenditure>
+		<deliveryTime>50</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430753375080</time>
@@ -2069,6 +2157,7 @@
 		<priority>International Air</priority>
 		<revenue>6048.0</revenue>
 		<expenditure>1457.0</expenditure>
+		<deliveryTime>50</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430753538813</time>
@@ -2080,6 +2169,7 @@
 		<priority>International Air</priority>
 		<revenue>1112.0</revenue>
 		<expenditure>4809.0</expenditure>
+		<deliveryTime>119</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430753643190</time>
@@ -2091,6 +2181,7 @@
 		<priority>International Standard</priority>
 		<revenue>3960.0</revenue>
 		<expenditure>2704.0</expenditure>
+		<deliveryTime>88</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430753782723</time>
@@ -2102,6 +2193,7 @@
 		<priority>International Standard</priority>
 		<revenue>4500.0</revenue>
 		<expenditure>3040.0</expenditure>
+		<deliveryTime>15</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430753927655</time>
@@ -2113,6 +2205,7 @@
 		<priority>International Standard</priority>
 		<revenue>4080.0</revenue>
 		<expenditure>4134.0</expenditure>
+		<deliveryTime>35</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430754016566</time>
@@ -2124,6 +2217,7 @@
 		<priority>International Standard</priority>
 		<revenue>2736.0</revenue>
 		<expenditure>1718.0</expenditure>
+		<deliveryTime>94</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430754151590</time>
@@ -2135,6 +2229,7 @@
 		<priority>International Air</priority>
 		<revenue>1020.0</revenue>
 		<expenditure>889.0</expenditure>
+		<deliveryTime>200</deliveryTime>
 	</mail>
 	<mail>
 		<time>1430754295454</time>
@@ -2146,6 +2241,7 @@
 		<priority>International Standard</priority>
 		<revenue>1376.0</revenue>
 		<expenditure>946.0</expenditure>
+		<deliveryTime>80</deliveryTime>
 	</mail>
 	<discontinue>
 	    <time>1430754295455</time>

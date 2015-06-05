@@ -461,25 +461,28 @@ public class KPSmartSystemTests {
 		kp.addPriceUpdateEvent("Node 6", "Node 3", 160, 180, Priority.INTERNATIONAL_STANDARD);
 
 		kp.addMailDeliveryEvent("Node 1", "Node 3", Day.MONDAY,  1,  1, Priority.INTERNATIONAL_STANDARD);
-
-		assertTrue(kp.getAvarageDeliveryTime() == 29);//
+		checkValidTimeTaken(kp.getEventLog().getLastEventAdded(), 29);
 
 		kp.addMailDeliveryEvent("Node 1", "Node 3", Day.TUESDAY,  1,  1, Priority.INTERNATIONAL_STANDARD);
-
-		System.out.println("Avg " + kp.getAvarageDeliveryTime());
-		assertTrue(kp.getAvarageDeliveryTime() == 173);//
+		checkValidTimeTaken(kp.getEventLog().getLastEventAdded(), 173);
 
 		kp.addMailDeliveryEvent("Node 1", "Node 5", Day.THURSDAY,  1,  1, Priority.INTERNATIONAL_STANDARD);
-
-		System.out.println("Avg " + kp.getAvarageDeliveryTime());
-		assertTrue(kp.getAvarageDeliveryTime() == 149);//
+		checkValidTimeTaken(kp.getEventLog().getLastEventAdded(), 149);
 
 		kp.addMailDeliveryEvent("Node 6", "Node 3", Day.TUESDAY,  1,  1, Priority.INTERNATIONAL_STANDARD);
-
-		System.out.println("Avg " + kp.getAvarageDeliveryTime());
-		assertTrue(kp.getAvarageDeliveryTime() == 173);//
+		checkValidTimeTaken(kp.getEventLog().getLastEventAdded(), 173);
 
 	}
 
-
+	private void checkValidTimeTaken(BusinessEvent event, int expectedTime){
+		if(event instanceof MailDeliveryEvent){
+			MailDeliveryEvent mail = (MailDeliveryEvent)event;
+			if(mail.getDeliveryTime() != expectedTime){
+				fail("Expecting delivery time of "+expectedTime+" hours, received time of "+mail.getDeliveryTime()+" hours.");
+			}
+		}
+		else{
+			fail("Expecting a MailDeliveryEvent, received a "+event.getClass());
+		}
+	}
 }

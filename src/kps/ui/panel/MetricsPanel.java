@@ -27,6 +27,7 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 import kps.data.wrappers.Metrics;
+import kps.enums.Priority;
 import kps.ui.util.SpringUtilities;
 
 public class MetricsPanel extends JPanel implements ActionListener{
@@ -213,6 +214,12 @@ public class MetricsPanel extends JPanel implements ActionListener{
 
         private static final long serialVersionUID = 1L;
 
+        // fields
+        private JFreeChart chart;
+
+        // components
+        private ChartPanel chartPanel;
+
         /**
          * Constructs a new GraphPanel Object with the specified
          * width and height.
@@ -224,16 +231,16 @@ public class MetricsPanel extends JPanel implements ActionListener{
          */
         public GraphPanel(int width, int height){
             super(width, height);
+            chart = ChartFactory.createXYLineChart("Revenue and Expenditure", "Mail Deliveries", "Money (NZD)", createDataset());
+            chartPanel = new ChartPanel(chart);
+            add(chartPanel);
         }
 
         /**
          * Paints the graph to the GraphPanel.
          */
         public void paintComponent(Graphics g){
-        	JFreeChart chart = ChartFactory.createXYLineChart("Revenue and Expenditure", "Mail Deliveries", "Money (NZD)", createDataset());
-        	ChartPanel panel = new ChartPanel(chart);
-        	panel.setPreferredSize(new Dimension(getWidth(), getHeight()));
-        	add(panel);
+
         }
 
         /**
@@ -445,6 +452,8 @@ public class MetricsPanel extends JPanel implements ActionListener{
         		mail.setWeight(metrics.getTotalMailWeight(origin, destination));
         		mail.setVolume(metrics.getTotalMailVolume(origin, destination));
         		mail.setAmount(metrics.getTotalMailAmount(origin, destination));
+        		times.setAirTime(metrics.getAverageDeliveryTime(origin, destination, Priority.INTERNATIONAL_AIR));
+        		times.setStandardTime(metrics.getAverageDeliveryTime(origin, destination, Priority.INTERNATIONAL_STANDARD));
         		super.repaint();
         	}
 

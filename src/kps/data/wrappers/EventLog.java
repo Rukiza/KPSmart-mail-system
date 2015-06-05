@@ -13,6 +13,7 @@ public class EventLog {
 	private List<BusinessEvent> eventLog;
 	private int iterationLocation;
 	private Filter currentFilter;
+	private BusinessEvent lastEventAdded; // used for tests
 
 	public EventLog(){
 		eventLog = new ArrayList<BusinessEvent>();
@@ -41,6 +42,7 @@ public class EventLog {
 	 */
 	public void addBusinessEvent(BusinessEvent event){
 		eventLog.add(findPosition(event), event);
+		lastEventAdded = event;
 	}
 
 	private int findPosition(BusinessEvent event){
@@ -224,6 +226,15 @@ public class EventLog {
 		else {
 			return iterationLocation;
 		}
+	}
+
+	/**
+	 * Returns the last event added to the event log.
+	 *
+	 * @return last event added
+	 */
+	public BusinessEvent getLastEventAdded(){
+		return lastEventAdded;
 	}
 
 	/**
