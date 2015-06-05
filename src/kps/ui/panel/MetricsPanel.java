@@ -517,7 +517,7 @@ public class MetricsPanel extends JPanel implements ActionListener{
         	 * 		-- volume to display
         	 */
         	public void setVolume(int volume){
-        		this.volume.setText(NUMBER_FORMAT.format(volume)+" cm³");
+        		this.volume.setText(NUMBER_FORMAT.format(volume)+" cm^3");
 
         	}
 
