@@ -532,14 +532,31 @@ public class KPSmartSystem {
 	}
 
 	/**
-	 * Removes the specified user from the system.
+	 * Removes the specified user from the system. Won't remove
+	 * the user if they are the last manager left in the system.
 	 *
 	 * @param username
 	 * 		-- the user to be removed
 	 */
 	public void removeKPSUser(String username){
 		if(users.containsKey(username)){
-			users.remove(username);
+			// count the number of managers in the system
+			int managerCount = 0;
+			for(KPSUser user : users.values()){
+				if(user.getPosition() == Position.MANAGER){
+					managerCount++;
+				}
+			}
+			// if there's more than one manager it's safe to remove
+			if(managerCount > 1){
+				users.remove(username);
+			}
+			// otherwise check if they are a manager
+			else{
+				if(users.get(username).getPosition() != Position.MANAGER){
+					users.remove(username);
+				}
+			}
 		}
 	}
 
