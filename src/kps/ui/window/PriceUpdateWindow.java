@@ -47,6 +47,8 @@ public class PriceUpdateWindow extends AbstractRouteChooserWindow {
 		makeTextField(NEW_WEIGHT_COST, inputPanel);
 		makeTextField(NEW_VOL_COST, inputPanel);
 
+		populateRoutesCombo();
+
 		SpringUtilities.makeCompactGrid(inputPanel,
 				fieldCount, 2,	//rows, cols
                 6, 6,	//initX, initY
@@ -92,19 +94,22 @@ public class PriceUpdateWindow extends AbstractRouteChooserWindow {
 		});
 
 		// open window
+		pack();
 		setVisible(true);
 	}
 
 	@Override
-	protected void populateRouteCombo(){
-		super.populateRouteCombo();
+	protected void populateRoutesCombo(){
+		super.populateRoutesCombo();
 		// update the old cost fields
 		Route route = ((Route)fields.get(ROUTES));
 		double weightPrice = route.getWeightPrice();
 		double volPrice = route.getVolumePrice();
 
-		oldWeightCostField.setText(weightPrice + "");
-		oldVolCostField.setText(volPrice + "");
+		if (oldWeightCostField != null){
+                oldWeightCostField.setText(weightPrice + "");
+                oldVolCostField.setText(volPrice + "");
+		}
 	}
 
 	@Override

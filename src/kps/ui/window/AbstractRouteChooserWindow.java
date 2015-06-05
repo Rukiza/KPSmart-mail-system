@@ -131,7 +131,7 @@ public class AbstractRouteChooserWindow extends AbstractFormWindow{
 		toComboBox.removeActionListener(toComboBox.getActionListeners()[0]);
 		toComboBox.addActionListener((ActionEvent e) -> {
 			comboBoxUpdated(toComboBox, fieldNames[1]);
-			populateRouteCombo();
+			populateRoutesCombo();
 		});
 		return toComboBox;
 	}
@@ -141,10 +141,10 @@ public class AbstractRouteChooserWindow extends AbstractFormWindow{
         Node from = (Node) fromComboBox.getSelectedItem();
         Set<String> validDests = routeGraph.destsFromSource(from.getName());
         toComboBox.setModel(new DefaultComboBoxModel<Object>(validDests.toArray()));
-        populateRouteCombo();
+        populateRoutesCombo();
 	}
 
-	protected void populateRouteCombo(){
+	protected void populateRoutesCombo(){
         String source = (String) fromComboBox.getSelectedItem().toString();
         String dest = (String) toComboBox.getSelectedItem().toString();
         Set<Route> validRoutes = routeGraph.getRoutes(source, dest);
