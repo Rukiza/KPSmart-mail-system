@@ -181,6 +181,9 @@
     <weight>100</weight>
     <volume>5</volume>
     <priority>International Air</priority>
+    <revenue>1</revenue>
+    <expenditure>1</expenditure>
+    <deliveryTime>1</deliveryTime>
   </mail>
   <mail>
 	<time>0</time>
@@ -190,6 +193,9 @@
     <weight>1000</weight>
     <volume>120</volume>
     <priority>International Air</priority>
+    <revenue>1</revenue>
+    <expenditure>1</expenditure>
+    <deliveryTime>1</deliveryTime>
   </mail>
   <mail>
 	<time>0</time>
@@ -199,6 +205,9 @@
     <weight>100</weight>
     <volume>5</volume>
     <priority>International Air</priority>
+    <revenue>1</revenue>
+    <expenditure>1</expenditure>
+    <deliveryTime>1</deliveryTime>
     </mail>
   <mail>
 	<time>0</time>
@@ -208,6 +217,9 @@
     <weight>2000</weight>
     <volume>120</volume>
     <priority>International Standard</priority>
+    <revenue>1</revenue>
+    <expenditure>1</expenditure>
+    <deliveryTime>1</deliveryTime>
   </mail>
   <discontinue>
 	<time>0</time>
@@ -215,6 +227,7 @@
     <to>Sydney</to>
     <from>Wellington</from>
     <type>Air</type>
+
   </discontinue>
   <cost>
 	<time>0</time>
@@ -246,6 +259,9 @@
     <weight>100</weight>
     <volume>3</volume>
     <priority>Domestic Standard</priority>
+    <revenue>1</revenue>
+    <expenditure>1</expenditure>
+    <deliveryTime>1</deliveryTime>
   </mail>
   <mail>
 	<time>0</time>
@@ -255,6 +271,9 @@
     <weight>400</weight>
     <volume>50</volume>
     <priority>International Air</priority>
+    <revenue>1</revenue>
+    <expenditure>1</expenditure>
+    <deliveryTime>1</deliveryTime>
   </mail>
   <mail>
 	<time>0</time>
@@ -264,6 +283,9 @@
     <weight>400</weight>
     <volume>25</volume>
     <priority>International Standard</priority>
+    <revenue>1</revenue>
+    <expenditure>1</expenditure>
+    <deliveryTime>1</deliveryTime>
   </mail>
   <mail>
 	<time>0</time>
@@ -273,6 +295,9 @@
     <weight>100</weight>
     <volume>5</volume>
     <priority>International Standard</priority>
+    <revenue>1</revenue>
+    <expenditure>1</expenditure>
+    <deliveryTime>1</deliveryTime>
   </mail>
   <mail>
 	<time>0</time>
@@ -282,5 +307,8 @@
     <weight>100</weight>
     <volume>5</volume>
     <priority>International Air</priority>
+    <revenue>1</revenue>
+    <expenditure>1</expenditure>
+    <deliveryTime>1</deliveryTime>
   </mail>
-</simulation> 
+</simulation>
