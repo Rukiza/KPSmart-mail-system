@@ -321,26 +321,24 @@ public class KPSmartSystem {
 	 * @param priority
 	 * 		-- priority of mail
 	 */
-	public void addMailDeliveryEvent(String from, String to, Day day, int weight, int volume, Priority priority){
+	public String addMailDeliveryEvent(String from, String to, Day day, int weight, int volume, Priority priority){
 		BasicRoute route = new BasicRoute(from, to);
 		if(!customerRoutes.containsKey(route)){
 			// cannot send mail
-			System.out.println("cannot send mail, No cutsomer cost for route" );
-			return;
+			return "Cannot send mail because there is no customer price for this route.";
 		}
 
 		double revenue = customerRoutes.get(route).calculateDeliveryPrice(weight, volume, priority);
 		if(revenue < 0){
 			// cannot send mail
-			System.out.println("cannot send mail, No customer cost for priority" );
-			return;
+			return "Cannot send mail because there is no customer cost for "+Priority.convertPriorityToString(priority)+" priority on this route.";
 		}
 
 		//check if the route is valid
 		if(!(new DijkstraSearch(routeGraph).isValidMailDelivery(new Mail(route, day, weight, volume, priority)))){
 			// cannot send mail
-			System.out.println("No valid route available in the graph" );
-			return;
+			System.out.println("No valid route available in the graph");
+			return "Cannot send mail because there is no transport route available for this route.";
 		}
 
 		// calculate expenditure
@@ -357,7 +355,7 @@ public class KPSmartSystem {
 
 		if(revenue == -1 || routeAndCost.size() > 1 || path == null){
 			System.out.println("Error");
-			return;
+			return "Cannot send mail because there is no transport route available for this route.";
 		}
 
 		//time to deliver in hours
@@ -367,6 +365,7 @@ public class KPSmartSystem {
 
 		long timeLogged = System.currentTimeMillis();
 		eventLog.addBusinessEvent(new MailDeliveryEvent(timeLogged, route, day, weight, volume, priority, revenue,  expenditure, deliveryTime));
+		return null;
 	}
 
 	/**
@@ -455,11 +454,8 @@ public class KPSmartSystem {
 	 */
 	public void addTransportDiscontinuedEvent(Route route){
 		BasicRoute bRoute = new BasicRoute(route.getSrc(), route.getDest());
-		//RouteGraph.removeRoute(route, transportFirm, transportType); TO BE IMPLEMENTED
 		long timeLogged = System.currentTimeMillis();
-
 		eventLog.addBusinessEvent(new TransportDiscontinuedEvent(timeLogged, bRoute, route.getCompany(), route.getType()));
-
 		routeGraph.removeRoute(route);
 	}
 
