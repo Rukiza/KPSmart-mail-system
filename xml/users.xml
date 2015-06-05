@@ -1,7 +1,7 @@
 <users>
-    <user>
-        <username>admin</username>
-        <passwordHash>92668751</passwordHash>
-        <position>Manager</position>
-    </user>
+	<user>
+		<username>admin</username>
+		<passwordHash>92668751</passwordHash>
+		<position>Manager</position>
+	</user>
 </users>
