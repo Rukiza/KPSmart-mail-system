@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import kps.data.Route;
+import kps.data.RouteGraph;
 import kps.data.wrappers.BasicRoute;
 import kps.data.wrappers.DeliveryPrice;
 import kps.data.wrappers.MailTransport;
@@ -55,6 +57,7 @@ public class KPSParser {
 	public static final String USERNAME_TAG = "username";
 	public static final String PASSWORD_TAG = "passwordHash";
 	public static final String POSITION_TAG = "position";
+	public static final String GRAPH_FILE_TAG = "graph";
 
 
 	/**
@@ -163,7 +166,7 @@ public class KPSParser {
 				users.put(user.getUsername(), user);
 			}
 			// check if the end of the file has been reached
-			else if(scan.hasNext("</"+USER_TAG+">")){
+			else if(scan.hasNext("</"+USERS_FILE_TAG+">")){
 				scan.next();
 				break;
 			}
@@ -177,6 +180,29 @@ public class KPSParser {
 		// file parsing successful
 		scan.close();
 		return users;
+	}
+
+	public static RouteGraph parseGraph(String filename) throws ParserException{
+		RouteGraph routeGraph = new RouteGraph();
+
+		// load file into the scanner
+		Scanner scan = null;
+		try{
+			scan = new Scanner(new File(filename));
+		}catch(IOException e){throw new ParserException("ParseGraph: Cannot load file "+filename);}
+
+		String data = convertXMLDataToString(scan);
+		scan.close();
+		scan = new Scanner(data);
+
+		gobble(scan, "<"+GRAPH_FILE_TAG+">");
+		while(scan.hasNext()){
+			if(scan.hasNext("<"+TRANSPORT_COST_UPDATE_TAG+">")){
+				Route route = new Route(KPSParser.parseTransportCostUpdateEvent(scan));
+			}
+		}
+
+		return routeGraph;
 	}
 
 	/**
