@@ -117,29 +117,34 @@ public class Route {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
+		if (this == obj)return true;
+
+		if (obj == null)return false;
+
+		if (getClass() != obj.getClass())return false;
+
 		Route other = (Route) obj;
-		if (Double.doubleToLongBits(cost) != Double
-				.doubleToLongBits(other.cost))
-			return false;
-		if ( transport.getDestination() == null) {
-			if (other.getDest()!= null)
-				return false;
-		} else if (! transport.getDestination().equals(other.getCost()))
-			return false;
-		if (transport.getOrigin() == null) {
-			if (other.getDest()!= null)
-				return false;
-		} else if (!transport.getOrigin().equals(other.getSrc()))
-			return false;
-		if (transport.getTransportType() != other.transport.getTransportType())
-			return false;
+
+		if(transport.getDayDelivered() != other.transport.getDayDelivered())return false;
+
+		if(transport.getDepartureFrequency() != other.transport.getDepartureFrequency())return false;
+
+		if(!transport.getDestination().equals(other.transport.getDestination()))return false;
+
+		if(!transport.getOrigin().equals(other.transport.getOrigin()))return false;
+
+		if(transport.getMaxWeight() != other.transport.getMaxWeight())return false;
+
+		if(transport.getMaxVolume() != other.transport.getMaxVolume())return false;
+
+		if(!transport.getTransportFirm().equals(other.transport.getTransportFirm()))return false;
+
+		if(transport.getTripDuration() !=other.transport.getTripDuration())return false;
+
+		if(transport.getTransportType() != other.transport.getTransportType())return false;
+
 		return true;
+
 	}
 
 	public String getCompany(){return transport.getTransportFirm();}

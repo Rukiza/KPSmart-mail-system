@@ -322,7 +322,7 @@ public class KPSmartSystemTests {
 		KPSmartSystem kps = constructSystemWithRoutes();
 		int graphSize = kps.getRouteGraph().getAllRoutes().size();
 		int logSize = kps.getEventLogSize();
-		kps.addTransportCostUpdateEvent("Node 1", "Node 2", "Test", TransportType.AIR, 30, 30, 1000, 1000, 5, 5, Day.MONDAY);
+		kps.addTransportCostUpdateEvent("Node 1", "Node 2", "Test", TransportType.AIR, 30, 30, 100, 100, 5, 5, Day.MONDAY);
 		int newGraphSize = kps.getRouteGraph().getAllRoutes().size();
 		int newLogSize = kps.getEventLogSize();
 		if(newGraphSize != graphSize){

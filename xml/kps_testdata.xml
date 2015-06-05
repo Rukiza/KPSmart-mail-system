@@ -73,7 +73,7 @@
         <time>0</time>
 		<company>Test</company>
 		<to>Node 5</to>
-		<from>Node 4</from>
+		<from>Node 3</from>
 		<type>Sea</type>
 		<weightcost>60</weightcost>
 		<volumecost>50</volumecost>

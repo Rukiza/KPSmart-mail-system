@@ -79,7 +79,7 @@ public class RouteGraphPanel extends JPanel implements MouseMotionListener, Mous
 	 * */
 	public void setUpDrawNodes(){
 		for(Node n : graph.getNodes()){
-			drawNodes.add(new DrawNode(n,(int)(Math.random()*1100), (int)(Math.random()*700)));
+			drawNodes.add(new DrawNode(n,(int)(Math.random()*1000), (int)(Math.random()*700)));
 		}
 		setUpNonRandomDrawNodes();
 	}
