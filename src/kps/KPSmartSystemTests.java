@@ -429,9 +429,7 @@ public class KPSmartSystemTests {
 		}
 	}
 
-
-	/*
-	@Test public void testCorrectTransportDiscontinuedEvent_1(){
+	/*@Test public void testCorrectTransportDiscontinuedEvent_1(){
 		KPSmartSystem kps = constructSystemWithRoutes();
 		int graphSize = kps.getRouteGraph().getAllRoutes().size();
 		int logSize = kps.getEventLogSize();

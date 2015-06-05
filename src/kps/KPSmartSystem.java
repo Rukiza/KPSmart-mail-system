@@ -29,10 +29,36 @@ import kps.events.MailDeliveryEvent;
 import kps.events.PriceUpdateEvent;
 import kps.events.TransportCostUpdateEvent;
 import kps.events.TransportDiscontinuedEvent;
-import kps.parser.KPSParser;
-import kps.parser.ParserException;
 import kps.users.KPSUser;
 
+/**
+ * The main class of the system. Contains the event log, customer routes, route
+ * graph, users and the metrics.
+ *
+ * Event Log:
+ * 	List of Business Events
+ *
+ * Customer Routes:
+ * 	Delivery Prices from origin to location for a specific priority.
+ * 	Calculates revenue for mail delivery.
+ *
+ * Route Graph:
+ * 	Graph of transport routes. Calculates expenditure for mail delivery.
+ *
+ * Users:
+ * 	Map of usernames to users.
+ *
+ * Metrics:
+ * 	Metrics of data in the system:
+ * 		- total revenue
+ * 		- total expenditure
+ * 		- business events counts
+ * 		- mail weight, volume and total counts
+ * 		- average delivery times
+ *
+ * @author David Sheridan and Nicky van Hulst
+ *
+ */
 public class KPSmartSystem {
 
 	// fields
