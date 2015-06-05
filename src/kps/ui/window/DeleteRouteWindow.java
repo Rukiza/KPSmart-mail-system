@@ -55,7 +55,7 @@ public class DeleteRouteWindow extends AbstractRouteChooserWindow{
 				completeFormPrompt();
 				return;
 			}
-			Route route = (Route)fields.get(fieldNames[2]);
+			Route route = (Route)fields.get(ROUTES);
 			deleteRouteListener.onDeleteFormSubmitted(route);
 			JOptionPane.showMessageDialog(this, "Route successfully deleted");
 			UIUtils.closeWindow(this);
@@ -63,11 +63,10 @@ public class DeleteRouteWindow extends AbstractRouteChooserWindow{
 
 		cancel.addActionListener((ActionEvent e) -> {
 			deleteRouteListener.onCancel();
-			UIUtils.closeWindow(DeleteRouteWindow.this);
+			UIUtils.closeWindow(this);
 		});
 
 		// open window
-//		setSize(new Dimension(600, 50 + fieldCount * 40));
 		pack();
 		setVisible(true);
 	}

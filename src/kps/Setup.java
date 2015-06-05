@@ -1,8 +1,12 @@
 package kps;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+
+import javax.swing.JFrame;
 
 import kps.data.RouteGraph;
 import kps.data.wrappers.EventLog;
@@ -45,7 +49,16 @@ public class Setup {
 						return false;
 					}
 
-					new KPSWindow(system, user);
+					KPSWindow window = new KPSWindow(system, user);
+
+					window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					window.addWindowListener(new WindowAdapter(){
+						@Override public void windowClosing(WindowEvent e){
+							system.convertEventLogToXML();
+							system.convertUsersMapToXML();
+							System.out.println("closed while being listened to");
+						}
+					});
 					return true;
 				}
 

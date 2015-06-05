@@ -58,7 +58,7 @@ public class KPSWindow extends JFrame {
 
 	private KPSmartSystem system;
 
-	private MetricsPanel metricsPanel;
+	private MetricsPanel metrics;
 	private DecisionSupportPanel dsPanel;
 	private RouteGraphPanel graphPanel;
 
@@ -70,17 +70,17 @@ public class KPSWindow extends JFrame {
 		setSize(WINDOW_SIZE);
 		setLocationRelativeTo(null);
 		setLayout(new BorderLayout());
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
 
 		JTabbedPane tabbedPane = new JTabbedPane();
 		add(tabbedPane, BorderLayout.CENTER);
 
-		metricsPanel = new MetricsPanel(system.getMetrics());
+		metrics = new MetricsPanel(system.getMetrics());
 		dsPanel = new DecisionSupportPanel(system.getEventLog());
 		graphPanel = new RouteGraphPanel(system.getRouteGraph(), this);
 
-		tabbedPane.addTab("Metrics", metricsPanel);
+		tabbedPane.addTab("Metrics", metrics);
 		// if user is a manager, should be able to access decision support
 		if (user.getPosition() == Position.MANAGER){
                 tabbedPane.addTab("Decision Support", dsPanel);
@@ -230,7 +230,9 @@ public class KPSWindow extends JFrame {
 			new PackageFormWindow(new PackageFormListener(){
 				@Override
 				public String onPackageFormSubmitted(Day day, String from, String to, int weight, int volume, Priority priority){
-					return system.addMailDeliveryEvent(from, to, day, weight, volume, priority);
+					String result = system.addMailDeliveryEvent(from, to, day, weight, volume, priority);
+					metrics.repaint();
+					return result;
 				}
 				@Override public void onCompletedFormUpdate(Day day, String from, String to, Priority priority, int weight, int volume){
 					DijkstraSearch search = new DijkstraSearch(system.getRouteGraph());
@@ -252,6 +254,7 @@ public class KPSWindow extends JFrame {
 					, int maxWeight, int maxVol, int dur, int freq, Day day){
 				system.addTransportCostUpdateEvent(from, to, company, type, weightCost, volCost, maxWeight, maxVol, dur, freq, day);
 				graphPanel.graphUpdated();
+				metrics.repaint();
 			}
 
 			@Override
@@ -264,6 +267,7 @@ public class KPSWindow extends JFrame {
 			@Override public void onDeleteFormSubmitted(Route route){
 				system.addTransportDiscontinuedEvent(route);
 				graphPanel.graphUpdated();
+				metrics.repaint();
 			}
 			@Override
 			public void onRouteUpdate(Route route) {
@@ -277,6 +281,7 @@ public class KPSWindow extends JFrame {
 		priceUpdate.addActionListener((ActionEvent e) -> new PriceUpdateWindow(new PriceUpdateListener(){
 			@Override public void onPriceUpdateSubmitted(String from, String to, double weightCost, double volumeCost, Priority priority){
 				system.addPriceUpdateEvent(from, to, weightCost, volumeCost, priority);
+				metrics.repaint();
 			}
 			@Override public void onRouteUpdate(Route r){
 				// update

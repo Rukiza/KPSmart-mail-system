@@ -60,7 +60,7 @@ public class AbstractRouteChooserWindow extends AbstractFormWindow{
 		// the combobox objects must be accessible for dynamic item changing
 		fromComboBox = makeFromComboBox(routeGraph.getNodes().toArray(new Node[]{}), inputPanel);
 		toComboBox = makeToComboBox(inputPanel);
-		routesComboBox = makeComboBox(fieldNames[2], new Object[]{}, inputPanel);
+		routesComboBox = makeComboBox(ROUTES, new Object[]{}, inputPanel);
 
 		// populate the to combobox (and also the routes combo)
 		populateToCombo();
@@ -111,11 +111,11 @@ public class AbstractRouteChooserWindow extends AbstractFormWindow{
 	 * @return the combobox which is created
 	 */
 	private JComboBox<Object> makeFromComboBox(Node[] sources, Container cont){
-		JComboBox<Object> fromComboBox = makeComboBox(fieldNames[0], sources, cont);
+		JComboBox<Object> fromComboBox = makeComboBox(FROM, sources, cont);
 		fromComboBox.removeActionListener(fromComboBox.getActionListeners()[0]);
 
 		fromComboBox.addActionListener((ActionEvent e) -> {
-			comboBoxUpdated(fromComboBox, fieldNames[0]);
+			comboBoxUpdated(fromComboBox, FROM);
             populateToCombo();
 		});
 		return fromComboBox;
@@ -127,21 +127,22 @@ public class AbstractRouteChooserWindow extends AbstractFormWindow{
 	 * @return the combobox which is created
 	 */
 	private JComboBox<Object> makeToComboBox(Container cont){
-		JComboBox<Object> toComboBox = makeComboBox(fieldNames[1], new Node[]{}, cont);
+		JComboBox<Object> toComboBox = makeComboBox(TO, new Node[]{}, cont);
 		toComboBox.removeActionListener(toComboBox.getActionListeners()[0]);
 		toComboBox.addActionListener((ActionEvent e) -> {
-			comboBoxUpdated(toComboBox, fieldNames[1]);
+			comboBoxUpdated(toComboBox, TO);
 			populateRoutesCombo();
 		});
 		return toComboBox;
 	}
 
 	protected void populateToCombo(){
-        comboBoxUpdated(toComboBox, fieldNames[1]);
+        comboBoxUpdated(toComboBox, TO);
         Node from = (Node) fromComboBox.getSelectedItem();
         Set<String> validDests = routeGraph.destsFromSource(from.getName());
         toComboBox.setModel(new DefaultComboBoxModel<Object>(validDests.toArray()));
         populateRoutesCombo();
+        comboBoxUpdated(toComboBox, TO);
 	}
 
 	protected void populateRoutesCombo(){
@@ -150,19 +151,22 @@ public class AbstractRouteChooserWindow extends AbstractFormWindow{
         Set<Route> validRoutes = routeGraph.getRoutes(source, dest);
 
         routesComboBox.setModel(new DefaultComboBoxModel<Object>(validRoutes.toArray()));
-        comboBoxUpdated(routesComboBox, fieldNames[2]);
+        comboBoxUpdated(routesComboBox, ROUTES);
 	}
 
 	private void fireFormUpdate(){
-		Route route = (Route)fields.get(fieldNames[2]);
+		Route route = (Route)fields.get(ROUTES);
         listener.onRouteUpdate(route);
 	}
 
 	@Override
 	protected boolean isFormComplete() {
-		for (Object field : fields.values()){
-			if (field == null)
+		for (String fieldName : fieldNames){
+			Object val = fields.get(fieldName);
+			if (val == null){
+				System.out.println(fieldName + " is null");
 				return false;
+			}
 		}
 		return true;
 	}
