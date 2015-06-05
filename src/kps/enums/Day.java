@@ -10,6 +10,11 @@ public enum Day {
 	MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY;
 
 	/**
+	 * The number of days in a week
+	 */
+	public static final int SIZE = 7;
+
+	/**
 	 * Converts the specified string into the corresponding
 	 * day of the week. Throws an IllegalArgumentException if
 	 * the string cannot be converted.
@@ -98,5 +103,37 @@ public enum Day {
 			// will not reach this stage as a day can only be one of the above cases
 			return null;
 		}
+	}
+
+	/**
+	 * Returns the day corresponding to the specified day
+	 * with the specified number of days added to it.
+	 *
+	 * @param day
+	 * 		-- the current day
+	 * @param days
+	 * 		-- the number of days to shift day by
+	 *
+	 * @return day + number of days
+	 */
+	public static Day getNextDay(Day day, int days){
+		int index = (day.ordinal() + days) % Day.SIZE;
+		return Day.values()[index];
+	}
+
+	/**
+	 * Returns the number of days between the two specified days.
+	 * The number of days refers to the number of days it takes
+	 * to get from day1 to day2.
+	 *
+	 * @param day1
+	 * 		-- the first day
+	 * @param day2
+	 * 		-- the second day
+	 *
+	 * @return number of days between the specified days
+	 */
+	public static int getDaysBetween(Day day1, Day day2){
+		return Math.abs(day1.ordinal() - day2.ordinal());
 	}
 }
