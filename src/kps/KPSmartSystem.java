@@ -182,12 +182,6 @@ public class KPSmartSystem {
 		return metrics;
 	}
 
-	private int averageDeliveryTime;
-
-	public int getAverageDeliveryTime(){
-		return averageDeliveryTime;
-	}
-
 	/**
 	 * Adds a new MailDeliveryEvent to the KPSmartSystem based on the specified
 	 * parameters. A new MailDeliveryEvent will not be added if:
@@ -249,12 +243,12 @@ public class KPSmartSystem {
 		}
 
 		//time to deliver in hours
-		this.averageDeliveryTime = timeToDeliver(path, day);//TODO make it not just be the price for one delivery
+		int deliveryTime = timeToDeliver(path, day);//TODO make it not just be the price for one delivery
 
-		metrics.addMailDeliveryEvent(revenue, expenditure, from, to, weight, volume, averageDeliveryTime, priority);
+		metrics.addMailDeliveryEvent(revenue, expenditure, from, to, weight, volume, deliveryTime, priority);
 
 		long timeLogged = System.currentTimeMillis();
-		eventLog.addBusinessEvent(new MailDeliveryEvent(timeLogged, route, day, weight, volume, priority, revenue,  expenditure, averageDeliveryTime));
+		eventLog.addBusinessEvent(new MailDeliveryEvent(timeLogged, route, day, weight, volume, priority, revenue,  expenditure, deliveryTime));
 	}
 
 	/**
@@ -394,6 +388,18 @@ public class KPSmartSystem {
 	public void addKPSUser(String username, int passwordHash, Position position){
 		KPSUser user = new KPSUser(username, passwordHash, position);
 		users.put(username, user);
+	}
+
+	/**
+	 * Removes the specified user from the system.
+	 *
+	 * @param username
+	 * 		-- the user to be removed
+	 */
+	public void removeKPSUser(String username){
+		if(users.containsKey(username)){
+			users.remove(username);
+		}
 	}
 
 	/**
