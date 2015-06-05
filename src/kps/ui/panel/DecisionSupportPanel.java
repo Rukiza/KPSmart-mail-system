@@ -180,11 +180,11 @@ public class DecisionSupportPanel extends JPanel {
 	            }
 			};
 		}
-		
+
 		public void setLoadingTextField(JTextField field){
 			loading = field;
 		}
-		
+
 		/**
 		 * Sets up the event display.
 		 * @param temp - is a list of jtext fields for modification.
@@ -419,7 +419,7 @@ public class DecisionSupportPanel extends JPanel {
 			textFields.get(6).setText("Gram Price");
 			textFields.get(7).setText(TEXTFORMAT.format(event.getGramPrice()/100));
 			textFields.get(8).setText("Max Volume");
-			textFields.get(9).setText("" + event.getMaxVolume()+"g");
+			textFields.get(9).setText("" + event.getMaxVolume()+"cm^3");
 			textFields.get(10).setText("Max Weight");
 			textFields.get(11).setText("" + event.getMaxWeight()+"g");
 			textFields.get(12).setText("Mail Transport Type");
