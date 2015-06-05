@@ -122,7 +122,7 @@ public class KPSmartSystemTests {
 	 */
 	@Test public void correctLogin_1(){
 		KPSmartSystem kps = constructSystemWithUsers();
-		assertTrue(kps.login(users[0], passwords[0].hashCode()));
+		assertTrue(kps.login(users[0], passwords[0].hashCode()) != null);
 		assertEquals(users[0], kps.getCurrentUser());
 	}
 
@@ -131,7 +131,7 @@ public class KPSmartSystemTests {
 	 */
 	@Test public void correctLogin_2(){
 		KPSmartSystem kps = constructSystemWithUsers();
-		assertTrue(kps.login(users[1], passwords[1].hashCode()));
+		assertTrue(kps.login(users[1], passwords[1].hashCode()) != null);
 		assertEquals(users[1], kps.getCurrentUser());
 	}
 
@@ -140,7 +140,7 @@ public class KPSmartSystemTests {
 	 */
 	@Test public void correctLogin_3(){
 		KPSmartSystem kps = constructSystemWithUsers();
-		assertTrue(kps.login(users[2], passwords[2].hashCode()));
+		assertTrue(kps.login(users[2], passwords[2].hashCode()) != null);
 		assertEquals(users[2], kps.getCurrentUser());
 	}
 
@@ -149,7 +149,7 @@ public class KPSmartSystemTests {
 	 */
 	@Test public void incorrectLogin_1(){
 		KPSmartSystem kps = constructSystemWithUsers();
-		assertFalse(kps.login(users[0], passwords[1].hashCode()));
+		assertTrue(kps.login(users[0], passwords[1].hashCode()) == null);
 		assertFalse(kps.isLoggedIn());
 	}
 
@@ -158,7 +158,7 @@ public class KPSmartSystemTests {
 	 */
 	@Test public void incorrectLogin_2(){
 		KPSmartSystem kps = constructSystemWithUsers();
-		assertFalse(kps.login(users[1], passwords[2].hashCode()));
+		assertTrue(kps.login(users[1], passwords[2].hashCode()) == null);
 		assertFalse(kps.isLoggedIn());
 	}
 
@@ -167,7 +167,7 @@ public class KPSmartSystemTests {
 	 */
 	@Test public void incorrectLogin_3(){
 		KPSmartSystem kps = constructSystemWithUsers();
-		assertFalse(kps.login(users[2], passwords[0].hashCode()));
+		assertTrue(kps.login(users[2], passwords[0].hashCode()) == null);
 		assertFalse(kps.isLoggedIn());
 	}
 

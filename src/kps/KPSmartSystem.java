@@ -461,6 +461,7 @@ public class KPSmartSystem {
 			// transport discontinued event
 			if(event instanceof TransportDiscontinuedEvent){
 				metrics.addTransportDiscontinuedEvent();
+
 			}
 			event = eventLog.getNextEvent();
 		}
@@ -560,15 +561,15 @@ public class KPSmartSystem {
 	 * @return
 	 * 		-- true if login successful, otherwise false
 	 */
-	public boolean login(String username, int passwordHash){
+	public KPSUser login(String username, int passwordHash){
 		if(users.containsKey(username)){
 			KPSUser user = users.get(username);
 			if(user.getPasswordHash() == passwordHash){
 				currentUser = user;
-				return true;
+				return user;
 			}
 		}
-		return false;
+		return null;
 	}
 
 	/**
