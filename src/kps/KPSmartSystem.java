@@ -246,9 +246,27 @@ public class KPSmartSystem {
 		metrics.addMailDeliveryEvent(revenue, expenditure, from, to, weight, volume, priority);
 
 		long timeLogged = System.currentTimeMillis();
-		eventLog.addBusinessEvent(new MailDeliveryEvent(timeLogged, route, day, weight, volume, priority, revenue, expenditure));
+		eventLog.addBusinessEvent(new MailDeliveryEvent(timeLogged, route, day, weight, volume, priority, revenue, expenditure, deliveryTime));
 	}
 
+	/**
+	 * Calculates the expenditure cost for sending a package.
+	 *
+	 * @param route
+	 * 		-- route the package is taking
+	 * @param day
+	 * 		-- day delivery started
+	 * @param weight
+	 * 		-- weight of package
+	 * @param volume
+	 * 		-- volume of package
+	 * @param priority
+	 * 		-- pritority of package
+	 * @param path
+	 * 		-- path that the package is going to take (null at method call)
+	 *
+	 * @return expenditure cost
+	 */
 	private double calculateExpenditure(BasicRoute route, Day day, int weight, int volume, Priority priority, List<Node> path){
 		double expenditure = -1;
 
