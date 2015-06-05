@@ -180,9 +180,8 @@ public class KPSWindow extends JFrame {
 		}, system.getRouteGraph()));
 
 		priceUpdate.addActionListener((ActionEvent e) -> new PriceUpdateWindow(new PriceUpdateListener(){
-			@Override public void onPriceUpdateSubmitted(Route route, double weightCost, double volumeCost){
-				// TODO: interface..
-//				system.addPriceUpdateEvent(from, to, weightCost, volumeCost, priority);
+			@Override public void onPriceUpdateSubmitted(String from, String to, double weightCost, double volumeCost, Priority priority){
+				system.addPriceUpdateEvent(from, to, weightCost, volumeCost, priority);
 			}
 			@Override public void onRouteUpdate(Route r){
 				// update

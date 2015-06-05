@@ -10,6 +10,7 @@ import javax.swing.JTextField;
 
 import kps.data.Route;
 import kps.data.RouteGraph;
+import kps.enums.Priority;
 import kps.ui.formlistener.PriceUpdateListener;
 import kps.ui.util.SpringUtilities;
 import kps.ui.util.UIUtils;
@@ -20,7 +21,8 @@ public class PriceUpdateWindow extends AbstractRouteChooserWindow {
 	private final String OLD_VOL_COST = "old volume cost";
 	private final String NEW_WEIGHT_COST = "new weight cost";
 	private final String NEW_VOL_COST = "new volume cost";
-	private final String[] fieldNames = new String[] { FROM , TO, ROUTES, OLD_WEIGHT_COST , OLD_VOL_COST, NEW_WEIGHT_COST, NEW_VOL_COST };
+	private final String PRIORITY = "priority";
+	private final String[] fieldNames = new String[] { FROM , TO, OLD_WEIGHT_COST, OLD_VOL_COST, NEW_WEIGHT_COST, NEW_VOL_COST, PRIORITY};
 
 	/**
 	 * displays the current weight cost of the currently selected route
@@ -34,6 +36,8 @@ public class PriceUpdateWindow extends AbstractRouteChooserWindow {
 	public PriceUpdateWindow(PriceUpdateListener listener, RouteGraph routeGraph){
 
 		super("Update route price", listener, routeGraph);
+		// not dealing with routes, rather just src, dest
+		inputPanel.remove(routesComboBox);
 
 		int fieldCount = fieldNames.length;
 
@@ -46,11 +50,12 @@ public class PriceUpdateWindow extends AbstractRouteChooserWindow {
 		// fields for new price input
 		makeTextField(NEW_WEIGHT_COST, inputPanel);
 		makeTextField(NEW_VOL_COST, inputPanel);
+		makeComboBox(PRIORITY, Priority.values(), inputPanel);
 
 		populateRoutesCombo();
 
 		SpringUtilities.makeCompactGrid(inputPanel,
-				fieldCount, 2,	//rows, cols
+				fieldCount-2, 2,	//rows, cols
                 6, 6,	//initX, initY
                 6, 6);	//xPad, yPad)
 
@@ -80,11 +85,13 @@ public class PriceUpdateWindow extends AbstractRouteChooserWindow {
 				return;
 			}
 
-			Route route = (Route) fields.get(ROUTES);
+			String from = (String) fields.get(FROM);
+			String to = (String) fields.get(TO);
+			Priority priority = (Priority)fields.get(PRIORITY);
 			int weightCost = Integer.parseInt(weightStr);
 			int volumeCost = Integer.parseInt(volStr);
 
-			listener.onPriceUpdateSubmitted(route, weightCost, volumeCost);
+			listener.onPriceUpdateSubmitted(from, to, weightCost, volumeCost, priority);
 			UIUtils.closeWindow(this);
 		});
 
@@ -99,17 +106,17 @@ public class PriceUpdateWindow extends AbstractRouteChooserWindow {
 	}
 
 	@Override
-	protected void populateRoutesCombo(){
-		super.populateRoutesCombo();
+	protected void populateToCombo(){
+		super.populateToCombo();
 		// update the old cost fields
-		Route route = ((Route)fields.get(ROUTES));
-		double weightPrice = route.getWeightPrice();
-		double volPrice = route.getVolumePrice();
-
-		if (oldWeightCostField != null){
-                oldWeightCostField.setText(weightPrice + "");
-                oldVolCostField.setText(volPrice + "");
-		}
+		// TODO
+//		double weightPrice = route.getWeightPrice();
+//		double volPrice = route.getVolumePrice();
+//
+//		if (oldWeightCostField != null){
+//                oldWeightCostField.setText(weightPrice + "");
+//                oldVolCostField.setText(volPrice + "");
+//		}
 	}
 
 	@Override

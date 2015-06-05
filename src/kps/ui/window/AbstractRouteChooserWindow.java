@@ -2,14 +2,11 @@ package kps.ui.window;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.util.Set;
 
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -20,10 +17,7 @@ import javax.swing.event.DocumentListener;
 import kps.data.Node;
 import kps.data.Route;
 import kps.data.RouteGraph;
-import kps.ui.formlistener.DeleteRouteListener;
 import kps.ui.formlistener.RouteUpdateListener;
-import kps.ui.util.SpringUtilities;
-import kps.ui.util.UIUtils;
 
 public class AbstractRouteChooserWindow extends AbstractFormWindow{
 
@@ -41,7 +35,8 @@ public class AbstractRouteChooserWindow extends AbstractFormWindow{
 	// items change dynamically
 	private JComboBox<Object> fromComboBox;
 	private JComboBox<Object> toComboBox;
-	private JComboBox<Object> routesComboBox;
+	// protected because one implementation needs access to it...
+	protected JComboBox<Object> routesComboBox;
 
 	private String[] fieldNames = new String[] { FROM, TO, ROUTES };
 
@@ -136,7 +131,7 @@ public class AbstractRouteChooserWindow extends AbstractFormWindow{
 		return toComboBox;
 	}
 
-	private void populateToCombo(){
+	protected void populateToCombo(){
         comboBoxUpdated(toComboBox, fieldNames[1]);
         Node from = (Node) fromComboBox.getSelectedItem();
         Set<String> validDests = routeGraph.destsFromSource(from.getName());
