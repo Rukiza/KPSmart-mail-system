@@ -71,7 +71,7 @@ public class KPSmartSystem {
 
 	private Metrics metrics;
 
-	private final String EVENT_LOG_FILENAME = Setup.XML_FILE_PATH+"kps_data.xml";
+	private final String EVENT_LOG_FILENAME = Setup.XML_FILE_PATH+"eventlog.xml";
 
 	/**
 	 * Constructs an empty instance of KPSmartSystem
