@@ -24,7 +24,11 @@ import kps.data.wrappers.BasicRoute;
 import kps.enums.Day;
 import kps.enums.Priority;
 import kps.enums.TransportType;
+import kps.ui.formlistener.CreateUserEvent;
+import kps.ui.formlistener.CreateUserListener;
 import kps.ui.formlistener.DeleteRouteListener;
+import kps.ui.formlistener.DeleteUserEvent;
+import kps.ui.formlistener.DeleteUserListener;
 import kps.ui.formlistener.PackageFormListener;
 import kps.ui.formlistener.PriceUpdateListener;
 import kps.ui.formlistener.RouteFormListener;
@@ -32,6 +36,7 @@ import kps.ui.panel.DecisionSupportPanel;
 import kps.ui.panel.MetricsPanel;
 import kps.ui.panel.RouteGraphPanel;
 import kps.ui.util.UIUtils;
+import kps.users.KPSUser;
 
 
 /**
@@ -46,7 +51,7 @@ public class KPSWindow extends JFrame {
 	private DecisionSupportPanel dsPanel;
 	private RouteGraphPanel graphPanel;
 
-	public KPSWindow(KPSmartSystem system){
+	public KPSWindow(KPSmartSystem system, KPSUser user){
 		super("KPSmart");
 		this.system = system;
 		final Dimension WINDOW_SIZE = new Dimension(1050,800);
@@ -71,7 +76,73 @@ public class KPSWindow extends JFrame {
 		JPanel sidebar = makeSidebar();
 		add(sidebar, BorderLayout.WEST);
 
+		JPanel userBar = makeUserBar(user);
+		add(userBar, BorderLayout.NORTH);
+
 		setVisible(true);
+	}
+
+	private JPanel makeUserBar(KPSUser user) {
+		JPanel userbar = new JPanel();
+		userbar.setLayout(new BorderLayout());
+
+		JLabel username = new JLabel(user.getUsername());
+		userbar.add(username, BorderLayout.CENTER);
+
+		JPanel buttons = new JPanel();
+		JButton createUser = new JButton("Create user");
+		JButton deleteUser = new JButton("Delete user");
+		buttons.add(createUser);
+		buttons.add(deleteUser);
+		add(buttons, BorderLayout.EAST);
+
+//		createUser.addActionListener((ActionEvent e) -> {
+//			new CreateUserWindow((CreateUserEvent e) -> {
+//                        system.addKPSUser(e.getUsername(), e.getPasswordHash(), e.getPosition());
+//			});
+//		});
+
+		createUser.addActionListener((ActionEvent e) -> {
+			new CreateUserWindow(new CreateUserListener(){
+				@Override public boolean onUserSubmitted(CreateUserEvent e){
+                       boolean containsUser = system.containsKPSUser(e.getUsername());
+                       if (!containsUser){
+                            system.addKPSUser(e.getUsername(), e.getPasswordHash(), e.getPosition());
+                            return true;
+                       }
+                       else {
+                    	   return false;
+                       }
+				}
+				@Override public void onCancel(){
+					// cancel
+				}
+			});
+		});
+
+//		deleteUser.addActionListener((ActionEvent e) -> {
+//			new DeleteUserWindow((DeleteUserEvent e) -> {
+//				system.removeKPSUser(e.getUserName());
+//			});
+//		});
+
+		deleteUser.addActionListener((ActionEvent e) -> {
+			new DeleteUserWindow(new DeleteUserListener(){
+				@Override public boolean onUserSubmitted(DeleteUserEvent e){
+					if (system.containsKPSUser(e.getUsername())){
+                        system.removeKPSUser(e.getUsername());
+                        return true;
+					} else {
+						return false;
+					}
+				}
+				@Override public void onCancel(){
+					// cancel
+				}
+			});
+		});
+
+		return userbar;
 	}
 
 	/**
@@ -82,7 +153,6 @@ public class KPSWindow extends JFrame {
 		JPanel sidebar = new JPanel();
 		sidebar.setPreferredSize(new Dimension(120, 0));
 		sidebar.setLayout(new FlowLayout(FlowLayout.CENTER));
-		sidebar.add(new JLabel("Sidebar"));
 
 		// button setup
 		ImageIcon plusIconGreen = null;

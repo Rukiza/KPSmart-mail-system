@@ -1,17 +1,21 @@
 package kps.ui.window;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
+
 
 import kps.ui.formlistener.AuthDetailsListener;
 import kps.ui.util.SpringUtilities;
@@ -59,20 +63,23 @@ public class LogonBox extends JFrame {
 
 		// event handling
 		loginButton.addActionListener((ActionEvent e) -> {
-			listener.onReceivedAuthDetails(
+			boolean result = listener.onReceivedAuthDetails(
 				usernameField.getText(),
 				new String(passwordField.getPassword())
 			);
+
+			if (!result){
+				JOptionPane.showMessageDialog(this, "username - password combination was not recognised");
+			} else {
+				UIUtils.closeWindow(this);
+			}
 		});
 		cancelButton.addActionListener((ActionEvent e) -> {
 			listener.onCancel();
+			UIUtils.closeWindow(this);
 		});
-		// close window when any of the buttons are pressed
-		loginButton.addActionListener(new LogonButtonListener());
-		cancelButton.addActionListener(new LogonButtonListener());
-
 		// display the box
-		pack();
+		setSize(new Dimension(300, 120));
 		setVisible(true);
 
 		loginButton.requestFocus(); // for quick usage
@@ -80,20 +87,13 @@ public class LogonBox extends JFrame {
 
 	public static void main(String[] args){
 		new LogonBox(new AuthDetailsListener(){
-			public void onReceivedAuthDetails(String un, String pw){
+			public boolean onReceivedAuthDetails(String un, String pw){
 				System.out.println(un + ", " + pw);
+				return true;
 			}
 			public void onCancel(){
 				System.out.println("Cancelled");
 			}
 		}, "Will", "pw");
 	}
-
-	private class LogonButtonListener implements ActionListener{
-		@Override
-		public void actionPerformed(ActionEvent e){
-			UIUtils.closeWindow(LogonBox.this);
-		}
-	}
-
 }

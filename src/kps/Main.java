@@ -27,10 +27,14 @@ public class Main {
 			new LogonBox(new AuthDetailsListener(){
 
 				@Override
-				public void onReceivedAuthDetails(String un, String pw) {
-					// just assume un and pw are correct for now
-					// use system.login when it's ready
-					new KPSWindow(system);
+				public boolean onReceivedAuthDetails(String un, String pw) {
+					KPSUser user = system.login(un, pw.hashCode();
+					if (user != null){
+						// login unsuccessful
+						return false;
+					}
+
+					new KPSWindow(system, user);
 				}
 
 				@Override
