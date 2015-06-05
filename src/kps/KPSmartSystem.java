@@ -192,6 +192,22 @@ public class KPSmartSystem {
 		return size;
 	}
 
+	public double getWeightCost(String origin, String destination, Priority priority){
+		BasicRoute route = new BasicRoute(origin, destination);
+		if(customerRoutes.containsKey(route)){
+			return customerRoutes.get(route).getWeightCost(priority);
+		}
+		return 0;
+	}
+
+	public double getVolumeCost(String origin, String destination, Priority priority){
+		BasicRoute route = new BasicRoute(origin, destination);
+		if(customerRoutes.containsKey(route)){
+			return customerRoutes.get(route).getVolumeCost(priority);
+		}
+		return 0;
+	}
+
 	public Metrics getMetrics(){
 		return metrics;
 	}

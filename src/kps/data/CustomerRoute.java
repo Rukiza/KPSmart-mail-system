@@ -70,6 +70,20 @@ public class CustomerRoute {
 		return deliveryPrices.size();
 	}
 
+	public double getWeightCost(Priority priority){
+		if(deliveryPrices.containsKey(priority)){
+			return deliveryPrices.get(priority).getGramPrice();
+		}
+		return 0;
+	}
+
+	public double getVolumeCost(Priority priority){
+		if(deliveryPrices.containsKey(priority)){
+			return deliveryPrices.get(priority).getVolumePrice();
+		}
+		return 0;
+	}
+
 	public boolean hasPriority(Priority priority){
 		return deliveryPrices.keySet().contains(priority);
 	}
